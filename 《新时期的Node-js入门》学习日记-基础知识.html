@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">《新时期的Node.js入门》学习日记-基础知识 | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">《新时期的Node.js入门》学习日记-基础知识</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-26&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为此时后期学习的知识储备，值得复习以及反复查阅</p>
+<h1 id="Node是什么"><a href="#Node是什么" class="headerlink" title="Node是什么"></a>Node是什么</h1><h2 id="Node和JavaScript的关系"><a href="#Node和JavaScript的关系" class="headerlink" title="Node和JavaScript的关系"></a>Node和JavaScript的关系</h2><p>Node是JavaScript(严格来说是ECMAScript)的<strong>运行时组件</strong>(runtime)</p>
+<h2 id="runtime"><a href="#runtime" class="headerlink" title="runtime"></a>runtime</h2><p>一个X语言的runtime表示开发者可以在这个runtime上运行X语言编写的代码</p>
+<ul>
+<li>VC++</li>
+<li>Chrome</li>
+<li>Node</li>
+</ul>
+<p>runtime可能会对编译语言做扩展</p>
+<ul>
+<li>fs模型</li>
+<li>Buffer类型</li>
+</ul>
+<h2 id="VM"><a href="#VM" class="headerlink" title="VM"></a>VM</h2><p>可以认为是硬件和二进制文件的中间层；C++编译好的二进制文件直接被OS调用，Java编译好的字节码交由虚拟机运行；这样做的好处是对开发者屏蔽OS差异</p>
+<h1 id="Node的内部机制"><a href="#Node的内部机制" class="headerlink" title="Node的内部机制"></a>Node的内部机制</h1><h2 id="OS相关概念"><a href="#OS相关概念" class="headerlink" title="OS相关概念"></a>OS相关概念</h2><ul>
+<li><strong>在任务完成之前，CPU在任何情况下都不会暂停或者停止执行，CPU如何执行和同步或是异步、阻塞或者非阻塞都没有必然关系</strong></li>
+<li><strong>操作系统始终保证CPU处在运行状态，这是通过系统调度来实现的，具体一点就是通过在不同进程/线程间切换实现的</strong></li>
+</ul>
+<h2 id="回调"><a href="#回调" class="headerlink" title="回调"></a>回调</h2><h3 id="回调的定义"><a href="#回调的定义" class="headerlink" title="回调的定义"></a>回调的定义</h3><p>通俗理解就是将一个函数作为参数传递给另一个函数，并且作为参数的函数可以被执行，其本质上是一个<strong>高阶函数</strong></p>
+<p><strong>❗️高阶函是至少满足下列一个条件</strong></p>
+<ul>
+<li>接受一个或多个函数作为输入</li>
+<li>输出一个函数</li>
+</ul>
+<p>map方法接受一个函数作为参数，依次作用于的数组的每一个元素</p>
+<pre><code class="javascript">[1, 2, 3].map(function (value) &#123;
+    console.log(value)
+&#125;)</code></pre>
+<p>关于回调函数在何时执行并没有具体的要求，回调函数的调用既可以是同步(map方法)，也可以是异步(setTimeout方法中的匿名函数)</p>
+<p>👇回调的过程</p>
+<p>![截屏2020-08-26 上午11.18.53](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 上午11.18.53.png)</p>
+<p>回调方法和主线程处于同一层级，假设主线程发起了一个底层的系统调用，那么操作系统转而去执行这个系统调用；当调用结束后，又回到主线程上调用其后方法</p>
+<h3 id="异步过程中的回调"><a href="#异步过程中的回调" class="headerlink" title="异步过程中的回调"></a>异步过程中的回调</h3><p><strong>单线程运行的语言</strong>在设计时要考虑👇的问题</p>
+<p>❓如果遇到一个耗时的操作，例如磁盘IO，要不要等待操作完成了再执行下一步操作</p>
+<p>有的语言选择在完成之前继续等待，例如PHP；Node选择另一种方式，当遇到IO操作时，Node代码在发起一个调用后继续向下执行，IO操作完成后，再执行对应的回调函数(异步)；虽然代码运行在单线程环境下，但依靠<code>异步+回调</code>的方式，也能实现对高并发的支持</p>
+<pre><code class="javascript">let fs = require(&quot;fs&quot;)
+let callback = function (err, data) &#123;
+    if (err)
+        return
+    console.log(data.toString())
+&#125;
+
+fs.readFile(&quot;foo.txt&quot;, callback)</code></pre>
+<p><code>readFile</code>发起一个系统调用，随后执行结束，当系统调用完成后，再通过回调函数获得文件的内容</p>
+<h1 id="同步-异步和阻塞-非阻塞"><a href="#同步-异步和阻塞-非阻塞" class="headerlink" title="同步/异步和阻塞/非阻塞"></a>同步/异步和阻塞/非阻塞</h1><h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><p><strong>🔔同步和异步描述的是进程/线程的调用方式</strong></p>
+<ul>
+<li><p>同步调用指的是进程/线程发起调用后，一直等待<code>调用返回</code>后才继续执行下一步操作，这并不代表CPU在这段时间内也会一直等待，操作系统多半会切换到另一个进程/线程上去，等到调用返回后再切换回原来的进程/线程</p>
+</li>
+<li><p>异步相反，发起调用后，进程/线程继续向下执行，当<code>调用返回</code>后，通过某种手段来通知调用者</p>
+</li>
+</ul>
+<p>❗️同步和异步中的<code>调用返回</code>，是指内核进程将数据复制到调用进程(Linux环境下)</p>
+<p>JavaScript的异步更多是依靠浏览器runtime内部其他线程来实现，并非JavaScript本身的功能，是浏览器提供的支持让JavaScript看起来像是一个异步的语言</p>
+<h2 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h2><p><strong>🔔阻塞与非阻塞的概念是针对IO状态而言</strong></p>
+<p>阻塞/非阻塞和同步/异步完全是两组概念，它们之间没有任何的必然联系。很多人认为，阻塞=同步，非阻塞=异步，这种观念是不正确的</p>
+<p>IO编程模型中，<strong>除了纯粹的AIO之外，阻塞和非阻塞IO都是同步的</strong></p>
+<p>❓在介绍IO编程模型之前，先回答两个问题</p>
+<ol>
+<li><p>什么是IO操作</p>
+<p><strong>🔔输入/输出(I/O)是在内存和外部设备(如磁盘、终端和网络)之间复制数据的过程</strong></p>
+<p>在实践中IO操作几乎无处不在，因为大多数程序都要产生输出结果才有意义(往往是输出到磁盘或者屏幕)</p>
+<p>在Node中，IO特指Node程序在<code>Libuv</code>支持下与系统磁盘和网络交互的过程</p>
+</li>
+<li><p>IO调用的结果怎么返回给调用的进程/线程</p>
+<p><strong>通过内核进程复制给调用进程</strong>，在Linux下，用户进程没办法直接访问内核空间，通常是内核调用copy_to_user方法来传递数据的，大致的流程就是IO的数据会先被内核空间读取，然后内核将数据复制给用户进程。<strong>还有一种零复制技术</strong>，大致是内核进程和用户进程共享一块内存地址，这避免了内存的复制</p>
+</li>
+</ol>
+<h2 id="IO编程模型"><a href="#IO编程模型" class="headerlink" title="IO编程模型"></a>IO编程模型</h2><p>编程模型是指操作系统在处理IO时所采用的方式，这通常是为了解决IO速度比较慢的问题而诞生的</p>
+<ol>
+<li><p>阻塞IO(blocking I/O)</p>
+<p>IO通常可以分为两个阶段，准备数据和返回结果；阻塞型IO在进程发出系统调用请求后，进程就一直等待上述两个阶段完成，等拿到返回结果后再重新运行</p>
+</li>
+<li><p>非阻塞IO(nonblocking I/O)</p>
+<p>和👆过程相似，不同之处是当进程发起一个调用后，如果数据还没有就绪，就会马上返回一个结果告诉进程现在还没有就绪，和阻塞IO的区别是用户进程会不断查询内核状态。这个过程依旧是同步</p>
+</li>
+<li><p>IO multiplexing/Event Driven</p>
+<p>事件驱动IO，同样以轮询方式查询内核执行状态，和非阻塞IO的区别是一个进程可能会管理多个IO请求，当某个IO调用有结果之后，就返回对应的结果。❗️select和poll都是IO复用的机制，另外Node使用epoll(改进后的poll)</p>
+</li>
+<li><p>Asynchronous I/O</p>
+<p>异步IO和前面的模型相比，当进程发出调用后，内核会立刻返回结果，进程会继续做其他的事情，直到操作系统返回数据，给用户进程发送一个信号。❗️异步IO并没有涉及任何关于回调函数的概念，此外这里的异步IO只存在于Linux系统</p>
+</li>
+</ol>
+<p>❓为什么在官网上Node没有标榜自己是异步IO，而是写成非阻塞IO</p>
+<p>因为非阻塞是实打实的，而Node中的<code>异步I/O</code>是依靠<code>Libuv</code>模拟出来的</p>
+<p><strong>🔔同步调用会造成调用进程的IO阻塞，异步调用不会造成调用进程的IO阻塞</strong></p>
+<h1 id="单线程和多线程"><a href="#单线程和多线程" class="headerlink" title="单线程和多线程"></a>单线程和多线程</h1><p>其他语言(Java、C++等)都有多线程的语言特性，即开发者可以派生出多个线程来协同工作，在这种情况下，用户的代码是运行在多线程环境下的</p>
+<p>Node并没有提供多线程的支持，这代表用户编写的代码只能运行在当前线程中，用于运行代码的事件循环也是单线程运行的。开发者无法在一个独立进程中增加新的线程，但是可以派生出多个进程来达到并行完成工作的目的；另一方面，Node的底层实现并非是单线程的，libuv会通过类似线程池的实现来模拟不同操作系统下的异步调用，这对开发者来说是不可见的</p>
+<h2 id="Libuv中的多线程"><a href="#Libuv中的多线程" class="headerlink" title="Libuv中的多线程"></a>Libuv中的多线程</h2><p>开发者编写的代码确实运行在单线程环境中，但如果说整个Node都是依靠单线程运行的，那就不正确了，因为<code>libuv</code>中是有线程池的概念存在的</p>
+<p>Libuv是一个跨平台的异步IO库，它结合了UNIX下的<code>libev</code>和Windows下的<code>IOCP</code>特性，最早由Node的作者开发，专门为Node提供多平台下的异步IO支持。libuv本身是由<code>C/C++</code>语言实现，Node中的非阻塞IO以及事件循环的底层机制，都是由<code>libuv</code>来实现的</p>
+<p>👇libuv的架构</p>
+<p>![截屏2020-08-26 下午2.22.25](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 下午2.22.25.png)</p>
+<p>在Windows环境下，libuv直接使用Windows的IOCP(I/O Completion Port)实现异步IO。在非Windows环境下，libuv使用多线程来模拟异步IO</p>
+<p><strong>🔔Node的异步调用是由libuv来支持的</strong></p>
+<h1 id="并行和并发"><a href="#并行和并发" class="headerlink" title="并行和并发"></a>并行和并发</h1><p>并行(Parallel)与并发(Concurrent)是两个很常见的概念；对应了两种需求，一个是希望计算机做更多的事(处理多个队列)，另一个是希望计算机能更快地完成任务(让队列以更快的速度向前移动)</p>
+<h3 id="Node中的并发"><a href="#Node中的并发" class="headerlink" title="Node中的并发"></a>Node中的并发</h3><p>单线程支持高并发，通常都是依靠<code>异步+事件驱动(循环)</code>来实现的，异步使得代码在面临多个请求时不会发生阻塞，事件循环提供IO调用结束后调用回调函数的能力</p>
+<p>Java可以依靠多线程实现并发，Node本身不支持开发者书写多线程的代码，事件循环也是单线程运行的，但是通过<code>异步和事件驱动</code>能够很好地实现并发</p>
+<h1 id="Event-loop事件循环"><a href="#Event-loop事件循环" class="headerlink" title="Event loop事件循环"></a>Event loop事件循环</h1><p>Node代码虽然运行在单线程中，但仍然能支持高并发，就是依靠事件循环实现的</p>
+<h2 id="事件与循环"><a href="#事件与循环" class="headerlink" title="事件与循环"></a>事件与循环</h2><p>在可交互的用户页面上，用户会产生一系列的事件，包括单击按钮、拖动元素等，这些事件会按照顺序被加载到一个队列中去。除了页面事件之外，还有一些例如Ajax执行成功、文件读取完毕等事件</p>
+<p>在GUI程序中，代码本身就处在一个循环的包裹中；这个循环通常对开发者来说是不可见的，只有当开发者单击了窗体的关闭按钮，该循环才会结束。当用户单击了页面上的按钮或者进行其他操作时，就会产生相应的事件，这些事件会被加入到一个队列中，然后主循环会逐个处理它们。JavaScript也是一样，用户在前台不断产生事件，背后的循环(由浏览器实现)会逐个地处理它们</p>
+<p>而JavaScript是单线程的，为了避免一个过于耗时的操作阻塞了其他操作的执行，就要通过异步加回调的方式解决问题</p>
+<p>以<code>Ajax</code>请求为例，当JavaScript执行到对应的代码时，就为这句代码注册了一个事件，在发出请求后该语句就执行完毕，<strong>后续的操作会交给回调函数来处理</strong></p>
+<p>此时浏览器背后的循环正在不断遍历事件队列，在Ajax操作完成之前，事件队列里还是空的(并不是发出请求这一动作被加入事件队列，而是请求完成这一事件才会加入队列)；如果<code>Ajax</code>操作完成，这个队列中就会增加一个事件，随后被循环遍历到，如果这个事件绑定了一个回调方法，那么循环就会去调用这个方法</p>
+<h2 id="Node中的事件循环"><a href="#Node中的事件循环" class="headerlink" title="Node中的事件循环"></a>Node中的事件循环</h2><p>Node中的事件循环比起浏览器中的JavaScript还是有一些区别的，事件循环同样运行在单线程环境下，JavaScript的事件循环是依靠浏览器实现的，而Node作为另一种运行时(runtime)，事件循环由底层的<code>libuv</code>实现</p>
+<p>👇Node事件循环的具体流程</p>
+<p>![截屏2020-08-26 下午3.04.23](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 下午3.04.23.png)</p>
+<p>Node事件循环分成了6个不同的阶段，其中每个阶段都维护着一个回调函数的队列；在不同的阶段，事件循环会处理不同类型的事</p>
+<ol>
+<li>Timers：用来处理<code>setTimeOut()</code>和<code>setInterval()</code>的回调</li>
+<li>I/O callbacks：大多数的回调方法在这个阶段执行，除了<code>timers</code>、<code>close</code>和<code>setImmediate</code>事件的回调</li>
+<li>idle, prepare：仅仅在内部使用，不管它</li>
+<li>Poll：轮询，不断检查有没有新的IO事件，事件循环可能会在这里阻塞</li>
+<li>Check：处理<code>setImmediate()</code>事件的回调</li>
+<li>close callbacks：处理一些close相关的事件，例如<code>socket.on(&#39;close&#39;, ...)</code></li>
+</ol>
+<p>👇Node事件循环的代码结构</p>
+<pre><code class="javascript">while (true) &#123;
+    // ...
+    nv_run_timers()
+
+    nv_run_pending(loop)
+
+    nv_run_idle()
+
+    nv_io_poll()
+
+    nv_run_check()
+
+    nv_run_closing_handles()
+    // ...
+&#125;</code></pre>
+<p>假设事件循环现在进入了某个阶段(即开始执行上面其中一个方法)，即使在这期间有其他队列中的事件就绪，也会先将当前阶段队列里的全部回调方法执行完毕后，再进入到下个阶段，结合代码这点很好理解</p>
+<ol>
+<li><p>Timers</p>
+<p>主要用来处理定时器相关的回调，当一个定时器超时后，一个事件就会加入到队列中，事件循环会跳转至这个阶段执行对应的回调函数；定时器的回调会在触发后尽可能早地被调用，这表示实际的延时可能会比定时器规定的时间要长。如果事件循环，此时正在执行一个比较耗时的callback，那么定时器的回调只能等当前回调执行结束了才能被执行，即被阻塞。事实上<code>timers</code>阶段的执行受到poll阶段控制</p>
+</li>
+<li><p>I/O callbacks</p>
+<p>官方称除<code>timers</code>、 <code>setImmediate</code>，以及<code>close</code>操作之外的大多数的回调方法都位于这个阶段执行。事实上从源码来看，该阶段只用来执行<code>pending callback</code>，例如一个TCP socket执行出现了错误，在一些<code>*nix</code>系统下可能希望稍后再处理这里的错误，那么这个回调就会放在IO callback阶段来执行。一些常见的回调，例如<code>fs.readFile</code>的回调是放在poll阶段来执行的</p>
+</li>
+<li><p>Poll</p>
+<p>主要任务是等待新的事件出现(该阶段使用<code>epoll</code>来获取新的事件)，如果没有，事件循环可能会在此阻塞(关于是否在poll阶段阻塞以及阻塞多长时间，libuv有一些复杂的判定方法，不作深究)。这些事件对应的回调方法可能位于<code>timers</code>阶段(如果定义了定时器)，也可能是<code>check</code>阶段(设置了<code>setImmediate</code>方法)</p>
+</li>
+<li><p>Check</p>
+<p><code>setImmediate</code>是一个特殊的定时器方法，它占据了事件循环的一个阶段，整个check阶段就是为<code>setImmediate</code>方法而设置的。一般情况下，当事件循环到达poll阶段后，就会检查当前代码是否调用了<code>setImmediate</code>，但如果一个回调函数是被<code>setImmediate</code>方法调用的，事件循环就会跳出poll阶段进而进入check阶段</p>
+</li>
+<li><p>Close</p>
+<p>如果<code>socket</code>或者句柄被关闭，那么就会产生一个close事件，该事件会被加入到对应的队列中。close阶段执行完毕后，本轮事件循环结束，循环进入到下一轮</p>
+</li>
+</ol>
+<p>Node中的事件循环是分阶段处理的，对于每一阶段来说，处理事件队列中的事件就是执行对应的回调方法，每一阶段的事件循环都对应着不同的队列</p>
+<p>👇为了更好地理解Node中的事件循环，以一段代码为例来配合说明</p>
+<pre><code class="javascript">let fs = require(&quot;fs&quot;)
+
+let timeoutScheduled = Date.now()
+
+setTimeout(function () &#123;
+    let delay = Date.now() - timeoutScheduled
+    console.log(delay + &quot;ms have passed since I was scheduled&quot;)
+&#125;, 100)
+
+// 假设readFile耗费的时间为95ms
+fs.readFile(&#39;foo.txt&#39;, function (err, data) &#123;
+    let startCallback = Date.now()
+    // 使while循环阻塞10ms
+    while (Date.now() - startCallback &lt; 10) &#123;&#125;
+&#125;)</code></pre>
+<p>👆代码改编自官方文档中的一个例子，讲述事件循环不同过程的处理步骤。这段代码的逻辑很简单，包含了readfile和timer两个异步操作</p>
+<ol>
+<li>代码开始运行后，事件循环也开始运作了。首先检查timers，然而timers对应的事件队列目前还为空(100ms后才会有事件产生)，事件循环向后执行到了poll阶段，到目前为止还没有事件出现，由于代码中没有定义setImmediate操作，事件循环便在此一直等待新的事件出现</li>
+<li>直到95ms后，readFile读取文件完毕，产生了一个事件，加入到了poll这一队列中，此时事件循环将该队列中的事件取出，准备执行之后的callback(此时err和data的值已经就绪)，readFile的回调方法什么都没做，只是暂停了10ms</li>
+<li>事件循环本身也被阻塞10ms，按照通常的思维，95ms+10ms=105ms﹥100ms，timers队列中的事件已经就绪，应该先执行对应的回调方法才是，然而由于事件循环单线程运行，因此也会停止10ms，如果readFile的回调函数中包含了一个死循环，那么整个事件循环都会被阻塞，setTimeout的回调永远不会执行</li>
+<li>readFile的回调完成后，事件循环切换到timers阶段，接着取出timers队列中的事件执行对应的回调方法</li>
+</ol>
+<h2 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick"></a>process.nextTick</h2><p>定义一个异步动作，并且让这个动作在事件循环当前阶段结束后执行</p>
+<pre><code class="javascript">process.nextTick(function () &#123;
+    console.log(&#39;next&#39;)
+&#125;)
+
+console.log(&#39;first&#39;)
+// first
+// next</code></pre>
+<p><code>process.nextTick</code>并不是事件循环的一部分，但它的回调方法也是由事件循环调用，该方法定义的回调方法会被加入到名为<code>nextTickQueue</code>的队列中。在事件循环的任何阶段，如果<code>nextTickQueue</code>不为空，都会在当前阶段操作结束后优先执行<code>nextTickQueue</code>中的回调函数，当<code>nextTickQueue</code>中的回调方法被执行完毕后，事件循环才会继续向下执行</p>
+<p>Node限制了<code>nextTickQueue</code>的大小，如果递归调用了<code>process.nextTick</code>，那么当<code>nextTickQueue</code>达到最大限制后会抛出一个错误</p>
+<pre><code class="javascript">function recurse(i) &#123;
+    while (i &lt; 1)
+    process.nextTick(recurse(i))
+&#125;
+
+recurse(0)</code></pre>
+<p>![截屏2020-08-26 下午5.18.25](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 下午5.18.25.png)</p>
+<p><code>nextTickQueue</code>显然是一个队列，先被加入队列的回调会先执行</p>
+<pre><code class="javascript">process.nextTick(function () &#123;
+    console.log(&#39;second&#39;)
+&#125;)
+
+process.nextTick(function () &#123;
+    console.log(&#39;third&#39;)
+&#125;)
+
+console.log(&#39;first&#39;)
+
+// first
+// second
+// third</code></pre>
+<p>和其他回调函数一样，<code>nextTick</code>定义的回调也是由事件循环执行的，如果<code>nextTick</code>的回调方法中出现了阻塞操作，后面的要执行的回调同样会被阻塞</p>
+<pre><code class="javascript">process.nextTick(function () &#123;
+    console.log(&#39;second&#39;)
+    while (true) &#123;&#125; 👈
+&#125;)
+
+process.nextTick(function () &#123;
+    console.log(&#39;third&#39;)
+&#125;)
+
+console.log(&#39;first&#39;)
+
+// first
+// second</code></pre>
+<h2 id="nextTick与setImmediate"><a href="#nextTick与setImmediate" class="headerlink" title="nextTick与setImmediate"></a>nextTick与setImmediate</h2><p>setImmediate方法不属于<code>ECMAScript</code>标准，而是Node提出的新方法，它同样将一个回调函数加入到事件队列中，不同于setTimeout和setInterval，setImmediate并不接受一个时间作为参数，setImmediate的事件会在当前事件循环的结尾触发，对应的回调方法会在当前事件循环末尾(check阶段)执行</p>
+<p>setImmediate方法和process.nextTick方法很相似，<strong>由于process.nextTick会在当前操作完成后立刻执行，因此总会在setImmediate之前执行</strong></p>
+<p>🔎关于这两个方法有个笑话：nextTick和setImmediate的行为和名称含义是反过来的</p>
+<pre><code class="javascript">setImmediate(function (arg) &#123;
+    console.log(&#39;executing immediate:&#39;, arg)
+&#125;, &#39;so immediate&#39;)
+
+process.nextTick(function () &#123;
+    console.log(&#39;next tick&#39;)
+&#125;)
+
+// next tick
+// executing immediate: so immediate</code></pre>
+<p>❗️当有递归的异步操作时只能使用setImmediate，不能使用process.nextTick，setImmediate不会生成call stack</p>
+<pre><code class="javascript">function recurse( i, end) &#123;
+    if (i &gt; end) &#123;
+        console.log(&quot;Done!&quot;)
+    &#125; else &#123;
+        console.log(i)
+        setImmediate(recurse, i + 1, end)
+    &#125;
+&#125;
+
+recurse(0, 9999)</code></pre>
+<h2 id="setImmediate和-setTimeout"><a href="#setImmediate和-setTimeout" class="headerlink" title="setImmediate和 setTimeout"></a>setImmediate和 setTimeout</h2><p>setImmediate方法会在poll阶段结束后执行，而setTimeout会在规定的时间到期后执行，由于无法预测执行代码时事件循环当前处于哪个阶段，因此当代码中同时存在这两个方法时，回调函数的执行顺序不是固定的</p>
+<pre><code class="javascript">setTimeout(function () &#123;
+    console.log(&#39;timeout&#39;)
+&#125;, 0)
+
+setImmediate(function () &#123;
+    console.log(&#39;immediate&#39;)
+&#125;)</code></pre>
+<p>👆但代码本人在实际测试中一直是timeout优先</p>
+<p>但如果将二者放在一个IO操作的callback中，则永远是setImmediate先执行</p>
+<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function () &#123;
+    setTimeout(function () &#123;
+        console.log(&#39;timeout&#39;)
+    &#125;, 0)
+
+    setImmediate(function () &#123;
+        console.log(&#39;immediate&#39;)
+    &#125;)
+&#125;)</code></pre>
+<p>因为readFile回调执行时，事件循环位于poll阶段，因此事件循环会先进入check阶段执行setImmediate的回调，然后再进入timers阶段执行setTimeout的回调</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》 李锴</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                《新时期的Node.js入门》学习日记-常用模块(上)</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%94%BB%E5%87%BB.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                学习JavaScript原型链污染攻击</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

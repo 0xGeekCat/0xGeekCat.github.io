@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">《新时期的Node.js入门》学习日记-常用模块(上) | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">《新时期的Node.js入门》学习日记-常用模块(上)</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-27&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h1><h2 id="JavaScript的模块规范"><a href="#JavaScript的模块规范" class="headerlink" title="JavaScript的模块规范"></a>JavaScript的模块规范</h2><p>JavaScript对模块规范的强调恰恰是其缺陷的体现，这主要是由历史原因造成的。在其他常见编程语言例如Java、 C++中，模块规范从未被如此刻意强调过，也没有分化出像JavaScript这般多样的标准</p>
+<p>目前流行的<strong>JavaScript模块规范</strong>有两种</p>
+<ul>
+<li><p>CommonJS</p>
+<p>其目标很远大，它的愿景是将来JavaScript不仅仅运行在浏览器内部，而是作为一门独立的编程语言在各种领域发挥作用，为此需要一种通用的模块规范。</p>
+<p>CommonJS将每个文件都看作一个模块，<strong>模块内部定义的变量都是私有的，无法被其他模块使用</strong>，除非使用预定义的方法(exports, require)将内部的变量暴露，其最为出名的实现就是Node.js，其一个显著的特点就是模块的加载同步，就目前来说，受限于宽带速度，并不适用于浏览器中的JavaScript</p>
+</li>
+<li><p>AMD</p>
+<p>AMD意思就是<code>异步模块定义</code>。它采用异步方式加载模块，模块的加载不影响它后面语句的运行。依赖这个模块的代码定义在一个回调函数中，等到加载完成之后这个回调函数才会运行。目前在前端流行的RequireJS就是AMD规范的一种实现</p>
+</li>
+</ul>
+<p>此外，ES6中也提出了一种模块机制，在以后章节再做解释</p>
+<h2 id="require及其运行机制"><a href="#require及其运行机制" class="headerlink" title="require及其运行机制"></a>require及其运行机制</h2><p>Node遵循CommonJS模块规范，也就是使用<code>require</code>关键字来加载模块</p>
+<pre><code class="javascript">let person = &#123;
+    talk: function () &#123;
+        console.log(&quot;I&#39;m talking&quot;)
+    &#125;,
+
+    listen: function () &#123;
+        console.log(&quot;I&#39;m listening&quot;)
+    &#125;
+&#125;
+
+module.exports = person</code></pre>
+<p>👆实现一个自定义模块，该模块提供了一个接口(person)，然后使用<code>module.exports</code>将该接口暴露给外部使用，外部的代码想要使用person.js中的方法，需要使用<code>require</code>关键字引入该接口</p>
+<pre><code class="javascript">require(&#39;./person&#39;).talk()</code></pre>
+<p><code>require</code>关键字并不依赖于<code>exports</code>，也可以加载一个没有暴露任何方法的模块，但通常没什么意义</p>
+<h3 id="重复引入"><a href="#重复引入" class="headerlink" title="重复引入"></a>重复引入</h3><p>在C++中，通常使用<code>#IFNDEF</code>(if not defined)等关键字来避免头文件的重复引入，在Node中无须关心这个问题，因为Node默认先从缓存中加载模块，一个模块被第一次加载后，就会在缓存中维持一个副本，<strong>如果遇到重复加载的模块会直接提取缓存中的副本</strong>，也就是说在任何情况下每个模块都只在缓存中有一个实例</p>
+<p><code>require()</code>加载模块是同步而非异步原因有三点</p>
+<ul>
+<li>公共依赖的模块，自然要一步加载到位</li>
+<li>模块个数有限，且Node会自动缓存已经加载的模块，再加上访问的都是本地文件，产生的IO开销几乎可以忽略</li>
+<li>Node程序运行在服务器端，很少遇到需要频繁重启服务，所以在服务启动时在加载上花点时间也没有什么影响</li>
+</ul>
+<h3 id="require的缓存策略"><a href="#require的缓存策略" class="headerlink" title="require的缓存策略"></a>require的缓存策略</h3><p>Node会自动缓存经过<code>require</code>引入的文件，使得下次再引入不需要经过文件系统而是直接从缓存中读取。<strong>这种缓存是基于文件路径定位的</strong>，这表示即使有两个完全相同的文件，但它们位于不同的路径下，也会在缓存中维持两份</p>
+<pre><code class="javascript">console.log(require.cache)</code></pre>
+<p>![截屏2020-08-26 下午8.02.30](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-26 下午8.02.30.png)</p>
+<p>上面输出的是<code>test.js</code>在缓存中的信息，其中<code>path</code>表示的是模块引入时Node的查找路径，即从当前目录下的<code>node_modules</code>开始，一直到磁盘根目录为止</p>
+<h3 id="require的隐患"><a href="#require的隐患" class="headerlink" title="require的隐患"></a>require的隐患</h3><p>当调用<code>require</code>加载一个模块时，模块内部的代码都会被调用，有时候这可能会带来隐藏的bug</p>
+<pre><code class="javascript">// module.js
+function test() &#123;
+    setInterval(function () &#123;
+        console.log(&#39;test&#39;)
+    &#125;, 1000)
+&#125;
+test() 👈
+
+module.exports = test
+
+// test.js
+let test = require(&#39;./module&#39;)</code></pre>
+<p><code>test.js</code>试着运行一下会发现会每隔一秒输出test，同时<code>run.js</code>进程不会自主退出</p>
+<p>加载一个模块相当于执行模块内部的代码，在<code>module.js</code>中由于设置了一个不间断的定时器，导致<code>run.js</code>也会一直运行</p>
+<p>设想一种情景，当调用某个已经编写完成的模块时，明明所有的调用都已经结束，但调用者进程无论如何都不会退出，这很可能是被调用的模块内部有一个隐蔽的循环或者一个一直打开的数据库连接，这个问题在开发过程中可能不会被注意到或者不会被触发，如果真正到了生产环境，这种情况可能导致严重的内存泄露</p>
+<p>这一方面告诉我们要对引用未知的模块保持警惕，即使那个模块是自己写的；另一方面也揭示了测试的重要性</p>
+<h3 id="模块化与作用域"><a href="#模块化与作用域" class="headerlink" title="模块化与作用域"></a>模块化与作用域</h3><p><strong>Node和JavaScript中的<code>this</code>指向有一些区别，其中Node控制台和脚本文件的策略也不一样</strong>。对于浏览器中的JavaScript来说，无论是在脚本或者是Chrome控制台中，其this的指向和行为都是一致的；而Node则不是</p>
+<ul>
+<li><p>控制台中的this</p>
+<p>![截屏2020-08-26 下午11.11.23](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-26 下午11.11.23.png)</p>
+<p>在Chrome控制台中this指向global对象，全局变量会被挂载到global下</p>
+<p>❗️注意是<code>var a</code>不能用<code>let a</code>，<code>let</code>在之后的章节进行讨论</p>
+</li>
+<li><p>脚本中的this</p>
+<pre><code class="javascript">console.log(this) 👈 &#123;&#125;
+
+var a = 10
+console.log(this.a) 👈 undefined 
+console.log(global.a) 👈 undefined</code></pre>
+<p>  全都是<code>undefined</code>，说明第一行代码定义的变量a并没有挂载在全局的this或者global对象</p>
+<p>  如果声明变量时不使用<code>var</code>或者<code>let</code>关键字</p>
+<pre><code class="javascript">a = 10
+console.log(this.a) 👈 undefined 
+console.log(global.a) 👈 10 </code></pre>
+<p> Node脚本文件中定义的全局<code>this</code>实际上指向<code>module.exports</code></p>
+<pre><code class="javascript">this.a = 10
+console.log(module.exports.a) 👈 10</code></pre>
+<p><strong>🔔控制台的全局this和global可以看作是同一对象，而在脚本文件中，二者并不等价</strong></p>
+</li>
+</ul>
+<h3 id="Node中的作用域种类"><a href="#Node中的作用域种类" class="headerlink" title="Node中的作用域种类"></a>Node中的作用域种类</h3><ul>
+<li><p>全局作用域</p>
+<p>如果一个变量没有用var、 let或者const之类的关键字修饰，那么它就是属于全局作用域，定义在全局作用域上的变量可以通过global对象访问；位于全局作用域中的变量，即使是在不同的文件中也能访问到</p>
+</li>
+<li><p>模块作用域</p>
+<p>在<strong>代码文件顶层</strong>(不在任何方法，对象中)使用var、let或者const修饰的变量都位于模块作用域中，不同模块作用域之间的作用域是隔离的。模块作用域中的this指向module.exports</p>
+</li>
+<li><p>函数作用域</p>
+<p>有效范围位于函数体内</p>
+</li>
+<li><p>块级作用域</p>
+<p><code>ES2015</code>中引入的let关键字提供了块级作用域的支持</p>
+</li>
+</ul>
+<h1 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h1><p>Buffer是Node特有(区别于浏览器JavaScript)的数据类型，<strong>主要用来处理二进制数据</strong>，在前端JavaScript中，和二进制数据打交道的机会比较少(ES2015增加了ArrayBuffer类型，用来操作二进制数据流)。而Node在进行Web开发时经常需要和前端进行数据通信，二进制数据流十分常见(例如传输一张GIF图片)，因此Node除了String外，还内置了Buffer这一数据类型，<strong>它是Node作为运行时对JavaScript做的扩展</strong></p>
+<p>Buffer属于固有(built-in)类型，因此无须使用require进行引入</p>
+<p>在文件操作和网络操作中，如果不显式声明编码格式，其返回数据的默认类型就是Buffer</p>
+<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function (err, results) &#123;
+    console.log(results) 👈 &lt;Buffer 49 27 6d 20 61 20 68 61 63 6b 65 72&gt;
+&#125;)</code></pre>
+<p>最后打印出的是十六进制的数据，由于纯二进制格式太长而且难以阅读，Buffer通常表现为十六进制的字符串</p>
+<h2 id="Buffer的构建与转换"><a href="#Buffer的构建与转换" class="headerlink" title="Buffer的构建与转换"></a>Buffer的构建与转换</h2><p>可以使用Buffer类初始化一个Buffer对象，参数可以是由二进制数据组成的数组也可以是字符串</p>
+<pre><code class="javascript">var buffer = Buffer.from([0x49, 0x27, 0x6d, 0x20, 0x61, 0x20, 0x68, 0x61, 0x63, 0x6b, 0x65, 0x72]);
+var buffer = Buffer.from(&quot;I&#39;m a hacker&quot;)</code></pre>
+<p>👆代码写法与书中例子不相符，因为在现如今的Node API中，<code>Buffer()</code>方法被标记为<code>Deprecated</code>，表示已不推荐使用，因为其存在<a target="_blank" rel="noopener" href="https://github.com/nodejs/node/issues/4660">漏洞</a>；目前推荐的是使用<code>Buffer.from</code>方法来初始化一个Buffer对象，如果想把一个Buffer对象转成字符串形式，还需要使用<code>toString</code>方法</p>
+<p>![截屏2020-08-27 上午12.05.56](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午12.05.56.png)</p>
+<p>Buffer支持的编码类型种类有限，仅支持ASCII，Base64，Binary，Hex，UTF-8，UTF-16LE/UCS-2</p>
+<p>Buffer还提供了<code>isEncoding</code>方法来判断是否支持转换为目标编码格式</p>
+<pre><code class="javascript">console.log(Buffer.isEncoding(&quot;UTF-8&quot;))
+console.log(Buffer.isEncoding(&quot;UTF-7&quot;))</code></pre>
+<p>如果<code>toString</code>在调用时不包含任何参数，那么就会默认采用UTF-8编码，并转换整个Buffer对象</p>
+<pre><code class="javascript">var buffer = Buffer.from([0x49, 0x27, 0x6d, 0x20, 0x61, 0x20, 0x68, 0x61, 0x63, 0x6b, 0x65, 0x72]);
+console.log(buffer.toString(&#39;UTF-8&#39;, 0, 12)) 👈 I&#39;m a hacker</code></pre>
+<h2 id="Buffer的拼接"><a href="#Buffer的拼接" class="headerlink" title="Buffer的拼接"></a>Buffer的拼接</h2><p>Buffer一个常见的使用场景是用来处理HTTP的post请求</p>
+<pre><code class="javascript">var body = &#39;&#39;
+req.setEncoding(&#39;utf8&#39;)
+req.on(&#39;data&#39;, function (chunk) &#123;
+    body += chunk 👈 此处包含了一个隐式的编码转换
+&#125;)
+req.on(&#39;end&#39;, function () &#123;&#125;)</code></pre>
+<p><code>body += chunk</code>相当于<code>body += chunk.toString()</code>，当上传字符全都是英文的时候固然没关系，但如果字符串中包含中文或者其他语言，由于<code>toString</code>方法默认使用utf-8编码，这时就有可能出现乱码</p>
+<pre><code class="javascript">var rs = require(&#39;fs&#39;).createReadStream(&#39;foo.txt&#39;, &#123;highWaterMark: 10&#125;)
+
+var data = &#39;&#39;
+rs.on(&#39;data&#39;, function (chunk) &#123;
+    data += chunk
+&#125;)
+rs.on(&#39;end&#39;, function () &#123;
+    console.log(data)
+&#125;)</code></pre>
+<h3 id="highWaterMark"><a href="#highWaterMark" class="headerlink" title="highWaterMark"></a>highWaterMark</h3><p><strong>最高水位线</strong>表示内部缓冲区最多能容纳的字节数，如果超过这个大小，就停止读取资源文件，默认值是64KB</p>
+<p>假设文件大小为100KB，那么在默认情况下，系统就会每次从文件里读取64KB大小的数据，随后触发data事件；<code>chunk</code>的大小即为<code>highWaterMark</code>的大小；然后接着读取36KB大小的文件，再次触发data事件；随后文件读取结束，触发end事件；如果<code>highWaterMark</code>设置得很小，那么就会发生多次系统调用，这会对性能造成影响</p>
+<p>运行例子，可以看到输出中产生了乱码</p>
+<p>![截屏2020-08-27 上午8.48.04](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午8.48.04.png)</p>
+<p>在utf-8中一个汉字占三个字节，那么将<code>highwatermark</code>设置为10后，每三个字之后都会有一个字被截断，因此在调用<code>toString</code>方法的时候出现了乱码</p>
+<p>打印例子观察<code>chunk</code>，可以发现刚好在<code>世</code>这里字符被截断</p>
+<p>![截屏2020-08-27 上午8.52.26](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午8.52.26.png)</p>
+<p>目前👆代码已被舍弃，官方的推荐做法是使用<code>push</code>方法来拼接Buffer</p>
+<pre><code class="javascript">var rs = require(&#39;fs&#39;).createReadStream(&#39;foo.txt&#39;, &#123;highWaterMark: 10&#125;)
+
+var data = []
+rs.on(&#39;data&#39;, function (chunk) &#123;
+    data.push(chunk)
+&#125;)
+rs.on(&#39;end&#39;, function () &#123;
+    var buf = Buffer.concat(data)
+    console.log(buf.toString())
+&#125;)
+// 你好，世界</code></pre>
+<p>先将Buffer放到数组里面，等待传输完成后再进行转换就不会出现乱码</p>
+<h1 id="File-System"><a href="#File-System" class="headerlink" title="File System"></a>File System</h1><p>File System是Node中使用最为频繁的模块之一，该模块提供了读写文件的能力，是借助于底层的<code>linuv</code>的<code>C++ API</code>实现的</p>
+<p>浏览器中的JavaScript没有读写本地文件系统的能力(忽略IE中的ActiveX)，<strong>而Node作为服务器编程语言，文件系统API是必需的</strong></p>
+<p>👇学习几种常见API</p>
+<h3 id="readFile"><a href="#readFile" class="headerlink" title="readFile"></a>readFile</h3><p>![截屏2020-08-27 上午10.07.22](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.07.22.png)</p>
+<p>异步读取文本文件中的内容</p>
+<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function (err, data) &#123;
+    if (err)
+        throw err
+    console.log(data)
+&#125;)</code></pre>
+<p>readFile会将一个文件的全部内容都读到内存中，适用于体积较小的文本文件；如果你有一个数百MB大小的文件需要读取，建议选择stream。readFile读出的数据需要在回调方法中获取，而<code>readFileSync</code>直接返回文本数据内容</p>
+<pre><code class="javascript">var data = require(&#39;fs&#39;).readFileSync(&#39;foo.txt&#39;, &#123;encoding: &quot;UTF-8&quot;&#125;)
+console.log(data)</code></pre>
+<p>如果不指定readFile的<code>encoding</code>配置，readFile会直接返回Buffer格式</p>
+<p>![截屏2020-08-27 上午9.46.53](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午9.46.53.png)</p>
+<h3 id="writeFile"><a href="#writeFile" class="headerlink" title="writeFile"></a>writeFile</h3><p>![截屏2020-08-27 上午10.08.25](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.08.25.png)</p>
+<p>WriteFile的第一个参数为文件名，如果不存在，则会创建它(默认的flag为<code>w</code>)</p>
+<pre><code class="javascript">require(&#39;fs&#39;).writeFile(&#39;foo.txt&#39;, &quot;I&#39;m a hacker&quot;, &#123;flag: &#39;a&#39;, encoding: &#39;utf-8&#39;&#125;,
+    function (err) &#123;
+    if (err) &#123;
+        console.log(err)
+    &#125; else &#123;
+        console.log(&#39;success&#39;)
+    &#125;
+&#125;)</code></pre>
+<p>![截屏2020-08-27 上午10.12.54](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.12.54.png)</p>
+<h3 id="fs-stat-path-callback"><a href="#fs-stat-path-callback" class="headerlink" title="fs.stat(path, callback)"></a>fs.stat(path, callback)</h3><p>stat方法通常用来获取文件的状态，通常开发者可以在调用open、read或者write方法之前调用<code>fs.stat</code>方法，用来判断该文件是否存在</p>
+<pre><code class="javascript">require(&#39;fs&#39;).stat(&#39;foo.txt&#39;, function (err, result) &#123;
+    if (err) &#123;
+        console.log(err)
+    &#125; else &#123;
+        console.log(result)
+    &#125;
+&#125;)</code></pre>
+<p>如果文件存在，<code>result</code>就会返回文件的状态信息</p>
+<p>![截屏2020-08-27 上午11.36.16](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午11.36.16.png)</p>
+<p>如果文件不存在，则会出现<code>Error: ENOENT: no such file or directory</code>的错误</p>
+<h4 id="fs-stat和fs-fstat的区别"><a href="#fs-stat和fs-fstat的区别" class="headerlink" title="fs.stat和fs.fstat的区别"></a><code>fs.stat</code>和<code>fs.fstat</code>的区别</h4><p>File System模块还有一个<code>fstat</code>方法</p>
+<p>![截屏2020-08-27 上午11.40.36](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午11.40.36.png)</p>
+<p>两个方法唯一的区别是<code>fstat</code>方法第一个参数是文件描述符，因此其通常搭配<code>open</code>方法使用，因为<code>open</code>方法返回的结果就是一个文件描述符</p>
+<p>👇代码运行结果与<code>fs.stat</code>相同</p>
+<pre><code class="javascript">var fs = require(&#39;fs&#39;)
+
+fs.open(&#39;foo.txt&#39;, &#39;a&#39;, function (err, fd) &#123;
+    if (err) &#123;
+        console.log(err)
+    &#125; else &#123;
+        console.log(fd)
+    &#125;
+
+    fs.fstat(fd, function (err, stats) &#123;
+        if (err) &#123;
+            console.log(err)
+        &#125; else &#123;
+            console.log(stats)
+        &#125;
+    &#125;)
+&#125;)</code></pre>
+<h3 id="readdir"><a href="#readdir" class="headerlink" title="readdir"></a>readdir</h3><p>![截屏2020-08-27 下午5.44.26](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.44.26.png)</p>
+<p>获取目录下的所有文件名是一个常见的需求，实现这个功能只需要<code>fs.readdir</code>以及<code>fs.stat</code>两个API，<code>readdir</code>用于获取目录下的所有文件或者子目录，<code>stat</code>用来判断具体每条记录是文件还是子目录</p>
+<pre><code class="javascript">var fs = require(&#39;fs&#39;)
+
+function getAllFileFromPath(path) &#123;
+    fs.readdir(path, function (err, res) &#123;
+        for (var subPath of res) &#123;
+            var statObj = fs.statSync(path + &#39;/&#39; + subPath)
+            if (statObj.isDirectory()) &#123;
+                console.log(&quot;Dir:&quot;, subPath)
+                getAllFileFromPath(path + &#39;/&#39; + subPath)
+            &#125; else &#123;
+                console.log(&quot;File:&quot;, subPath)
+            &#125;
+        &#125;
+    &#125;)
+&#125;
+
+getAllFileFromPath(__dirname)</code></pre>
+<p>![截屏2020-08-27 下午5.08.56](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.08.56.png)</p>
+<h1 id="HTTP服务"><a href="#HTTP服务" class="headerlink" title="HTTP服务"></a>HTTP服务</h1><p>HTTP模块是Node的核心模块，主要提供一系列用于网络传输的API，这些API大都位于比较底层的位置，可以让开发者自由地控制整个HTTP传输过程</p>
+<h2 id="创建HTTP服务器"><a href="#创建HTTP服务器" class="headerlink" title="创建HTTP服务器"></a>创建HTTP服务器</h2><pre><code class="javascript">var http = require(&#39;http&#39;)
+var server = http.createServer(function (req, res) &#123;
+    res.writeHead(200, &#123;&#39;Content-Type&#39;: &#39;text/plain&#39;&#125;)
+    res.end(&quot;0xGeekCat&quot;)
+&#125;)
+
+server.listen(3000)</code></pre>
+<p>👆使用createServer方法创建一个简单的HTTP服务器，该方法返回一个<code>http.server</code>类的实例，createServer方法包含一个匿名的回调函数，该函数有两个参数<code>req</code>和<code>res</code>，它们是InComingMessage和ServerResponse的实例。分别表示HTTP的request和response对象，服务器创建完成后Node进程开始循环监听端口</p>
+<p>访问<code>127.0.0.1:3000</code>的结果</p>
+<p>![截屏2020-08-27 下午5.19.47](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.19.47.png)</p>
+<p>HTTP请求还会触发connection和request事件，👇监听来自客户端的事件</p>
+<p>![截屏2020-08-27 下午5.38.35](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.38.35.png)</p>
+<p>❗️观察结果发现发生了两次连接请求适应浏览器还访问了<code>favicon.ico</code></p>
+<p>![截屏2020-08-27 下午5.40.17](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.40.17.png)</p>
+<h3 id="简单的静态文件服务器"><a href="#简单的静态文件服务器" class="headerlink" title="简单的静态文件服务器"></a>简单的静态文件服务器</h3><pre><code class="javascript">var http = require(&#39;http&#39;)
+var fs = require(&#39;fs&#39;)
+
+var server = http.createServer(function (req, res) &#123;
+    if (req.url === &#39;/&#39;) &#123;
+        var fileList = fs.readdirSync(&#39;./&#39;)
+        res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;)
+        res.end(fileList.toString())
+    &#125; else &#123;
+        var path = req.url
+        fs.readFile(&#39;.&#39; + path, function (err, data) &#123;
+            if (err) &#123;
+                res.end(&quot;Internal error&quot;)
+                throw err
+            &#125;
+            res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;)
+            res.end(data)
+        &#125;)
+    &#125;
+&#125;)
+
+var port = 3000
+server.listen(port)
+console.log(&quot;Listening on 3000&quot;)
+
+process.on(&quot;uncaughtException&quot;, function () &#123;
+    console.log(&quot;got error&quot;)
+&#125;)</code></pre>
+<h2 id="处理HTTP请求"><a href="#处理HTTP请求" class="headerlink" title="处理HTTP请求"></a>处理HTTP请求</h2><p>当处理HTTP请求时，最先做的事就是获取请求的URL、method等信息。Node将相关的信息都封装在<code>req</code>对象中，该对象是IncomingMessage的实例</p>
+<h3 id="method"><a href="#method" class="headerlink" title="method"></a>method</h3><pre><code class="javascript">var method = req.method</code></pre>
+<p>HTTP请求method的值通常是get、post、put、delete、update这5个关键字之一，以get和post最为常见</p>
+<h3 id="header"><a href="#header" class="headerlink" title="header"></a>header</h3><pre><code class="javascript">var headers = req.headers</code></pre>
+<p>![截屏2020-08-27 下午7.53.17](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午7.53.17.png)</p>
+<h3 id="request-body"><a href="#request-body" class="headerlink" title="request body"></a>request body</h3><p>Node使用stream处理HTTP的请求体，stream注册了data和end两个事件</p>
+<pre><code class="javascript">var body = []
+req.on(&#39;data&#39;, function (chunk) &#123;
+    body.push(chunk)
+&#125;).on(&#39;end&#39;, function () &#123;
+    body = Buffer.concat(body).toString()
+&#125;)</code></pre>
+<h3 id="Response对象"><a href="#Response对象" class="headerlink" title="Response对象"></a>Response对象</h3><h4 id="statusCode"><a href="#statusCode" class="headerlink" title="statusCode"></a>statusCode</h4><p>Node中如果开发者不手动设置，那么状态码的值会默认为200。但200并不适用所有场景</p>
+<h4 id="response-header"><a href="#response-header" class="headerlink" title="response header"></a>response header</h4><p>通过<code>setHeader</code>方法设置response的头部信息，但其只能设置<code>response header</code>单个属性，如果想要一次性设置所有的响应头和状态码，则使用<code>writeHead</code>方法，<code>writeHead</code>方法用于定义HTTP响应头，包括状态码等一系列属性；调用该方法后，服务器向客户端发送HTTP响应头</p>
+<pre><code class="javascript">res.writeHead(200, &#123;
+    &#39;Content-Length&#39;: Buffer.byteLength(body),
+    &#39;Content-Type&#39;: &#39;text/plain&#39;
+&#125;)</code></pre>
+<p>有时开发者并不会显式调用该方法，当调用end方法时也会调用writeHead方法，此时<code>statusCode</code>会自动设置成200</p>
+<h4 id="response-body"><a href="#response-body" class="headerlink" title="response body"></a>response body</h4><p>response对象是一个<code>writableStream</code>实例，可以直接调用write方法进行写入，写入完成后再调用end方法将该stream发送到客户端</p>
+<pre><code class="javascript">res.write(&#39;&lt;html&gt;&#39;)
+res.write(&#39;&lt;body&gt;&#39;)
+res.write(&#39;&lt;h1&gt;0xGeekCat&lt;/h1&gt;&#39;)
+res.write(&#39;&lt;/body&gt;&#39;)
+res.write(&#39;&lt;/html&gt;&#39;)
+res.end()</code></pre>
+<p>更好的方法是直接将<code>response body</code>作为end方法的参数进行返回</p>
+<pre><code class="javascript">res.end(&#39;&lt;html&gt;&lt;body&gt;&lt;h1&gt;0xGeekCat&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&#39;)</code></pre>
+<h4 id="response-end"><a href="#response-end" class="headerlink" title="response.end"></a>response.end</h4><p>end方法在每个HTTP请求的最后都会被调用，当客户端的请求完成之后，开发者应该调用该方法来结束HTTP请求。通常情况下，如果不调用end方法，用户最直观的感受通常是浏览器位于地址栏左边的叉号会一直存在，表示该请求尚未完成</p>
+<p>👇已完成</p>
+<p>![截屏2020-08-27 下午10.13.32](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.13.32.png)</p>
+<p>👇未完成</p>
+<p>![截屏2020-08-27 下午10.13.54](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.13.54.png)</p>
+<p>end方法支持字符串或者buffer作为参数，可以指定HTTP请求最后返回的数据，该数据会在浏览器页面上显示；如果定义了回调方法，那么会在end返回后调用</p>
+<pre><code class="javascript">res.end(&quot;0xGeekCat&quot;, function () &#123;
+    console.log(&#39;end&#39;)
+&#125;)</code></pre>
+<h3 id="上传数据"><a href="#上传数据" class="headerlink" title="上传数据"></a>上传数据</h3><p>传统的Web开发中，最常用的HTTP请求只有get和post两种。get请求的报文内容很简单，只有请求行和请求头部；post请求由于要上传数据，因此需要包含请求体的内容，有两个相关的属性经常被用到，分别是<code>content-type</code>和<code>content-length</code></p>
+<p><strong>首先判断请求方法的类型</strong></p>
+<pre><code class="javascript">var http = require(&#39;http&#39;)
+
+var server = http.createServer(function (req, res) &#123;
+    if (req.method === &#39;get&#39;) &#123;
+        // TODO
+    &#125;
+    if (req.method === &#39;post&#39;) &#123;
+        // TODO
+    &#125;
+&#125;)</code></pre>
+<p><strong>提交表单</strong></p>
+<pre><code class="javascript">&lt;form action=&quot;/login&quot; method=&quot;post&quot; id=&quot;form1&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;username&quot; id=&quot;username&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;password&quot; name=&quot;password&quot; id=&quot;password&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;submit&quot; name=&quot;submit&quot; id=&quot;submit&quot;&gt;
+&lt;/form&gt;</code></pre>
+<p><strong>server端的代码</strong></p>
+<pre><code class="javascript">var http = require(&#39;http&#39;)
+var fs = require(&#39;fs&#39;)
+
+var server = http.createServer(function (req, res) &#123;
+    if (req.url === &#39;/login&#39;) &#123;
+        switch (req.method) &#123;
+            case &#39;GET&#39;:
+                // 使用流来加载login.html
+                fs.createReadStream(&#39;login.html&#39;).pipe(res) 👈 将Readable流中的数据传输给Writable流 readable.pipe(writeable)
+                break
+            case &#39;POST&#39;:
+                console.log(req.headers)
+                break
+            default :
+                console.log(&#39;other request&#39;)
+                break
+        &#125;
+    &#125; else &#123;
+        res.writeHead(302, &#123;
+            &#39;Location&#39;: &#39;/login&#39;
+        &#125;)
+        res.end()
+    &#125;
+&#125;)
+
+server.listen(3000)</code></pre>
+<p>![截屏2020-08-28 上午10.45.27](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.45.27.png)</p>
+<p>如果不使用<code>Express</code>之类的Web框架，Node实现的服务器代码通常都是上面这种结构，获取请求的URL之后，再针对不同的<code>HTTP method</code>进行处理，<strong>缺点就是要写很多条件控制语句</strong></p>
+<p>当用户在浏览器输入用户名、密码并提交后，浏览器向<code>127.0.0.1:3000/login</code>发起post请求</p>
+<p><strong>打印头部信息</strong></p>
+<p>![截屏2020-08-27 下午10.43.21](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.43.21.png)</p>
+<p>以表单形式提交数据时，请求头中的content-type为<code>application/x-www-form-urlencoded</code></p>
+<p>报文主体中的内容是通过数据流的形式来传输的，通过监听流事件的方式来获取数据</p>
+<p><strong>打印请求体</strong></p>
+<pre><code class="javascript">case &#39;POST&#39;:
+    var body = []
+    req.on(&#39;data&#39;, function (chunk) &#123;
+        body.push(chunk)
+    &#125;).on(&#39;end&#39;, function () &#123;
+        body = Buffer.concat(body).toString()
+        console.log(body)
+    &#125;)
+    break</code></pre>
+<p>![截屏2020-08-27 下午10.51.03](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.51.03.png)</p>
+<h3 id="使用post上传文件"><a href="#使用post上传文件" class="headerlink" title="使用post上传文件"></a>使用post上传文件</h3><pre><code class="javascript">&lt;form action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;&quot;&gt;&lt;br&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;submit&quot; name=&quot;submit&quot;&gt;
+&lt;/form&gt;</code></pre>
+<p>和只有字段值的表单不同的是，上传文件的表单要设置<code>enctype=&quot;multipart/form-data&quot;</code>属性，自然文件上传时的header信息也有所不同</p>
+<p>![截屏2020-08-27 下午11.11.29](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午11.11.29.png)</p>
+<p><strong>服务器处理上传文件</strong></p>
+<pre><code class="javascript">function dealUpload(req, res) &#123;
+    var form = new formidable.IncomingForm() 👈 创建formidable.IncomingFrom对象
+    form.keepExtensions = true 👈 保持原有扩展名
+    form.uploadDir = __dirname 👈上传目录为当前目录
+    form.parse(req, function (err, fields, files) &#123;
+        if (err)
+            throw err
+        console.log(fields) 👈 &#123; submit: &#39;submit&#39; &#125;
+        console.log(files)
+        res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;)
+        res.end(&quot;upload finished&quot;)
+    &#125;)
+&#125;</code></pre>
+<p>![截屏2020-08-28 上午8.39.46](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.39.46.png)</p>
+<p>此时浏览器界面回显</p>
+<p>![截屏2020-08-28 上午8.40.51](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.40.51.png)</p>
+<p>如果想获取特定属性比如<code>name</code></p>
+<pre><code class="javascript">console.log(files.file.name)</code></pre>
+<h3 id="HTTP客户端服务"><a href="#HTTP客户端服务" class="headerlink" title="HTTP客户端服务"></a>HTTP客户端服务</h3><p>HTTP模块除了能在服务端处理客户端请求之外，还可以作为客户端向服务器发起请求。这也是Node也能做出像electron那样的桌面软件的基础</p>
+<p>![截屏2020-08-28 上午8.57.01](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.57.01.png)</p>
+<pre><code class="javascript">var http = require(&#39;http&#39;)
+http.get(&quot;http://127.0.0.1:3000/&quot;, function (res) &#123;
+    var statueCode = res.statusCode
+    if (statueCode === 200) &#123;
+        var result = &quot;&quot;
+        res.on(&quot;data&quot;, function (data) &#123;
+            result += data
+        &#125;)
+        res.on(&quot;end&quot;, function () &#123;
+            console.log(result.toString())
+        &#125;)
+        res.on(&quot;error&quot;, function (e) &#123;
+            console.log(e.message)
+        &#125;)
+    &#125;
+&#125;)</code></pre>
+<p>![截屏2020-08-28 上午9.09.05](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午9.09.05.png)</p>
+<h3 id="创建代理服务器"><a href="#创建代理服务器" class="headerlink" title="创建代理服务器"></a>创建代理服务器</h3><p>代理服务器相当于在客户端和目标服务器之间建立了一个中转，所有的访问和流量都经过这个服务器进行中转</p>
+<pre><code class="javascript">var http = require(&quot;http&quot;);
+var url = require(&quot;url&quot;);
+
+http.createServer(function(req,res)&#123;
+    console.log(req.url);
+    var options = url.parse(req.url);
+    options.headers = req.headers;
+
+    var proxyRequest = http.request(options,function(pres)&#123;
+        res.writeHead(pres.statusCode,pres.headers);
+        pres.on(&#39;data&#39;,function (data) &#123;
+            res.write(data);
+        &#125;);
+        pres.on(&#39;end&#39;,function () &#123;
+            res.end();
+        &#125;);
+
+    &#125;);
+
+    req.on(&#39;data&#39;,function(data)&#123;
+        proxyRequest.write(data);
+    &#125;);
+
+    req.on(&#39;end&#39;,function()&#123;
+        proxyRequest.end();
+    &#125;);
+
+&#125;).listen(80);</code></pre>
+<p>在本地创建了一个HTTP服务器，请求经由<code>127.0.0.1:80</code>进行转发，<strong>不过并不太清楚👆代码的具体使用，暂时仅简单了解</strong></p>
+<p>代理服务器可以有很多应用领域，例如使用它来缓存文件或者很多企业都会使用代理服务器来过滤掉一些广告和垃圾网站的URL，或者限制员工使用公司网络访问社交网站。有的企业访问npm下载第三方模块也需要配置代理。一些常用的屏蔽广告的浏览器插件大都也是依靠本地启动代理服务器来实现广告过滤的</p>
+<h4 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h4><p>如果一个代理服务器可以代理外部的访问来访问内部网络时，这种代理方式就被称为<strong>反向代理</strong></p>
+<p>如果一个网站购买了CDN服务，那么当有来自外部(客户端)的请求时，并没有直接访问服务器的内容，而是访问距离用户最近的CDN节点。对于服务器来说，CDN就起到了反向代理的功能</p>
+<h1 id="TCP服务"><a href="#TCP服务" class="headerlink" title="TCP服务"></a>TCP服务</h1><p>如果开发者大多数时间都在进行Web站点的开发，那么TCP服务和HTTP服务相比，出场率并不高</p>
+<h2 id="TCP和Socket"><a href="#TCP和Socket" class="headerlink" title="TCP和Socket"></a>TCP和Socket</h2><p>❓网络服务需要Socket编程，TCP协议是用来传输数据的，但TCP协议和Socket有哪些区别</p>
+<p><strong>Socket是对TCP协议的一种封装方式，Socket本身并不是协议，而是一个编程接口</strong>，如果一种编程语言实现了socket接口，那么它就可以通过socket接口预定义的方法来解析使用TCP协议传输的数据流；socket并不是专门为TCP协议设计的，在设计之初就期望能兼容多种传输层协议</p>
+<h2 id="创建TCP服务器"><a href="#创建TCP服务器" class="headerlink" title="创建TCP服务器"></a>创建TCP服务器</h2><p>Node中有三种Socket，分别对应实现TCP、UDP以及UNIX Socket，与这些相关的代码都位于Net模块中；UNIX Socket即<code>UNIX Domain Socket</code>，和面向网络的TCP、UDP不同，主要用于<strong>本地系统的进程间通信</strong></p>
+<pre><code class="javascript">var net = require(&#39;net&#39;)
+
+var server = net.createServer(function (c) &#123;
+    console.log(&#39;client connected&#39;)
+    c.on(&#39;end&#39;, function () &#123;
+        console.log(&#39;client disconnected&#39;)
+    &#125;)
+    c.write(&#39;hello\r\n&#39;)
+    c.pipe(c) 
+&#125;)
+
+server.on(&#39;error&#39;, function (err) &#123;
+    throw err
+&#125;)
+
+server.listen(8124, function () &#123;
+    console.log(&#39;server bound&#39;)
+&#125;)</code></pre>
+<p>如果服务器收到了一个连接请求，就会返回一个Hello字符串；如果在浏览器里打开<code>localhost:8124</code>的方式来访问，会出现<code>GET http://localhost:8124/ net::ERR_INVALID_HTTP_RESPONSE</code>的错误。原因也很简单，一CP服务器不会返回符合HTTP协议标准的响应</p>
+<p>![截屏2020-08-28 上午10.55.28](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.55.28.png)</p>
+<p>使用<code>nc</code>连接服务器后，服务器端出现👇回显表示服务器正常运行</p>
+<p>![截屏2020-08-28 上午10.56.32](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.56.32.png)</p>
+<p><code>c.pipe(c) </code>如果不添加的话会导致对服务器的输入无法输出，原因在之前对<code>pipe</code>的解释中可以理解</p>
+<p>👇前者是不添加后者为添加</p>
+<p>![截屏2020-08-28 上午11.27.47](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.27.47.png)</p>
+<h3 id="TCP客户端"><a href="#TCP客户端" class="headerlink" title="TCP客户端"></a>TCP客户端</h3><pre><code class="javascript">const net =require(&#39;net&#39;)
+const client = net.connect(&#123;port: 8124&#125;, function () &#123;
+    console.log(&#39;connected to server&#39;)
+    client.write(&#39;0xGeekCat&#39;)
+&#125;)
+
+client.on(&#39;data&#39;, function (data) &#123;
+    console.log(data.toString())
+    client.end()
+&#125;)
+
+client.on(&quot;end&quot;, function () &#123;
+    console.log(&#39;disconnected from server&#39;)
+&#125;)</code></pre>
+<p>![截屏2020-08-28 上午11.31.12](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.31.12.png)</p>
+<h1 id="SSL更安全的传输方式"><a href="#SSL更安全的传输方式" class="headerlink" title="SSL更安全的传输方式"></a>SSL更安全的传输方式</h1><p>对于企业网站，使用更加安全的数据传输是必要的，使用单纯的HTTP连接，所有的内容都以明文传输，这种方式是极不安全，就连通常被认为安全的<code>post</code>操作，其安全性也无法保证，因此需要更安全的<code>HTTPS(HTTP+SSL)</code></p>
+<p>👇描述<code>SSL</code>在网络通信中的位置</p>
+<p>![截屏2020-08-28 上午11.35.36](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.35.36.png)</p>
+<h2 id="SSL-Secure-Sockets-Layer-amp-TLS-Transport-Layer-Security"><a href="#SSL-Secure-Sockets-Layer-amp-TLS-Transport-Layer-Security" class="headerlink" title="SSL - Secure Sockets Layer &amp; TLS - Transport Layer Security"></a>SSL - Secure Sockets Layer &amp; TLS - Transport Layer Security</h2><p><code>安全套接层</code>协议及其继任者<code>传输层安全</code>协议是为网络通信提供安全及数据完整性的一种安全协议。TLS与SSL在传输层对网络连接进行加密。 SSL的一大优势在于它独立于上层协议，和HTTP结合即为HTTPS，和WebSocket结合即为WSS</p>
+<p>通常认为SSL和TLS指代同一个标准，两者之间的差异极小</p>
+<h2 id="SSL原理"><a href="#SSL原理" class="headerlink" title="SSL原理"></a>SSL原理</h2><p>不同的SSL<strong>握手过程</strong>存在差异，有👇三种</p>
+<ul>
+<li>只验证服务器</li>
+<li>验证服务器和客户端</li>
+<li>恢复原有会话</li>
+</ul>
+<p>👇是第一种建立连接的过程</p>
+<p>客户端发送Client Hello消息，该消息包括SSL版本信息、一个随机数(假设它是random1)、一个session id(用来避免后续请求的握手)和浏览器支持的密码套件cipher suite，其内容和其的含义一样，是一个由加密算法名称组成的字符串，包括了以下4种用途的加密算法</p>
+<ul>
+<li>密钥交换算法：常用的有RSA、PSK等</li>
+<li>数据加密算法：常用的例如AES 256、RC4等</li>
+<li>报文认证信息码(MAC)算法：常用的例如MD5、SHA等。伪随机数(PRF)算法</li>
+</ul>
+<p>👇字符串就是一个cipher suite</p>
+<p>![截屏2020-08-28 上午11.53.10](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.53.10.png)</p>
+<ul>
+<li>ECDHE_RSA：密钥交换算法</li>
+<li>AES_128_GCM：数据加密算法</li>
+</ul>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》 李锴</p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                《新时期的Node.js入门》学习日记-常用模块(下)</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                《新时期的Node.js入门》学习日记-基础知识</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

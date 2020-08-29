@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">学习JavaScript中类，原型和继承 | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">学习JavaScript中类，原型和继承</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-24&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="构造函数和对象"><a href="#构造函数和对象" class="headerlink" title="构造函数和对象"></a>构造函数和对象</h1><p>在学习之前先了解一下其他语言是如何定义类的</p>
+<p>在JAVA中类是创建对象的模板，👇定义一个<code>Person</code>类</p>
+<pre><code class="java">public class Person&#123;
+  String name;
+  int age;
+  String gender;
+  void wake()&#123;&#125;
+  void eat()&#123;&#125;
+  void sleep()&#123;&#125;
+&#125;</code></pre>
+<p>但是对于JavaScript，在<code>ECMAScript 6</code>之前并没有<code>class</code>语法；<strong>在JavaScript中通过构造函数[等效其他语言的类]来创建对象</strong>。</p>
+<p>构造函数是一个提供生成对象的模板并描述对象基本结构的函数。一个构造函数可以生成多个对象，每个对象都有相同的结构</p>
+<p><strong>🔔构造函数就是对象的模板，对象就是构造函数的实例</strong></p>
+<pre><code class="javascript">function Person(name) &#123;
+    this.name = name
+
+    this.sayName = function () &#123;
+        return this.name
+    &#125;
+&#125;
+
+let person1 = new Person(&#39;hacker&#39;)
+let person2 = new Person(&#39;geeker&#39;)
+
+console.log(person1.constructor === Person) 👈 true</code></pre>
+<p>通过<code>new</code>构建实例化对象，<strong>构造函数中的<code>this</code>总是指向实例化的对象</strong>，每个实例对象都有一个不可枚举的属性<code>constructor</code>属性来指向构造函数，即<code>Person</code></p>
+<p>![截屏2020-08-24 下午8.22.22](学习JavaScript中类，原型和继承/截屏2020-08-24 下午8.22.22.png)</p>
+<p>实例对象中可以看到<code>Person</code>类中定义的<code>name</code>属性和<code>sayName</code>方法</p>
+<p>❓没有<code>constructor</code>属性；但也能取到其值为<code>Person</code>；此原因稍后解释</p>
+<p>![截屏2020-08-24 下午8.25.44](学习JavaScript中类，原型和继承/截屏2020-08-24 下午8.25.44.png)</p>
+<h1 id="构造函数缺点"><a href="#构造函数缺点" class="headerlink" title="构造函数缺点"></a>构造函数缺点</h1><p>所有实例对象都单独创建属性和方法；也就是说，每实例化一个对象👆<code>name</code>和<code>sayName</code>就会创建一次；其实际是绑定在对象上，而不是绑定在构造函数中；但是在有的场景中属性或者方法需要时通用的</p>
+<pre><code class="javascript">function Person(name) &#123;
+    this.name = name
+
+    this.sayName = function () &#123;
+        return this.name
+    &#125;
+
+    this.sleep = function () &#123;
+        console.log(&#39;sleep&#39;)
+    &#125;
+&#125;
+
+let person1 = new Person(&#39;hacker&#39;)
+let person2 = new Person(&#39;geeker&#39;)
+
+console.log(person1.sleep === person2.sleep) 👈 false</code></pre>
+<h1 id="prototype原型对象"><a href="#prototype原型对象" class="headerlink" title="prototype原型对象"></a>prototype原型对象</h1><p>为了解决👆实例对象之间共享属性和方法问题，JavaScript提供了<code>prototype</code>属性</p>
+<pre><code class="javascript">function Person(name) &#123;
+    this.name = name
+
+    this.sayName = function () &#123;
+        return this.name
+    &#125;
+&#125;
+
+Person.prototype.sleep = function () &#123;
+    console.log(&#39;sleep&#39;)
+&#125;
+
+let person1 = new Person(&#39;hacker&#39;)
+let person2 = new Person(&#39;geeker&#39;)
+
+console.log(person1.sleep === person2.sleep) 👈 true</code></pre>
+<p>构造函数通过<code>prototype</code>指向原型对象，即构造函数才有<code>prototype</code>属性，其作用是让构造函数创建的所有实例对象都能找到公用的属性和方法</p>
+<p><strong>🔔实际上任何构造函数在创建实例对象的时候，都会关联其自身的prototype对象</strong></p>
+<p>![截屏2020-08-24 下午9.10.51](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.10.51.png)</p>
+<p>❗️可以修改原型对象的引用，但是仍需要把<code>constructor</code>属性指向构造函数</p>
+<p>👇对上个例子中<code>sleep</code>方法进行改写</p>
+<pre><code class="javascript">Person.prototype = &#123;
+    constructor: Person,
+    sleep: function () &#123;
+        console.log(&#39;sleep&#39;)
+    &#125;
+&#125;</code></pre>
+<h1 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h1><p>根据👆所学知识作为基础可以知道，实例对象的属性和方法可以定义在自身，也可以定义在原型对象上</p>
+<p>通过上面的对象执行<code>sleep</code>方法不难发现，实例对象能够直接获取原型对象上的属性和方法</p>
+<p>在之前打印<code>person1</code>时，仔细观察不难发现有个特别的属性<code>__proto__</code>，其指向实例对象的原型对象</p>
+<p>![截屏2020-08-24 下午9.33.35](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.33.35.png)</p>
+<p>当访问对象上没有的所要查询的属性时，就会去<code>__proto__</code>中查询；如果还是查询不到，就会继续查询原型对象的<code>__proto__</code>，直到所查询的原型对象为<code>null</code></p>
+<p><strong>🔔可以通过<code>__proto__</code>构成了一条原型链</strong></p>
+<p>![截屏2020-08-24 下午9.39.56](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.39.56.png)</p>
+<p>观察<code>Person</code>构造函数的原型对象可以发现其含有<code>constructor</code>属性；这点解答了👆关于实例对象为什么没有<code>constructor</code>属性但还是可以执行的问题，**<code>constructor</code>属性实际上存在于原型对象**，在刚刚改写<code>sleep</code>方法时也不难发现这点</p>
+<p>👇虚线表示该属性或方法并不是真正存在，<code>person1.constructor</code>是通过<code>__proto__</code>间接实现的</p>
+<p>![截屏2020-08-24 下午9.54.41](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.54.41.png)</p>
+<p>原型对象显然也是一个对象，既然是对象那么肯定也有自己的原型对象；<strong>在JavaScript中所有的对象都是<code>Object</code>的实例，并继承<code>Object.prototype</code>的属性和方法</strong>；<code>let a = &#123;&#125;</code>实际上是<code>new Object()</code>的语法糖</p>
+<p><strong>❗️解释说明：</strong>语法糖指的是计算机语言中添加的某种语法，这种语法对语言的功能没有影响，但是更方便程序员使用。语法糖让程序更加简洁，有更高的可读性</p>
+<pre><code class="javascript">let obj1 = &#123;&#125;
+let obj2 = new Object()
+
+console.log(obj1.__proto__ === Object.prototype) 👈 true
+console.log(obj2.__proto__ === Object.prototype) 👈 true
+console.log(person1.__proto__.__proto__ === Object.prototype) 👈 true</code></pre>
+<p>![截屏2020-08-24 下午10.08.20](学习JavaScript中类，原型和继承/截屏2020-08-24 下午10.08.20.png)</p>
+<h1 id="constructor属性"><a href="#constructor属性" class="headerlink" title="constructor属性"></a>constructor属性</h1><p>原型对象的<code>constructor</code>用来指向构造函数</p>
+<pre><code class="javascript">console.log(Person.prototype.constructor === Person) 👈 true</code></pre>
+<p><code>constructor</code>还可以用来判数据类型</p>
+<pre><code class="javascript">console.log((2).constructor === Number); 👈 true
+console.log((true).constructor === Boolean); 👈 true
+console.log((&#39;str&#39;).constructor === String); 👈 true
+console.log(([]).constructor === Array); 👈 true
+console.log((function() &#123;&#125;).constructor === Function); 👈 true
+console.log((&#123;&#125;).constructor === Object); 👈 true</code></pre>
+<p>但是一旦更改原型对象，这种判断类型的方式就不可靠</p>
+<pre><code class="javascript">function func() &#123;&#125;
+func.prototype = []
+f = new func()
+
+console.log(f.constructor === Function) 👈 false
+console.log(f.constructor === Array) 👈 true</code></pre>
+<p>JavaScript中构造函数本身也可以看成是对象，这种即是函数也是对象的称为<code>函数对象</code>；调用构造函数的<code>f.call</code>和<code>f.apply</code>其实调用的是继承自其原型对象的<code>Function.prototype.call</code>和<code>Function.prototype.apply</code>，因此构造函数都是Function函数的实例对象；既然是实例对象，构造函数也拥有<code>__proto__</code>和<code>constructor</code>属性</p>
+<p>![截屏2020-08-25 上午9.08.58](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.08.58.png)</p>
+<p><strong>🔔Person构造函数和JavaScript的普通对象没有任何区别</strong>，有<code>constructor</code>属性指向<code>Function</code>函数，说明<code>Person</code>函数是<code>Function</code>函数的实例对象；而且<code>constructor</code>属性不在<code>Person</code>构造函数上而在其原型对象<code>Function.prototype</code>上</p>
+<p>![截屏2020-08-25 上午9.12.11](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.12.11.png)</p>
+<h1 id="鸡生蛋蛋生鸡"><a href="#鸡生蛋蛋生鸡" class="headerlink" title="鸡生蛋蛋生鸡"></a>鸡生蛋蛋生鸡</h1><p>发现最终👆的原型图指向四个对象：<code>Object</code>、<code>Object.prototype</code>、<code>Function</code>和<code>Function.prototype</code>，其之间的关系在整个原型关系里最难理解</p>
+<p>![截屏2020-08-25 上午9.15.02](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.15.02.png)</p>
+<p><code>Object</code>函数和<code>Person</code>函数一样都是函数对象，因此都是<code>Function</code>函数的实例对象</p>
+<p>![截屏2020-08-25 上午9.38.03](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.38.03.png)</p>
+<p>👇Object和Function的关系</p>
+<p>![截屏2020-08-25 上午9.39.02](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.39.02.png)</p>
+<p><code>Object</code>是构造函数，则<code>Function</code>也能通过<code>new Function() &#123;&#125;</code>来构造匿名函数，<code>Function</code>同时也是自己的<code>constructor</code></p>
+<p>![截屏2020-08-25 下午2.17.59](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.17.59.png)</p>
+<p><code>Function.prototype</code>同样也是实例对象，因此它的原型对象自然是<code>Object.prototype</code></p>
+<p>![截屏2020-08-25 下午2.21.48](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.21.48.png)</p>
+<p><strong>🔔<code>Object</code>、<code>Object.prototype</code>、<code>Function</code>和<code>Function.prototype</code>四者间关系</strong></p>
+<p>![截屏2020-08-25 下午2.22.17](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.22.17.png)</p>
+<p><code>Object</code>继承自<code>Function.prototype</code>；<code>Function.prototype</code>继承自<code>Object.prototype</code></p>
+<p>❓那么到底是先有<code>Object</code>，还是先有<code>Function</code></p>
+<p>这个鸡和蛋问题的根本原因在于<code>Function.__proto__</code>指向<code>Function.prototype</code>，让<code>Function</code>间接继承了<code>Object.prototype</code></p>
+<p>![截屏2020-08-25 下午3.06.43](学习JavaScript中类，原型和继承/截屏2020-08-25 下午3.06.43.png)</p>
+<p><strong>❗️关于<code>Function.prototype</code></strong></p>
+<ul>
+<li>和普通函数一样可以调用，但总是返回<code>undefined</code></li>
+<li>继承于<code>Object.prototype</code>，且没有<code>prototype</code>属性</li>
+</ul>
+<p>由于<code>Object.prototype.__proto__ === null</code>，所以原型链溯源到<code>Object.prototype</code>就结束了</p>
+<p><strong>🔔先有 <code>Object.prototype</code>(原型链顶端)，<code>Function.prototype</code> 继承自 <code>Object.prototype</code> ；最后<code>Function</code> 和<code>Object</code>以及其它构造函数继承<code>Function.prototype</code>而产生</strong></p>
+<p>![截屏2020-08-25 下午3.17.46](学习JavaScript中类，原型和继承/截屏2020-08-25 下午3.17.46.png)</p>
+<h1 id="静态属性和方法"><a href="#静态属性和方法" class="headerlink" title="静态属性和方法"></a>静态属性和方法</h1><p>静态方法是指不需要声明类的实例就可以直接使用的方法。在JAVA中通过<code>static</code>定义静态方法</p>
+<pre><code class="java">public class Person&#123;
+  static int num = 0;
+  public static void say() &#123;
+    System.out.println(&quot;hello&quot;); 
+  &#125;
+  public static void main(String[] args)&#123;
+    Person.say();
+  &#125;
+&#125;</code></pre>
+<p>在<code>ES5</code>中，直接通过设置构造函数属性的方式创建静态属性和方法</p>
+<pre><code class="javascript">function Person() &#123;&#125;
+
+Person.sleep = function () &#123;
+    console.log(&#39;sleep&#39;)
+    console.log(this) 👈 [Function: Person] &#123; sleep: [Function], num: 10 &#125;
+&#125;
+Person.num = 10
+
+console.log(Person.num)
+Person.sleep()</code></pre>
+<p>静态方法和实例方法最主要的区别就是实例方法可以访问到实例对象，可以对实例进行操作，而静态方法一般用于跟实例无关的操作。静态方法最常见的是在jQuery的一些工具函数中，比如ajax()和trim()</p>
+<h1 id="ES5继承"><a href="#ES5继承" class="headerlink" title="ES5继承"></a>ES5继承</h1><p>继承就是指子类继承父类所有的属性和方法；同时要知道此处父类指的不仅仅是自身的构造函数，原型链上还会有父类的父类等，也需要一同继承</p>
+<h2 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h2><pre><code class="javascript">function Parent () &#123;
+    this.name = &#39;Mac&#39;;
+    this.sayName = function() &#123;
+        return this.name
+    &#125;
+&#125;
+Parent.prototype.sleep = function () &#123;
+    console.log(&#39;sleep&#39;)
+&#125;
+
+function Child () &#123;&#125;
+Child.prototype = new Parent();
+
+let child1 = new Child();
+console.log(child1.sayName()) 👈 Mac
+child1.sleep() 👈 sleep</code></pre>
+<p>👆将父类的实例挂载到子类原型上，那么所有的子类就能访问到父类的属性和方法</p>
+<p>❓但所有子类共享原型对象也会带来一些问题</p>
+<ul>
+<li><p>父类属性被某个子类篡改，其余所有子类属性都将一同改变</p>
+<pre><code class="javascript">function Parent () &#123;
+    this.name = [&#39;Mac&#39;, &#39;Mary&#39;];
+&#125;
+
+function Child() &#123;&#125;
+Child.prototype = new Parent()
+
+let child1 = new Child()
+child1.name.push(&#39;A&#39;)
+
+let child2 = new Child()
+console.log(child2.name) 👈 [ &#39;Mac&#39;, &#39;Mary&#39;, &#39;A&#39; ]</code></pre>
+</li>
+<li><p>创建子类实例的时候，不能向父类传参数</p>
+</li>
+<li><p>不能继承静态方法</p>
+</li>
+</ul>
+<h2 id="构造函数继承"><a href="#构造函数继承" class="headerlink" title="构造函数继承"></a>构造函数继承</h2><pre><code class="javascript">function Parent(name) &#123;
+    this.name = name
+    this.color = [&#39;red&#39;,&#39;yellow&#39;]
+&#125;
+Parent.prototype.sleep = function()&#123;
+    console.log(&#39;sleep&#39;)
+&#125;
+
+function Child(name) &#123;
+    Parent.call(this, name)
+&#125;
+
+let child1 = new Child(&#39;Mac&#39;)
+child1.color.push(&#39;blue&#39;)
+
+let child2 = new Child(&#39;Mary&#39;)
+console.log(child2.color) 👈 [ &#39;red&#39;, &#39;yellow&#39; ]
+console.log(child2.sleep) 👈 undefined</code></pre>
+<p>创建子类实例时调用父类构造函数，避免属性被其他子类篡改；此时也可以向父类传参数，但是还是没有继承父类原型上的属性和方法</p>
+<h2 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h2><pre><code class="javascript">function Parent(name) &#123;
+    this.name = name
+    this.color = [&#39;red&#39;,&#39;yellow&#39;]
+&#125;
+Parent.prototype.sleep = function()&#123;
+    console.log(&#39;sleep&#39;)
+&#125;
+
+function Child(name) &#123;
+    Parent.call(this, name)
+&#125;
+Child.prototype = new Parent()
+
+let child1 = new Child(&#39;Mac&#39;)
+child1.color.push(&#39;blue&#39;)
+
+let child2 = new Child(&#39;Mary&#39;)
+console.log(child2.color) 👈 [ &#39;red&#39;, &#39;yellow&#39; ]
+console.log(child2.sleep) 👈 sleep</code></pre>
+<p>融合原型链继承和构造函数继承的优点，是JavaScript中常用的继承方式</p>
+<h1 id="ES6继承"><a href="#ES6继承" class="headerlink" title="ES6继承"></a>ES6继承</h1><p><code>ES6</code>新增了<code>class</code>关键词用来定义一个类；但本质上只是<code>ES5</code>构造函数的语法糖，大多部分功能<code>ES5</code>都能实现</p>
+<pre><code class="javascript">class Person&#123;
+    constructor(name)&#123;
+        this.name = name
+    &#125;
+    sayName()&#123;
+        return this.name
+    &#125;
+    static sleep() &#123;
+        console.log(&#39;sleep&#39;);
+    &#125;
+&#125;
+Person.prototype.hack = function()&#123;
+    console.log(&#39;hack&#39;)
+&#125;
+
+Person.sleep()
+let person = new Person(&#39;Mac&#39;)
+person.hack()
+console.log(person.sayName())</code></pre>
+<p><code>ES6</code>的继承可以通过<code>extends</code>关键词实现，比<code>ES5</code>修改原型链来实现继承要更清晰和方便</p>
+<pre><code>class Person&#123;
+    constructor(name)&#123;
+        this.name = name
+    &#125;
+    sayName()&#123;
+        return this.name
+    &#125;
+    static sleep() &#123;
+        console.log(&#39;sleep&#39;);
+    &#125;
+&#125;
+Person.prototype.hack = function()&#123;
+    console.log(&#39;hack&#39;)
+&#125;
+
+class Child extends Person&#123;
+    constructor(name,color)&#123;
+        super(name)
+        this.color = color
+    &#125;
+    sayColor()&#123;
+        return &#39;my color is:&#39;+ this.color
+    &#125;
+&#125;
+let child = new Child(&#39;child&#39;, &#39;yellow&#39;)
+console.log(child.sayName())
+console.log(child.sayColor())
+child.hack()
+console.log(child.sleep) 👈 undefined JavaScript中静态方法不会被继承</code></pre>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a target="_blank" rel="noopener" href="https://juejin.im/post/6844904127344934926">一文读懂JS中类、原型和继承</a></p>
+<p><strong>郑重感谢</strong></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%94%BB%E5%87%BB.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                学习JavaScript原型链污染攻击</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                学习XNUCA2019-ezphp</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>

