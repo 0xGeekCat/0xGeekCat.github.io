@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -312,22 +312,22 @@
 <p><strong>JavaScript连接WebScoket</strong></p>
 <pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
     var ws = new WebSocket(&quot;ws://localhost:3004&quot;)
-    ws.onopen = function () &#123;
+    ws.onopen = function () {
         ws.send(&#39;hello&#39;)
-    &#125;
-    ws.onmessage = function (msg) &#123;
+    }
+    ws.onmessage = function (msg) {
         console.log(msg.data)
-    &#125;
+    }
 &lt;/script&gt;</code></pre>
 <p><strong>WebSocket服务器</strong></p>
 <pre><code class="javascript">var WebSocketServer = require(&#39;ws&#39;).Server
-wss = new WebSocketServer(&#123;port: 3004&#125;)
-wss.on(&#39;connection&#39;, function (ws) &#123;
-    ws.on(&#39;message&#39;, function (message) &#123;
+wss = new WebSocketServer({port: 3004})
+wss.on(&#39;connection&#39;, function (ws) {
+    ws.on(&#39;message&#39;, function (message) {
         console.log(&#39;received: %s&#39;, message)
-    &#125;)
+    })
     ws.send(&quot;I&#39;m a message send from a ws server&quot;)
-&#125;)</code></pre>
+})</code></pre>
 <p>👇服务器和控制器回显</p>
 <p>![截屏2020-08-28 下午3.24.21](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午3.24.21.png)</p>
 <p>![截屏2020-08-28 下午3.24.45](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午3.24.45.png)</p>
@@ -343,55 +343,55 @@ wss.on(&#39;connection&#39;, function (ws) &#123;
 <h2 id="Readable-Stream"><a href="#Readable-Stream" class="headerlink" title="Readable Stream"></a>Readable Stream</h2><pre><code class="javascript">var fs = require(&#39;fs&#39;)
 
 var readStream = fs.createReadStream(&#39;foo.txt&#39;, &#39;utf-8&#39;)
-readStream.on(&#39;data&#39;, function (data) &#123;
+readStream.on(&#39;data&#39;, function (data) {
     console.log(data)
-&#125;)
+})
 
-readStream.on(&#39;close&#39;, function () &#123;
+readStream.on(&#39;close&#39;, function () {
     console.log(&#39;closed&#39;)
-&#125;)
+})
 
-readStream.on(&#39;error&#39;, function () &#123;
+readStream.on(&#39;error&#39;, function () {
     console.log(&#39;error&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <h2 id="Writeable-Stream"><a href="#Writeable-Stream" class="headerlink" title="Writeable Stream"></a>Writeable Stream</h2><p>write方法同样是异步的，假设我们创建一个可读流读取一个较大的文件，再调用<code>pipe</code>方法将数据通过一个可写流写入另一个位置。如果读取的速度大于写入的速度，那么Node将会在内存中缓存这些数据；缓冲区有大小限制(state.highWatermark)，当达到阈值后，<code>write</code>方法会返回false，可读流也进入暂停状态，当<code>writeable stream</code>将缓冲区清空之后，会触发<code>drain</code>事件，上游的<code>readable</code>重新开始读取数据</p>
 <p>🔔<strong>pipe方法相当于在可读流和可写流之间架起了桥梁，使得数据可以通过管道由可读流进入可写流</strong></p>
 <p><strong>使用pipe改写的静态文件服务器</strong></p>
 <pre><code class="javascript">var http = require(&#39;http&#39;)
 var fs = require(&#39;fs&#39;)
 
-var server = http.createServer(function (req, res) &#123;
-    if (req.url === &#39;/&#39;) &#123;
+var server = http.createServer(function (req, res) {
+    if (req.url === &#39;/&#39;) {
         var fileList = fs.readdirSync(&#39;./&#39;)
-        res.writeHead(200, &#123;&#39;Content-Type&#39;: &#39;text/plain&#39;&#125;)
+        res.writeHead(200, {&#39;Content-Type&#39;: &#39;text/plain&#39;})
         res.end(fileList.toString())
-    &#125; else &#123;
+    } else {
         var path = &#39;.&#39; + req.url
         var readStream = fs.createReadStream(path).pipe(res)
-    &#125;
-&#125;)
+    }
+})
 
 server.listen(3000)
 console.log(&#39;Listening on 3000&#39;)
 
-process.on(&#39;uncaughtException&#39;, function () &#123;
+process.on(&#39;uncaughtException&#39;, function () {
     console.log(&#39;got error&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <h2 id="ReadLine"><a href="#ReadLine" class="headerlink" title="ReadLine"></a>ReadLine</h2><p><code>ReadLine</code>是一个Node原生模块，该模块比较不起眼，提供了按行读取Stream中数据的功能</p>
 <pre><code class="javascript">var readline = require(&#39;readline&#39;)
 var fs = require(&#39;fs&#39;)
 
-var rl = readline.createInterface(&#123;
+var rl = readline.createInterface({
     input: fs.createReadStream(&#39;foo.txt&#39;)
-&#125;)
+})
 
-rl.on(&#39;line&#39;, function (data) &#123;
+rl.on(&#39;line&#39;, function (data) {
     console.log(data)
-&#125;)
+})
 
-rl.on(&#39;close&#39;, function () &#123;
+rl.on(&#39;close&#39;, function () {
     console.log(&#39;closed&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <p><code>readLine</code>并没有提供形如<code>new readline()</code>形式的构造方法，而是使用<code>createInterface</code>方法初始化了一个<code>rl</code>对象</p>
 <p>如果一个可读流中包含了很多条独立的信息需要逐条处理，这可能是一个消息队列，这时使用<code>readline</code>模块就比较方便</p>
 <h2 id="自定义Stream"><a href="#自定义Stream" class="headerlink" title="自定义Stream"></a>自定义Stream</h2><p>在实际开发中，如果想要使用流式API，而原生的Stream又不能满足需求时，可以考虑自定义Stream类，常用的方法是继承原生的Stream类然后做一些扩展</p>
@@ -400,18 +400,18 @@ var util = require(&#39;util&#39;)
 
 util.inherits(MyReadable, Readable)
 
-function MyReadable(array) &#123;
-    Readable.call(this, &#123;objectMode: true&#125;)
+function MyReadable(array) {
+    Readable.call(this, {objectMode: true})
     this.array = array
-&#125;
+}
 
-MyReadable.prototype._read = function () &#123;
-    if (this.array.length) &#123;
+MyReadable.prototype._read = function () {
+    if (this.array.length) {
         this.push(this.array.shift())
-    &#125; else &#123;
+    } else {
         this.push(null)
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p>👆实现了名为<code>MyReadable</code>的类，它继承自<code>Readable</code>类，并且接受一个数组作为参数</p>
 <p>想要继承<code>Readable</code>类，就要在自定义的类内部实现<code>_read</code>方法，该方法内部使用<code>push</code>方法往可读流添加数据。</p>
 <p>当我们给可读流对象注册data事件后，可读流会在nextTick中调用<code>_read</code>方法，并触发第一次data事件，可读流开始读取时机并不在调用构造函数之后，此时data事件还未注册，可能会捕获不到最初的事件，因此可读流开始产生数据的操作是放在nextTick中的，当有消费者从readable中取数据时会自动调用该方法</p>
@@ -419,13 +419,13 @@ MyReadable.prototype._read = function () &#123;
 <pre><code class="javascript">const array = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;]
 const read = new MyReadable(array)
 
-read.on(&#39;data&#39;, function (data) &#123;
+read.on(&#39;data&#39;, function (data) {
     console.log(data)
-&#125;)
+})
 
-read.on(&#39;end&#39;, function () &#123;
+read.on(&#39;end&#39;, function () {
     console.log(&#39;end&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <p><strong>❗️对于自定义Stream的例子并不是很理解，以后再仔细研究</strong></p>
 <h1 id="Events"><a href="#Events" class="headerlink" title="Events"></a>Events</h1><p>Node的Events模块只定义了一个类，就是<code>EventEmitter</code>(以下简称Event)，这个类在很多Node本身以及第三方模块中大量使用，通常是用作基类被继承</p>
 <h2 id="事件和监听器"><a href="#事件和监听器" class="headerlink" title="事件和监听器"></a>事件和监听器</h2><p>Node程序中的对象会产生一系列的事件，这些对象被称为<strong>事件触发器</strong>；所有能触发事件的对象都是<code>EventEmitter</code>类的实例。<code>EventEmitter</code>定义了<code>on</code>方法</p>
@@ -434,9 +434,9 @@ read.on(&#39;end&#39;, function () &#123;
 <pre><code class="javascript">var eventEmitter = require(&#39;events&#39;)
 
 var myEmitter = new eventEmitter()
-myEmitter.on(&#39;begin&#39;, function () &#123;
+myEmitter.on(&#39;begin&#39;, function () {
     console.log(&#39;0xGeekCat&#39;)
-&#125;)
+})
 
 myEmitter.emit(&#39;begin&#39;)</code></pre>
 <p>首先初始化了一个<code>EventEmitter</code>实例，然后注册了一个名为<code>begin</code>的事件，之后调用<code>emit</code>方法触发<code>begin</code>事件</p>
@@ -455,9 +455,9 @@ myEmitter.emit(&#39;begin&#39;)</code></pre>
 <p>👆Node程序主动抛出了一个error并打印出整个错误栈，相当于</p>
 <pre><code class="javascript">throw new Error(&#39;crash&#39;)</code></pre>
 <p>如果不想因为抛出一个error而使进程退出，那么可以让<code>uncaughtException</code>事件作为最后一道防线来捕获异常</p>
-<pre><code class="javascript">process.on(&#39;uncaughtException&#39;, function () &#123;
+<pre><code class="javascript">process.on(&#39;uncaughtException&#39;, function () {
     console.log(&#39;got error&#39;)
-&#125;)
+})
 
 throw new Error(&#39;Error occurred&#39;)</code></pre>
 <p>这种错误处理的方式虽然可以捕获异常，避免了进程的退出，但实际上并不值得提倡</p>
@@ -466,21 +466,21 @@ throw new Error(&#39;Error occurred&#39;)</code></pre>
 <pre><code class="javascript">var util = require(&#39;util&#39;)
 var event = require(&#39;events&#39;)
 
-function Player() &#123;
+function Player() {
     event.call(this)
-&#125;
+}
 
 util.inherits(Player, event) 👈
 
 var player = new Player()
 
-player.on(&#39;pause&#39;, function () &#123;
+player.on(&#39;pause&#39;, function () {
     console.log(&#39;paused&#39;)
-&#125;)
+})
 
-player.on(&#39;play&#39;, function () &#123;
+player.on(&#39;play&#39;, function () {
     console.log(&#39;playing&#39;)
-&#125;)
+})
 
 player.emit(&#39;play&#39;)</code></pre>
 <p>另一种场景，假设要利用原生的数组来模拟一个消息队列，该队列会在新增消息和弹出消息时触发对应的事件，也可以考虑继承Events模块</p>
@@ -491,17 +491,17 @@ player.emit(&#39;play&#39;)</code></pre>
 <pre><code class="javascript">var spwan = require(&#39;child_process&#39;).spawn
 var ls = spwan(&#39;ls&#39;, [&#39;-la&#39;, &#39;/usr&#39;])
 
-ls.stdout.on(&#39;data&#39;, function (data) &#123;
+ls.stdout.on(&#39;data&#39;, function (data) {
     console.log(&#39;stdout:&#39;, data.toString())
-&#125;)
+})
 
-ls.stderr.on(&#39;data&#39;, function (data) &#123;
+ls.stderr.on(&#39;data&#39;, function (data) {
     console.log(&#39;stderr:&#39;, data.toString())
-&#125;)
+})
 
-ls.on(&#39;close&#39;, function (code) &#123;
+ls.on(&#39;close&#39;, function (code) {
     console.log(&#39;child process exited with code&#39;, code)
-&#125;)</code></pre>
+})</code></pre>
 <p>![截屏2020-08-28 下午9.24.16](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午9.24.16.png)</p>
 <p>其中<code>spawn</code>的第一个参数虽然是<code>command</code>，但实际接收的却是一个file</p>
 <p>![截屏2020-08-28 下午9.24.52](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午9.24.52.png)</p>
@@ -513,22 +513,22 @@ ls.on(&#39;close&#39;, function (code) &#123;
 <pre><code class="javascript">var child_process = require(&#39;child_process&#39;)
 var worker = child_process.fork(&#39;worker.js&#39;, [&#39;args1&#39;])
 
-worker.on(&#39;exit&#39;, function () &#123;
+worker.on(&#39;exit&#39;, function () {
     console.log(&#39;child process exit&#39;)
-&#125;)
+})
 
-worker.send(&#123;hello: &#39;child&#39;&#125;)
-worker.on(&#39;message&#39;, function (msg) &#123;
+worker.send({hello: &#39;child&#39;})
+worker.on(&#39;message&#39;, function (msg) {
     console.log(&#39;from child&#39;, msg)
-&#125;)</code></pre>
+})</code></pre>
 <p><strong>worker.js</strong></p>
 <pre><code class="javascript">var begin = process.argv[2]
 console.log(&#39;I am worker&#39;, begin)
-process.on(&#39;message&#39;, function (msg) &#123;
+process.on(&#39;message&#39;, function (msg) {
     console.log(&#39;from parent&#39;, msg)
     process.exit()
-&#125;)
-process.send(&#123;hello: &#39;parent&#39;&#125;)</code></pre>
+})
+process.send({hello: &#39;parent&#39;})</code></pre>
 <p>fork内部会通过<code>spawn</code>调用<code>process.executePath</code>，即Node的可执行文件地址<code>/usr/local/bin/node</code>来生成一个Node实例，然后再用这个实例来执行fork方法</p>
 <p>![截屏2020-08-28 下午9.56.52](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午9.56.52.png)</p>
 <h2 id="exec和execFile"><a href="#exec和execFile" class="headerlink" title="exec和execFile"></a>exec和execFile</h2><p>如果开发一种系统，那么对于不同的模块可能会用到不同的技术来实现，例如Web服务器使用Node，然后再使用Java的消息队列提供发布订阅服务，这种情况下通常使用<strong>进程间通信</strong>的方式来实现</p>
@@ -542,37 +542,37 @@ process.send(&#123;hello: &#39;parent&#39;&#125;)</code></pre>
 <pre><code class="c">#include &lt;stdio.h&gt;
 
 int main()
-&#123;
+{
     printf(&quot;%s&quot;, &quot;hello, world&quot;);
     return 5;
-&#125;</code></pre>
+}</code></pre>
 <p><strong>使用gcc编译该文件</strong></p>
 <p>![截屏2020-08-28 下午10.37.54](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午10.37.54.png)</p>
 <p><strong>使用spwan来调用</strong></p>
 <pre><code class="javascript">var spawn = require(&#39;child_process&#39;).spawn
 var ls = spawn(&#39;/Users/max/Webstorm/test/example&#39;) 👈 
 
-ls.stdout.on(&#39;data&#39;, function (data) &#123;
+ls.stdout.on(&#39;data&#39;, function (data) {
     console.log(&#39;stdout:&#39;, data.toString())
-&#125;)
+})
 
-ls.stderr.on(&#39;data&#39;, function (data) &#123;
+ls.stderr.on(&#39;data&#39;, function (data) {
     console.log(&#39;stderr:&#39;, data.toString())
-&#125;)
+})
 
-ls.on(&#39;close&#39;, function (code) &#123;
+ls.on(&#39;close&#39;, function (code) {
     console.log(&#39;child process exited with code&#39;, code)
-&#125;)</code></pre>
+})</code></pre>
 <p><strong>❗️spawn的执行目录和node所处目录相同，如果是<code>spawn(&#39;example&#39;)</code>程序会报错，除非<code>example</code>程序也位于<code>/usr/local/bin</code>目录</strong></p>
 <p>![截屏2020-08-28 下午11.09.01](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午11.09.01.png)</p>
 <p>程序正确打印出了<code>hello,world</code>，此外还可以看到<code>example</code>最后的<code>return 5</code>会被作为子进程结束的<code>code</code>被返回</p>
 <p><strong>使用execFile来调用</strong></p>
 <pre><code class="javascript">const exec = require(&#39;child_process&#39;).exec
-const child = exec(&#39;/Users/max/Webstorm/test/example&#39;, ((error, stdout, stderr) =&gt; &#123;
+const child = exec(&#39;/Users/max/Webstorm/test/example&#39;, ((error, stdout, stderr) =&gt; {
     if (stderr) 👈 作者似乎写错了 本人在这里进行了修改
         throw stderr
     console.log(stdout)
-&#125;))</code></pre>
+}))</code></pre>
 <p>![截屏2020-08-28 下午11.17.45](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午11.17.45.png)</p>
 <p>同样打印出<code>hello,world</code>，可见除了调用形式不同，二者相差不大</p>
 <p>在子进程的信息交互方面，spawn使用流式处理的方式，当子进程产生数据时，主进程可以通过监听事件来获取消息；而exec是将所有返回的信息放在stdout里面一次性返回的，也就是该方法的<code>maxBuffer</code>参数，当子进程的输出超过这个大小时，会产生一个错误</p>
@@ -589,21 +589,21 @@ const child = exec(&#39;/Users/max/Webstorm/test/example&#39;, ((error, stdout, 
 <pre><code class="javascript">const child = require(&#39;child_process&#39;).fork(&#39;worker.js&#39;)
 const server = require(&#39;net&#39;).createServer()
 
-server.on(&#39;connection&#39;, (socket) =&gt; &#123;
+server.on(&#39;connection&#39;, (socket) =&gt; {
     socket.end(&#39;handled by parent&#39;)
-&#125;)
+})
 
-server.listen(1337, function () &#123;
+server.listen(1337, function () {
     child.send(&#39;server&#39;, server)
-&#125;)</code></pre>
+})</code></pre>
 <p><strong>子进程接收socket对象</strong></p>
-<pre><code class="javascript">process.on(&#39;message&#39;, function (m, server) &#123;
-    if (m === &#39;server&#39;) &#123;
-        server.on(&#39;connection&#39;, function (socket) &#123;
+<pre><code class="javascript">process.on(&#39;message&#39;, function (m, server) {
+    if (m === &#39;server&#39;) {
+        server.on(&#39;connection&#39;, function (socket) {
             socket.end(&#39;handled by child&#39;)
-        &#125;)
-    &#125;
-&#125;)</code></pre>
+        })
+    }
+})</code></pre>
 <p><strong>❌此处没有太理解例子</strong></p>
 <h2 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h2><p><code>child_process</code>的一个重要使用场景是创建多进程服务来保证服务稳定运行</p>
 <p>为了统一Node创建多进程服务的方式，Node在0.6之后的版本中增加了<code>Cluster</code>模块，<code>Cluster</code>可以看作是做了封装的<code>child_Process</code>模块。</p>
@@ -612,25 +612,25 @@ server.listen(1337, function () &#123;
 const http = require(&#39;http&#39;)
 const numCPUs = require(&#39;os&#39;).cpus().length
 
-if (cluster.isMaster) &#123;
+if (cluster.isMaster) {
     console.log(&#39;Master process id is&#39;, process.pid)
 
-    for (let i = 0; i &lt; numCPUs; i++) &#123;
+    for (let i = 0; i &lt; numCPUs; i++) {
         cluster.fork()
-    &#125;
+    }
 
-    cluster.on(&#39;exit&#39;, function (worker, code, signal) &#123;
+    cluster.on(&#39;exit&#39;, function (worker, code, signal) {
         console.log(&#39;worker process died, id&#39;, worker.process.pid)
-    &#125;)
-&#125; else &#123;
+    })
+} else {
     // Worker可以共享一个TCP连接
-    http.createServer(function (req, res) &#123;
+    http.createServer(function (req, res) {
         res.writeHead(200)
         res.end(&#39;hello, world\n&#39;)
-    &#125;).listen(3000)
+    }).listen(3000)
 
     console.log(&#39;Worker started, process id&#39;, process.pid)
-&#125;</code></pre>
+}</code></pre>
 <p>为了充分利用多核CPU，先调用OS模块的<code>cpus()</code>方法来<strong>获得CPU的核心数</strong></p>
 <p>![截屏2020-08-29 上午9.33.07](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午9.33.07.png)</p>
 <p>本人电脑为1个6核CPU，但由于电脑操作系统使用了超线程技术，所以实际拥有12个核，从👆代码的运行结果不难看出有12条进程</p>
@@ -649,23 +649,23 @@ console.log(process.version) // Node版本</code></pre>
 <p>开发者可以在代码中判断当前正在运行的Node所属版本，并根据结果来决定是否运行含有一些最新特性的代码</p>
 <pre><code class="javascript">var version = process.version
 
-if (version &gt; &quot;v07.6.0&quot;) &#123; 👈 当前版本为V12.18.3 题目的代码在比较中会出现问题
+if (version &gt; &quot;v07.6.0&quot;) { 👈 当前版本为V12.18.3 题目的代码在比较中会出现问题
     console.log(&#39;Higher version than v6.0.0&#39;)
-&#125;</code></pre>
+}</code></pre>
 <h2 id="方法和事件"><a href="#方法和事件" class="headerlink" title="方法和事件"></a>方法和事件</h2><p>process模块定义👇事件</p>
 <p>![截屏2020-08-29 上午10.17.22](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午10.17.22.png)</p>
 <p><code>unhandledRejection</code>和<code>uncaughtException</code>通常用做错误处理的最后一层保险，但不代表开发者可以省略具体错误处理的代码，<code>beforeExit</code>比较有意思，它仅会在进程准备退出时触发，<strong>准备退出是指目前的事件循环没有要执行的任务</strong>，如果我们手动捕获这一事件并在回调中增加一些额外动作，<strong>进程就不会退出</strong></p>
-<pre><code class="javascript">process.on(&#39;beforeExit&#39;, function () &#123;
-    setInterval(function () &#123;
+<pre><code class="javascript">process.on(&#39;beforeExit&#39;, function () {
+    setInterval(function () {
         console.log(&#39;Process will not exit&#39;)
-    &#125;, 1000)
-&#125;)</code></pre>
+    }, 1000)
+})</code></pre>
 <p>![截屏2020-08-29 上午10.24.57](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午10.24.57.png)</p>
-<pre><code class="javascript">process.on(&quot;exit&quot;, function (code) &#123;
-    setInterval(function () &#123;
+<pre><code class="javascript">process.on(&quot;exit&quot;, function (code) {
+    setInterval(function () {
         console.log(&#39;Process will exit what ever you do&#39;)
-    &#125;, 1000)
-&#125;)
+    }, 1000)
+})
 
 process.exit()</code></pre>
 <p>程序直接退出，没有执行<code>exit</code>事件</p>
@@ -687,51 +687,51 @@ Date.prototype.TimeZone = new Map([
     [&#39;Asia/Shanghai&#39;,8],
     [&#39;America/New_York&#39;,-5]
 ])
-Date.prototype.zoneDate = function()&#123;
-    if(process.env.TZ === undefined)&#123;
+Date.prototype.zoneDate = function(){
+    if(process.env.TZ === undefined){
         return new Date();
-    &#125;else&#123;
-        for (let item of this.TimeZone.entries()) &#123;
-            if(item[0] === process.env.TZ)&#123;
+    }else{
+        for (let item of this.TimeZone.entries()) {
+            if(item[0] === process.env.TZ){
                 let d = new Date();
                 d.setHours(d.getHours()+item[1]);
                 return d;
-            &#125;
-        &#125;
+            }
+        }
         return new Date();
-    &#125;
-&#125;
+    }
+}
 
 var date = new Date().zoneDate();
 console.log(date);</code></pre>
 <p>开发者可能会担心<code>d.getHours()+item[1]</code>会出现大于24的情况，所幸<code>setHours</code>方法已经内置了对这种情况的处理，如果小时的范围小于0或者大于24，会对日期进行相应的加减</p>
 <h1 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h1><p>Node中的定时器都是全局方法，无须通过require来引入</p>
 <h2 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h2><h3 id="setTimeout"><a href="#setTimeout" class="headerlink" title="setTimeout"></a>setTimeout</h3><p>使用<code>setTimeout</code>方法最简单的例子是延迟一个函数的执行时间</p>
-<pre><code class="javascript">setTimeout(function () &#123;
+<pre><code class="javascript">setTimeout(function () {
     console.log(&#39;hello&#39;)
-&#125;, 1000)</code></pre>
+}, 1000)</code></pre>
 <p>如果想要在回调执行前清除定时器，可以使用<code>clearTimeout</code>方法</p>
-<pre><code class="javascript">var timeout = setTimeout(function () &#123;
+<pre><code class="javascript">var timeout = setTimeout(function () {
     console.log(&#39;hello&#39;)
-&#125;, 1000)
+}, 1000)
 
 clearTimeout(timeout) 👈 hello不会被打印</code></pre>
 <h3 id="setInterval"><a href="#setInterval" class="headerlink" title="setInterval"></a>setInterval</h3><p>如果想要以一个固定的时间间隔运行回调函数，可以使用<code>setInterval</code>方法</p>
-<pre><code class="javascript">setInterval(function () &#123;
+<pre><code class="javascript">setInterval(function () {
     console.log(&#39;hello&#39;)
-&#125;, 1000)</code></pre>
+}, 1000)</code></pre>
 <p>同样可以用<code>clearInterval</code>方法来清除定时器</p>
 <pre><code class="javascript">var i = 0
-var interval = setInterval(function () &#123;
+var interval = setInterval(function () {
     console.log(&#39;hello&#39;)
-    if (++i === 5) &#123;
+    if (++i === 5) {
         clearInterval(interval)
-    &#125;
-&#125;, 1000)</code></pre>
+    }
+}, 1000)</code></pre>
 <h3 id="回调函数的参数"><a href="#回调函数的参数" class="headerlink" title="回调函数的参数"></a>回调函数的参数</h3><p>在定时器中，第一个参数是回调方法，第二个参数是定时器的超时时间，其后面还可以定义更多的参数，多余的参数会被作为回调函数的参数</p>
-<pre><code class="javascript">setTimeout(function (args) &#123;
+<pre><code class="javascript">setTimeout(function (args) {
     console.log(args)
-&#125;, 1000, &#39;timeout&#39;) 👈 一秒后打印timeout</code></pre>
+}, 1000, &#39;timeout&#39;) 👈 一秒后打印timeout</code></pre>
 <h2 id="定时器中的this"><a href="#定时器中的this" class="headerlink" title="定时器中的this"></a>定时器中的this</h2><p>在JavaScript中，<code>setTimeout</code>和<code>setInterval</code>中的<code>this</code>均指向Windows。原因也很简单，定时器方法的第一个参数是一个匿名函数，<strong>而JavaScript中所有匿名函数的<code>this</code>都指向Windows</strong></p>
 <p>![截屏2020-08-29 上午11.56.50](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午11.56.50.png)</p>
 <p>在Node中，<code>setTimeout</code>和<code>setInterval</code>的this会指向<code>timeout</code>类，该类在<code>setTimeout</code>和<code>setInterval</code>内部创建并返回，开发者通常不会直接用到两个类，但是可以打印出来</p>

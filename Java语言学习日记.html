@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -407,15 +407,15 @@ int i = (++ i2); // i2先自增，之后i2赋值给i
 <li>default可以省略，但不推荐省略</li>
 <li>Java中switch语句只能探测int，但也可以接收byte，short，char，只要可以转换为int即可</li>
 </ul>
-<h2 id="Java方法"><a href="#Java方法" class="headerlink" title="Java方法"></a>Java方法</h2><pre><code class="java">public static void main(String[] args) &#123;
+<h2 id="Java方法"><a href="#Java方法" class="headerlink" title="Java方法"></a>Java方法</h2><pre><code class="java">public static void main(String[] args) {
 
   m(&#39;1&#39;, 2); // 可以传字符 传入值为 &#39;1&#39; 的 ascii code
-&#125;
+}
 
-public static void m(int i, int j) &#123;
+public static void m(int i, int j) {
 
   System.out.println(i + j);
-&#125;</code></pre>
+}</code></pre>
 <h1 id="Java-oop"><a href="#Java-oop" class="headerlink" title="Java-oop"></a>Java-oop</h1><h2 id="Java面向对象"><a href="#Java面向对象" class="headerlink" title="Java面向对象"></a>Java面向对象</h2><h3 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量"></a>成员变量</h3><p>在定义成员变量时可以对其初始化，如果不初始化，Java对其默认初始化，但<strong>局部变量没有此功能</strong></p>
 <p>成员变量范围是整个类体</p>
 <table>
@@ -487,7 +487,7 @@ s = new String(&quot;Hello World&quot;);</code></pre>
 <li>对象是new出来的，位于堆内存</li>
 <li>除静态变量外，类的每个成员变量在不同的对象中有不同的值，而方法执行时才占用内存</li>
 </ul>
-<h3 id="Java构造方法"><a href="#Java构造方法" class="headerlink" title="Java构造方法"></a>Java构造方法</h3><p>构造方法缺省情况下，系统默认添加代码<code>className() &#123;&#125;</code></p>
+<h3 id="Java构造方法"><a href="#Java构造方法" class="headerlink" title="Java构造方法"></a>Java构造方法</h3><p>构造方法缺省情况下，系统默认添加代码<code>className() {}</code></p>
 <ul>
 <li><p>new + 构造方法，创建一个新的对象</p>
 </li>
@@ -496,20 +496,20 @@ s = new String(&quot;Hello World&quot;);</code></pre>
 <li><p>构造函数与类同名且没有返回值</p>
 </li>
 </ul>
-<pre><code class="java">public class Person &#123;
+<pre><code class="java">public class Person {
 
     private int id;
     private int age;
 
-    Person(int _id, int _age) &#123;
+    Person(int _id, int _age) {
         id = _id;
         age = _age;
-    &#125;
+    }
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Person mac = new Person(1, 18);
-    &#125;
-&#125;  
+    }
+}  
 
 // ** 内存解析 **
 // 栈内存中存放Person 引用类型 的 局部变量mac
@@ -537,11 +537,11 @@ s = new String(&quot;Hello World&quot;);</code></pre>
 </ul>
 <p><strong>Java方法(包括构造方法)允许重载，但不允许重名</strong></p>
 <pre><code class="Java">// 重名现象 会造成混淆
-public class Person &#123;
+public class Person {
 
-    void a() &#123; &#125;
-    int a() &#123; &#125;
-&#125;</code></pre>
+    void a() { }
+    int a() { }
+}</code></pre>
 <h3 id="Java-this关键字"><a href="#Java-this关键字" class="headerlink" title="Java this关键字"></a>Java this关键字</h3><ul>
 <li>在类的方法定义中使用的this关键字代表使用该方法的对象的引用</li>
 <li>当必须指出当前使用方法的对象是谁时要使用this</li>
@@ -577,20 +577,20 @@ public class Person &#123;
 Cat.java
 package Demo;
 
-public class Cat &#123; &#125;
+public class Cat { }
 
 Dog.java(普通写法)
-public class Dog &#123;
+public class Dog {
      Demo.Cat cat = new Demo.Cat();
-&#125;
+}
 
 Dog.java(import引入)
 import Demo.Cat; // 如果要引入文件夹下所有类 import Demo.*
 
-public class Dog &#123;
+public class Dog {
 
      Cat cat = new Cat();
-&#125;
+}
 
 // 访问同一个包中的类不需要引入</code></pre>
 <h3 id="J2SDK-JDK-主要包介绍-暂不研究jar包生成"><a href="#J2SDK-JDK-主要包介绍-暂不研究jar包生成" class="headerlink" title="J2SDK(JDK)主要包介绍(暂不研究jar包生成)"></a>J2SDK(JDK)主要包介绍(暂不研究jar包生成)</h3><ul>
@@ -719,31 +719,31 @@ $ tree -L 1
 
 package Demo;
 
-class Cat &#123; &#125;
+class Cat { }
 
 // Dog.java
 
 package Demo;
 
-public class Dog &#123;
+public class Dog {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Cat c= new Cat();
         System.out.println(c.toString()); // Demo.Cat@61bbe9ba
-    &#125;
-&#125;
+    }
+}
 
 // Object 类的 toString 方法返回一个字符串，该字符串由类名（对象是该类的一个实例）、at 标记符“@”和此对象哈希码的无符号十六进制表示组成
 
 // Cat.java(重写toString)
 package Demo;
 
-class Cat &#123;
+class Cat {
     @Override
-    public String toString() &#123;
+    public String toString() {
         return &quot;I am a cat&quot;; // 最后执行Dog.java 结果 I am a cat
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="HashCode解释"><a href="#HashCode解释" class="headerlink" title="HashCode解释"></a>HashCode解释</h2><p>从Java虚拟机角度看内存布局，在Java运行时，需要找到内存地址，hashcodes table存着每个对象的hash编码</p>
 <p>通过hash编码寻找内存地址，但可能存在多对象具有相同hash编码的情况，暂不讨论原因</p>
 <h2 id="Java-equals方法"><a href="#Java-equals方法" class="headerlink" title="Java equals方法"></a>Java equals方法</h2><ul>
@@ -753,36 +753,36 @@ class Cat &#123;
 </ul>
 <pre><code class="java">package Demo;
 
-class Cat &#123;
+class Cat {
     private int color;
 
-    private Cat(int color) &#123;
+    private Cat(int color) {
         this.color = color;
-    &#125;
+    }
 
     @Override
-    public boolean equals(Object obj) &#123; // 栈内存中开辟 Object引用类型变量obj
+    public boolean equals(Object obj) { // 栈内存中开辟 Object引用类型变量obj
         // 对象不能为空值
         if (obj == null)
             return false;
-        else &#123;
+        else {
             // obj 为 Cat 对象的引用
-            if (obj instanceof Cat) &#123;
+            if (obj instanceof Cat) {
                 Cat c = (Cat) obj; // 强制将Object类型转换为Cat类型
                 return c.color == this.color;
-            &#125;
-        &#125;
+            }
+        }
 
         return false;
-    &#125;
+    }
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Cat c1 = new Cat(1);
         Cat c2 = new Cat(1);
 
         System.out.println(c1.equals(c2)); // true 
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="Java对象转型"><a href="#Java对象转型" class="headerlink" title="Java对象转型"></a>Java对象转型</h2><ul>
 <li>一个基类的引用类型变量可以指向其子类的对象</li>
 <li>一个基类的引用不可以访问其子类对象新增的成员(属性和方法)</li>
@@ -792,49 +792,49 @@ class Cat &#123;
 <p><strong>instanceof</strong></p>
 <pre><code class="java">package Demo;
 
-class Animal &#123; &#125;
+class Animal { }
 
-class Cat extends Animal &#123; &#125;
+class Cat extends Animal { }
 
-public class Test &#123;
+public class Test {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Animal a = new Animal();
         Cat c = new Cat();
         System.out.println(a instanceof Animal); // true
         System.out.println(c instanceof Animal); // true
         System.out.println(a instanceof Cat); // false 
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p><strong>强制转换</strong></p>
 <pre><code class="java">package Demo;
 
-class Animal &#123;
+class Animal {
     public String name;
 
-    Animal(String name) &#123;
+    Animal(String name) {
         this.name = name;
-    &#125;
-&#125;
+    }
+}
 
-class Cat extends Animal &#123;
+class Cat extends Animal {
     public String eyesColor;
 
-    Cat(String n, String c) &#123;
+    Cat(String n, String c) {
         super(n);
         eyesColor = c;
-    &#125;
-&#125;
+    }
+}
 
-public class Test &#123;
+public class Test {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Animal a = new Cat(&quot;Cat&quot;, &quot;blue&quot;);
         System.out.println(a.eyesColor); // error
         Cat c = (Cat) a;
         System.out.println(c.eyesColor); // blue
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="Java动态绑定和多态"><a href="#Java动态绑定和多态" class="headerlink" title="Java动态绑定和多态"></a>Java动态绑定和多态</h2><p>动态绑定是指在执行期间(非编译期间)判断所引用对象的实际类型，根据实际类型调用其相应方法</p>
 <ul>
 <li>要有继承</li>
@@ -842,55 +842,55 @@ public class Test &#123;
 <li>父类引用指向子类对象</li>
 </ul>
 <p><strong>多态例子</strong></p>
-<pre><code class="java">class Animal &#123;
+<pre><code class="java">class Animal {
     private String name;
 
-    Animal(String name) &#123;
+    Animal(String name) {
         this.name = name;
-    &#125;
+    }
 
-    public void enjoy() &#123;
+    public void enjoy() {
         System.out.println(&quot;叫声&quot;);
-    &#125;
-&#125;
+    }
+}
 
-class Cat extends Animal &#123;
+class Cat extends Animal {
 
     private String eyeColor;
 
-    Cat(String name, String eyeColor) &#123;
+    Cat(String name, String eyeColor) {
         super(name);
         this.eyeColor = eyeColor;
-    &#125;
+    }
 
-    public void enjoy() &#123;
+    public void enjoy() {
         System.out.println(&quot;猫叫&quot;);
-    &#125;
-&#125;
+    }
+}
 
-class Lady &#123;
+class Lady {
 
     private String name;
     private Animal pet;
 
-    Lady(String name, Animal pet) &#123; 
+    Lady(String name, Animal pet) { 
         this.name = name;
         this.pet = pet;
-    &#125;
+    }
 
-    public void mePetEnjoy() &#123;
+    public void mePetEnjoy() {
         pet.enjoy(); // b
-    &#125;
-&#125;
+    }
+}
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Cat c = new Cat(&quot;Cat&quot;, &quot;blue&quot;);
         Lady l = new Lady(&quot;Lady&quot;, c); // a
         l.mePetEnjoy(); // 猫叫
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p><strong>内存解析</strong></p>
 <p><strong>堆内存中new的对象虽然不含方法(code segment)，但存在可以指向方法的标识，具体指向什么方法依据情况动态改变</strong></p>
 <p>a代码表示<code>Animal pet = c</code>，虽然c的引用类型是Cat，但由于pet引用类型是Animal，则调用的为Animal类的enjoy()方法</p>
@@ -904,14 +904,14 @@ public class Main &#123;
 <p><strong>抽象类</strong></p>
 <pre><code class="java">package Demo;
 
-abstract class Animal &#123;
+abstract class Animal {
     private String name;
-    Animal(String name) &#123;
+    Animal(String name) {
         this.name = name;
-    &#125;
+    }
 
     public abstract void enjoy();
-&#125;</code></pre>
+}</code></pre>
 <h2 id="Java-final关键字"><a href="#Java-final关键字" class="headerlink" title="Java final关键字"></a>Java final关键字</h2><ul>
 <li>final的变量的值不能够被改变(局部变量，形参)</li>
 <li>final的方法不能被重写</li>
@@ -928,13 +928,13 @@ abstract class Animal &#123;
 <li>本质上，接口是一种特殊的抽象类，其只包含常量和方法的定义，没有变量和方法的实现</li>
 </ul>
 <p><strong>接口</strong></p>
-<pre><code class="java">public interface Runner &#123;
+<pre><code class="java">public interface Runner {
     public static final int id = 1; 
     // public static final解决c++多继承中容易出现的问题 因为该变量不属于任何对象 位于data segment3
     public void start();
     public void run();
     public void stop();
-&#125;</code></pre>
+}</code></pre>
 <h3 id="接口特性"><a href="#接口特性" class="headerlink" title="接口特性"></a>接口特性</h3><ul>
 <li>接口可以多重实现</li>
 <li>接口声明的属性默认为public static final，也只能是这个</li>
@@ -943,50 +943,50 @@ abstract class Animal &#123;
 </ul>
 <pre><code class="java">package Demo;
 
-public interface Singer &#123;
+public interface Singer {
     public void sing();
     public void sleep();
-&#125;
+}
 
 package Demo;
 
-public interface Painter &#123;
+public interface Painter {
     public void paint();
     public void eat();
-&#125;
+}
 
 package Demo;
 
-public class Teacher implements Singer, Painter &#123;
+public class Teacher implements Singer, Painter {
     private String name;
-    Teacher(String name) &#123;
+    Teacher(String name) {
         this.name = name;
-    &#125;
+    }
 
-    public void study() &#123;
+    public void study() {
         System.out.println(&quot;studying&quot;);
-    &#125;
+    }
 
     @Override
-    public void sing() &#123;
+    public void sing() {
         System.out.println(&quot;teacher is singing&quot;);
-    &#125;
+    }
 
     @Override
-    public void sleep() &#123;
+    public void sleep() {
         System.out.println(&quot;teacher is sleeping&quot;);
-    &#125;
+    }
 
     @Override
-    public void paint() &#123;
+    public void paint() {
         System.out.println(&quot;teacher is painting&quot;);
-    &#125;
+    }
 
     @Override
-    public void eat() &#123;
+    public void eat() {
         System.out.println(&quot;teacher is eating&quot;);
-    &#125;
-&#125; </code></pre>
+    }
+} </code></pre>
 <h1 id="Java-exceptional-handling"><a href="#Java-exceptional-handling" class="headerlink" title="Java-exceptional handling"></a>Java-exceptional handling</h1><p><strong>c++不检测数组是否越界，但Java检测</strong></p>
 <h2 id="Java异常"><a href="#Java异常" class="headerlink" title="Java异常"></a>Java异常</h2><ul>
 <li>Java异常是Java提供用于处理程序中错误的机制</li>
@@ -997,17 +997,17 @@ public class Teacher implements Singer, Painter &#123;
 </ul>
 <pre><code class="JAVA">package Demo;
 
-public class Demo &#123;
-    public static void main(String[] args) &#123;
-        try &#123;
+public class Demo {
+    public static void main(String[] args) {
+        try {
             System.out.println(2/0);
-        &#125; catch (ArithmeticException ae) &#123;
+        } catch (ArithmeticException ae) {
             System.out.println(&quot;error&quot;);
             ae.printStackTrace(); // 打印异常栈轨迹
             // getMessage() 得到有关异常事件的信息
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 // 运行结果
 // error
@@ -1030,77 +1030,77 @@ public class Demo &#123;
 <pre><code class="java">package Demo;
 import java.io.*;
 
-public class Demo &#123;
-    public static void main(String[] args) &#123;
+public class Demo {
+    public static void main(String[] args) {
         FileInputStream in = null;
-        try &#123;
+        try {
             in = new FileInputStream(&quot;file&quot;);
             int b;
             b = in.read();
-            while (b != -1) &#123;
+            while (b != -1) {
                 System.out.println((char) b);
                 b = in.read();
-            &#125;
-        &#125; catch (FileNotFoundException e) &#123;
+            }
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             System.out.println(e.getMessage());
-        &#125; finally &#123;
-            try &#123;
+        } finally {
+            try {
                 in.close();
-            &#125; catch (IOException e) &#123;
+            } catch (IOException e) {
                 e.printStackTrace();
-            &#125;
-        &#125;
-    &#125;
-&#125;</code></pre>
+            }
+        }
+    }
+}</code></pre>
 <p><strong>throw向上级抛出错误</strong></p>
 <pre><code class="java">package Demo;
 import java.io.*;
 
-class D &#123;
+class D {
 
-    public void f() throws FileNotFoundException, IOException &#123;
+    public void f() throws FileNotFoundException, IOException {
         FileInputStream in = new FileInputStream(&quot;file&quot;);
         int b;
         b = in.read();
-        while (b != -1) &#123;
+        while (b != -1) {
             System.out.println((char) b);
             b = in.read();
-        &#125;
-    &#125;
+        }
+    }
 
-    public void f2() &#123;
-        try &#123;
+    public void f2() {
+        try {
             f();
-        &#125; catch (FileNotFoundException e) &#123;
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
-public class Demo &#123;
-    public static void main(String[] args) &#123;
+public class Demo {
+    public static void main(String[] args) {
         D d = new D();
         d.f2();
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p><strong>手动抛出错误</strong></p>
 <pre><code class="java">package Demo;
 
-public class Demo &#123;
+public class Demo {
 
-    private static void m(int i) throws ArithmeticException &#123;
+    private static void m(int i) throws ArithmeticException {
         if (i == 2)
             throw new ArithmeticException(&quot;出现错误&quot;);
-    &#125;
+    }
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         m(2);
-    &#125;
-&#125;
+    }
+}
 
 // 输出结果
 Exception in thread &quot;main&quot; java.lang.ArithmeticException: 出现错误
@@ -1114,18 +1114,18 @@ Exception in thread &quot;main&quot; java.lang.ArithmeticException: 出现错误
 <p><strong>创建数组</strong></p>
 <pre><code class="java">package Demo;
 
-public class Demo &#123;
+public class Demo {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         int[] arr;
         arr = new int[5];
 
-        for (int i = 0; i &lt; 5; i ++) &#123;
+        for (int i = 0; i &lt; 5; i ++) {
             System.out.print(arr[i] + &quot;\t&quot;);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 // 0 0 0 0 0</code></pre>
 <h2 id="Java数组初始化"><a href="#Java数组初始化" class="headerlink" title="Java数组初始化"></a>Java数组初始化</h2><p>动态初始化：数组定义与数组元素分配空间和赋值的操作分开进行</p>
@@ -1134,17 +1134,17 @@ public class Demo &#123;
 <li>每个数组都有一个属性length指明其长度</li>
 </ul>
 <p><strong>Java命令行与args数组</strong></p>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         System.out.println(&quot;Hello World!&quot;);
 
-        for (String arg : args) &#123;
+        for (String arg : args) {
             System.out.print(arg);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 ~/IdeaProjects/Java-study/src 
 $ javac Main.java // 编译
@@ -1154,9 +1154,9 @@ $ java Main 1 2 3 // 执行
 Hello World!
 123%           </code></pre>
 <p><strong>简单算数运算</strong></p>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         if (args.length &lt; 3)
             System.exit(-1);
@@ -1165,7 +1165,7 @@ Hello World!
         double d2 = Double.parseDouble(args[2]);
         double d = 0;
 
-        switch (args[1]) &#123;
+        switch (args[1]) {
             case &quot;+&quot;:
                 d = d1 + d2;
                 break;
@@ -1180,56 +1180,56 @@ Hello World!
                 break;
             default:
                 System.exit(-1);
-        &#125;
+        }
 
         System.out.println(d);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p><strong>简单排序</strong></p>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         int[] a = new int[args.length];
-        for (int i = 0; i &lt; args.length; i ++) &#123;
+        for (int i = 0; i &lt; args.length; i ++) {
             a[i] = Integer.parseInt(args[i]);
-        &#125;
+        }
 
         selectionSort(a);
         print(a);
-    &#125;
+    }
 
-    private static void selectionSort(int[] a) &#123;
+    private static void selectionSort(int[] a) {
 
         int k, temp;
-        for (int i = 0; i &lt; a.length - 1; i ++) &#123;
+        for (int i = 0; i &lt; a.length - 1; i ++) {
             k = i;
-            for (int j = i + 1; j &lt; a.length; j ++) &#123;
+            for (int j = i + 1; j &lt; a.length; j ++) {
                 if (a[j] &lt; a[k])
                     k = j;
-            &#125;
+            }
 
-            if (k != i) &#123;
+            if (k != i) {
                 temp = a[i];
                 a[i] = a[k];
                 a[k] = temp;
-            &#125;
-        &#125;
-    &#125;
+            }
+        }
+    }
 
-    private static void print(int[] a) &#123;
-        for (int i1 : a) &#123;
+    private static void print(int[] a) {
+        for (int i1 : a) {
             System.out.print(i1 + &quot; &quot;);
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h3 id="二维数组"><a href="#二维数组" class="headerlink" title="二维数组"></a>二维数组</h3><ul>
 <li><p>二维数组可以看成数组为元素的数组</p>
 </li>
 <li><p>Java中多维数组的声明和初始化应按从高维到低维的顺序进行</p>
 <pre><code class="java">// 静态初始化
-int[][] a = &#123;&#123;1&#125;, &#123;2, 3&#125;, &#123;4, 5, 6&#125;&#125;;
-int[3][2] b = &#123;&#123;1, 2&#125;, &#123;2, 3&#125;, &#123;4, 5&#125;&#125;; // 非法
+int[][] a = {{1}, {2, 3}, {4, 5, 6}};
+int[3][2] b = {{1, 2}, {2, 3}, {4, 5}}; // 非法
 
 // 动态初始化
 int[][] a = new int[3][5];
@@ -1250,20 +1250,20 @@ a[2] = new int[3];</code></pre>
 <li><p>如果源数据数目超过目标数组边界会抛出IndexOutOfBoundsException异常</p>
 </li>
 </ul>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
-        int[] a = &#123;1, 2, 3&#125;;
+        int[] a = {1, 2, 3};
         int[] b = new int[3];
 
         System.arraycopy(a, 0, b, 0, a.length);
 
-        for (int i1 : b) &#123;
+        for (int i1 : b) {
             System.out.println(i1);
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h1 id="Java-common-class"><a href="#Java-common-class" class="headerlink" title="Java-common class"></a>Java-common class</h1><h2 id="String类"><a href="#String类" class="headerlink" title="String类"></a>String类</h2><ul>
 <li><p>Java.lang.String类代表<strong>不可变</strong>的字符序列</p>
 </li>
@@ -1276,19 +1276,19 @@ a[2] = new int[3];</code></pre>
 </li>
 </ul>
 <p><strong>思考代码</strong></p>
-<pre><code class="java">public static void main(String[] args) &#123;
+<pre><code class="java">public static void main(String[] args) {
 
   String s1 = &quot;hello&quot;; // a
   String s2 = &quot;hello&quot;; // b
 
   System.out.println(s1 == s2); // true
-&#125;</code></pre>
+}</code></pre>
 <p><strong>内存分析</strong></p>
 <p>“hello”为字符串常量，a行代码会在代码区中生成”hello”，并让s1指向它</p>
 <p>当执行b行代码，编译器存在优化手段，代码区已经存在”hello”，则直接将s2指向它</p>
 <p><strong>思考代码</strong></p>
 <p><code>String是不可变字符序列，但这里为什么改变了？</code></p>
-<pre><code class="java">    public static void main(String[] args) &#123;
+<pre><code class="java">    public static void main(String[] args) {
 
         String s1 = &quot;hello&quot;;
         String s2 = &quot;world&quot;;
@@ -1296,28 +1296,28 @@ a[2] = new int[3];</code></pre>
         s1 += s2;
 
         System.out.println(s1); // helloworld
-    &#125;</code></pre>
+    }</code></pre>
 <p><strong>内存分析</strong></p>
 <p>实质上是在data segment中开辟一块新内存，将s1、s2的内容复制进去，再令s1指向新内存(效率不高)</p>
 <p><strong>代码测试</strong></p>
-<pre><code class="java">public static void main(String[] args) &#123;
+<pre><code class="java">public static void main(String[] args) {
 
   String s1 = new String(&quot;hello&quot;); // new 分配到堆中
   String s2 = new String(&quot;hello&quot;);
 
   System.out.println(s1 == s2); // false == 比较地址 
   System.out.println(s1.equals(s2)); // true
-&#125;</code></pre>
+}</code></pre>
 <p><strong>字符数组</strong></p>
-<pre><code class="java">    public static void main(String[] args) &#123;
+<pre><code class="java">    public static void main(String[] args) {
 
-        char c[] = &#123;&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;&#125;;
+        char c[] = {&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;};
         String s1 = new String(c);
         String s2 = new String(c, 1, 2);
 
         System.out.println(s1); // abcd
         System.out.println(s2); // bc
-    &#125;</code></pre>
+    }</code></pre>
 <h3 id="String类常用方法"><a href="#String类常用方法" class="headerlink" title="String类常用方法"></a>String类常用方法</h3><p>返回字符串第index个字符</p>
 <p><code>public char charAt(int index)</code></p>
 <p>返回字符串长度</p>
@@ -1347,7 +1347,7 @@ a[2] = new int[3];</code></pre>
 <p><code>public static String valueOf(...) </code></p>
 <p>将字符串按照指定分隔符分隔，返回分隔后字符串数组</p>
 <p><code>public String[] split(String regex)</code></p>
-<pre><code class="java">public static void main(String[] args) &#123;
+<pre><code class="java">public static void main(String[] args) {
 
   int j = 1234567;
   String sNumber = String.valueOf(j);
@@ -1356,10 +1356,10 @@ a[2] = new int[3];</code></pre>
 
   String s = &quot;Mary,F,1976&quot;;
   String[] sPlit = s.split(&quot;,&quot;);
-  for (String s1 : sPlit) &#123;
+  for (String s1 : sPlit) {
     System.out.println(s1);
-  &#125;
-&#125;</code></pre>
+  }
+}</code></pre>
 <h2 id="StringBuffer类"><a href="#StringBuffer类" class="headerlink" title="StringBuffer类"></a>StringBuffer类</h2><ul>
 <li>Java.lang.StringBuffer代表<strong>可变</strong>字符序列</li>
 <li>StringBuffer和String类似，但StringBuffer可以对其字符串进行改变</li>
@@ -1370,19 +1370,19 @@ a[2] = new int[3];</code></pre>
 <p><code>public StringBuffer append(int offset, String str)</code></p>
 <p>可以删除从start开始到end-1位置的字符序列，返回修改后的字符引用</p>
 <p><code>public StringBuffer delete(int start, int end)</code></p>
-<pre><code class="java">public static void main(String[] args) &#123;
+<pre><code class="java">public static void main(String[] args) {
 
   String s = &quot;Microsoft&quot;;
-  char[] a = &#123;&#39;a&#39;, &#39;b&#39;, &#39;c&#39;&#125;;
+  char[] a = {&#39;a&#39;, &#39;b&#39;, &#39;c&#39;};
   StringBuffer sb1 = new StringBuffer(s);
   sb1.append(&#39;/&#39;).append(&quot;IBM&quot;);
 
   System.out.println(sb1);
 
   StringBuffer sb2 = new StringBuffer(&quot;数字&quot;);
-  for (int i = 0; i &lt;= 9; i ++) &#123;
+  for (int i = 0; i &lt;= 9; i ++) {
     sb2.append(i);
-  &#125;
+  }
 
   System.out.println(sb2);
 
@@ -1391,7 +1391,7 @@ a[2] = new int[3];</code></pre>
   System.out.println(sb2);
 
   System.out.println(sb2.reverse());
-&#125;</code></pre>
+}</code></pre>
 <h2 id="基本数据类型包装类"><a href="#基本数据类型包装类" class="headerlink" title="基本数据类型包装类"></a>基本数据类型包装类</h2><h3 id="java-lang-Integer"><a href="#java-lang-Integer" class="headerlink" title="java.lang.Integer"></a>java.lang.Integer</h3><p>最大int型整数(2^31 -  1)</p>
 <p><code>public static final int MAX_VALUE</code></p>
 <p>最小int型整数(-2^31)</p>
@@ -1404,32 +1404,32 @@ a[2] = new int[3];</code></pre>
 <p><code>public static int parseInt(String s) throws NumberFormatException</code></p>
 <p>将字符串解析为int型数据，返回Integer对象</p>
 <p><code>public static Integer valueOf(String s) throws NumberFormatException</code></p>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         double[][] d;
         String s = &quot;1,2;3,4,5;6,7,8&quot;;
 
         String[] sFirst = s.split(&quot;;&quot;);
         d = new double[sFirst.length][];
-        for (int i = 0; i &lt; sFirst.length; i ++) &#123;
+        for (int i = 0; i &lt; sFirst.length; i ++) {
             String[] sSecond = sFirst[i].split(&quot;,&quot;);
             d[i] = new double[sSecond.length];
 
-            for (int j = 0; j &lt; sSecond.length; j ++) &#123;
+            for (int j = 0; j &lt; sSecond.length; j ++) {
                 d[i][j] = Double.parseDouble(sSecond[j]);
-            &#125;
-        &#125;
+            }
+        }
 
-        for (int i = 0; i &lt; d.length; i ++) &#123;
-            for (int j = 0; j &lt; d[i].length; j ++) &#123;
+        for (int i = 0; i &lt; d.length; i ++) {
+            for (int j = 0; j &lt; d[i].length; j ++) {
                 System.out.print(d[i][j] + &quot; &quot;);
-            &#125;
+            }
             System.out.println();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="Math-and-File"><a href="#Math-and-File" class="headerlink" title="Math and File"></a>Math and File</h2><h3 id="Math类"><a href="#Math类" class="headerlink" title="Math类"></a>Math类</h3><p>java.lang.Math提供一系列静态方法用于科学计算，其方法的<strong>参数和返回值类型</strong>一般为<strong>double型</strong></p>
 <h3 id="Math类常用方法"><a href="#Math类常用方法" class="headerlink" title="Math类常用方法"></a>Math类常用方法</h3><p>abs 绝对值</p>
 <p>sqrt 平方根</p>
@@ -1476,9 +1476,9 @@ a[2] = new int[3];</code></pre>
 <pre><code class="java">import java.io.File;
 import java.io.IOException;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         String separator = File.separator;
         String filename = &quot;file.txt&quot;;
@@ -1486,61 +1486,61 @@ public class Main &#123;
 
         File f = new File(director, filename);
 
-        if (f.exists()) &#123;
+        if (f.exists()) {
             System.out.println(&quot;文件名：&quot; + f.getAbsolutePath());
             System.out.println(&quot;文件大小：&quot; + f.length());
-        &#125; else &#123;
+        } else {
             f.getParentFile().mkdirs(); // getParentFile 包的上级目录
 
-            try &#123;
+            try {
                 f.createNewFile();
-            &#125; catch (IOException e) &#123;
+            } catch (IOException e) {
                 e.printStackTrace();
-            &#125;
-        &#125;
-    &#125;
-&#125;</code></pre>
+            }
+        }
+    }
+}</code></pre>
 <p><strong>递归列出目录结构</strong></p>
 <pre><code class="java">package Week2;
 
 import java.io.File;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         File f = new File(&quot;/Users/max/IdeaProjects/Java-study/dir1&quot;);
         tree(f, 0);
-    &#125;
+    }
 
-    private static void tree(File f, int level) &#123;
+    private static void tree(File f, int level) {
 
         StringBuilder preStr = new StringBuilder();
 
-        for (int i = 0; i &lt; level; i ++) &#123;
+        for (int i = 0; i &lt; level; i ++) {
             preStr.append(&quot;    &quot;); // 采用动态字符序列
-        &#125;
+        }
 
         File[] childs = f.listFiles();
 
         assert childs != null;
-        for (File child : childs) &#123;
+        for (File child : childs) {
             System.out.println(preStr + child.getName());
 
-            if (child.isDirectory()) &#123;
+            if (child.isDirectory()) {
                 tree(child, level + 1);
-            &#125;
-        &#125;
-    &#125;
-&#125;</code></pre>
-<h2 id="Enum类"><a href="#Enum类" class="headerlink" title="Enum类"></a>Enum类</h2><pre><code class="java">public class Main &#123;
+            }
+        }
+    }
+}</code></pre>
+<h2 id="Enum类"><a href="#Enum类" class="headerlink" title="Enum类"></a>Enum类</h2><pre><code class="java">public class Main {
 
-    private enum Color &#123;red, green, blue&#125;; // 定义枚举类型
+    private enum Color {red, green, blue}; // 定义枚举类型
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Color c = Color.blue;
 
-        switch (c) &#123;
+        switch (c) {
             case red:
                 System.out.println(&quot;red&quot;);
                 break;
@@ -1553,16 +1553,16 @@ public class Main &#123;
             default:
                 System.out.println(&quot;default&quot;);
                 break;
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="日期处理"><a href="#日期处理" class="headerlink" title="日期处理"></a>日期处理</h2><p><code>System.out.println(new Date());</code> // Wed Sep 11 18:53:42 CST 2019</p>
 <p><strong>返回以毫秒为单位的当前时间</strong></p>
 <p><code>System.out.println(System.currentTimeMillis()); // 1568133500627</code></p>
 <p><strong>Calendar</strong></p>
 <pre><code class="java">import java.util.Calendar;
 
-public static void main(String[] args) &#123;
+public static void main(String[] args) {
 
   // 此时时间 2019-9-11
   Calendar c = Calendar.getInstance();
@@ -1571,31 +1571,31 @@ public static void main(String[] args) &#123;
   System.out.println(c.get(Calendar.MONTH)); // 8 
   System.out.println(c.get(Calendar.DAY_OF_WEEK)); // 4
   System.out.println(c.get(Calendar.DAY_OF_MONTH)); // 11
-&#125;</code></pre>
+}</code></pre>
 <p><strong>DateFormat</strong></p>
 <pre><code class="java">import java.text.DateFormat;
 import java.util.Calendar;
 
-public static void main(String[] args) &#123;
+public static void main(String[] args) {
 
   Calendar c = Calendar.getInstance();
 
   System.out.println(DateFormat.getDateInstance().format(c.getTime())); // 2019-9-11
   System.out.println(DateFormat.getInstance().format(c.getTime())); // 19-9-11 上午12:46
   System.out.println(DateFormat.getDateTimeInstance().format(c.getTime())); // 2019-9-11 0:46:45
-&#125;</code></pre>
+}</code></pre>
 <p><strong>SimpleDateFormat</strong></p>
 <pre><code class="java">import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public static void main(String[] args) &#123;
+public static void main(String[] args) {
 
 Calendar c = Calendar.getInstance();
 
 SimpleDateFormat sm = new SimpleDateFormat(&quot;yyyy年MM月dd日 E HH时mm分ss秒&quot;);
 
 System.out.println(sm.format(c.getTime())); // 2019年09月11日 星期三 00时53分44秒
-&#125;</code></pre>
+}</code></pre>
 <h1 id="Java-io"><a href="#Java-io" class="headerlink" title="Java-io"></a>Java-io</h1><h2 id="Java流式输入-输出原理"><a href="#Java流式输入-输出原理" class="headerlink" title="Java流式输入/输出原理"></a>Java流式输入/输出原理</h2><p>Java程序中，对于数据的输入/输出操作以”流”方式进行，J2SDK提供各种各样的”流”类，用以获取不同种类的数据；程序中通过标准的方法输入或输出数据</p>
 <p><strong>“流”可以理解为连接与程序和文件(硬盘)间用于数据传输的管道</strong></p>
 <h2 id="Java输入-输出流的分类"><a href="#Java输入-输出流的分类" class="headerlink" title="Java输入/输出流的分类"></a>Java输入/输出流的分类</h2><ul>
@@ -1671,121 +1671,121 @@ System.out.println(sm.format(c.getTime())); // 2019年09月11日 星期三 00时
 <h2 id="FileInputStream-amp-FileOutputStream"><a href="#FileInputStream-amp-FileOutputStream" class="headerlink" title="FileInputStream &amp; FileOutputStream"></a>FileInputStream &amp; FileOutputStream</h2><p><strong>文件读取</strong></p>
 <pre><code class="java">import java.io.*;;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         int b = 0;
         FileInputStream in = null;
 
-        try &#123;
+        try {
             in = new FileInputStream(&quot;/Users/max/IdeaProjects/Java-study/src/Main.java&quot;);
-        &#125; catch (FileNotFoundException e) &#123;
+        } catch (FileNotFoundException e) {
             System.out.println(&quot;找不到指定文件&quot;);
             System.exit(-1);
-        &#125;
+        }
 
-        try &#123;
+        try {
             int num = 0;
-            while ((b = in.read()) != -1) &#123;
+            while ((b = in.read()) != -1) {
                 System.out.print((char)b);
                 num ++;
-            &#125;
+            }
             in.close();
             System.out.println();
             System.out.println(&quot;共读取了&quot; + num + &quot;个字节&quot;);
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             System.out.println(&quot;文件读取错误&quot;);
             System.exit(-1);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 // 中文会乱码，因为中文占两个字节</code></pre>
 <p><strong>文件复制</strong></p>
 <pre><code class="java">import java.io.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         int b = 0;
         FileInputStream in = null;
         FileOutputStream out = null;
 
-        try &#123;
+        try {
             in = new FileInputStream(&quot;/Users/max/IdeaProjects/Java-study/src/Main.java&quot;);
             out = new FileOutputStream(&quot;/Users/max/IdeaProjects/Java-study/src/Copy.java&quot;);
 
-            while ((b = in.read()) != -1) &#123;
+            while ((b = in.read()) != -1) {
                 out.write(b);
-            &#125;
+            }
 
             in.close();
             out.close();
-        &#125; catch (FileNotFoundException e) &#123;
+        } catch (FileNotFoundException e) {
             System.out.println(&quot;找不到指定文件&quot;);
             System.exit(-1);
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             System.out.println(&quot;文件复制失败&quot;);
             System.exit(-1);
-        &#125;
+        }
 
         System.out.println(&quot;文件已复制&quot;);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="FileReader-amp-FileWriter"><a href="#FileReader-amp-FileWriter" class="headerlink" title="FileReader &amp; FileWriter"></a>FileReader &amp; FileWriter</h2><pre><code class="java">import java.io.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         int  b = 0;
         FileReader fr = null;
 
-        try &#123;
+        try {
             fr = new FileReader(&quot;/Users/max/IdeaProjects/Java-study/src/Week2/Main.java&quot;);
 
-            while ((b = fr.read()) != -1) &#123;
+            while ((b = fr.read()) != -1) {
                 System.out.print((char)b);
-            &#125;
+            }
 
             fr.close();
-        &#125; catch (FileNotFoundException e) &#123;
+        } catch (FileNotFoundException e) {
             System.out.println(&quot;找不到指定文件&quot;);
             System.exit(-1);
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             System.out.println(&quot;文件复制失败&quot;);
             System.exit(-1);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 // FileReader 解决中文乱码问题</code></pre>
 <pre><code class="java">import java.io.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         FileWriter fw = null;
 
-        try &#123;
+        try {
             fw = new FileWriter(&quot;/Users/max/IdeaProjects/Java-study/src/Unicode.txt&quot;);
 
-            for (int i = 0; i &lt;= 65545; i ++) &#123;
+            for (int i = 0; i &lt;= 65545; i ++) {
                 fw.write(i);
-            &#125;
+            }
 
             fw.close();
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             System.out.println(&quot;文件写入错误&quot;);
             System.exit(-1);
-        &#125;
+        }
 
         System.out.println(&quot;文件写入成功&quot;);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="缓冲流"><a href="#缓冲流" class="headerlink" title="缓冲流"></a>缓冲流</h2><ul>
 <li>缓冲流要”套接”在相应的节点流之上，对读写的数据提供缓冲功能，提高读写的效率，同时增加了新方法</li>
 <li>缓冲输入流支持其父类的mark和reset方法</li>
@@ -1795,11 +1795,11 @@ public class Main &#123;
 </ul>
 <h2 id="BufferedInputStream"><a href="#BufferedInputStream" class="headerlink" title="BufferedInputStream"></a>BufferedInputStream</h2><pre><code class="java">import java.io.*;;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
-        try &#123;
+        try {
             FileInputStream fis = new FileInputStream(&quot;/Users/max/IdeaProjects/Java-study/src/Week2/Main.java&quot;);
             BufferedInputStream bis = new BufferedInputStream(fis); // 套接之前的字节流
 
@@ -1819,39 +1819,39 @@ public class Main &#123;
 
             bis.close();
 
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="BufferedWriter-amp-BufferedReader"><a href="#BufferedWriter-amp-BufferedReader" class="headerlink" title="BufferedWriter &amp; BufferedReader"></a>BufferedWriter &amp; BufferedReader</h2><pre><code class="java">import java.io.*;;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
-        try &#123;
+        try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(&quot;/Users/max/IdeaProjects/Java-study/src/Week2/random.txt&quot;));
             BufferedReader br = new BufferedReader(new FileReader(&quot;/Users/max/IdeaProjects/Java-study/src/Week2/random.txt&quot;));
 
             String s = null;
 
-            for (int i = 0; i &lt; 100; i ++) &#123;
+            for (int i = 0; i &lt; 100; i ++) {
                 s = String.valueOf(Math.random());
                 bw.write(s);
                 bw.newLine();
-            &#125;
+            }
 
             bw.flush();
 
-            while ((s = br.readLine()) != null) &#123;
+            while ((s = br.readLine()) != null) {
                 System.out.println(s);
-            &#125;
-        &#125; catch (IOException e) &#123;
+            }
+        } catch (IOException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="转换流"><a href="#转换流" class="headerlink" title="转换流"></a>转换流</h2><ul>
 <li>InputStreamReader和OutputStreamWriter用于字节数据到字符数据之间的转换</li>
 <li>InputStreamReader需要和InputStream”套接”</li>
@@ -1860,11 +1860,11 @@ public class Main &#123;
 </ul>
 <pre><code class="java">import java.io.*;;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
-        try &#123;
+        try {
             OutputStreamWriter osw = new OutputStreamWriter(
                     new FileOutputStream(&quot;/Users/max/IdeaProjects/Java-study/src/Week2/file&quot;));
 
@@ -1881,16 +1881,16 @@ public class Main &#123;
 
             System.out.println(osw.getEncoding());
             osw.close();
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="System-in"><a href="#System-in" class="headerlink" title="System.in"></a>System.in</h2><pre><code class="java">import java.io.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         InputStreamReader isr = new InputStreamReader(System.in); // 阻塞式(同步)方法 会一直等待输入
 
@@ -1898,23 +1898,23 @@ public class Main &#123;
 
         String s;
 
-        try &#123;
+        try {
             s = br.readLine();
 
-            while (s != null) &#123;
+            while (s != null) {
                 if (s.equalsIgnoreCase(&quot;exit&quot;))
                     break;
                 System.out.println(s.toUpperCase());
 
                 s = br.readLine();
-            &#125;
+            }
 
             br.close();
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="DateIO-amp-ByteArrayIO-暂不研究"><a href="#DateIO-amp-ByteArrayIO-暂不研究" class="headerlink" title="DateIO &amp; ByteArrayIO(暂不研究)"></a>DateIO &amp; ByteArrayIO(暂不研究)</h2><h2 id="Print流"><a href="#Print流" class="headerlink" title="Print流"></a>Print流</h2><ul>
 <li>PrintWriter和PrintStream都属于输出流，分别针对字符和字节</li>
 <li>PrintWriter和PrintStream提供了重载的print</li>
@@ -1924,11 +1924,11 @@ public class Main &#123;
 </ul>
 <h3 id="PrintStream"><a href="#PrintStream" class="headerlink" title="PrintStream"></a>PrintStream</h3><pre><code class="java">import java.io.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
-        try &#123;
+        try {
             PrintStream ps = new PrintStream(
                     new FileOutputStream(&quot;/Users/max/IdeaProjects/Java-study/src/Week2/file&quot;)
             );
@@ -1937,26 +1937,26 @@ public class Main &#123;
 
             for (int i = 0; i &lt; 100; i ++)
                 System.out.print(i + &quot;  &quot;); //数据并不会打印到终端 而是到file中 
-        &#125; catch (FileNotFoundException e) &#123;
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <pre><code class="java">import java.io.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         String filename = args[0];
 
         if (filename != null)
             list(filename, System.out);
-    &#125;
+    }
 
-    private static void list(String filename, PrintStream out) &#123;
+    private static void list(String filename, PrintStream out) {
 
-        try &#123;
+        try {
             BufferedReader bf = new BufferedReader(
                     new FileReader(filename)
             );
@@ -1966,46 +1966,46 @@ public class Main &#123;
                 out.println(s);
 
             bf.close();
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h3 id="PrintWriter"><a href="#PrintWriter" class="headerlink" title="PrintWriter"></a>PrintWriter</h3><pre><code class="java">import java.io.*;
 import java.util.Date;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         String s = null;
         BufferedReader bf = new BufferedReader(
                 new InputStreamReader(System.in)
         );
 
-        try &#123;
+        try {
             FileWriter fw = new FileWriter(&quot;/Users/max/IdeaProjects/Java-study/src/file&quot;, true);
 
             PrintWriter log = new PrintWriter(fw);
 
-            while ((s = bf.readLine()) != null) &#123;
+            while ((s = bf.readLine()) != null) {
                 if (s.equalsIgnoreCase(&quot;exit&quot;))
                     break;
                 System.out.println(s.toUpperCase());
                 log.println(&quot;----&quot;);
                 log.println(s.toUpperCase());
                 log.flush();
-            &#125;
+            }
 
             log.println(&quot;===&quot; + new Date() + &quot;===&quot;);
             log.flush();
             log.close();
 
-        &#125; catch (IOException e) &#123;
+        } catch (IOException e) {
             e.printStackTrace();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="Object流-暂不研究"><a href="#Object流-暂不研究" class="headerlink" title="Object流(暂不研究)"></a>Object流(暂不研究)</h2><h1 id="Java-thread"><a href="#Java-thread" class="headerlink" title="Java-thread"></a>Java-thread</h1><h2 id="线程的基本概念"><a href="#线程的基本概念" class="headerlink" title="线程的基本概念"></a>线程的基本概念</h2><ul>
 <li>线程是一个程序内部的顺序控制流</li>
 <li>线程和进程的区别<ul>
@@ -2017,21 +2017,21 @@ public class Main &#123;
 </li>
 </ul>
 <p><strong>思考代码</strong></p>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123; 
+    public static void main(String[] args) { 
         m1(); 
-    &#125;
+    }
 
-    private static void m1() &#123;
+    private static void m1() {
         m2();
         m3();
-    &#125;
+    }
 
-    private static void m3() &#123; &#125;
+    private static void m3() { }
 
-    private static void m2() &#123; &#125;
-&#125;
+    private static void m2() { }
+}
 
 // 依然是单线程 只有一个主线程</code></pre>
 <ul>
@@ -2048,9 +2048,9 @@ public class Main &#123;
 </ul>
 <p>创建线程的一种方法是声明实现 <code>Runnable</code> 接口的类，然后实现 <code>run</code> 方法。</p>
 <p>然后可以分配该类的实例，在创建 <code>Thread</code> 时作为一个参数来传递并启动</p>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Runner r = new Runner();
 
         Thread t = new Thread(r);
@@ -2058,42 +2058,42 @@ public class Main &#123;
 
         for (int i = 0; i &lt; 100; i ++)
             System.out.println(&quot;%%%%%%&quot; + i);
-    &#125;
+    }
 
-&#125;
+}
 
-class Runner implements Runnable &#123;
+class Runner implements Runnable {
 
     @Override
-    public void run() &#123;
+    public void run() {
         for (int i = 0; i &lt; 100; i ++)
             System.out.println(&quot;******&quot; + i);
-    &#125;
-&#125;
+    }
+}
 
 // 结果得出两线程并行运行</code></pre>
 <p>创建新执行线程的另一种方法是将类声明为 <code>Thread</code> 的子类。该子类应重写 <code>Thread</code> 类的 <code>run</code> 方法。</p>
 <p>接下来可以分配并启动该子类的实例</p>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Runner r = new Runner();
         r.start();
 
         for (int i = 0; i &lt; 100; i ++)
             System.out.println(&quot;%%%%%%&quot; + i);
-    &#125;
+    }
 
-&#125;
+}
 
-class Runner extends Thread &#123;
+class Runner extends Thread {
 
     @Override
-    public void run() &#123;
+    public void run() {
         for (int i = 0; i &lt; 100; i ++)
             System.out.println(&quot;******&quot; + i);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p><strong>推荐使用第一种接口方法，接口并不会影响继承其它父类</strong></p>
 <h2 id="线程状态转换"><a href="#线程状态转换" class="headerlink" title="线程状态转换"></a>线程状态转换</h2><p><strong>大流程</strong></p>
 <p><code>创建内存 -start()-&gt; 就绪状态 &lt;-调度-&gt; 运行状态 --&gt; 终止</code></p>
@@ -2142,100 +2142,100 @@ class Runner extends Thread &#123;
 </tbody></table>
 <h2 id="sleep方法"><a href="#sleep方法" class="headerlink" title="sleep方法"></a>sleep方法</h2><pre><code class="java">import java.util.Date;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Runner r = new Runner();
         Thread t = new Thread(r);
 
         t.start(); // 调用子进程run方法
 
-        try &#123;
+        try {
             Thread.sleep(10000);
-        &#125; catch (InterruptedException ignored) &#123; &#125;
+        } catch (InterruptedException ignored) { }
 
         t.interrupt();
-    &#125;
-&#125;
+    }
+}
 
-class Runner implements Runnable &#123;
+class Runner implements Runnable {
 
     boolean flag = true;
 
     @Override
-    public void run() &#123; // run方法一结束子进程就结束
-        while (flag) &#123;
+    public void run() { // run方法一结束子进程就结束
+        while (flag) {
             System.out.println(&quot;===&quot; + new Date() + &quot;===&quot;);
 
-            try &#123;
+            try {
                 Thread.sleep(1000);
-            &#125; catch (InterruptedException e) &#123;
+            } catch (InterruptedException e) {
                 flag = false;
-            &#125;
-        &#125;
-    &#125;
-&#125;</code></pre>
-<h2 id="join方法"><a href="#join方法" class="headerlink" title="join方法"></a>join方法</h2><pre><code class="java">public class Main &#123;
+            }
+        }
+    }
+}</code></pre>
+<h2 id="join方法"><a href="#join方法" class="headerlink" title="join方法"></a>join方法</h2><pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Thread t = new Thread(&quot;son thread&quot;);
         t.start();
-        try &#123;
+        try {
             t.join();
-        &#125; catch (InterruptedException e) &#123;
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        &#125;
+        }
 
-        for (int i = 0; i &lt; 10; i ++) &#123;
+        for (int i = 0; i &lt; 10; i ++) {
             System.out.println(&quot;I am main Thread&quot;);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
-class Thread extends java.lang.Thread &#123;
+class Thread extends java.lang.Thread {
 
-    Thread(String s) &#123;
+    Thread(String s) {
         super(s);
-    &#125;
+    }
 
     @Override
-    public void run() &#123;
+    public void run() {
 
-        for (int i = 0; i &lt; 10; i ++) &#123;
+        for (int i = 0; i &lt; 10; i ++) {
             System.out.println(&quot;I am &quot; + getName());
-        &#125;
-    &#125;
-&#125;</code></pre>
-<h2 id="yield方法"><a href="#yield方法" class="headerlink" title="yield方法"></a>yield方法</h2><pre><code class="java">public class Main &#123;
+        }
+    }
+}</code></pre>
+<h2 id="yield方法"><a href="#yield方法" class="headerlink" title="yield方法"></a>yield方法</h2><pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Thread t1 = new Thread(&quot;t1&quot;);
         Thread t2 = new Thread(&quot;t2&quot;);
 
         t1.start();
         t2.start();
-    &#125;
-&#125;
+    }
+}
 
-class Thread extends java.lang.Thread &#123;
+class Thread extends java.lang.Thread {
 
-    Thread(String s) &#123;
+    Thread(String s) {
         super(s);
-    &#125;
+    }
 
     @Override
-    public void run() &#123;
+    public void run() {
 
-        for (int i = 1; i &lt;= 100; i ++) &#123;
+        for (int i = 1; i &lt;= 100; i ++) {
             System.out.println(getName() + &quot;: &quot; + i);
 
             if (i % 10 == 0) // 满足10的倍数交换进程 
                 yield();
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="线程优先级"><a href="#线程优先级" class="headerlink" title="线程优先级"></a>线程优先级</h2><ul>
 <li><p>Java提供一个线程调度器来监控程序中启动后进入就绪状态的所有线程</p>
 <p>线程调度器按照线程优先级决定应调度那个线程来执行</p>
@@ -2252,9 +2252,9 @@ class Thread extends java.lang.Thread &#123;
 <li>int getPriority();</li>
 <li>void setPriority(int newPriority);</li>
 </ul>
-<pre><code class="java">public class Main &#123;
+<pre><code class="java">public class Main {
 
-  public static void main(String[] args) &#123;
+  public static void main(String[] args) {
 
       Thread t1 = new Thread(new R1());
       Thread t2 = new Thread(new R2());
@@ -2262,32 +2262,32 @@ class Thread extends java.lang.Thread &#123;
       t1.setPriority(Thread.NORM_PRIORITY + 3);
       t1.start();
       t2.start();
-  &#125;
-&#125;
+  }
+}
 </code></pre>
 </li>
 </ul>
 <p>class R1 implements Runnable {</p>
 <pre><code>@Override
-public void run() &#123;
+public void run() {
     for (int i = 0; i &lt; 1000; i ++)
         System.out.println(&quot;%%%%%%&quot; + i);
-&#125;</code></pre>
+}</code></pre>
 <p>}</p>
 <p>class R2 implements Runnable {</p>
 <pre><code>@Override
-public void run() &#123;
+public void run() {
     for (int i = 0; i &lt; 1000; i ++)
         System.out.println(&quot;++++++&quot; + i);
-&#125;</code></pre>
+}</code></pre>
 <p>}</p>
 <pre><code>
 ## 停止线程
 
 ```java
-public class Main &#123;
+public class Main {
 
-   public static void main(String[] args) &#123;
+   public static void main(String[] args) {
 
        Runner r = new Runner();
        Thread t = new Thread(r);
@@ -2300,49 +2300,49 @@ public class Main &#123;
        System.out.println(&quot;main thread is over&quot;);
 
        r.shutDown();
-   &#125;
-&#125;
+   }
+}
 
-class Runner implements Runnable &#123;
+class Runner implements Runnable {
 
    private boolean flag = true;
 
    @Override
-   public void run() &#123;
+   public void run() {
        int i = 0;
 
        while (flag)
            System.out.println(&quot;I am son thread&quot;);
-   &#125;
+   }
 
-   public void shutDown() &#123;
+   public void shutDown() {
        flag = false;
-   &#125;
-&#125;</code></pre>
-<h2 id="isAlive方法"><a href="#isAlive方法" class="headerlink" title="isAlive方法"></a>isAlive方法</h2><pre><code class="java">public class Main &#123;
+   }
+}</code></pre>
+<h2 id="isAlive方法"><a href="#isAlive方法" class="headerlink" title="isAlive方法"></a>isAlive方法</h2><pre><code class="java">public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Runner r = new Runner();
         Thread t = new Thread(r);
 
         t.start();
-    &#125;
-&#125;
+    }
+}
 
-class Runner implements Runnable &#123;
+class Runner implements Runnable {
 
     @Override
-    public void run() &#123;
+    public void run() {
         System.out.println(Thread.currentThread().isAlive());
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h2><p><strong>思考代码</strong></p>
-<pre><code class="java">public class Main implements Runnable &#123;
+<pre><code class="java">public class Main implements Runnable {
 
     private Timer timer = new Timer();
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Main main = new Main();
 
@@ -2351,24 +2351,24 @@ class Runner implements Runnable &#123;
 
         t1.start();
         t2.start();
-    &#125;
+    }
 
     @Override
-    public void run() &#123;
+    public void run() {
         timer.add(Thread.currentThread().getName());
-    &#125;
-&#125;
+    }
+}
 
-class Timer &#123;
+class Timer {
 
     private int num = 0;
 
-    void add(String name) &#123;
+    void add(String name) {
 
         num ++;
         System.out.println(name + &quot; 第 &quot; + num + &quot; 个timer线程&quot;);
-    &#125;
-&#125;
+    }
+}
 
 // 执行结果
 t2 第 2 个timer线程
@@ -2376,17 +2376,17 @@ t1 第 2 个timer线程</code></pre>
 <p><strong>结果分析</strong></p>
 <p>先执行t1子线程，num此时为1，之后发生<strong>线程打断</strong>，执行t2子线程，num为2，输出，之后t1子线程中num已经为2，输出</p>
 <p><strong>代码修改</strong></p>
-<pre><code class="java">synchronized void add(String name) &#123; // 执行方法时锁定当前对象 (可理解是一个排队过程)
+<pre><code class="java">synchronized void add(String name) { // 执行方法时锁定当前对象 (可理解是一个排队过程)
 
     num ++;
     System.out.println(name + &quot;第 &quot; + num + &quot; 个timer线程&quot;);
-&#125;
+}
 
 // 执行结果
 t1第 1 个timer线程
 t2第 2 个timer线程</code></pre>
 <h2 id="线程死锁"><a href="#线程死锁" class="headerlink" title="线程死锁"></a>线程死锁</h2><p><strong>思考代码</strong></p>
-<pre><code class="java">public class Main implements Runnable &#123;
+<pre><code class="java">public class Main implements Runnable {
 
     private int flag;
 
@@ -2394,38 +2394,38 @@ t2第 2 个timer线程</code></pre>
     private static final Object o2 = new Object();
 
     @Override
-    public void run() &#123;
+    public void run() {
 
-        if (flag == 1) &#123;
-            synchronized (o1) &#123;
-                try &#123;
+        if (flag == 1) {
+            synchronized (o1) {
+                try {
                     Thread.sleep(500);
-                &#125; catch (InterruptedException e) &#123;
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-                &#125;
+                }
 
-                synchronized (o2) &#123;
+                synchronized (o2) {
                     System.out.println(&quot;1&quot;);
-                &#125;
-            &#125;
-        &#125;
+                }
+            }
+        }
 
-        if (flag == 0) &#123;
-            synchronized (o2) &#123;
-                try &#123;
+        if (flag == 0) {
+            synchronized (o2) {
+                try {
                     Thread.sleep(500);
-                &#125; catch (InterruptedException e) &#123;
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-                &#125;
+                }
 
-                synchronized (o1) &#123;
+                synchronized (o1) {
                     System.out.println(&quot;0&quot;);
-                &#125;
-            &#125;
-        &#125;
-    &#125;
+                }
+            }
+        }
+    }
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
         Main main1 = new Main();
         Main main2 = new Main();
 
@@ -2437,8 +2437,8 @@ t2第 2 个timer线程</code></pre>
 
         t1.start(); // a
         t2.start(); // b
-    &#125;
-&#125;
+    }
+}
 
 // 无响应</code></pre>
 <p><strong>代码解析</strong></p>
@@ -2470,9 +2470,9 @@ t2第 2 个timer线程</code></pre>
 </ul>
 <pre><code class="java">import java.awt.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Frame f = new Frame(&quot;First Demo&quot;);
 
@@ -2481,34 +2481,34 @@ public class Main &#123;
         f.setLocation(300, 300); // 设置初始窗口左上角坐标 默认是(0, 0)
         f.setResizable(false); // 设置不可以改变窗口大小
         f.setVisible(true); // 设置窗口可视
-    &#125;
-&#125;
+    }
+}
 
 // 目前窗口是关不掉的 因为没有做事件处理</code></pre>
 <pre><code class="java">import java.awt.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Frame f1 = new Frame(100, 100, 200, 200, Color.BLUE, &quot;Frame1&quot;);
         Frame f2 = new Frame(300, 100, 200, 200, Color.YELLOW, &quot;Frame2&quot;);
         Frame f3 = new Frame(100, 300, 200, 200, Color.GREEN, &quot;Frame3&quot;);
         Frame f4 = new Frame(300, 300, 200, 200, Color.MAGENTA, &quot;Frame4&quot;);
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
-    Frame(int x, int y, int w, int h, Color color, String s) &#123;
+    Frame(int x, int y, int w, int h, Color color, String s) {
 
         super(s);
         setBackground(color);
         setLayout(null); // 内部布局管理器设为空
         setBounds(x, y, w, h);
         setVisible(true);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="Panel"><a href="#Panel" class="headerlink" title="Panel"></a>Panel</h2><ul>
 <li>Panel对象可以看成可容纳Component的空间</li>
 <li>Panel对象可以拥有自己的布局管理器</li>
@@ -2521,9 +2521,9 @@ class Frame extends java.awt.Frame &#123;
 </ul>
 <pre><code class="java">import java.awt.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Frame f = new Frame(&quot;Java Frame with Panel&quot;);
         Panel p = new Panel(null);
@@ -2537,23 +2537,23 @@ public class Main &#123;
 
         f.add(p);
         f.setVisible(true);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <pre><code class="java">import java.awt.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame(300, 300, 400, 300, Color.BLUE);
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
     private Panel p;
 
-    Frame(int x, int y, int w, int h, Color c) &#123;
+    Frame(int x, int y, int w, int h, Color c) {
 
         super(&quot;Frame&quot;);
         setLayout(null);
@@ -2568,8 +2568,8 @@ class Frame extends java.awt.Frame &#123;
         add(p);
 
         setVisible(true);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="布局管理器"><a href="#布局管理器" class="headerlink" title="布局管理器"></a>布局管理器</h2><ul>
 <li>Java中提供布局管理器类对象可以管理<ul>
 <li>管理Component在Container中的布局，不必直接设置Component位置和大小</li>
@@ -2614,9 +2614,9 @@ class Frame extends java.awt.Frame &#123;
 </ul>
 <pre><code class="java">import java.awt.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Frame f = new Frame(&quot;BorderLayout&quot;);
 
@@ -2634,8 +2634,8 @@ public class Main &#123;
 
         f.setSize(200, 200);
         f.setVisible(true);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h3 id="GridLayout"><a href="#GridLayout" class="headerlink" title="GridLayout"></a>GridLayout</h3><ul>
 <li><p>GridLayout布局管理器将空间划分为规则矩形网格，每个单元格区域大小相等，组件添加时，从左到右，从上到下</p>
 </li>
@@ -2644,9 +2644,9 @@ public class Main &#123;
 </ul>
 <pre><code class="java">import java.awt.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Frame f = new Frame(&quot;GridLayout&quot;);
 
@@ -2667,15 +2667,15 @@ public class Main &#123;
         f.setLayout(new GridLayout(3, 2));
         f.pack(); // 根据组件调成窗口大小
         f.setVisible(true);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="事件监听"><a href="#事件监听" class="headerlink" title="事件监听"></a>事件监听</h2><p><code>事件源对象(当事件发生向监听器传送事件对象) -&gt; 实现监听器接口的类对象(接到事件对象后进行处理) -(注册)-&gt; 事件源对象</code></p>
 <pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         Frame f = new Frame(&quot;ActionListener&quot;);
         Button b1 = new Button(&quot;Start&quot;);
@@ -2690,33 +2690,33 @@ public class Main &#123;
         f.add(b2, BorderLayout.CENTER);
         f.pack();
         f.setVisible(true);
-    &#125;
-&#125;
+    }
+}
 
-class Monitor implements ActionListener &#123;
+class Monitor implements ActionListener {
 
     @Override
-    public void actionPerformed(ActionEvent e) &#123;
+    public void actionPerformed(ActionEvent e) {
         System.out.println(&quot;A button has been pressed, the relative info: &quot; + e.getActionCommand());
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="TextField事件监听"><a href="#TextField事件监听" class="headerlink" title="TextField事件监听"></a>TextField事件监听</h2><ul>
 <li>java.awt.TextField类用于创建文本框对象</li>
 </ul>
 <pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame();
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
-    Frame() &#123;
+    Frame() {
 
         TextField tf = new TextField();
         add(tf);
@@ -2724,35 +2724,35 @@ class Frame extends java.awt.Frame &#123;
         tf.setEchoChar(&#39;*&#39;); // 设置回显字符 一般用于处理密码逻辑
         pack();
         setVisible(true);
-    &#125;
-&#125;
+    }
+}
 
-class ActionListener implements java.awt.event.ActionListener &#123;
+class ActionListener implements java.awt.event.ActionListener {
 
     @Override
-    public void actionPerformed(ActionEvent e) &#123;
+    public void actionPerformed(ActionEvent e) {
         TextField tf = (TextField)e.getSource();
         System.out.println(tf.getText());
         tf.setText(&quot;&quot;); // 清空文本框
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="持有对方引用"><a href="#持有对方引用" class="headerlink" title="持有对方引用"></a>持有对方引用</h2><p><strong>简单加法计算器</strong></p>
 <pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame();
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
     public TextField num1, num2, num3;
 
-    Frame() &#123;
+    Frame() {
         num1 = new TextField(10);
         num2 = new TextField(10);
         num3 = new TextField(15);
@@ -2773,25 +2773,25 @@ class Frame extends java.awt.Frame &#123;
 
         pack();
         setVisible(true);
-    &#125;
-&#125;
+    }
+}
 
-class ActionLister implements ActionListener &#123;
+class ActionLister implements ActionListener {
 
     private Frame frame;
 
-    ActionLister(Frame frame) &#123;
+    ActionLister(Frame frame) {
         this.frame = frame;
-    &#125;
+    }
 
     @Override
-    public void actionPerformed(ActionEvent e) &#123;
+    public void actionPerformed(ActionEvent e) {
         int n1 = Integer.parseInt(frame.num1.getText());
         int n2 = Integer.parseInt(frame.num2.getText());
 
         frame.num3.setText(&quot;&quot; + (n1 + n2));
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p><strong>可以用内部类的方法优化上端代码</strong></p>
 <h2 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h2><p>当一个类不需要其他类进行访问时采用内部类</p>
 <p><strong>内部类可以非常方便的访问包装类的成员变量以及方法，可以更清楚的组织逻辑</strong></p>
@@ -2799,19 +2799,19 @@ class ActionLister implements ActionListener &#123;
 <pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame();
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
     private TextField num1, num2, num3;
 
-    Frame() &#123;
+    Frame() {
         num1 = new TextField(10);
         num2 = new TextField(10);
         num3 = new TextField(15);
@@ -2832,39 +2832,39 @@ class Frame extends java.awt.Frame &#123;
 
         pack();
         setVisible(true);
-    &#125;
+    }
 
-    private class ActionLister implements ActionListener &#123; // 私有
+    private class ActionLister implements ActionListener { // 私有
         @Override
-        public void actionPerformed(ActionEvent e) &#123;
+        public void actionPerformed(ActionEvent e) {
             int n1 = Integer.parseInt(num1.getText());
             int n2 = Integer.parseInt(num2.getText());
 
             num3.setText(&quot;&quot; + (n1 + n2));
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="Graphics类"><a href="#Graphics类" class="headerlink" title="Graphics类"></a>Graphics类</h2><p>每个Component都有一个paint(Graphics g)用于实现绘画目的，每次重画该Component时都自动调用paint方法</p>
 <pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame();
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
-    Frame() &#123;
+    Frame() {
         setBounds(200, 200, 640, 480);
         setVisible(true);
-    &#125;
+    }
 
     @Override
-    public void paint(Graphics g) &#123;
+    public void paint(Graphics g) {
         Color c = g.getColor(); // 得到当前画笔颜色
 
         g.setColor(Color.red);
@@ -2873,25 +2873,25 @@ class Frame extends java.awt.Frame &#123;
         g.fillRect(80, 80, 40, 40);
 
         g.setColor(c); // 还原画笔颜色
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="鼠标适配器"><a href="#鼠标适配器" class="headerlink" title="鼠标适配器"></a>鼠标适配器</h2><pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame(&quot;Draw&quot;);
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
     private ArrayList&lt;Point&gt; points; // 使用泛型
 
-    Frame(String draw) &#123;
+    Frame(String draw) {
         super(draw);
 
         points = new ArrayList&lt;&gt;();
@@ -2900,47 +2900,47 @@ class Frame extends java.awt.Frame &#123;
         setBackground(new Color(204, 204, 255));
         setVisible(true);
         addMouseListener(new Monitor());
-    &#125;
+    }
 
     @Override
-    public void paint(Graphics g) &#123;
+    public void paint(Graphics g) {
 
-        for (Point p : points) &#123;
+        for (Point p : points) {
             g.setColor(Color.BLUE);
             g.fillOval(p.x, p.y, 10, 10);
-        &#125;
-    &#125;
+        }
+    }
 
-    private void addPoint(Point p) &#123;
+    private void addPoint(Point p) {
         points.add(p);
-    &#125;
+    }
 
-    private class Monitor extends MouseAdapter &#123; // 若采用implements MouseListener 几种方法全要复写
+    private class Monitor extends MouseAdapter { // 若采用implements MouseListener 几种方法全要复写
 
         @Override
-        public void mousePressed(MouseEvent e) &#123;
+        public void mousePressed(MouseEvent e) {
             Frame f = (Frame)e.getSource();
             f.addPoint(new Point(e.getX(), e.getY()));
             f.repaint(); // 对当前画面进行重画
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <h2 id="Window事件"><a href="#Window事件" class="headerlink" title="Window事件"></a>Window事件</h2><h3 id="匿名类"><a href="#匿名类" class="headerlink" title="匿名类"></a>匿名类</h3><pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame(&quot;Draw&quot;);
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
 
-    Frame(String draw) &#123;
+    Frame(String draw) {
         super(draw);
 
         setLayout(null);
@@ -2949,30 +2949,30 @@ class Frame extends java.awt.Frame &#123;
         setVisible(true);
 
         // 匿名类
-        addWindowListener(new WindowAdapter() &#123;
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) &#123;
+            public void windowClosing(WindowEvent e) {
                 setVisible(false);
                 System.exit(0);
-            &#125;
-        &#125;);
-    &#125;
-&#125;</code></pre>
+            }
+        });
+    }
+}</code></pre>
 <pre><code class="java">import java.awt.*;
 import java.awt.event.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame(&quot;Draw&quot;);
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
 
-    Frame(String draw) &#123;
+    Frame(String draw) {
         super(draw);
 
         TextField tf = new TextField(10);
@@ -2981,57 +2981,57 @@ class Frame extends java.awt.Frame &#123;
         add(b, BorderLayout.NORTH);
         add(tf, BorderLayout.SOUTH);
 
-        b.addActionListener(new ActionListener() &#123;
+        b.addActionListener(new ActionListener() {
 
             private int i;
             @Override
-            public void actionPerformed(ActionEvent e) &#123;
+            public void actionPerformed(ActionEvent e) {
 
                 tf.setText(e.getActionCommand() + (++ i));
-            &#125;
-        &#125;);
+            }
+        });
 
-        addWindowListener(new WindowAdapter() &#123;
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) &#123;
+            public void windowClosing(WindowEvent e) {
                 System.exit(0);
-            &#125;
-        &#125;);
+            }
+        });
 
         pack();
         setVisible(true);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h2 id="键盘事件"><a href="#键盘事件" class="headerlink" title="键盘事件"></a>键盘事件</h2><pre><code class="java">import java.awt.event.*;
 
-public class Main &#123;
+public class Main {
 
-    public static void main(String[] args) &#123;
+    public static void main(String[] args) {
 
         new Frame(&quot;Draw&quot;);
-    &#125;
-&#125;
+    }
+}
 
-class Frame extends java.awt.Frame &#123;
+class Frame extends java.awt.Frame {
 
-    Frame(String draw) &#123;
+    Frame(String draw) {
         super(draw);
 
         setBounds(200, 200, 300, 300);
-        addKeyListener(new KeyAdapter() &#123;
+        addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) &#123;
+            public void keyPressed(KeyEvent e) {
                 int KeyCode = e.getKeyCode();
 
-                if (KeyCode == KeyEvent.VK_0) &#123;
+                if (KeyCode == KeyEvent.VK_0) {
                     System.out.println(&quot;0&quot;);
-                &#125;
-            &#125;
-        &#125;);
+                }
+            }
+        });
 
         setVisible(true);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 
         </div>
         <!-- .entry-content -->

@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -305,36 +305,36 @@
         <div class="entry-content">
           <h1 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h1><pre><code class="php">&lt;?php
     $files = scandir(&#39;./&#39;); 
-    foreach($files as $file) &#123;
-        if(is_file($file))&#123;
-            if ($file !== &quot;index.php&quot;) &#123;
+    foreach($files as $file) {
+        if(is_file($file)){
+            if ($file !== &quot;index.php&quot;) {
                 unlink($file);
-            &#125;
-        &#125;
-    &#125;
+            }
+        }
+    }
     include_once(&quot;fl3g.php&quot;);
-    if(!isset($_GET[&#39;content&#39;]) || !isset($_GET[&#39;filename&#39;])) &#123;
+    if(!isset($_GET[&#39;content&#39;]) || !isset($_GET[&#39;filename&#39;])) {
         highlight_file(__FILE__);
         die();
-    &#125;
+    }
     $content = $_GET[&#39;content&#39;];
-    if(stristr($content,&#39;on&#39;) || stristr($content,&#39;html&#39;) || stristr($content,&#39;type&#39;) || stristr($content,&#39;flag&#39;) || stristr($content,&#39;upload&#39;) || stristr($content,&#39;file&#39;)) &#123;
+    if(stristr($content,&#39;on&#39;) || stristr($content,&#39;html&#39;) || stristr($content,&#39;type&#39;) || stristr($content,&#39;flag&#39;) || stristr($content,&#39;upload&#39;) || stristr($content,&#39;file&#39;)) {
         echo &quot;Hacker&quot;;
         die();
-    &#125;
+    }
     $filename = $_GET[&#39;filename&#39;];
-    if(preg_match(&quot;/[^a-z\.]/&quot;, $filename) == 1) &#123; 👈
+    if(preg_match(&quot;/[^a-z\.]/&quot;, $filename) == 1) { 👈
         echo &quot;Hacker&quot;;
         die();
-    &#125;
+    }
     $files = scandir(&#39;./&#39;); 
-    foreach($files as $file) &#123;
-        if(is_file($file))&#123;
-            if ($file !== &quot;index.php&quot;) &#123;
+    foreach($files as $file) {
+        if(is_file($file)){
+            if ($file !== &quot;index.php&quot;) {
                 unlink($file);
-            &#125;
-        &#125;
-    &#125;
+            }
+        }
+    }
     file_put_contents($filename, $content . &quot;\nJust one chance&quot;);
 ?&gt;</code></pre>
 <ol>
@@ -355,13 +355,13 @@ hacker</code></pre>
 <p>👇编辑index.php</p>
 <pre><code class="php">&lt;?php
 $files = scandir(&#39;./&#39;);
-foreach($files as $file) &#123;
-    if(is_file($file))&#123;
-        if ($file !== &quot;index.php&quot; &amp;&amp; $file !== &quot;1.a&quot;) &#123;
+foreach($files as $file) {
+    if(is_file($file)){
+        if ($file !== &quot;index.php&quot; &amp;&amp; $file !== &quot;1.a&quot;) {
             unlink($file);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 file_put_contents($_GET[&#39;filename&#39;], $_GET[&#39;content&#39;]);</code></pre>
 <p>之后访问<code>index.php</code>传入参数</p>
@@ -404,7 +404,7 @@ file_put_contents($_GET[&#39;filename&#39;], $_GET[&#39;content&#39;]);</code></
 <h1 id="解题三"><a href="#解题三" class="headerlink" title="解题三"></a>解题三</h1><p>这种解题方法才是官方的正解，还是很有水平的</p>
 <p>注意到源码包含不存在的文件<code>fl3g.php</code>，意图肯定是想让我们向其中写入一句话之后利用文件包含getshell；但直接写入后会发现题目环境不解析<code>/var/www/html</code>中除<code>index.php</code>以外的php文件</p>
 <p>![截屏2020-08-24 上午10.39.30](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.39.30.png)</p>
-<p>查阅<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.list.php">php.ini配置选项列表</a>了解符合条件的可用配置👇</p>
+<p>查阅<a href="https://www.php.net/manual/zh/ini.list.php" target="_blank" rel="noopener">php.ini配置选项列表</a>了解符合条件的可用配置👇</p>
 <p>![截屏2020-08-24 上午11.47.59](学习XNUCA2019-ezphp/截屏2020-08-24 上午11.47.59.png)</p>
 <p>![截屏2020-08-24 上午11.52.57](学习XNUCA2019-ezphp/截屏2020-08-24 上午11.52.57.png)</p>
 <p><strong>❗️注意事项：</strong>error_log写入的内容默认经过<code>htmlentities</code>；会对html标签进行转义；可以用之前学过的<code>UTF-7</code>编码绕过</p>
@@ -423,7 +423,7 @@ php_value zend.script_encoding &quot;UTF-7&quot;
 <p>![截屏2020-08-24 下午12.01.54](学习XNUCA2019-ezphp/截屏2020-08-24 下午12.01.54.png)</p>
 <h1 id="吐槽一下"><a href="#吐槽一下" class="headerlink" title="吐槽一下"></a>吐槽一下</h1><p>真的吐了；这阵子一直在打比赛和调试环境中度过，搞的这个博客从18号一直拖到24号；自己也是菜的真实，打题打的人都傻了</p>
 <p>这道题细节是真的多，就算明白方法，操作上也有可能一不小心产生失误</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://nikoeurus.github.io/2019/12/01/xnuca-Web/#ezphp">从xnuca2019-ezphp深入学习.htaccess</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://nikoeurus.github.io/2019/12/01/xnuca-Web/#ezphp" target="_blank" rel="noopener">从xnuca2019-ezphp深入学习.htaccess</a></p>
 
         </div>
         <!-- .entry-content -->

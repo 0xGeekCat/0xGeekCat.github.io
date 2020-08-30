@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -380,7 +380,7 @@ class IP(Structure):
         super().__init__()
         self.socket_buffer = socket_buffer
         # 协议字段与协议名称对应
-        self.protocol_map = &#123;1: &quot;ICMP&quot;, 6: &quot;TCP&quot;, 17: &quot;UDP&quot;&#125;
+        self.protocol_map = {1: &quot;ICMP&quot;, 6: &quot;TCP&quot;, 17: &quot;UDP&quot;}
 
         # 可读性更强的IP地址
         # inet_ntoa将32位的IPV4地址转换为平常看到的点分十进制形式(将网络地址转换成“.”点隔的字符串格式)
@@ -456,7 +456,7 @@ class IP(Structure):
     def __init__(self, socket_buffer=None):
         super().__init__()
         self.socket_buffer = socket_buffer
-        self.protocol_map = &#123;1: &quot;ICMP&quot;, 6: &quot;TCP&quot;, 17: &quot;UDP&quot;&#125;
+        self.protocol_map = {1: &quot;ICMP&quot;, 6: &quot;TCP&quot;, 17: &quot;UDP&quot;}
 
         self.src_address = socket.inet_ntoa(struct.pack(&quot;@I&quot;, self.src))
         self.dst_address = socket.inet_ntoa(struct.pack(&quot;@I&quot;, self.dst))
@@ -581,7 +581,7 @@ class IP(Structure):
     def __init__(self, socket_buffer=None):
         super().__init__()
         self.socket_buffer = socket_buffer
-        self.protocol_map = &#123;1: &quot;ICMP&quot;, 6: &quot;TCP&quot;, 17: &quot;UDP&quot;&#125;
+        self.protocol_map = {1: &quot;ICMP&quot;, 6: &quot;TCP&quot;, 17: &quot;UDP&quot;}
 
         self.src_address = socket.inet_ntoa(struct.pack(&quot;@I&quot;, self.src))
         self.dst_address = socket.inet_ntoa(struct.pack(&quot;@I&quot;, self.dst))

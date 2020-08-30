@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -288,20 +288,20 @@
         <div class="entry-content">
           <h1 id="JavaScript原型链继承"><a href="#JavaScript原型链继承" class="headerlink" title="JavaScript原型链继承"></a>JavaScript原型链继承</h1><p><strong>在上一篇<a href="https://0xgeekcat.github.io/2020/08/24/%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/">文章</a>中对其已经进行过详细研究，再次就仅跟着文章简单温习一下，不再做详细解释</strong></p>
 <p>所有构造函数在实例化为对象的时候会拥有<code>prototype</code>中的属性和方法，这个特性被用来实现JavaScript中的继承机制</p>
-<pre><code class="javascript">function Father() &#123;
+<pre><code class="javascript">function Father() {
     this.first_name = &#39;Donald&#39;
     this.last_name = &#39;Trump&#39;
-&#125;
+}
 
-function Son() &#123;
+function Son() {
     this.first_name = &#39;Melania&#39;
-&#125;
+}
 
 let father = new Father()
 Son.prototype = father
 
 let son = new Son()
-console.log(`Name: $&#123;son.first_name&#125; $&#123;son.last_name&#125;`)</code></pre>
+console.log(`Name: ${son.first_name} ${son.last_name}`)</code></pre>
 <p>Son类继承了Father类的<code>last_name</code>属性，最后输出的是<code>Name: Melania Trump</code></p>
 <p>对于对象son，在调用<code>son.last_name</code>的时候，实际上JavaScript引擎会进行如下操作</p>
 <ol>
@@ -320,10 +320,10 @@ console.log(`Name: $&#123;son.first_name&#125; $&#123;son.last_name&#125;`)</cod
 <li>JavaScript使用prototype链实现继承机制</li>
 </ol>
 <h1 id="原型链污染"><a href="#原型链污染" class="headerlink" title="原型链污染"></a>原型链污染</h1><p>在上一篇文章中提到过原型链继承会带来的问题之一便是<strong>父类属性被某个子类篡改，其余所有子类属性都将一同改变</strong>，在这篇文章中就会将如何利用这个理论基础实现原型链污染</p>
-<pre><code class="javascript">let foo = &#123;bar: 1&#125;
+<pre><code class="javascript">let foo = {bar: 1}
 foo[&quot;__proto__&quot;].bar = 2 👈 与foo.__proto__.bar等效 此处书写目的为了方便对下文污染操作的理解
 console.log(foo.bar) // 1
-let zoo = &#123;&#125;
+let zoo = {}
 console.log(zoo.bar) // 2</code></pre>
 <p>👆修改foo的原型添加bar为2，而foo是Object的一个实例，所以实际上是修改Object，给这个Object增加了一个属性bar，值为2；后来又用Object创建了一个zoo对象，zoo对象自然也有一个bar属性</p>
 <p><strong>🔔在一个应用中，如果攻击者控制并修改一个对象的原型，就可以影响所有和这个对象来自同一个类、父祖类的对象。这种攻击方式就是原型链污染</strong></p>
@@ -334,38 +334,38 @@ console.log(zoo.bar) // 2</code></pre>
 <li>对象clone</li>
 </ul>
 <p>以对象merge为例，想象一个简单的merge函数</p>
-<pre><code class="javascript">function merge(target, source) &#123;
-    for (let key in source) &#123;
-        if (key in source &amp;&amp; key in target) &#123;
+<pre><code class="javascript">function merge(target, source) {
+    for (let key in source) {
+        if (key in source &amp;&amp; key in target) {
             merge(target[key], source[key])
-        &#125; else &#123;
+        } else {
             target[key] = source[key]
-        &#125;
-    &#125;
-&#125;</code></pre>
+        }
+    }
+}</code></pre>
 <p>👆代码很简单，就是一个实现将<code>source</code>数组拼接到<code>target</code>数组后面的函数；在合并的过程中，存在赋值的操作<code>target[key] = source[key]</code>，那么key如果是<code>__proto__</code>，是就可以实现原型链污染</p>
 <p>👇做个试验</p>
-<pre><code class="javascript">let o1 = &#123;&#125;
-let o2 = &#123;a: 1, &quot;__proto__&quot;: &#123;b: 2&#125;&#125;
+<pre><code class="javascript">let o1 = {}
+let o2 = {a: 1, &quot;__proto__&quot;: {b: 2}}
 merge(o1, o2)
 
-o3 = &#123;&#125;
+o3 = {}
 console.log(o3.b)</code></pre>
 <p>出现问题，原型链没有被污染</p>
 <p>![截屏2020-08-25 下午9.22.35](学习JavaScript原型链污染攻击/截屏2020-08-25 下午9.22.35.png)</p>
-<p>观察上文的等效写法，<code>let o2 = &#123;a: 1, &quot;__proto__&quot;: &#123;b: 2&#125;&#125;</code>中插入<code>__proto__</code>的行为可以如👇理解</p>
-<pre><code class="javascript">o2[&#39;__proto__&#39;] = &#123;b: 2&#125; 👉 o2.__proto__ = &#123;b: 2&#125;</code></pre>
-<p>实际上是将<code>&#123;b: 2&#125;</code>设为<code>o2</code>的原型对象，很明显和修改<code>Object.prototype</code>的目的相违背；导致污染失败是因为<code>o2</code>中<code>__proto__</code>被视为指向<code>Object.prototype</code>的原型链处理</p>
+<p>观察上文的等效写法，<code>let o2 = {a: 1, &quot;__proto__&quot;: {b: 2}}</code>中插入<code>__proto__</code>的行为可以如👇理解</p>
+<pre><code class="javascript">o2[&#39;__proto__&#39;] = {b: 2} 👉 o2.__proto__ = {b: 2}</code></pre>
+<p>实际上是将<code>{b: 2}</code>设为<code>o2</code>的原型对象，很明显和修改<code>Object.prototype</code>的目的相违背；导致污染失败是因为<code>o2</code>中<code>__proto__</code>被视为指向<code>Object.prototype</code>的原型链处理</p>
 <p><strong>❓如何让<code>__proto__</code>被认为是一个键名，使得污染生效</strong></p>
-<p>利用<code>JSON</code>格式字符串，JSON解析时，<code>__proto__</code>会被认为是真正的’’键名’’而不是原型链；这样便实现直接将<code>&#123;b: 2&#125;</code>写入<code>Object.prototype</code>的操作</p>
-<pre><code class="javascript">let o1 = &#123;&#125;
-let o2 = JSON.parse(&#39;&#123;&quot;a&quot;: 1, &quot;__proto__&quot;: &#123;&quot;b&quot;: 2&#125;&#125;&#39;)
+<p>利用<code>JSON</code>格式字符串，JSON解析时，<code>__proto__</code>会被认为是真正的’’键名’’而不是原型链；这样便实现直接将<code>{b: 2}</code>写入<code>Object.prototype</code>的操作</p>
+<pre><code class="javascript">let o1 = {}
+let o2 = JSON.parse(&#39;{&quot;a&quot;: 1, &quot;__proto__&quot;: {&quot;b&quot;: 2}}&#39;)
 merge(o1, o2)
 
-o3 = &#123;&#125;
+o3 = {}
 console.log(o3.b)</code></pre>
 <p>![截屏2020-08-25 下午9.55.30](学习JavaScript原型链污染攻击/截屏2020-08-25 下午9.55.30.png)</p>
-<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html">深入理解 JavaScript Prototype 污染攻击</a></p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html" target="_blank" rel="noopener">深入理解 JavaScript Prototype 污染攻击</a></p>
 <p><strong>郑重感谢</strong></p>
 
         </div>

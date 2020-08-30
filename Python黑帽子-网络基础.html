@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -736,7 +736,7 @@ def hexdump(src, length=16):
         s = src[i:i + length]
         hexa = &#39; &#39;.join([hex(x)[2:].upper().zfill(digits) for x in s])
         text = &#39;&#39;.join([chr(x) if 0x20 &lt;= x &lt; 0x7F else &#39;.&#39; for x in s])
-        result.append(&quot;&#123;0:04X&#125;&quot;.format(i) + &#39; &#39; * 3 + hexa.ljust(length * (digits + 1)) + &#39; &#39; * 3 + &quot;&#123;0&#125;&quot;.format(text))
+        result.append(&quot;{0:04X}&quot;.format(i) + &#39; &#39; * 3 + hexa.ljust(length * (digits + 1)) + &#39; &#39; * 3 + &quot;{0}&quot;.format(text))
 
     print(&#39;\n&#39;.join(result))
 

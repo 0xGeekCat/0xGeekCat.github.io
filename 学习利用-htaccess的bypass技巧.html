@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -345,12 +345,12 @@ SetHandler text/plain
 <h2 id="php-value"><a href="#php-value" class="headerlink" title="php_value"></a>php_value</h2><p>在学习此方法之前先了解点理论基础</p>
 <p>![截屏2020-08-16 下午9.25.24](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午9.25.24.png)</p>
 <p><strong>❗️注意事项：</strong>php_value的使用条件是在PHP作为Apache模块；也就是说在Apache以FastCGI模式运行条件下，php_value失效，滥用会导致服务器报错</p>
-<p>👇查看<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/configuration.changes.modes.php">配置可被设定的范围</a></p>
+<p>👇查看<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">配置可被设定的范围</a></p>
 <p>![截屏2020-08-16 下午9.18.49](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午9.18.49.png)</p>
 <p>从上图可知，<code>.htaccess</code>可以使两种配置模式生效：<code>PHP_INI_PREDIR</code>和<code>PHP_INI_ALL</code></p>
 <p>👇学习如何利用<code>php_value</code></p>
 <p>![截屏2020-08-16 下午9.27.20](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午9.27.20.png)</p>
-<p>接着查看<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.list.php">php.ini配置选项列表</a>，从中寻找可利用的配置项</p>
+<p>接着查看<a href="https://www.php.net/manual/zh/ini.list.php" target="_blank" rel="noopener">php.ini配置选项列表</a>，从中寻找可利用的配置项</p>
 <ul>
 <li><code>auto_prepend_file</code>：指定一个文件，在主文件解析之前自动解析</li>
 <li><code>auto_append_file</code>：指定一个文件，在主文件解析后自动解析</li>
@@ -459,10 +459,10 @@ file_put_contents(&#39;.htaccess&#39;, $data);</code></pre>
     Require all granted
 &lt;/Directory&gt;</code></pre>
 <p>还要注意的一点就是如果使用firefox浏览器遇到界面不变化的情况时八成清理浏览器缓存就可以解决</p>
-<h1 id><a href="#" class="headerlink" title></a></h1><h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/205098">.htaccess利用与Bypass方式总结</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/top5/archive/2009/09/22/1571709.html">Apache的Order Allow,Deny 详解</a></p>
-<p><a target="_blank" rel="noopener" href="https://qastack.cn/webmasters/61009/how-to-enable-use-of-htaccess-in-apache-on-ubuntu">如何在Ubuntu上的Apache中启用.htaccess</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/218495.html">Apache中.htaccess文件利用的总结与新思路拓展</a></p>
+<h1 id><a href="#" class="headerlink" title></a></h1><h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.anquanke.com/post/id/205098" target="_blank" rel="noopener">.htaccess利用与Bypass方式总结</a></p>
+<p><a href="https://www.cnblogs.com/top5/archive/2009/09/22/1571709.html" target="_blank" rel="noopener">Apache的Order Allow,Deny 详解</a></p>
+<p><a href="https://qastack.cn/webmasters/61009/how-to-enable-use-of-htaccess-in-apache-on-ubuntu" target="_blank" rel="noopener">如何在Ubuntu上的Apache中启用.htaccess</a></p>
+<p><a href="https://www.freebuf.com/vuls/218495.html" target="_blank" rel="noopener">Apache中.htaccess文件利用的总结与新思路拓展</a></p>
 <p><strong>郑重感谢</strong></p>
 
         </div>

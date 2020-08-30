@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -288,24 +288,24 @@
         <div class="entry-content">
           <h1 id="构造函数和对象"><a href="#构造函数和对象" class="headerlink" title="构造函数和对象"></a>构造函数和对象</h1><p>在学习之前先了解一下其他语言是如何定义类的</p>
 <p>在JAVA中类是创建对象的模板，👇定义一个<code>Person</code>类</p>
-<pre><code class="java">public class Person&#123;
+<pre><code class="java">public class Person{
   String name;
   int age;
   String gender;
-  void wake()&#123;&#125;
-  void eat()&#123;&#125;
-  void sleep()&#123;&#125;
-&#125;</code></pre>
+  void wake(){}
+  void eat(){}
+  void sleep(){}
+}</code></pre>
 <p>但是对于JavaScript，在<code>ECMAScript 6</code>之前并没有<code>class</code>语法；<strong>在JavaScript中通过构造函数[等效其他语言的类]来创建对象</strong>。</p>
 <p>构造函数是一个提供生成对象的模板并描述对象基本结构的函数。一个构造函数可以生成多个对象，每个对象都有相同的结构</p>
 <p><strong>🔔构造函数就是对象的模板，对象就是构造函数的实例</strong></p>
-<pre><code class="javascript">function Person(name) &#123;
+<pre><code class="javascript">function Person(name) {
     this.name = name
 
-    this.sayName = function () &#123;
+    this.sayName = function () {
         return this.name
-    &#125;
-&#125;
+    }
+}
 
 let person1 = new Person(&#39;hacker&#39;)
 let person2 = new Person(&#39;geeker&#39;)
@@ -317,34 +317,34 @@ console.log(person1.constructor === Person) 👈 true</code></pre>
 <p>❓没有<code>constructor</code>属性；但也能取到其值为<code>Person</code>；此原因稍后解释</p>
 <p>![截屏2020-08-24 下午8.25.44](学习JavaScript中类，原型和继承/截屏2020-08-24 下午8.25.44.png)</p>
 <h1 id="构造函数缺点"><a href="#构造函数缺点" class="headerlink" title="构造函数缺点"></a>构造函数缺点</h1><p>所有实例对象都单独创建属性和方法；也就是说，每实例化一个对象👆<code>name</code>和<code>sayName</code>就会创建一次；其实际是绑定在对象上，而不是绑定在构造函数中；但是在有的场景中属性或者方法需要时通用的</p>
-<pre><code class="javascript">function Person(name) &#123;
+<pre><code class="javascript">function Person(name) {
     this.name = name
 
-    this.sayName = function () &#123;
+    this.sayName = function () {
         return this.name
-    &#125;
+    }
 
-    this.sleep = function () &#123;
+    this.sleep = function () {
         console.log(&#39;sleep&#39;)
-    &#125;
-&#125;
+    }
+}
 
 let person1 = new Person(&#39;hacker&#39;)
 let person2 = new Person(&#39;geeker&#39;)
 
 console.log(person1.sleep === person2.sleep) 👈 false</code></pre>
 <h1 id="prototype原型对象"><a href="#prototype原型对象" class="headerlink" title="prototype原型对象"></a>prototype原型对象</h1><p>为了解决👆实例对象之间共享属性和方法问题，JavaScript提供了<code>prototype</code>属性</p>
-<pre><code class="javascript">function Person(name) &#123;
+<pre><code class="javascript">function Person(name) {
     this.name = name
 
-    this.sayName = function () &#123;
+    this.sayName = function () {
         return this.name
-    &#125;
-&#125;
+    }
+}
 
-Person.prototype.sleep = function () &#123;
+Person.prototype.sleep = function () {
     console.log(&#39;sleep&#39;)
-&#125;
+}
 
 let person1 = new Person(&#39;hacker&#39;)
 let person2 = new Person(&#39;geeker&#39;)
@@ -355,12 +355,12 @@ console.log(person1.sleep === person2.sleep) 👈 true</code></pre>
 <p>![截屏2020-08-24 下午9.10.51](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.10.51.png)</p>
 <p>❗️可以修改原型对象的引用，但是仍需要把<code>constructor</code>属性指向构造函数</p>
 <p>👇对上个例子中<code>sleep</code>方法进行改写</p>
-<pre><code class="javascript">Person.prototype = &#123;
+<pre><code class="javascript">Person.prototype = {
     constructor: Person,
-    sleep: function () &#123;
+    sleep: function () {
         console.log(&#39;sleep&#39;)
-    &#125;
-&#125;</code></pre>
+    }
+}</code></pre>
 <h1 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h1><p>根据👆所学知识作为基础可以知道，实例对象的属性和方法可以定义在自身，也可以定义在原型对象上</p>
 <p>通过上面的对象执行<code>sleep</code>方法不难发现，实例对象能够直接获取原型对象上的属性和方法</p>
 <p>在之前打印<code>person1</code>时，仔细观察不难发现有个特别的属性<code>__proto__</code>，其指向实例对象的原型对象</p>
@@ -371,9 +371,9 @@ console.log(person1.sleep === person2.sleep) 👈 true</code></pre>
 <p>观察<code>Person</code>构造函数的原型对象可以发现其含有<code>constructor</code>属性；这点解答了👆关于实例对象为什么没有<code>constructor</code>属性但还是可以执行的问题，**<code>constructor</code>属性实际上存在于原型对象**，在刚刚改写<code>sleep</code>方法时也不难发现这点</p>
 <p>👇虚线表示该属性或方法并不是真正存在，<code>person1.constructor</code>是通过<code>__proto__</code>间接实现的</p>
 <p>![截屏2020-08-24 下午9.54.41](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.54.41.png)</p>
-<p>原型对象显然也是一个对象，既然是对象那么肯定也有自己的原型对象；<strong>在JavaScript中所有的对象都是<code>Object</code>的实例，并继承<code>Object.prototype</code>的属性和方法</strong>；<code>let a = &#123;&#125;</code>实际上是<code>new Object()</code>的语法糖</p>
+<p>原型对象显然也是一个对象，既然是对象那么肯定也有自己的原型对象；<strong>在JavaScript中所有的对象都是<code>Object</code>的实例，并继承<code>Object.prototype</code>的属性和方法</strong>；<code>let a = {}</code>实际上是<code>new Object()</code>的语法糖</p>
 <p><strong>❗️解释说明：</strong>语法糖指的是计算机语言中添加的某种语法，这种语法对语言的功能没有影响，但是更方便程序员使用。语法糖让程序更加简洁，有更高的可读性</p>
-<pre><code class="javascript">let obj1 = &#123;&#125;
+<pre><code class="javascript">let obj1 = {}
 let obj2 = new Object()
 
 console.log(obj1.__proto__ === Object.prototype) 👈 true
@@ -387,10 +387,10 @@ console.log(person1.__proto__.__proto__ === Object.prototype) 👈 true</code></
 console.log((true).constructor === Boolean); 👈 true
 console.log((&#39;str&#39;).constructor === String); 👈 true
 console.log(([]).constructor === Array); 👈 true
-console.log((function() &#123;&#125;).constructor === Function); 👈 true
-console.log((&#123;&#125;).constructor === Object); 👈 true</code></pre>
+console.log((function() {}).constructor === Function); 👈 true
+console.log(({}).constructor === Object); 👈 true</code></pre>
 <p>但是一旦更改原型对象，这种判断类型的方式就不可靠</p>
-<pre><code class="javascript">function func() &#123;&#125;
+<pre><code class="javascript">function func() {}
 func.prototype = []
 f = new func()
 
@@ -406,7 +406,7 @@ console.log(f.constructor === Array) 👈 true</code></pre>
 <p>![截屏2020-08-25 上午9.38.03](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.38.03.png)</p>
 <p>👇Object和Function的关系</p>
 <p>![截屏2020-08-25 上午9.39.02](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.39.02.png)</p>
-<p><code>Object</code>是构造函数，则<code>Function</code>也能通过<code>new Function() &#123;&#125;</code>来构造匿名函数，<code>Function</code>同时也是自己的<code>constructor</code></p>
+<p><code>Object</code>是构造函数，则<code>Function</code>也能通过<code>new Function() {}</code>来构造匿名函数，<code>Function</code>同时也是自己的<code>constructor</code></p>
 <p>![截屏2020-08-25 下午2.17.59](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.17.59.png)</p>
 <p><code>Function.prototype</code>同样也是实例对象，因此它的原型对象自然是<code>Object.prototype</code></p>
 <p>![截屏2020-08-25 下午2.21.48](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.21.48.png)</p>
@@ -425,39 +425,39 @@ console.log(f.constructor === Array) 👈 true</code></pre>
 <p><strong>🔔先有 <code>Object.prototype</code>(原型链顶端)，<code>Function.prototype</code> 继承自 <code>Object.prototype</code> ；最后<code>Function</code> 和<code>Object</code>以及其它构造函数继承<code>Function.prototype</code>而产生</strong></p>
 <p>![截屏2020-08-25 下午3.17.46](学习JavaScript中类，原型和继承/截屏2020-08-25 下午3.17.46.png)</p>
 <h1 id="静态属性和方法"><a href="#静态属性和方法" class="headerlink" title="静态属性和方法"></a>静态属性和方法</h1><p>静态方法是指不需要声明类的实例就可以直接使用的方法。在JAVA中通过<code>static</code>定义静态方法</p>
-<pre><code class="java">public class Person&#123;
+<pre><code class="java">public class Person{
   static int num = 0;
-  public static void say() &#123;
+  public static void say() {
     System.out.println(&quot;hello&quot;); 
-  &#125;
-  public static void main(String[] args)&#123;
+  }
+  public static void main(String[] args){
     Person.say();
-  &#125;
-&#125;</code></pre>
+  }
+}</code></pre>
 <p>在<code>ES5</code>中，直接通过设置构造函数属性的方式创建静态属性和方法</p>
-<pre><code class="javascript">function Person() &#123;&#125;
+<pre><code class="javascript">function Person() {}
 
-Person.sleep = function () &#123;
+Person.sleep = function () {
     console.log(&#39;sleep&#39;)
-    console.log(this) 👈 [Function: Person] &#123; sleep: [Function], num: 10 &#125;
-&#125;
+    console.log(this) 👈 [Function: Person] { sleep: [Function], num: 10 }
+}
 Person.num = 10
 
 console.log(Person.num)
 Person.sleep()</code></pre>
 <p>静态方法和实例方法最主要的区别就是实例方法可以访问到实例对象，可以对实例进行操作，而静态方法一般用于跟实例无关的操作。静态方法最常见的是在jQuery的一些工具函数中，比如ajax()和trim()</p>
 <h1 id="ES5继承"><a href="#ES5继承" class="headerlink" title="ES5继承"></a>ES5继承</h1><p>继承就是指子类继承父类所有的属性和方法；同时要知道此处父类指的不仅仅是自身的构造函数，原型链上还会有父类的父类等，也需要一同继承</p>
-<h2 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h2><pre><code class="javascript">function Parent () &#123;
+<h2 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h2><pre><code class="javascript">function Parent () {
     this.name = &#39;Mac&#39;;
-    this.sayName = function() &#123;
+    this.sayName = function() {
         return this.name
-    &#125;
-&#125;
-Parent.prototype.sleep = function () &#123;
+    }
+}
+Parent.prototype.sleep = function () {
     console.log(&#39;sleep&#39;)
-&#125;
+}
 
-function Child () &#123;&#125;
+function Child () {}
 Child.prototype = new Parent();
 
 let child1 = new Child();
@@ -467,11 +467,11 @@ child1.sleep() 👈 sleep</code></pre>
 <p>❓但所有子类共享原型对象也会带来一些问题</p>
 <ul>
 <li><p>父类属性被某个子类篡改，其余所有子类属性都将一同改变</p>
-<pre><code class="javascript">function Parent () &#123;
+<pre><code class="javascript">function Parent () {
     this.name = [&#39;Mac&#39;, &#39;Mary&#39;];
-&#125;
+}
 
-function Child() &#123;&#125;
+function Child() {}
 Child.prototype = new Parent()
 
 let child1 = new Child()
@@ -485,17 +485,17 @@ console.log(child2.name) 👈 [ &#39;Mac&#39;, &#39;Mary&#39;, &#39;A&#39; ]</co
 <li><p>不能继承静态方法</p>
 </li>
 </ul>
-<h2 id="构造函数继承"><a href="#构造函数继承" class="headerlink" title="构造函数继承"></a>构造函数继承</h2><pre><code class="javascript">function Parent(name) &#123;
+<h2 id="构造函数继承"><a href="#构造函数继承" class="headerlink" title="构造函数继承"></a>构造函数继承</h2><pre><code class="javascript">function Parent(name) {
     this.name = name
     this.color = [&#39;red&#39;,&#39;yellow&#39;]
-&#125;
-Parent.prototype.sleep = function()&#123;
+}
+Parent.prototype.sleep = function(){
     console.log(&#39;sleep&#39;)
-&#125;
+}
 
-function Child(name) &#123;
+function Child(name) {
     Parent.call(this, name)
-&#125;
+}
 
 let child1 = new Child(&#39;Mac&#39;)
 child1.color.push(&#39;blue&#39;)
@@ -504,17 +504,17 @@ let child2 = new Child(&#39;Mary&#39;)
 console.log(child2.color) 👈 [ &#39;red&#39;, &#39;yellow&#39; ]
 console.log(child2.sleep) 👈 undefined</code></pre>
 <p>创建子类实例时调用父类构造函数，避免属性被其他子类篡改；此时也可以向父类传参数，但是还是没有继承父类原型上的属性和方法</p>
-<h2 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h2><pre><code class="javascript">function Parent(name) &#123;
+<h2 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h2><pre><code class="javascript">function Parent(name) {
     this.name = name
     this.color = [&#39;red&#39;,&#39;yellow&#39;]
-&#125;
-Parent.prototype.sleep = function()&#123;
+}
+Parent.prototype.sleep = function(){
     console.log(&#39;sleep&#39;)
-&#125;
+}
 
-function Child(name) &#123;
+function Child(name) {
     Parent.call(this, name)
-&#125;
+}
 Child.prototype = new Parent()
 
 let child1 = new Child(&#39;Mac&#39;)
@@ -525,56 +525,56 @@ console.log(child2.color) 👈 [ &#39;red&#39;, &#39;yellow&#39; ]
 console.log(child2.sleep) 👈 sleep</code></pre>
 <p>融合原型链继承和构造函数继承的优点，是JavaScript中常用的继承方式</p>
 <h1 id="ES6继承"><a href="#ES6继承" class="headerlink" title="ES6继承"></a>ES6继承</h1><p><code>ES6</code>新增了<code>class</code>关键词用来定义一个类；但本质上只是<code>ES5</code>构造函数的语法糖，大多部分功能<code>ES5</code>都能实现</p>
-<pre><code class="javascript">class Person&#123;
-    constructor(name)&#123;
+<pre><code class="javascript">class Person{
+    constructor(name){
         this.name = name
-    &#125;
-    sayName()&#123;
+    }
+    sayName(){
         return this.name
-    &#125;
-    static sleep() &#123;
+    }
+    static sleep() {
         console.log(&#39;sleep&#39;);
-    &#125;
-&#125;
-Person.prototype.hack = function()&#123;
+    }
+}
+Person.prototype.hack = function(){
     console.log(&#39;hack&#39;)
-&#125;
+}
 
 Person.sleep()
 let person = new Person(&#39;Mac&#39;)
 person.hack()
 console.log(person.sayName())</code></pre>
 <p><code>ES6</code>的继承可以通过<code>extends</code>关键词实现，比<code>ES5</code>修改原型链来实现继承要更清晰和方便</p>
-<pre><code>class Person&#123;
-    constructor(name)&#123;
+<pre><code>class Person{
+    constructor(name){
         this.name = name
-    &#125;
-    sayName()&#123;
+    }
+    sayName(){
         return this.name
-    &#125;
-    static sleep() &#123;
+    }
+    static sleep() {
         console.log(&#39;sleep&#39;);
-    &#125;
-&#125;
-Person.prototype.hack = function()&#123;
+    }
+}
+Person.prototype.hack = function(){
     console.log(&#39;hack&#39;)
-&#125;
+}
 
-class Child extends Person&#123;
-    constructor(name,color)&#123;
+class Child extends Person{
+    constructor(name,color){
         super(name)
         this.color = color
-    &#125;
-    sayColor()&#123;
+    }
+    sayColor(){
         return &#39;my color is:&#39;+ this.color
-    &#125;
-&#125;
+    }
+}
 let child = new Child(&#39;child&#39;, &#39;yellow&#39;)
 console.log(child.sayName())
 console.log(child.sayColor())
 child.hack()
 console.log(child.sleep) 👈 undefined JavaScript中静态方法不会被继承</code></pre>
-<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a target="_blank" rel="noopener" href="https://juejin.im/post/6844904127344934926">一文读懂JS中类、原型和继承</a></p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://juejin.im/post/6844904127344934926" target="_blank" rel="noopener">一文读懂JS中类、原型和继承</a></p>
 <p><strong>郑重感谢</strong></p>
 
         </div>

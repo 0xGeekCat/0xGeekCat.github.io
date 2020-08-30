@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -299,15 +299,15 @@
 </ul>
 <p>此外，ES6中也提出了一种模块机制，在以后章节再做解释</p>
 <h2 id="require及其运行机制"><a href="#require及其运行机制" class="headerlink" title="require及其运行机制"></a>require及其运行机制</h2><p>Node遵循CommonJS模块规范，也就是使用<code>require</code>关键字来加载模块</p>
-<pre><code class="javascript">let person = &#123;
-    talk: function () &#123;
+<pre><code class="javascript">let person = {
+    talk: function () {
         console.log(&quot;I&#39;m talking&quot;)
-    &#125;,
+    },
 
-    listen: function () &#123;
+    listen: function () {
         console.log(&quot;I&#39;m listening&quot;)
-    &#125;
-&#125;
+    }
+}
 
 module.exports = person</code></pre>
 <p>👆实现一个自定义模块，该模块提供了一个接口(person)，然后使用<code>module.exports</code>将该接口暴露给外部使用，外部的代码想要使用person.js中的方法，需要使用<code>require</code>关键字引入该接口</p>
@@ -326,11 +326,11 @@ module.exports = person</code></pre>
 <p>上面输出的是<code>test.js</code>在缓存中的信息，其中<code>path</code>表示的是模块引入时Node的查找路径，即从当前目录下的<code>node_modules</code>开始，一直到磁盘根目录为止</p>
 <h3 id="require的隐患"><a href="#require的隐患" class="headerlink" title="require的隐患"></a>require的隐患</h3><p>当调用<code>require</code>加载一个模块时，模块内部的代码都会被调用，有时候这可能会带来隐藏的bug</p>
 <pre><code class="javascript">// module.js
-function test() &#123;
-    setInterval(function () &#123;
+function test() {
+    setInterval(function () {
         console.log(&#39;test&#39;)
-    &#125;, 1000)
-&#125;
+    }, 1000)
+}
 test() 👈
 
 module.exports = test
@@ -349,7 +349,7 @@ let test = require(&#39;./module&#39;)</code></pre>
 <p>❗️注意是<code>var a</code>不能用<code>let a</code>，<code>let</code>在之后的章节进行讨论</p>
 </li>
 <li><p>脚本中的this</p>
-<pre><code class="javascript">console.log(this) 👈 &#123;&#125;
+<pre><code class="javascript">console.log(this) 👈 {}
 
 var a = 10
 console.log(this.a) 👈 undefined 
@@ -382,14 +382,14 @@ console.log(module.exports.a) 👈 10</code></pre>
 <h1 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h1><p>Buffer是Node特有(区别于浏览器JavaScript)的数据类型，<strong>主要用来处理二进制数据</strong>，在前端JavaScript中，和二进制数据打交道的机会比较少(ES2015增加了ArrayBuffer类型，用来操作二进制数据流)。而Node在进行Web开发时经常需要和前端进行数据通信，二进制数据流十分常见(例如传输一张GIF图片)，因此Node除了String外，还内置了Buffer这一数据类型，<strong>它是Node作为运行时对JavaScript做的扩展</strong></p>
 <p>Buffer属于固有(built-in)类型，因此无须使用require进行引入</p>
 <p>在文件操作和网络操作中，如果不显式声明编码格式，其返回数据的默认类型就是Buffer</p>
-<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function (err, results) &#123;
+<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function (err, results) {
     console.log(results) 👈 &lt;Buffer 49 27 6d 20 61 20 68 61 63 6b 65 72&gt;
-&#125;)</code></pre>
+})</code></pre>
 <p>最后打印出的是十六进制的数据，由于纯二进制格式太长而且难以阅读，Buffer通常表现为十六进制的字符串</p>
 <h2 id="Buffer的构建与转换"><a href="#Buffer的构建与转换" class="headerlink" title="Buffer的构建与转换"></a>Buffer的构建与转换</h2><p>可以使用Buffer类初始化一个Buffer对象，参数可以是由二进制数据组成的数组也可以是字符串</p>
 <pre><code class="javascript">var buffer = Buffer.from([0x49, 0x27, 0x6d, 0x20, 0x61, 0x20, 0x68, 0x61, 0x63, 0x6b, 0x65, 0x72]);
 var buffer = Buffer.from(&quot;I&#39;m a hacker&quot;)</code></pre>
-<p>👆代码写法与书中例子不相符，因为在现如今的Node API中，<code>Buffer()</code>方法被标记为<code>Deprecated</code>，表示已不推荐使用，因为其存在<a target="_blank" rel="noopener" href="https://github.com/nodejs/node/issues/4660">漏洞</a>；目前推荐的是使用<code>Buffer.from</code>方法来初始化一个Buffer对象，如果想把一个Buffer对象转成字符串形式，还需要使用<code>toString</code>方法</p>
+<p>👆代码写法与书中例子不相符，因为在现如今的Node API中，<code>Buffer()</code>方法被标记为<code>Deprecated</code>，表示已不推荐使用，因为其存在<a href="https://github.com/nodejs/node/issues/4660" target="_blank" rel="noopener">漏洞</a>；目前推荐的是使用<code>Buffer.from</code>方法来初始化一个Buffer对象，如果想把一个Buffer对象转成字符串形式，还需要使用<code>toString</code>方法</p>
 <p>![截屏2020-08-27 上午12.05.56](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午12.05.56.png)</p>
 <p>Buffer支持的编码类型种类有限，仅支持ASCII，Base64，Binary，Hex，UTF-8，UTF-16LE/UCS-2</p>
 <p>Buffer还提供了<code>isEncoding</code>方法来判断是否支持转换为目标编码格式</p>
@@ -401,20 +401,20 @@ console.log(buffer.toString(&#39;UTF-8&#39;, 0, 12)) 👈 I&#39;m a hacker</code
 <h2 id="Buffer的拼接"><a href="#Buffer的拼接" class="headerlink" title="Buffer的拼接"></a>Buffer的拼接</h2><p>Buffer一个常见的使用场景是用来处理HTTP的post请求</p>
 <pre><code class="javascript">var body = &#39;&#39;
 req.setEncoding(&#39;utf8&#39;)
-req.on(&#39;data&#39;, function (chunk) &#123;
+req.on(&#39;data&#39;, function (chunk) {
     body += chunk 👈 此处包含了一个隐式的编码转换
-&#125;)
-req.on(&#39;end&#39;, function () &#123;&#125;)</code></pre>
+})
+req.on(&#39;end&#39;, function () {})</code></pre>
 <p><code>body += chunk</code>相当于<code>body += chunk.toString()</code>，当上传字符全都是英文的时候固然没关系，但如果字符串中包含中文或者其他语言，由于<code>toString</code>方法默认使用utf-8编码，这时就有可能出现乱码</p>
-<pre><code class="javascript">var rs = require(&#39;fs&#39;).createReadStream(&#39;foo.txt&#39;, &#123;highWaterMark: 10&#125;)
+<pre><code class="javascript">var rs = require(&#39;fs&#39;).createReadStream(&#39;foo.txt&#39;, {highWaterMark: 10})
 
 var data = &#39;&#39;
-rs.on(&#39;data&#39;, function (chunk) &#123;
+rs.on(&#39;data&#39;, function (chunk) {
     data += chunk
-&#125;)
-rs.on(&#39;end&#39;, function () &#123;
+})
+rs.on(&#39;end&#39;, function () {
     console.log(data)
-&#125;)</code></pre>
+})</code></pre>
 <h3 id="highWaterMark"><a href="#highWaterMark" class="headerlink" title="highWaterMark"></a>highWaterMark</h3><p><strong>最高水位线</strong>表示内部缓冲区最多能容纳的字节数，如果超过这个大小，就停止读取资源文件，默认值是64KB</p>
 <p>假设文件大小为100KB，那么在默认情况下，系统就会每次从文件里读取64KB大小的数据，随后触发data事件；<code>chunk</code>的大小即为<code>highWaterMark</code>的大小；然后接着读取36KB大小的文件，再次触发data事件；随后文件读取结束，触发end事件；如果<code>highWaterMark</code>设置得很小，那么就会发生多次系统调用，这会对性能造成影响</p>
 <p>运行例子，可以看到输出中产生了乱码</p>
@@ -423,16 +423,16 @@ rs.on(&#39;end&#39;, function () &#123;
 <p>打印例子观察<code>chunk</code>，可以发现刚好在<code>世</code>这里字符被截断</p>
 <p>![截屏2020-08-27 上午8.52.26](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午8.52.26.png)</p>
 <p>目前👆代码已被舍弃，官方的推荐做法是使用<code>push</code>方法来拼接Buffer</p>
-<pre><code class="javascript">var rs = require(&#39;fs&#39;).createReadStream(&#39;foo.txt&#39;, &#123;highWaterMark: 10&#125;)
+<pre><code class="javascript">var rs = require(&#39;fs&#39;).createReadStream(&#39;foo.txt&#39;, {highWaterMark: 10})
 
 var data = []
-rs.on(&#39;data&#39;, function (chunk) &#123;
+rs.on(&#39;data&#39;, function (chunk) {
     data.push(chunk)
-&#125;)
-rs.on(&#39;end&#39;, function () &#123;
+})
+rs.on(&#39;end&#39;, function () {
     var buf = Buffer.concat(data)
     console.log(buf.toString())
-&#125;)
+})
 // 你好，世界</code></pre>
 <p>先将Buffer放到数组里面，等待传输完成后再进行转换就不会出现乱码</p>
 <h1 id="File-System"><a href="#File-System" class="headerlink" title="File System"></a>File System</h1><p>File System是Node中使用最为频繁的模块之一，该模块提供了读写文件的能力，是借助于底层的<code>linuv</code>的<code>C++ API</code>实现的</p>
@@ -440,35 +440,35 @@ rs.on(&#39;end&#39;, function () &#123;
 <p>👇学习几种常见API</p>
 <h3 id="readFile"><a href="#readFile" class="headerlink" title="readFile"></a>readFile</h3><p>![截屏2020-08-27 上午10.07.22](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.07.22.png)</p>
 <p>异步读取文本文件中的内容</p>
-<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function (err, data) &#123;
+<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function (err, data) {
     if (err)
         throw err
     console.log(data)
-&#125;)</code></pre>
+})</code></pre>
 <p>readFile会将一个文件的全部内容都读到内存中，适用于体积较小的文本文件；如果你有一个数百MB大小的文件需要读取，建议选择stream。readFile读出的数据需要在回调方法中获取，而<code>readFileSync</code>直接返回文本数据内容</p>
-<pre><code class="javascript">var data = require(&#39;fs&#39;).readFileSync(&#39;foo.txt&#39;, &#123;encoding: &quot;UTF-8&quot;&#125;)
+<pre><code class="javascript">var data = require(&#39;fs&#39;).readFileSync(&#39;foo.txt&#39;, {encoding: &quot;UTF-8&quot;})
 console.log(data)</code></pre>
 <p>如果不指定readFile的<code>encoding</code>配置，readFile会直接返回Buffer格式</p>
 <p>![截屏2020-08-27 上午9.46.53](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午9.46.53.png)</p>
 <h3 id="writeFile"><a href="#writeFile" class="headerlink" title="writeFile"></a>writeFile</h3><p>![截屏2020-08-27 上午10.08.25](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.08.25.png)</p>
 <p>WriteFile的第一个参数为文件名，如果不存在，则会创建它(默认的flag为<code>w</code>)</p>
-<pre><code class="javascript">require(&#39;fs&#39;).writeFile(&#39;foo.txt&#39;, &quot;I&#39;m a hacker&quot;, &#123;flag: &#39;a&#39;, encoding: &#39;utf-8&#39;&#125;,
-    function (err) &#123;
-    if (err) &#123;
+<pre><code class="javascript">require(&#39;fs&#39;).writeFile(&#39;foo.txt&#39;, &quot;I&#39;m a hacker&quot;, {flag: &#39;a&#39;, encoding: &#39;utf-8&#39;},
+    function (err) {
+    if (err) {
         console.log(err)
-    &#125; else &#123;
+    } else {
         console.log(&#39;success&#39;)
-    &#125;
-&#125;)</code></pre>
+    }
+})</code></pre>
 <p>![截屏2020-08-27 上午10.12.54](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.12.54.png)</p>
 <h3 id="fs-stat-path-callback"><a href="#fs-stat-path-callback" class="headerlink" title="fs.stat(path, callback)"></a>fs.stat(path, callback)</h3><p>stat方法通常用来获取文件的状态，通常开发者可以在调用open、read或者write方法之前调用<code>fs.stat</code>方法，用来判断该文件是否存在</p>
-<pre><code class="javascript">require(&#39;fs&#39;).stat(&#39;foo.txt&#39;, function (err, result) &#123;
-    if (err) &#123;
+<pre><code class="javascript">require(&#39;fs&#39;).stat(&#39;foo.txt&#39;, function (err, result) {
+    if (err) {
         console.log(err)
-    &#125; else &#123;
+    } else {
         console.log(result)
-    &#125;
-&#125;)</code></pre>
+    }
+})</code></pre>
 <p>如果文件存在，<code>result</code>就会返回文件的状态信息</p>
 <p>![截屏2020-08-27 上午11.36.16](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午11.36.16.png)</p>
 <p>如果文件不存在，则会出现<code>Error: ENOENT: no such file or directory</code>的错误</p>
@@ -478,47 +478,47 @@ console.log(data)</code></pre>
 <p>👇代码运行结果与<code>fs.stat</code>相同</p>
 <pre><code class="javascript">var fs = require(&#39;fs&#39;)
 
-fs.open(&#39;foo.txt&#39;, &#39;a&#39;, function (err, fd) &#123;
-    if (err) &#123;
+fs.open(&#39;foo.txt&#39;, &#39;a&#39;, function (err, fd) {
+    if (err) {
         console.log(err)
-    &#125; else &#123;
+    } else {
         console.log(fd)
-    &#125;
+    }
 
-    fs.fstat(fd, function (err, stats) &#123;
-        if (err) &#123;
+    fs.fstat(fd, function (err, stats) {
+        if (err) {
             console.log(err)
-        &#125; else &#123;
+        } else {
             console.log(stats)
-        &#125;
-    &#125;)
-&#125;)</code></pre>
+        }
+    })
+})</code></pre>
 <h3 id="readdir"><a href="#readdir" class="headerlink" title="readdir"></a>readdir</h3><p>![截屏2020-08-27 下午5.44.26](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.44.26.png)</p>
 <p>获取目录下的所有文件名是一个常见的需求，实现这个功能只需要<code>fs.readdir</code>以及<code>fs.stat</code>两个API，<code>readdir</code>用于获取目录下的所有文件或者子目录，<code>stat</code>用来判断具体每条记录是文件还是子目录</p>
 <pre><code class="javascript">var fs = require(&#39;fs&#39;)
 
-function getAllFileFromPath(path) &#123;
-    fs.readdir(path, function (err, res) &#123;
-        for (var subPath of res) &#123;
+function getAllFileFromPath(path) {
+    fs.readdir(path, function (err, res) {
+        for (var subPath of res) {
             var statObj = fs.statSync(path + &#39;/&#39; + subPath)
-            if (statObj.isDirectory()) &#123;
+            if (statObj.isDirectory()) {
                 console.log(&quot;Dir:&quot;, subPath)
                 getAllFileFromPath(path + &#39;/&#39; + subPath)
-            &#125; else &#123;
+            } else {
                 console.log(&quot;File:&quot;, subPath)
-            &#125;
-        &#125;
-    &#125;)
-&#125;
+            }
+        }
+    })
+}
 
 getAllFileFromPath(__dirname)</code></pre>
 <p>![截屏2020-08-27 下午5.08.56](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.08.56.png)</p>
 <h1 id="HTTP服务"><a href="#HTTP服务" class="headerlink" title="HTTP服务"></a>HTTP服务</h1><p>HTTP模块是Node的核心模块，主要提供一系列用于网络传输的API，这些API大都位于比较底层的位置，可以让开发者自由地控制整个HTTP传输过程</p>
 <h2 id="创建HTTP服务器"><a href="#创建HTTP服务器" class="headerlink" title="创建HTTP服务器"></a>创建HTTP服务器</h2><pre><code class="javascript">var http = require(&#39;http&#39;)
-var server = http.createServer(function (req, res) &#123;
-    res.writeHead(200, &#123;&#39;Content-Type&#39;: &#39;text/plain&#39;&#125;)
+var server = http.createServer(function (req, res) {
+    res.writeHead(200, {&#39;Content-Type&#39;: &#39;text/plain&#39;})
     res.end(&quot;0xGeekCat&quot;)
-&#125;)
+})
 
 server.listen(3000)</code></pre>
 <p>👆使用createServer方法创建一个简单的HTTP服务器，该方法返回一个<code>http.server</code>类的实例，createServer方法包含一个匿名的回调函数，该函数有两个参数<code>req</code>和<code>res</code>，它们是InComingMessage和ServerResponse的实例。分别表示HTTP的request和response对象，服务器创建完成后Node进程开始循环监听端口</p>
@@ -531,31 +531,31 @@ server.listen(3000)</code></pre>
 <h3 id="简单的静态文件服务器"><a href="#简单的静态文件服务器" class="headerlink" title="简单的静态文件服务器"></a>简单的静态文件服务器</h3><pre><code class="javascript">var http = require(&#39;http&#39;)
 var fs = require(&#39;fs&#39;)
 
-var server = http.createServer(function (req, res) &#123;
-    if (req.url === &#39;/&#39;) &#123;
+var server = http.createServer(function (req, res) {
+    if (req.url === &#39;/&#39;) {
         var fileList = fs.readdirSync(&#39;./&#39;)
-        res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;)
+        res.writeHead(200, {&quot;Content-Type&quot;: &quot;text/plain&quot;})
         res.end(fileList.toString())
-    &#125; else &#123;
+    } else {
         var path = req.url
-        fs.readFile(&#39;.&#39; + path, function (err, data) &#123;
-            if (err) &#123;
+        fs.readFile(&#39;.&#39; + path, function (err, data) {
+            if (err) {
                 res.end(&quot;Internal error&quot;)
                 throw err
-            &#125;
-            res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;)
+            }
+            res.writeHead(200, {&quot;Content-Type&quot;: &quot;text/plain&quot;})
             res.end(data)
-        &#125;)
-    &#125;
-&#125;)
+        })
+    }
+})
 
 var port = 3000
 server.listen(port)
 console.log(&quot;Listening on 3000&quot;)
 
-process.on(&quot;uncaughtException&quot;, function () &#123;
+process.on(&quot;uncaughtException&quot;, function () {
     console.log(&quot;got error&quot;)
-&#125;)</code></pre>
+})</code></pre>
 <h2 id="处理HTTP请求"><a href="#处理HTTP请求" class="headerlink" title="处理HTTP请求"></a>处理HTTP请求</h2><p>当处理HTTP请求时，最先做的事就是获取请求的URL、method等信息。Node将相关的信息都封装在<code>req</code>对象中，该对象是IncomingMessage的实例</p>
 <h3 id="method"><a href="#method" class="headerlink" title="method"></a>method</h3><pre><code class="javascript">var method = req.method</code></pre>
 <p>HTTP请求method的值通常是get、post、put、delete、update这5个关键字之一，以get和post最为常见</p>
@@ -563,17 +563,17 @@ process.on(&quot;uncaughtException&quot;, function () &#123;
 <p>![截屏2020-08-27 下午7.53.17](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午7.53.17.png)</p>
 <h3 id="request-body"><a href="#request-body" class="headerlink" title="request body"></a>request body</h3><p>Node使用stream处理HTTP的请求体，stream注册了data和end两个事件</p>
 <pre><code class="javascript">var body = []
-req.on(&#39;data&#39;, function (chunk) &#123;
+req.on(&#39;data&#39;, function (chunk) {
     body.push(chunk)
-&#125;).on(&#39;end&#39;, function () &#123;
+}).on(&#39;end&#39;, function () {
     body = Buffer.concat(body).toString()
-&#125;)</code></pre>
+})</code></pre>
 <h3 id="Response对象"><a href="#Response对象" class="headerlink" title="Response对象"></a>Response对象</h3><h4 id="statusCode"><a href="#statusCode" class="headerlink" title="statusCode"></a>statusCode</h4><p>Node中如果开发者不手动设置，那么状态码的值会默认为200。但200并不适用所有场景</p>
 <h4 id="response-header"><a href="#response-header" class="headerlink" title="response header"></a>response header</h4><p>通过<code>setHeader</code>方法设置response的头部信息，但其只能设置<code>response header</code>单个属性，如果想要一次性设置所有的响应头和状态码，则使用<code>writeHead</code>方法，<code>writeHead</code>方法用于定义HTTP响应头，包括状态码等一系列属性；调用该方法后，服务器向客户端发送HTTP响应头</p>
-<pre><code class="javascript">res.writeHead(200, &#123;
+<pre><code class="javascript">res.writeHead(200, {
     &#39;Content-Length&#39;: Buffer.byteLength(body),
     &#39;Content-Type&#39;: &#39;text/plain&#39;
-&#125;)</code></pre>
+})</code></pre>
 <p>有时开发者并不会显式调用该方法，当调用end方法时也会调用writeHead方法，此时<code>statusCode</code>会自动设置成200</p>
 <h4 id="response-body"><a href="#response-body" class="headerlink" title="response body"></a>response body</h4><p>response对象是一个<code>writableStream</code>实例，可以直接调用write方法进行写入，写入完成后再调用end方法将该stream发送到客户端</p>
 <pre><code class="javascript">res.write(&#39;&lt;html&gt;&#39;)
@@ -590,21 +590,21 @@ res.end()</code></pre>
 <p>👇未完成</p>
 <p>![截屏2020-08-27 下午10.13.54](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.13.54.png)</p>
 <p>end方法支持字符串或者buffer作为参数，可以指定HTTP请求最后返回的数据，该数据会在浏览器页面上显示；如果定义了回调方法，那么会在end返回后调用</p>
-<pre><code class="javascript">res.end(&quot;0xGeekCat&quot;, function () &#123;
+<pre><code class="javascript">res.end(&quot;0xGeekCat&quot;, function () {
     console.log(&#39;end&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <h3 id="上传数据"><a href="#上传数据" class="headerlink" title="上传数据"></a>上传数据</h3><p>传统的Web开发中，最常用的HTTP请求只有get和post两种。get请求的报文内容很简单，只有请求行和请求头部；post请求由于要上传数据，因此需要包含请求体的内容，有两个相关的属性经常被用到，分别是<code>content-type</code>和<code>content-length</code></p>
 <p><strong>首先判断请求方法的类型</strong></p>
 <pre><code class="javascript">var http = require(&#39;http&#39;)
 
-var server = http.createServer(function (req, res) &#123;
-    if (req.method === &#39;get&#39;) &#123;
+var server = http.createServer(function (req, res) {
+    if (req.method === &#39;get&#39;) {
         // TODO
-    &#125;
-    if (req.method === &#39;post&#39;) &#123;
+    }
+    if (req.method === &#39;post&#39;) {
         // TODO
-    &#125;
-&#125;)</code></pre>
+    }
+})</code></pre>
 <p><strong>提交表单</strong></p>
 <pre><code class="javascript">&lt;form action=&quot;/login&quot; method=&quot;post&quot; id=&quot;form1&quot;&gt;
     &lt;input type=&quot;text&quot; name=&quot;username&quot; id=&quot;username&quot;&gt;&lt;br&gt;
@@ -615,9 +615,9 @@ var server = http.createServer(function (req, res) &#123;
 <pre><code class="javascript">var http = require(&#39;http&#39;)
 var fs = require(&#39;fs&#39;)
 
-var server = http.createServer(function (req, res) &#123;
-    if (req.url === &#39;/login&#39;) &#123;
-        switch (req.method) &#123;
+var server = http.createServer(function (req, res) {
+    if (req.url === &#39;/login&#39;) {
+        switch (req.method) {
             case &#39;GET&#39;:
                 // 使用流来加载login.html
                 fs.createReadStream(&#39;login.html&#39;).pipe(res) 👈 将Readable流中的数据传输给Writable流 readable.pipe(writeable)
@@ -628,14 +628,14 @@ var server = http.createServer(function (req, res) &#123;
             default :
                 console.log(&#39;other request&#39;)
                 break
-        &#125;
-    &#125; else &#123;
-        res.writeHead(302, &#123;
+        }
+    } else {
+        res.writeHead(302, {
             &#39;Location&#39;: &#39;/login&#39;
-        &#125;)
+        })
         res.end()
-    &#125;
-&#125;)
+    }
+})
 
 server.listen(3000)</code></pre>
 <p>![截屏2020-08-28 上午10.45.27](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.45.27.png)</p>
@@ -648,12 +648,12 @@ server.listen(3000)</code></pre>
 <p><strong>打印请求体</strong></p>
 <pre><code class="javascript">case &#39;POST&#39;:
     var body = []
-    req.on(&#39;data&#39;, function (chunk) &#123;
+    req.on(&#39;data&#39;, function (chunk) {
         body.push(chunk)
-    &#125;).on(&#39;end&#39;, function () &#123;
+    }).on(&#39;end&#39;, function () {
         body = Buffer.concat(body).toString()
         console.log(body)
-    &#125;)
+    })
     break</code></pre>
 <p>![截屏2020-08-27 下午10.51.03](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.51.03.png)</p>
 <h3 id="使用post上传文件"><a href="#使用post上传文件" class="headerlink" title="使用post上传文件"></a>使用post上传文件</h3><pre><code class="javascript">&lt;form action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
@@ -663,19 +663,19 @@ server.listen(3000)</code></pre>
 <p>和只有字段值的表单不同的是，上传文件的表单要设置<code>enctype=&quot;multipart/form-data&quot;</code>属性，自然文件上传时的header信息也有所不同</p>
 <p>![截屏2020-08-27 下午11.11.29](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午11.11.29.png)</p>
 <p><strong>服务器处理上传文件</strong></p>
-<pre><code class="javascript">function dealUpload(req, res) &#123;
+<pre><code class="javascript">function dealUpload(req, res) {
     var form = new formidable.IncomingForm() 👈 创建formidable.IncomingFrom对象
     form.keepExtensions = true 👈 保持原有扩展名
     form.uploadDir = __dirname 👈上传目录为当前目录
-    form.parse(req, function (err, fields, files) &#123;
+    form.parse(req, function (err, fields, files) {
         if (err)
             throw err
-        console.log(fields) 👈 &#123; submit: &#39;submit&#39; &#125;
+        console.log(fields) 👈 { submit: &#39;submit&#39; }
         console.log(files)
-        res.writeHead(200, &#123;&quot;Content-Type&quot;: &quot;text/plain&quot;&#125;)
+        res.writeHead(200, {&quot;Content-Type&quot;: &quot;text/plain&quot;})
         res.end(&quot;upload finished&quot;)
-    &#125;)
-&#125;</code></pre>
+    })
+}</code></pre>
 <p>![截屏2020-08-28 上午8.39.46](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.39.46.png)</p>
 <p>此时浏览器界面回显</p>
 <p>![截屏2020-08-28 上午8.40.51](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.40.51.png)</p>
@@ -684,51 +684,51 @@ server.listen(3000)</code></pre>
 <h3 id="HTTP客户端服务"><a href="#HTTP客户端服务" class="headerlink" title="HTTP客户端服务"></a>HTTP客户端服务</h3><p>HTTP模块除了能在服务端处理客户端请求之外，还可以作为客户端向服务器发起请求。这也是Node也能做出像electron那样的桌面软件的基础</p>
 <p>![截屏2020-08-28 上午8.57.01](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.57.01.png)</p>
 <pre><code class="javascript">var http = require(&#39;http&#39;)
-http.get(&quot;http://127.0.0.1:3000/&quot;, function (res) &#123;
+http.get(&quot;http://127.0.0.1:3000/&quot;, function (res) {
     var statueCode = res.statusCode
-    if (statueCode === 200) &#123;
+    if (statueCode === 200) {
         var result = &quot;&quot;
-        res.on(&quot;data&quot;, function (data) &#123;
+        res.on(&quot;data&quot;, function (data) {
             result += data
-        &#125;)
-        res.on(&quot;end&quot;, function () &#123;
+        })
+        res.on(&quot;end&quot;, function () {
             console.log(result.toString())
-        &#125;)
-        res.on(&quot;error&quot;, function (e) &#123;
+        })
+        res.on(&quot;error&quot;, function (e) {
             console.log(e.message)
-        &#125;)
-    &#125;
-&#125;)</code></pre>
+        })
+    }
+})</code></pre>
 <p>![截屏2020-08-28 上午9.09.05](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午9.09.05.png)</p>
 <h3 id="创建代理服务器"><a href="#创建代理服务器" class="headerlink" title="创建代理服务器"></a>创建代理服务器</h3><p>代理服务器相当于在客户端和目标服务器之间建立了一个中转，所有的访问和流量都经过这个服务器进行中转</p>
 <pre><code class="javascript">var http = require(&quot;http&quot;);
 var url = require(&quot;url&quot;);
 
-http.createServer(function(req,res)&#123;
+http.createServer(function(req,res){
     console.log(req.url);
     var options = url.parse(req.url);
     options.headers = req.headers;
 
-    var proxyRequest = http.request(options,function(pres)&#123;
+    var proxyRequest = http.request(options,function(pres){
         res.writeHead(pres.statusCode,pres.headers);
-        pres.on(&#39;data&#39;,function (data) &#123;
+        pres.on(&#39;data&#39;,function (data) {
             res.write(data);
-        &#125;);
-        pres.on(&#39;end&#39;,function () &#123;
+        });
+        pres.on(&#39;end&#39;,function () {
             res.end();
-        &#125;);
+        });
 
-    &#125;);
+    });
 
-    req.on(&#39;data&#39;,function(data)&#123;
+    req.on(&#39;data&#39;,function(data){
         proxyRequest.write(data);
-    &#125;);
+    });
 
-    req.on(&#39;end&#39;,function()&#123;
+    req.on(&#39;end&#39;,function(){
         proxyRequest.end();
-    &#125;);
+    });
 
-&#125;).listen(80);</code></pre>
+}).listen(80);</code></pre>
 <p>在本地创建了一个HTTP服务器，请求经由<code>127.0.0.1:80</code>进行转发，<strong>不过并不太清楚👆代码的具体使用，暂时仅简单了解</strong></p>
 <p>代理服务器可以有很多应用领域，例如使用它来缓存文件或者很多企业都会使用代理服务器来过滤掉一些广告和垃圾网站的URL，或者限制员工使用公司网络访问社交网站。有的企业访问npm下载第三方模块也需要配置代理。一些常用的屏蔽广告的浏览器插件大都也是依靠本地启动代理服务器来实现广告过滤的</p>
 <h4 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h4><p>如果一个代理服务器可以代理外部的访问来访问内部网络时，这种代理方式就被称为<strong>反向代理</strong></p>
@@ -739,22 +739,22 @@ http.createServer(function(req,res)&#123;
 <h2 id="创建TCP服务器"><a href="#创建TCP服务器" class="headerlink" title="创建TCP服务器"></a>创建TCP服务器</h2><p>Node中有三种Socket，分别对应实现TCP、UDP以及UNIX Socket，与这些相关的代码都位于Net模块中；UNIX Socket即<code>UNIX Domain Socket</code>，和面向网络的TCP、UDP不同，主要用于<strong>本地系统的进程间通信</strong></p>
 <pre><code class="javascript">var net = require(&#39;net&#39;)
 
-var server = net.createServer(function (c) &#123;
+var server = net.createServer(function (c) {
     console.log(&#39;client connected&#39;)
-    c.on(&#39;end&#39;, function () &#123;
+    c.on(&#39;end&#39;, function () {
         console.log(&#39;client disconnected&#39;)
-    &#125;)
+    })
     c.write(&#39;hello\r\n&#39;)
     c.pipe(c) 
-&#125;)
+})
 
-server.on(&#39;error&#39;, function (err) &#123;
+server.on(&#39;error&#39;, function (err) {
     throw err
-&#125;)
+})
 
-server.listen(8124, function () &#123;
+server.listen(8124, function () {
     console.log(&#39;server bound&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <p>如果服务器收到了一个连接请求，就会返回一个Hello字符串；如果在浏览器里打开<code>localhost:8124</code>的方式来访问，会出现<code>GET http://localhost:8124/ net::ERR_INVALID_HTTP_RESPONSE</code>的错误。原因也很简单，一CP服务器不会返回符合HTTP协议标准的响应</p>
 <p>![截屏2020-08-28 上午10.55.28](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.55.28.png)</p>
 <p>使用<code>nc</code>连接服务器后，服务器端出现👇回显表示服务器正常运行</p>
@@ -763,19 +763,19 @@ server.listen(8124, function () &#123;
 <p>👇前者是不添加后者为添加</p>
 <p>![截屏2020-08-28 上午11.27.47](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.27.47.png)</p>
 <h3 id="TCP客户端"><a href="#TCP客户端" class="headerlink" title="TCP客户端"></a>TCP客户端</h3><pre><code class="javascript">const net =require(&#39;net&#39;)
-const client = net.connect(&#123;port: 8124&#125;, function () &#123;
+const client = net.connect({port: 8124}, function () {
     console.log(&#39;connected to server&#39;)
     client.write(&#39;0xGeekCat&#39;)
-&#125;)
+})
 
-client.on(&#39;data&#39;, function (data) &#123;
+client.on(&#39;data&#39;, function (data) {
     console.log(data.toString())
     client.end()
-&#125;)
+})
 
-client.on(&quot;end&quot;, function () &#123;
+client.on(&quot;end&quot;, function () {
     console.log(&#39;disconnected from server&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <p>![截屏2020-08-28 上午11.31.12](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.31.12.png)</p>
 <h1 id="SSL更安全的传输方式"><a href="#SSL更安全的传输方式" class="headerlink" title="SSL更安全的传输方式"></a>SSL更安全的传输方式</h1><p>对于企业网站，使用更加安全的数据传输是必要的，使用单纯的HTTP连接，所有的内容都以明文传输，这种方式是极不安全，就连通常被认为安全的<code>post</code>操作，其安全性也无法保证，因此需要更安全的<code>HTTPS(HTTP+SSL)</code></p>
 <p>👇描述<code>SSL</code>在网络通信中的位置</p>

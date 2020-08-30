@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -311,9 +311,9 @@
 <li>输出一个函数</li>
 </ul>
 <p>map方法接受一个函数作为参数，依次作用于的数组的每一个元素</p>
-<pre><code class="javascript">[1, 2, 3].map(function (value) &#123;
+<pre><code class="javascript">[1, 2, 3].map(function (value) {
     console.log(value)
-&#125;)</code></pre>
+})</code></pre>
 <p>关于回调函数在何时执行并没有具体的要求，回调函数的调用既可以是同步(map方法)，也可以是异步(setTimeout方法中的匿名函数)</p>
 <p>👇回调的过程</p>
 <p>![截屏2020-08-26 上午11.18.53](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 上午11.18.53.png)</p>
@@ -322,11 +322,11 @@
 <p>❓如果遇到一个耗时的操作，例如磁盘IO，要不要等待操作完成了再执行下一步操作</p>
 <p>有的语言选择在完成之前继续等待，例如PHP；Node选择另一种方式，当遇到IO操作时，Node代码在发起一个调用后继续向下执行，IO操作完成后，再执行对应的回调函数(异步)；虽然代码运行在单线程环境下，但依靠<code>异步+回调</code>的方式，也能实现对高并发的支持</p>
 <pre><code class="javascript">let fs = require(&quot;fs&quot;)
-let callback = function (err, data) &#123;
+let callback = function (err, data) {
     if (err)
         return
     console.log(data.toString())
-&#125;
+}
 
 fs.readFile(&quot;foo.txt&quot;, callback)</code></pre>
 <p><code>readFile</code>发起一个系统调用，随后执行结束，当系统调用完成后，再通过回调函数获得文件的内容</p>
@@ -401,7 +401,7 @@ fs.readFile(&quot;foo.txt&quot;, callback)</code></pre>
 <li>close callbacks：处理一些close相关的事件，例如<code>socket.on(&#39;close&#39;, ...)</code></li>
 </ol>
 <p>👇Node事件循环的代码结构</p>
-<pre><code class="javascript">while (true) &#123;
+<pre><code class="javascript">while (true) {
     // ...
     nv_run_timers()
 
@@ -415,7 +415,7 @@ fs.readFile(&quot;foo.txt&quot;, callback)</code></pre>
 
     nv_run_closing_handles()
     // ...
-&#125;</code></pre>
+}</code></pre>
 <p>假设事件循环现在进入了某个阶段(即开始执行上面其中一个方法)，即使在这期间有其他队列中的事件就绪，也会先将当前阶段队列里的全部回调方法执行完毕后，再进入到下个阶段，结合代码这点很好理解</p>
 <ol>
 <li><p>Timers</p>
@@ -440,17 +440,17 @@ fs.readFile(&quot;foo.txt&quot;, callback)</code></pre>
 
 let timeoutScheduled = Date.now()
 
-setTimeout(function () &#123;
+setTimeout(function () {
     let delay = Date.now() - timeoutScheduled
     console.log(delay + &quot;ms have passed since I was scheduled&quot;)
-&#125;, 100)
+}, 100)
 
 // 假设readFile耗费的时间为95ms
-fs.readFile(&#39;foo.txt&#39;, function (err, data) &#123;
+fs.readFile(&#39;foo.txt&#39;, function (err, data) {
     let startCallback = Date.now()
     // 使while循环阻塞10ms
-    while (Date.now() - startCallback &lt; 10) &#123;&#125;
-&#125;)</code></pre>
+    while (Date.now() - startCallback &lt; 10) {}
+})</code></pre>
 <p>👆代码改编自官方文档中的一个例子，讲述事件循环不同过程的处理步骤。这段代码的逻辑很简单，包含了readfile和timer两个异步操作</p>
 <ol>
 <li>代码开始运行后，事件循环也开始运作了。首先检查timers，然而timers对应的事件队列目前还为空(100ms后才会有事件产生)，事件循环向后执行到了poll阶段，到目前为止还没有事件出现，由于代码中没有定义setImmediate操作，事件循环便在此一直等待新的事件出现</li>
@@ -459,30 +459,30 @@ fs.readFile(&#39;foo.txt&#39;, function (err, data) &#123;
 <li>readFile的回调完成后，事件循环切换到timers阶段，接着取出timers队列中的事件执行对应的回调方法</li>
 </ol>
 <h2 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick"></a>process.nextTick</h2><p>定义一个异步动作，并且让这个动作在事件循环当前阶段结束后执行</p>
-<pre><code class="javascript">process.nextTick(function () &#123;
+<pre><code class="javascript">process.nextTick(function () {
     console.log(&#39;next&#39;)
-&#125;)
+})
 
 console.log(&#39;first&#39;)
 // first
 // next</code></pre>
 <p><code>process.nextTick</code>并不是事件循环的一部分，但它的回调方法也是由事件循环调用，该方法定义的回调方法会被加入到名为<code>nextTickQueue</code>的队列中。在事件循环的任何阶段，如果<code>nextTickQueue</code>不为空，都会在当前阶段操作结束后优先执行<code>nextTickQueue</code>中的回调函数，当<code>nextTickQueue</code>中的回调方法被执行完毕后，事件循环才会继续向下执行</p>
 <p>Node限制了<code>nextTickQueue</code>的大小，如果递归调用了<code>process.nextTick</code>，那么当<code>nextTickQueue</code>达到最大限制后会抛出一个错误</p>
-<pre><code class="javascript">function recurse(i) &#123;
+<pre><code class="javascript">function recurse(i) {
     while (i &lt; 1)
     process.nextTick(recurse(i))
-&#125;
+}
 
 recurse(0)</code></pre>
 <p>![截屏2020-08-26 下午5.18.25](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 下午5.18.25.png)</p>
 <p><code>nextTickQueue</code>显然是一个队列，先被加入队列的回调会先执行</p>
-<pre><code class="javascript">process.nextTick(function () &#123;
+<pre><code class="javascript">process.nextTick(function () {
     console.log(&#39;second&#39;)
-&#125;)
+})
 
-process.nextTick(function () &#123;
+process.nextTick(function () {
     console.log(&#39;third&#39;)
-&#125;)
+})
 
 console.log(&#39;first&#39;)
 
@@ -490,14 +490,14 @@ console.log(&#39;first&#39;)
 // second
 // third</code></pre>
 <p>和其他回调函数一样，<code>nextTick</code>定义的回调也是由事件循环执行的，如果<code>nextTick</code>的回调方法中出现了阻塞操作，后面的要执行的回调同样会被阻塞</p>
-<pre><code class="javascript">process.nextTick(function () &#123;
+<pre><code class="javascript">process.nextTick(function () {
     console.log(&#39;second&#39;)
-    while (true) &#123;&#125; 👈
-&#125;)
+    while (true) {} 👈
+})
 
-process.nextTick(function () &#123;
+process.nextTick(function () {
     console.log(&#39;third&#39;)
-&#125;)
+})
 
 console.log(&#39;first&#39;)
 
@@ -506,46 +506,46 @@ console.log(&#39;first&#39;)
 <h2 id="nextTick与setImmediate"><a href="#nextTick与setImmediate" class="headerlink" title="nextTick与setImmediate"></a>nextTick与setImmediate</h2><p>setImmediate方法不属于<code>ECMAScript</code>标准，而是Node提出的新方法，它同样将一个回调函数加入到事件队列中，不同于setTimeout和setInterval，setImmediate并不接受一个时间作为参数，setImmediate的事件会在当前事件循环的结尾触发，对应的回调方法会在当前事件循环末尾(check阶段)执行</p>
 <p>setImmediate方法和process.nextTick方法很相似，<strong>由于process.nextTick会在当前操作完成后立刻执行，因此总会在setImmediate之前执行</strong></p>
 <p>🔎关于这两个方法有个笑话：nextTick和setImmediate的行为和名称含义是反过来的</p>
-<pre><code class="javascript">setImmediate(function (arg) &#123;
+<pre><code class="javascript">setImmediate(function (arg) {
     console.log(&#39;executing immediate:&#39;, arg)
-&#125;, &#39;so immediate&#39;)
+}, &#39;so immediate&#39;)
 
-process.nextTick(function () &#123;
+process.nextTick(function () {
     console.log(&#39;next tick&#39;)
-&#125;)
+})
 
 // next tick
 // executing immediate: so immediate</code></pre>
 <p>❗️当有递归的异步操作时只能使用setImmediate，不能使用process.nextTick，setImmediate不会生成call stack</p>
-<pre><code class="javascript">function recurse( i, end) &#123;
-    if (i &gt; end) &#123;
+<pre><code class="javascript">function recurse( i, end) {
+    if (i &gt; end) {
         console.log(&quot;Done!&quot;)
-    &#125; else &#123;
+    } else {
         console.log(i)
         setImmediate(recurse, i + 1, end)
-    &#125;
-&#125;
+    }
+}
 
 recurse(0, 9999)</code></pre>
 <h2 id="setImmediate和-setTimeout"><a href="#setImmediate和-setTimeout" class="headerlink" title="setImmediate和 setTimeout"></a>setImmediate和 setTimeout</h2><p>setImmediate方法会在poll阶段结束后执行，而setTimeout会在规定的时间到期后执行，由于无法预测执行代码时事件循环当前处于哪个阶段，因此当代码中同时存在这两个方法时，回调函数的执行顺序不是固定的</p>
-<pre><code class="javascript">setTimeout(function () &#123;
+<pre><code class="javascript">setTimeout(function () {
     console.log(&#39;timeout&#39;)
-&#125;, 0)
+}, 0)
 
-setImmediate(function () &#123;
+setImmediate(function () {
     console.log(&#39;immediate&#39;)
-&#125;)</code></pre>
+})</code></pre>
 <p>👆但代码本人在实际测试中一直是timeout优先</p>
 <p>但如果将二者放在一个IO操作的callback中，则永远是setImmediate先执行</p>
-<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function () &#123;
-    setTimeout(function () &#123;
+<pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function () {
+    setTimeout(function () {
         console.log(&#39;timeout&#39;)
-    &#125;, 0)
+    }, 0)
 
-    setImmediate(function () &#123;
+    setImmediate(function () {
         console.log(&#39;immediate&#39;)
-    &#125;)
-&#125;)</code></pre>
+    })
+})</code></pre>
 <p>因为readFile回调执行时，事件循环位于poll阶段，因此事件循环会先进入check阶段执行setImmediate的回调，然后再进入timers阶段执行setTimeout的回调</p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》 李锴</p>
 

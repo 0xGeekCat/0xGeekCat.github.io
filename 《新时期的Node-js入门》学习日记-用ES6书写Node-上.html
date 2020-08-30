@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -319,16 +319,16 @@
 <h3 id="块级作用域-1"><a href="#块级作用域-1" class="headerlink" title="块级作用域"></a>块级作用域</h3><p>大多数常用的编程语言中都有块级作用域的概念，以C语言为例，C语言可以用一对花括号来定义一个块级作用域，<strong>而在<code>ES5</code>中没有这样的设计</strong></p>
 <p>![截屏2020-08-29 下午2.44.50](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午2.44.50.png)</p>
 <p>在if代码块中定义的变量在外部依然可以访问到。<strong>要想避免这种情况，通常使用一个闭包来隔离作用域</strong></p>
-<pre><code class="javascript">function foo() &#123;
+<pre><code class="javascript">function foo() {
     var x = 1
-    if (x) &#123;
-        (function () &#123;
+    if (x) {
+        (function () {
             var x = 2
             console.log(x) 👈 2
-        &#125;())
-    &#125;
+        }())
+    }
     console.log(x) 👈 1
-&#125;
+}
 
 foo()</code></pre>
 <p>但实现一个闭包要写不少冗余的代码</p>
@@ -342,9 +342,9 @@ msg = &#39;0xGeekCat&#39;</code></pre>
 <p>之所以输出<code>undefined</code>，是因为变量提升仅仅提升变量的声明，并没有提升变量的值</p>
 <h2 id="let关键字"><a href="#let关键字" class="headerlink" title="let关键字"></a>let关键字</h2><p>let关键字会创建一个块级作用域，使用let关键字声明的变量只能在当前块级作用域中使用</p>
 <pre><code class="javascript">var i = 0
-for (let i = 0; i &lt; 3; i++) &#123;
+for (let i = 0; i &lt; 3; i++) {
     console.log(i) // 0 1 2
-&#125;
+}
 console.log(i) // 0</code></pre>
 <p>for循环内部使用let声明的变量，和外部使用var声明的处于不同的作用域中，值互不影响</p>
 <h3 id="重复声明"><a href="#重复声明" class="headerlink" title="重复声明"></a>重复声明</h3><p>在同一个块级作用域中，不能使用let关键字重复声明同一个变量</p>
@@ -352,14 +352,14 @@ console.log(i) // 0</code></pre>
 <p>在不同块级作用域中则无此限制</p>
 <pre><code class="javascript">let a = 15
 
-function scope() &#123;
+function scope() {
     let a = 10
     console.log(a) // 10
-    if (true) &#123;
+    if (true) {
         let a = 5
         console.log(a) // 5
-    &#125;
-&#125;
+    }
+}
 scope()
 console.log(a) // 15</code></pre>
 <h3 id="变量提升-1"><a href="#变量提升-1" class="headerlink" title="变量提升"></a>变量提升</h3><p>let关键字可以解决<code>ES5</code>中变量提升带来的问题，下面的代码会抛出一个错误而不是打印出<code>undefined</code></p>
@@ -368,7 +368,7 @@ console.log(a) // 15</code></pre>
 <h2 id="const关键字"><a href="#const关键字" class="headerlink" title="const关键字"></a>const关键字</h2><p>声明为<code>const</code>的变量不可以再被修改，也不能被重复声明，这表示<code>const</code>变量必须在声明的同时进行初始化，const的另一个适用场景是用于模块引入</p>
 <p>![截屏2020-08-29 下午3.28.32](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午3.28.32.png)</p>
 <p><strong><code>const</code>声明的变量不能修改，但使用<code>const</code>修饰的对象却可以修改</strong>，这表明<code>const</code>内部是依靠指针来判断对象是否被修改的</p>
-<pre><code class="javascript">const b = &#123;name: &#39;0xGeekCat&#39;&#125;
+<pre><code class="javascript">const b = {name: &#39;0xGeekCat&#39;}
 b.name = &#39;hacker&#39;
 console.log(b.name) // hacker</code></pre>
 <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><p>数组是JavaScript中的全局对象</p>
@@ -376,13 +376,13 @@ console.log(b.name) // hacker</code></pre>
 <p><code>find</code>函数会返回相应元素的值，<code>findIndex</code>方法会返回对应元素的索引，它们都只匹配第一个满足条件的元素；这两个方法都接受一个回调函数作为参数，<strong>对于数据的每个成员都会按顺序执行这个回调函数</strong>，因此可以自定义筛选条件</p>
 <pre><code class="javascript">let array = [1, 2, -3, -4]
 
-console.log(array.find(function (n) &#123;
+console.log(array.find(function (n) {
     return n &lt; 0
-&#125;)) // -3
+})) // -3
 
-console.log(array.findIndex(function (n) &#123;
+console.log(array.findIndex(function (n) {
     return n &lt; 0
-&#125;)) // 2</code></pre>
+})) // 2</code></pre>
 <p>比起原有的<code>findIndexOf</code>方法，新增的两个方法可以用来处理<code>NaN</code></p>
 <pre><code class="javascript">const arr = [&#39;a&#39;, &#39;b&#39;, NaN, &#39;c&#39;]
 
@@ -390,26 +390,26 @@ console.log(arr.indexOf(&#39;d&#39;)) // -1
 console.log(arr.indexOf(NaN)) // -1 👈 返回-1 是因为 NaN !=== NaN
 console.log(arr.indexOf(&#39;b&#39;)) // 1
 
-console.log(arr.findIndex(function (x) &#123;
+console.log(arr.findIndex(function (x) {
     return Number.isNaN(x) // 2
-&#125;))</code></pre>
+}))</code></pre>
 <h2 id="from-方法"><a href="#from-方法" class="headerlink" title="from()方法"></a>from()方法</h2><p>from方法用于将一个<code>array-like object</code>转换成数组</p>
 <p>JavaScript中的参数对象<code>arguments</code>就是一个<code>array-like object</code>，可以通过<code>[]</code>来访问其中的元素，也可以通过<code>length</code>属性来得到对象的长度。但是无法通过<code>array</code>对象的方法，例如<code>pop</code>或者<code>push</code>来操作它</p>
 <p>![截屏2020-08-29 下午4.06.00](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午4.06.00.png)</p>
 <p>🔔<strong>通常一个对象有length属性而且其值大于0，那么就可以看作是<code>array-like object</code></strong></p>
 <p><strong>新建一个<code>array-like object</code></strong></p>
-<pre><code class="javascript">var a = &#123;&#125;
+<pre><code class="javascript">var a = {}
 
 var i = 0
-while (i &lt; 10) &#123;
+while (i &lt; 10) {
     a[i] = i * i
     i ++
-&#125;
+}
 
 a.length = i</code></pre>
 <p>在<code>ES5</code>中，开发者可以使用<code>Array.prototype.slice</code>方法来将<code>array-like</code>对象转换成真正的数组，</p>
 <p><strong>❗️如果要转换一个现有的<code>object</code>，通常还要调用<code>call</code>方法，否则会返回一个空数组</strong></p>
-<pre><code class="javascript">var a = &#123;&#125;
+<pre><code class="javascript">var a = {}
 
 // ES5
 var a1 = Array.prototype.slice.call(a)
@@ -430,9 +430,9 @@ a.fill(1)
 console.log(a) // [ 1, 1, 1, 1, 1 ]</code></pre>
 <p>在<code>ES5</code>中初始化一个数组，通常要借助<code>apply</code>和<code>map</code>方法，这是一种比较<code>hack</code>的方法，而在<code>ES6</code>直接调用<code>fill</code>方法就可以完成</p>
 <pre><code class="javascript">// ES5
-var array = Array.apply(null, new Array(5)).map(function () &#123;
+var array = Array.apply(null, new Array(5)).map(function () {
     return 0
-&#125;)
+})
 
 // ES6
 var array = new Array(5).fill(0)</code></pre>
@@ -445,20 +445,20 @@ var array = new Array(5).fill(0)</code></pre>
 <p>区别在于<code>keys</code>是对键名的遍历，<code>values</code>是对键值的遍历，<code>entries</code>是对键值对的遍历</p>
 <pre><code class="javascript">var a = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
 
-for (let i of a.keys()) &#123;
+for (let i of a.keys()) {
     console.log(i)
-&#125;
+}
 
-for (let i of a.entries()) &#123;
+for (let i of a.entries()) {
     console.log(i)
-&#125;</code></pre>
+}</code></pre>
 <p>![截屏2020-08-29 下午4.44.07](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午4.44.07.png)</p>
-<p>事实上凡是内部实现<code>iterator</code>接口的对象都可以使用这三个方法进行遍历。上面的代码中没有使用values方法，原因是该方法目前还没有得到广泛支持，在某些环境中可能存在<a target="_blank" rel="noopener" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1299593">兼容性问题</a></p>
+<p>事实上凡是内部实现<code>iterator</code>接口的对象都可以使用这三个方法进行遍历。上面的代码中没有使用values方法，原因是该方法目前还没有得到广泛支持，在某些环境中可能存在<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1299593" target="_blank" rel="noopener">兼容性问题</a></p>
 <h2 id="TypedArray"><a href="#TypedArray" class="headerlink" title="TypedArray"></a>TypedArray</h2><p><code>ES2015</code>新增了<code>TypedArray</code>类型，它和<code>array</code>的区别在于<code>TypedArray</code>的元素必须是同一类型。<code>TypedArray</code>的本意是为JavaScript提供访问二进制数据的能力，由于Node已经内置了<code>Buffer</code>类型，因此<code>TypedArray</code>在Node中的出镜率相对不高，在<code>TypedArray</code>标准推出后，Node中<code>Buffer</code>类型的底层改用<code>TypedArray</code>实现</p>
 <h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="参数的默认值"><a href="#参数的默认值" class="headerlink" title="参数的默认值"></a>参数的默认值</h2><p><code>ES6</code>允许给函数的参数赋一个默认值</p>
-<pre><code class="javascript">function greed(x = &#39;hello&#39;, y = &#39;world&#39;) &#123;
+<pre><code class="javascript">function greed(x = &#39;hello&#39;, y = &#39;world&#39;) {
     console.log(x, y)
-&#125;
+}
 
 greed() // hello world</code></pre>
 <p>不能在方法体内用<code>let</code>关键字声明与参数同名的变量，否则会出现<code>SyntaxError</code></p>
@@ -474,95 +474,95 @@ var name = [...&#39;0xGeekCat&#39;]
 console.log(name)</code></pre>
 <p>![截屏2020-08-29 下午5.21.13](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午5.21.13.png)</p>
 <p><code>spread运算符</code>也可以作为函数的参数，表示该函数有多个参数，也可以在函数调用时使用</p>
-<pre><code class="javascript">function func(x, y, z) &#123;
+<pre><code class="javascript">function func(x, y, z) {
     return x + y + z
-&#125;
+}
 
 var args = [1, 2, 3]
 console.log(func(...args)) // 6</code></pre>
 <h2 id="箭头函数"><a href="#箭头函数" class="headerlink" title="箭头函数"></a>箭头函数</h2><p><code>ES6</code>提出了一种新的箭头函数，它以<code>=﹥</code>定义匿名函数</p>
 <pre><code class="javascript">var func = a =&gt; a 
 👇
-var func = function (a) &#123;
+var func = function (a) {
     return a
-&#125;</code></pre>
+}</code></pre>
 <p>在多参数的情况下</p>
 <pre><code class="javascript">var func = (arg1 = &#39;hello&#39;, arg2 = &#39;world&#39;) =&gt; console.log(arg1, arg2)</code></pre>
 <p>除简洁之外，箭头函数还有另一个优点</p>
 <p><strong>🔔修复<code>this</code>作用域问题</strong></p>
-<pre><code class="javascript">var date = &#123;
+<pre><code class="javascript">var date = {
     year: 2020,
     month: 8,
     day: 29,
-    getDate: function () &#123;
-        var func = function () &#123;
+    getDate: function () {
+        var func = function () {
             return this.year + &#39;/&#39; + this.month + &#39;/&#39; + this.day
-        &#125;
+        }
         return func()
-    &#125;
-&#125;
+    }
+}
 
 console.log(date.getDate()) // undefined/undefined/undefined</code></pre>
 <p>导致👆输出的原因是<code>func()</code>方法内部的<code>this</code>指向全局对象而非<code>date</code>对象</p>
 <p><code>ES5</code>中的一种解决方法是使用临时变量保存外部<code>this</code></p>
-<pre><code class="javascript">var date = &#123;
+<pre><code class="javascript">var date = {
     year: 2020,
     month: 8,
     day: 29,
-    getDate: function () &#123;
+    getDate: function () {
         var self = this
         console.log(self)
-        var func = function () &#123;
+        var func = function () {
             return self.year + &#39;/&#39; + self.month + &#39;/&#39; + self.day
-        &#125;
+        }
         return func()
-    &#125;
-&#125;
+    }
+}
 
 console.log(date.getDate())</code></pre>
 <p>![截屏2020-08-29 下午6.33.29](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午6.33.29.png)</p>
 <p>在<code>ES6</code>中使用箭头函数则可以完美解决问题</p>
-<pre><code class="javascript">var date = &#123;
+<pre><code class="javascript">var date = {
     year: 2020,
     month: 8,
     day: 29,
-    getDate: function () &#123;
+    getDate: function () {
         var func = () =&gt; this.year + &#39;/&#39; + this.month + &#39;/&#39; + this.day
         return func()
-    &#125;
-&#125;
+    }
+}
 
 console.log(date.getDate()) // 2020/8/29</code></pre>
 <h3 id="匿名函数中的this"><a href="#匿名函数中的this" class="headerlink" title="匿名函数中的this"></a>匿名函数中的this</h3><p>在<code>ES5</code>中，匿名函数默认是指向全局对象的，在浏览器中为<code>Window</code>对象，在Node中大部分情况下都会指向<code>global</code>对象，定时器API略有不同</p>
-<pre><code class="javascript">function foo() &#123;
+<pre><code class="javascript">function foo() {
     var func = () =&gt; console.log(this)
     func()
-&#125;
+}
 foo()</code></pre>
 <p>![截屏2020-08-29 下午6.47.49](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午6.47.49.png)</p>
 <p>![截屏2020-08-29 下午6.48.52](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午6.48.52.png)</p>
 <p><code>setTimeout</code>中匿名函数的<code>this</code>指向，Node和浏览器不同，在Chrome中输出<code>window</code>对象，在Node控制台中输出一个<code>Timeout</code>对象</p>
-<pre><code class="javascript">function foo() &#123;
-    setTimeout(function () &#123;
+<pre><code class="javascript">function foo() {
+    setTimeout(function () {
         console.log(this)
-    &#125;)
-&#125;
+    })
+}
 foo()</code></pre>
 <p>使用箭头函数后，<code>this</code>的指向和<code>foo</code>函数内部相同</p>
-<pre><code class="javascript">function foo() &#123;
+<pre><code class="javascript">function foo() {
     this.name = &#39;0xGeekCat&#39;
-    setTimeout(() =&gt; &#123;
+    setTimeout(() =&gt; {
         console.log(this)
         console.log(this.name)
-    &#125;)
-&#125;
+    })
+}
 foo()</code></pre>
 <p>![截屏2020-08-29 下午6.59.31](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午6.59.31.png)</p>
 <p><strong>🔔此时浏览器中<code>this</code>还是指向Windows，证明实际上匿名函数内部并没有定义this，仅仅是引用外面一层的<code>this</code></strong></p>
 <h2 id="箭头函数的陷阱"><a href="#箭头函数的陷阱" class="headerlink" title="箭头函数的陷阱"></a>箭头函数的陷阱</h2><p>箭头函数本身没有定义<code>this</code>，在箭头函数内部使用<code>this</code>关键字时，它开始在代码定义的位置向上找，直到遇见第一个<code>this</code>，这带来了很大的便利但有时也会出现一些问题</p>
-<pre><code class="javascript">function Person() &#123;
+<pre><code class="javascript">function Person() {
     this.name = &#39;0xGeekCat&#39;
-&#125;
+}
 
 Person.prototype.greet = () =&gt; console.log(this.name)
 
@@ -573,54 +573,54 @@ person.greet() // undefined</code></pre>
 <p><strong>🔔最好还是使用最基本的定义形式，而不是用<code>prototype</code>原型对象</strong></p>
 <pre><code class="javascript">var EventEmitter = require(&#39;events&#39;).EventEmitter 👈 导入EventEmitter类
 
-class Producer extends EventEmitter &#123;
-    constructor() &#123;
+class Producer extends EventEmitter {
+    constructor() {
         super();
         this.status = &#39;ready&#39;
-    &#125;
-&#125;
+    }
+}
 
 var producer = new Producer()
 
-producer.on(&#39;begin&#39;, function () &#123;
+producer.on(&#39;begin&#39;, function () {
     console.log(this.status) // ready
-&#125;)
+})
 
-producer.on(&#39;begin&#39;, () =&gt; &#123;
+producer.on(&#39;begin&#39;, () =&gt; {
     console.log(this.status) // undefined
-&#125;)
+})
 
 producer.emit(&#39;begin&#39;)</code></pre>
 <p>原因同上，箭头函数的外层还是全局对象，这个隐藏的bug很难在code review阶段被发现</p>
 <h1 id="Set和Map"><a href="#Set和Map" class="headerlink" title="Set和Map"></a>Set和Map</h1><p><code>ES6</code>提出了两种新的数据结构，<code>Set</code>和<code>Map</code>，<code>Set</code>的实现类似于数组，和普通数组的不同之处在于**<code>Set</code>中不能包含重复数据**</p>
 <h2 id="Set和WeakSet"><a href="#Set和WeakSet" class="headerlink" title="Set和WeakSet"></a>Set和WeakSet</h2><p><strong>Set的使用</strong></p>
 <pre><code class="javascript">var set = new Set([1, 2, 3, 4, 4, 5])
-console.log(set) // Set(5) &#123; 1, 2, 3, 4, 5 &#125; 👈 自动过滤重复数据
+console.log(set) // Set(5) { 1, 2, 3, 4, 5 } 👈 自动过滤重复数据
 
 set.add(6)
 set.delete(5)
 console.log(set.has(6)) // true
 
-for (let i of set) &#123;
+for (let i of set) {
     console.log(i) // 1 2 3 4 5 6
-&#125;
+}
 
 set.clear()
-console.log(set) // Set(0) &#123;&#125;</code></pre>
+console.log(set) // Set(0) {}</code></pre>
 <p><strong>Set的遍历</strong></p>
 <pre><code class="javascript">let set  = new Set([1, 2, 3])
 
-for (let i of set.keys()) &#123;
+for (let i of set.keys()) {
     console.log(i)
-&#125;
+}
 
-for (let i of set.values()) &#123;
+for (let i of set.values()) {
     console.log(i)
-&#125;
+}
 
-for (let i of set.entries()) &#123;
+for (let i of set.entries()) {
     console.log(i)
-&#125;</code></pre>
+}</code></pre>
 <p>![截屏2020-08-29 下午8.40.27](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午8.40.27.png)</p>
 <p><strong>WeakSet</strong></p>
 <p><code>WeakSet</code>和<code>Set</code>的主要区别在于**<code>WeakSet</code>的成员只能是对象**</p>
@@ -629,7 +629,7 @@ for (let i of set.entries()) &#123;
 <p>这也就表示<code>WeakSet</code>中存储的对象如果没有被其他的对象所引用，其内存空间就会被回收。由于开发者通常无法控制垃圾回收器的运行，因此<code>WeakSet</code>中的值是无法预测的。 WeakSet不支持遍历，也不能用size属性来得到其大小</p>
 <p><strong><code>WeakSet</code>的优点在于对垃圾回收有利</strong>，假设在一个局部作用域中产生了一个中间值的对象，如果作用域之外没有引用这个对象，那么就可以使用<code>WeakSet</code>来存储它，在离开局部作用域之后，该对象就会在下一轮垃圾回收时被销毁</p>
 <h2 id="Map和WeakMap"><a href="#Map和WeakMap" class="headerlink" title="Map和WeakMap"></a>Map和WeakMap</h2><h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p><code>Map</code>表示由<strong>键值对组成的有序集合</strong>，有序表现在<code>Map</code>的遍历顺序为插入顺序，在<code>ES5</code>中虽然也有类似的结构，但<code>ES5</code>中键值对的键值只能为字符串类型，<code>ES6</code>新增的<code>Map</code>则支持多种类型作为键值，包括对象和布尔值，Map爷提供了一系列方法来访问或操作其中的数据</p>
-<pre><code class="javascript">var obj = &#123;c: 3&#125;
+<pre><code class="javascript">var obj = {c: 3}
 
 var map = new Map([
     [&#39;a&#39;, 1],
@@ -644,17 +644,17 @@ map.set(&#39;d&#39;, 4) // 如果键值对不存在则添加，存在则覆盖
 map.delete(&#39;a&#39;)
 
 console.log(map)
-for (let key of map.keys()) &#123;
+for (let key of map.keys()) {
     console.log(key)
-&#125;
+}
 
-for (let value of map.values()) &#123;
+for (let value of map.values()) {
     console.log(value)
-&#125;
+}
 
-for (let m of map.entries()) &#123;
+for (let m of map.entries()) {
     console.log(m)
-&#125;
+}
 
 map.clear()
 console.log(map)</code></pre>
@@ -662,16 +662,16 @@ console.log(map)</code></pre>
 <h3 id="WeakMap"><a href="#WeakMap" class="headerlink" title="WeakMap"></a>WeakMap</h3><p><code>WeakMap</code>用法和<code>WeakSet</code>相似，作为<code>key</code>的变量必须是个对象，关于弱引用的特性和<code>WeakSet</code>相同，不再叙述</p>
 <h1 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h1><h2 id="ES6中的Iterator"><a href="#ES6中的Iterator" class="headerlink" title="ES6中的Iterator"></a>ES6中的Iterator</h2><p><code>ES6</code>中的<code>Iterator</code>接口通过<code>Symbol.iterator</code>属性来实现，如果对象设置了<code>Symbol.iterator</code>属性，就表示该对象是可以被遍历的，就可以用<code>next</code>方法遍历</p>
 <p>👇给对象加上<code>Iterator</code>接口</p>
-<pre><code class="javascript">var Iter = &#123;
-    [Symbol.iterator] : function () &#123;
+<pre><code class="javascript">var Iter = {
+    [Symbol.iterator] : function () {
         var i = 0
-        return &#123;
-            next: function () &#123;
+        return {
+            next: function () {
                 return ++i
-            &#125;
-        &#125;
-    &#125;
-&#125;
+            }
+        }
+    }
+}
 
 var obj = new Iter[Symbol.iterator]()
 console.log(obj.next()) // 1
@@ -693,42 +693,42 @@ console.log(map[Symbol.iterator])
 var str = &#39;0xGeekCat&#39;
 console.log(str[Symbol.iterator])
 
-var obj = &#123;&#125;
+var obj = {}
 console.log(obj[Symbol.iterator]) // undefined</code></pre>
 <p>![截屏2020-08-29 下午9.30.47](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午9.30.47.png)</p>
 <p><strong>❗️普通对象没有<code>iterator</code>接口</strong></p>
 <h2 id="Iterator的遍历"><a href="#Iterator的遍历" class="headerlink" title="Iterator的遍历"></a>Iterator的遍历</h2><p>在<code>ES6</code>中所有<strong>内部实现了<code>Symbol.iterator</code>接口的对象</strong>都可以使用<code>for / of</code>循环进行遍历</p>
 <p>👆自定义的<code>Iter</code>对象不可以进行循环，需要进行修改</p>
-<pre><code class="javascript">function Iter(array) &#123;
+<pre><code class="javascript">function Iter(array) {
     this.array = array
-&#125;
+}
 
-Iter.prototype[Symbol.iterator] = function () &#123;
+Iter.prototype[Symbol.iterator] = function () {
     let index = 0
-    let next = () =&gt; &#123;
-        if (index &lt; this.array.length) &#123;
-            return &#123;
+    let next = () =&gt; {
+        if (index &lt; this.array.length) {
+            return {
                 value: this.array[index++],
                 done: false
-            &#125;
-        &#125; else &#123;
-            return &#123;
+            }
+        } else {
+            return {
                 value: undefined,
                 done: true
-            &#125;
-        &#125;
-    &#125;
-    return &#123;next: next&#125;
-&#125;
+            }
+        }
+    }
+    return {next: next}
+}
 
 let iter = new Iter([&#39;a&#39;, &#39;b&#39;])
 
-for (let i of iter) &#123;
+for (let i of iter) {
     console.log(i) // a b
-&#125;</code></pre>
+}</code></pre>
 <h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><h2 id="新的方法"><a href="#新的方法" class="headerlink" title="新的方法"></a>新的方法</h2><h3 id="object-assign"><a href="#object-assign" class="headerlink" title="object.assign()"></a>object.assign()</h3><p>将一个对象的属性复制到另一个对象，很多开发者看到这个方法第一时间想到的就是确认该方法是深复制或者是浅复制</p>
-<pre><code class="javascript">var obj1 = &#123;a : &#123;b: 1&#125;&#125;
-var obj2 = Object.assign(&#123;&#125;, obj1)
+<pre><code class="javascript">var obj1 = {a : {b: 1}}
+var obj2 = Object.assign({}, obj1)
 obj1.a.b = 2
 console.log(obj2.a.b) // 2</code></pre>
 <p>很明显，该方法实现的是一种浅拷贝</p>
@@ -736,15 +736,15 @@ console.log(obj2.a.b) // 2</code></pre>
 <h3 id="Object-setPrototypeOf"><a href="#Object-setPrototypeOf" class="headerlink" title="Object.setPrototypeOf()"></a>Object.setPrototypeOf()</h3><p><code>Object.setPrototypeOf</code>方法用来设置一个对象的<code>prototype</code>对象，返回参数对象本身，它的作用和直接设置<code>__proto__</code>属性相同</p>
 <p>在ES6之前，<code>__proto__</code>属性只是一种事实的标准，不是<code>ECMAScript</code>标准中的内容，ES6将<code>__proto__</code>写入了附录中，<strong>但仍然不推荐直接使用该属性</strong></p>
 <h3 id="Object-getPrototypeOf"><a href="#Object-getPrototypeOf" class="headerlink" title="Object.getPrototypeOf()"></a>Object.getPrototypeOf()</h3><p>与<code>Object.setPrototypeOf</code>方法配套，用于获得一个对象的原型对象</p>
-<pre><code class="javascript">var Person = function (name, age) &#123;
+<pre><code class="javascript">var Person = function (name, age) {
     this.name = name
     this.age = age
-    this.greed = function () &#123;
+    this.greed = function () {
         console.log(&#39;Hello, I am&#39;, this.name)
-    &#125;
-&#125;
+    }
+}
 
-function Student() &#123;&#125;
+function Student() {}
 
 // 设置prototype
 // 方法一
@@ -761,23 +761,23 @@ student.__proto__ = Person
 console.log(student.__proto__) // [Function: Person]
 console.log(Object.getPrototypeOf(student).name) // Person</code></pre>
 <h2 id="对象的遍历"><a href="#对象的遍历" class="headerlink" title="对象的遍历"></a>对象的遍历</h2><p>先设置一个对象</p>
-<pre><code class="javascript">var obj = &#123;
+<pre><code class="javascript">var obj = {
     name: &#39;0xGeekCat&#39;,
     age: 19,
     gender: &#39;male&#39;
-&#125;</code></pre>
-<h3 id="使用for-in遍历"><a href="#使用for-in遍历" class="headerlink" title="使用for / in遍历"></a>使用<code>for / in</code>遍历</h3><pre><code class="javascript">for (let key in obj) &#123;
+}</code></pre>
+<h3 id="使用for-in遍历"><a href="#使用for-in遍历" class="headerlink" title="使用for / in遍历"></a>使用<code>for / in</code>遍历</h3><pre><code class="javascript">for (let key in obj) {
     console.log(key, obj[key])
-&#125;</code></pre>
+}</code></pre>
 <h3 id="使用Object-keys-遍历"><a href="#使用Object-keys-遍历" class="headerlink" title="使用Object.keys()遍历"></a>使用<code>Object.keys()</code>遍历</h3><p>返回包含所有键值的数组，不包含不可枚举的属性</p>
 <pre><code class="javascript">console.log(Object.keys(obj)) // [ &#39;name&#39;, &#39;age&#39;, &#39;gender&#39; ]</code></pre>
 <h3 id="使用Object-getOwnPropertyNames-遍历"><a href="#使用Object-getOwnPropertyNames-遍历" class="headerlink" title="使用Object.getOwnPropertyNames()遍历"></a>使用<code>Object.getOwnPropertyNames()</code>遍历</h3><p>作用和<code>Object.keys</code>相同，区别是返回全部的属性，无论是否可枚举</p>
 <pre><code class="javascript">console.log(Object.getOwnPropertyNames(obj))</code></pre>
 <h3 id="枚举属性"><a href="#枚举属性" class="headerlink" title="枚举属性"></a>枚举属性</h3><p>在<code>ES5</code>中可以将一个对象的属性设置为不可枚举的，不可枚举的属性可以正常地通过<code>a.b</code>的形式访问，但无法通过<code>for / in</code>循环和<code>Object.keys</code>方法遍历</p>
 <p>可以通过<code>Object.defineProperty</code>来设置一个属性是否可以被枚举</p>
-<pre><code class="javascript">Object.defineProperty(obj, &#39;gender&#39;, &#123;
+<pre><code class="javascript">Object.defineProperty(obj, &#39;gender&#39;, {
     enumerable: false
-&#125;)</code></pre>
+})</code></pre>
 <p>将<code>gender</code>的<code>enumerable</code>属性设置为<code>false</code>后，只有<code>getOwnPropertyNames</code>可以遍历到该属性</p>
 <h3 id="ES6中的遍历方法"><a href="#ES6中的遍历方法" class="headerlink" title="ES6中的遍历方法"></a>ES6中的遍历方法</h3><p><code>ES6</code>在此基础上增加<code>Object.getOwnPropertySymbols()</code>和<code>Reflect.ownKeys()</code>两个方法，它们都接受一个对象作为参数，前者会返回参数对象的全部<code>Symbol</code>属性，后者会返回全部属性</p>
 <h1 id="类"><a href="#类" class="headerlink" title="类"></a>类</h1><h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1>

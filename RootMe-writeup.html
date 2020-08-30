@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -349,11 +349,11 @@ drwxr-xr-x 17 root                    root            4096 Mar 19 20:19 ../
 #include &lt;unistd.h&gt;
 
 int main(void)
-&#123;
+{
     setreuid(geteuid(), geteuid());
     system(&quot;ls /challenge/app-script/ch11/.passwd&quot;);
     return 0;
-&#125;</code></pre>
+}</code></pre>
 <p><code>system(&quot;ls /challenge/app-script/ch11/.passwd&quot;);</code>可以实现对ch11文件的操作，但应该为<code>cat</code>命令才能实现读取文件，若将<code>cat</code>命令名更改为<code>ls</code>即可实现绕过</p>
 <p><strong>查看PATH环境变量</strong></p>
 <pre><code class="sh">app-script-ch11@challenge02:/usr/local/bin$ echo $PATH
@@ -430,11 +430,11 @@ User app-script-ch1 may run the following commands on challenge02:
 #include &lt;unistd.h&gt;
 #include &lt;sys/types.h&gt;
 
-int main()&#123;
+int main(){
     setreuid(geteuid(), geteuid());
     system(&quot;ls -lA /challenge/app-script/ch12/.passwd&quot;);
     return 0;
-&#125;</code></pre>
+}</code></pre>
 <p><strong>创建/tmp/hacker</strong></p>
 <pre><code class="sh">app-script-ch12@challenge02:~$ cd /tmp/
 app-script-ch12@challenge02:/tmp$ mkdir hacker</code></pre>
@@ -442,10 +442,10 @@ app-script-ch12@challenge02:/tmp$ mkdir hacker</code></pre>
 <pre><code class="sh">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 
-int main()&#123;
+int main(){
         system(&quot;cat /challenge/app-script/ch12/.passwd&quot;);
         return 0;
-&#125;</code></pre>
+}</code></pre>
 <p><font color="#dd0000"><code>system()</code>中的参数要用双引号包裹</font></p>
 <pre><code class="sh">app-script-ch12@challenge02:/tmp/hacker$ gcc -o ls ls.c</code></pre>
 <p><strong>修改环境变量 &amp; 执行ch12文件</strong></p>
@@ -475,17 +475,17 @@ Chars: 0</code></pre>
 <p>软链接文件类似于Windows的快捷方式</p>
 <pre><code class="sh"># cron.d为软链接文件，其指向/tmp/._cron/
 cron.d -&gt; /tmp/._cron/ </code></pre>
-<h2 id="How-do-0-and-0-work"><a href="#How-do-0-and-0-work" class="headerlink" title="How do ${0##*/} and ${0%/*} work?"></a>How do <code>$&#123;0##*/&#125;</code> and <code>$&#123;0%/*&#125;</code> work?</h2><ul>
-<li><p><code>$&#123;0##*/&#125;</code></p>
+<h2 id="How-do-0-and-0-work"><a href="#How-do-0-and-0-work" class="headerlink" title="How do ${0##*/} and ${0%/*} work?"></a>How do <code>${0##*/}</code> and <code>${0%/*}</code> work?</h2><ul>
+<li><p><code>${0##*/}</code></p>
 <p>for the variable <code>$0</code>, and the pattern <code>/</code>, the two <code>#</code> mean from the beginning of the parameter, delete the longest match and including the pattern</p>
 </li>
-<li><p><code>$&#123;0%/*&#125;</code></p>
+<li><p><code>${0%/*}</code></p>
 <p>the pattern <code>/</code> is matched against the end of parameter <code>%</code>, with the shortest match deleted </p>
 </li>
 </ul>
 <pre><code class="sh">$0 = $HOME/documents/doc.txt
-$&#123;0##*/&#125; -&gt; doc.txt
-$&#123;0%/*&#125; -&gt; $HOME/documents</code></pre>
+${0##*/} -&gt; doc.txt
+${0%/*} -&gt; $HOME/documents</code></pre>
 <h2 id="What-is-the-meaning-of-0"><a href="#What-is-the-meaning-of-0" class="headerlink" title="What is the meaning of $0?"></a>What is the meaning of <code>$0</code>?</h2><p><code>$0</code>表示要执行的shell脚本名称</p>
 <h2 id="What-is-the-meaning-of-f-a-x-in-bash-if-statement"><a href="#What-is-the-meaning-of-f-a-x-in-bash-if-statement" class="headerlink" title="What is the meaning of -f -a -x in bash if statement"></a>What is the meaning of <code>-f -a -x</code> in bash <code>if</code> statement</h2><ul>
 <li><p><code>-f</code></p>
@@ -521,7 +521,7 @@ lrwxrwxrwx  1 app-script-ch4         app-script-ch4           11 May 25  2015 cr
 exec 1&gt;/dev/null 2&gt;&amp;1
 
 wdir=&quot;cron.d/&quot;
-challdir=$&#123;0%/*&#125;
+challdir=${0%/*}
 cd &quot;$challdir&quot;
 
 
@@ -529,11 +529,11 @@ if [ ! -e &quot;/tmp/._cron&quot; ]; then
     mkdir -m 733 &quot;/tmp/._cron&quot;
 fi
 
-ls -1a &quot;$&#123;wdir&#125;&quot; | while read task; do
-    if [ -f &quot;$&#123;wdir&#125;$&#123;task&#125;&quot; -a -x &quot;$&#123;wdir&#125;$&#123;task&#125;&quot; ]; then
-        timelimit -q -s9 -S9 -t 5 bash -p &quot;$&#123;PWD&#125;/$&#123;wdir&#125;$&#123;task&#125;&quot;
+ls -1a &quot;${wdir}&quot; | while read task; do
+    if [ -f &quot;${wdir}${task}&quot; -a -x &quot;${wdir}${task}&quot; ]; then
+        timelimit -q -s9 -S9 -t 5 bash -p &quot;${PWD}/${wdir}${task}&quot;
     fi
-    rm -f &quot;$&#123;PWD&#125;/$&#123;wdir&#125;$&#123;task&#125;&quot;
+    rm -f &quot;${PWD}/${wdir}${task}&quot;
 done
 
 rm -rf cron.d/*</code></pre>

