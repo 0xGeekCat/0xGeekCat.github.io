@@ -312,10 +312,10 @@ let person2 = new Person(&#39;geeker&#39;)
 
 console.log(person1.constructor === Person) 👈 true</code></pre>
 <p>通过<code>new</code>构建实例化对象，<strong>构造函数中的<code>this</code>总是指向实例化的对象</strong>，每个实例对象都有一个不可枚举的属性<code>constructor</code>属性来指向构造函数，即<code>Person</code></p>
-<p>![截屏2020-08-24 下午8.22.22](学习JavaScript中类，原型和继承/截屏2020-08-24 下午8.22.22.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%888.22.22.png" alt="截屏2020-08-24 下午8.22.22"></p>
 <p>实例对象中可以看到<code>Person</code>类中定义的<code>name</code>属性和<code>sayName</code>方法</p>
 <p>❓没有<code>constructor</code>属性；但也能取到其值为<code>Person</code>；此原因稍后解释</p>
-<p>![截屏2020-08-24 下午8.25.44](学习JavaScript中类，原型和继承/截屏2020-08-24 下午8.25.44.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%888.25.44.png" alt="截屏2020-08-24 下午8.25.44"></p>
 <h1 id="构造函数缺点"><a href="#构造函数缺点" class="headerlink" title="构造函数缺点"></a>构造函数缺点</h1><p>所有实例对象都单独创建属性和方法；也就是说，每实例化一个对象👆<code>name</code>和<code>sayName</code>就会创建一次；其实际是绑定在对象上，而不是绑定在构造函数中；但是在有的场景中属性或者方法需要时通用的</p>
 <pre><code class="javascript">function Person(name) {
     this.name = name
@@ -352,7 +352,7 @@ let person2 = new Person(&#39;geeker&#39;)
 console.log(person1.sleep === person2.sleep) 👈 true</code></pre>
 <p>构造函数通过<code>prototype</code>指向原型对象，即构造函数才有<code>prototype</code>属性，其作用是让构造函数创建的所有实例对象都能找到公用的属性和方法</p>
 <p><strong>🔔实际上任何构造函数在创建实例对象的时候，都会关联其自身的prototype对象</strong></p>
-<p>![截屏2020-08-24 下午9.10.51](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.10.51.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%889.10.51.png" alt="截屏2020-08-24 下午9.10.51"></p>
 <p>❗️可以修改原型对象的引用，但是仍需要把<code>constructor</code>属性指向构造函数</p>
 <p>👇对上个例子中<code>sleep</code>方法进行改写</p>
 <pre><code class="javascript">Person.prototype = {
@@ -364,13 +364,13 @@ console.log(person1.sleep === person2.sleep) 👈 true</code></pre>
 <h1 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h1><p>根据👆所学知识作为基础可以知道，实例对象的属性和方法可以定义在自身，也可以定义在原型对象上</p>
 <p>通过上面的对象执行<code>sleep</code>方法不难发现，实例对象能够直接获取原型对象上的属性和方法</p>
 <p>在之前打印<code>person1</code>时，仔细观察不难发现有个特别的属性<code>__proto__</code>，其指向实例对象的原型对象</p>
-<p>![截屏2020-08-24 下午9.33.35](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.33.35.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%889.33.35.png" alt="截屏2020-08-24 下午9.33.35"></p>
 <p>当访问对象上没有的所要查询的属性时，就会去<code>__proto__</code>中查询；如果还是查询不到，就会继续查询原型对象的<code>__proto__</code>，直到所查询的原型对象为<code>null</code></p>
 <p><strong>🔔可以通过<code>__proto__</code>构成了一条原型链</strong></p>
-<p>![截屏2020-08-24 下午9.39.56](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.39.56.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%889.39.56.png" alt="截屏2020-08-24 下午9.39.56"></p>
 <p>观察<code>Person</code>构造函数的原型对象可以发现其含有<code>constructor</code>属性；这点解答了👆关于实例对象为什么没有<code>constructor</code>属性但还是可以执行的问题，**<code>constructor</code>属性实际上存在于原型对象**，在刚刚改写<code>sleep</code>方法时也不难发现这点</p>
 <p>👇虚线表示该属性或方法并不是真正存在，<code>person1.constructor</code>是通过<code>__proto__</code>间接实现的</p>
-<p>![截屏2020-08-24 下午9.54.41](学习JavaScript中类，原型和继承/截屏2020-08-24 下午9.54.41.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%889.54.41.png" alt="截屏2020-08-24 下午9.54.41"></p>
 <p>原型对象显然也是一个对象，既然是对象那么肯定也有自己的原型对象；<strong>在JavaScript中所有的对象都是<code>Object</code>的实例，并继承<code>Object.prototype</code>的属性和方法</strong>；<code>let a = {}</code>实际上是<code>new Object()</code>的语法糖</p>
 <p><strong>❗️解释说明：</strong>语法糖指的是计算机语言中添加的某种语法，这种语法对语言的功能没有影响，但是更方便程序员使用。语法糖让程序更加简洁，有更高的可读性</p>
 <pre><code class="javascript">let obj1 = {}
@@ -379,7 +379,7 @@ let obj2 = new Object()
 console.log(obj1.__proto__ === Object.prototype) 👈 true
 console.log(obj2.__proto__ === Object.prototype) 👈 true
 console.log(person1.__proto__.__proto__ === Object.prototype) 👈 true</code></pre>
-<p>![截屏2020-08-24 下午10.08.20](学习JavaScript中类，原型和继承/截屏2020-08-24 下午10.08.20.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%8810.08.20.png" alt="截屏2020-08-24 下午10.08.20"></p>
 <h1 id="constructor属性"><a href="#constructor属性" class="headerlink" title="constructor属性"></a>constructor属性</h1><p>原型对象的<code>constructor</code>用来指向构造函数</p>
 <pre><code class="javascript">console.log(Person.prototype.constructor === Person) 👈 true</code></pre>
 <p><code>constructor</code>还可以用来判数据类型</p>
@@ -397,25 +397,25 @@ f = new func()
 console.log(f.constructor === Function) 👈 false
 console.log(f.constructor === Array) 👈 true</code></pre>
 <p>JavaScript中构造函数本身也可以看成是对象，这种即是函数也是对象的称为<code>函数对象</code>；调用构造函数的<code>f.call</code>和<code>f.apply</code>其实调用的是继承自其原型对象的<code>Function.prototype.call</code>和<code>Function.prototype.apply</code>，因此构造函数都是Function函数的实例对象；既然是实例对象，构造函数也拥有<code>__proto__</code>和<code>constructor</code>属性</p>
-<p>![截屏2020-08-25 上午9.08.58](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.08.58.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8A%E5%8D%889.08.58.png" alt="截屏2020-08-25 上午9.08.58"></p>
 <p><strong>🔔Person构造函数和JavaScript的普通对象没有任何区别</strong>，有<code>constructor</code>属性指向<code>Function</code>函数，说明<code>Person</code>函数是<code>Function</code>函数的实例对象；而且<code>constructor</code>属性不在<code>Person</code>构造函数上而在其原型对象<code>Function.prototype</code>上</p>
-<p>![截屏2020-08-25 上午9.12.11](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.12.11.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8A%E5%8D%889.12.11.png" alt="截屏2020-08-25 上午9.12.11"></p>
 <h1 id="鸡生蛋蛋生鸡"><a href="#鸡生蛋蛋生鸡" class="headerlink" title="鸡生蛋蛋生鸡"></a>鸡生蛋蛋生鸡</h1><p>发现最终👆的原型图指向四个对象：<code>Object</code>、<code>Object.prototype</code>、<code>Function</code>和<code>Function.prototype</code>，其之间的关系在整个原型关系里最难理解</p>
-<p>![截屏2020-08-25 上午9.15.02](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.15.02.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8A%E5%8D%889.15.02.png" alt="截屏2020-08-25 上午9.15.02"></p>
 <p><code>Object</code>函数和<code>Person</code>函数一样都是函数对象，因此都是<code>Function</code>函数的实例对象</p>
-<p>![截屏2020-08-25 上午9.38.03](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.38.03.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8A%E5%8D%889.38.03.png" alt="截屏2020-08-25 上午9.38.03"></p>
 <p>👇Object和Function的关系</p>
-<p>![截屏2020-08-25 上午9.39.02](学习JavaScript中类，原型和继承/截屏2020-08-25 上午9.39.02.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8A%E5%8D%889.39.02.png" alt="截屏2020-08-25 上午9.39.02"></p>
 <p><code>Object</code>是构造函数，则<code>Function</code>也能通过<code>new Function() {}</code>来构造匿名函数，<code>Function</code>同时也是自己的<code>constructor</code></p>
-<p>![截屏2020-08-25 下午2.17.59](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.17.59.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%882.17.59.png" alt="截屏2020-08-25 下午2.17.59"></p>
 <p><code>Function.prototype</code>同样也是实例对象，因此它的原型对象自然是<code>Object.prototype</code></p>
-<p>![截屏2020-08-25 下午2.21.48](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.21.48.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%882.21.48.png" alt="截屏2020-08-25 下午2.21.48"></p>
 <p><strong>🔔<code>Object</code>、<code>Object.prototype</code>、<code>Function</code>和<code>Function.prototype</code>四者间关系</strong></p>
-<p>![截屏2020-08-25 下午2.22.17](学习JavaScript中类，原型和继承/截屏2020-08-25 下午2.22.17.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%882.22.17.png" alt="截屏2020-08-25 下午2.22.17"></p>
 <p><code>Object</code>继承自<code>Function.prototype</code>；<code>Function.prototype</code>继承自<code>Object.prototype</code></p>
 <p>❓那么到底是先有<code>Object</code>，还是先有<code>Function</code></p>
 <p>这个鸡和蛋问题的根本原因在于<code>Function.__proto__</code>指向<code>Function.prototype</code>，让<code>Function</code>间接继承了<code>Object.prototype</code></p>
-<p>![截屏2020-08-25 下午3.06.43](学习JavaScript中类，原型和继承/截屏2020-08-25 下午3.06.43.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%883.06.43.png" alt="截屏2020-08-25 下午3.06.43"></p>
 <p><strong>❗️关于<code>Function.prototype</code></strong></p>
 <ul>
 <li>和普通函数一样可以调用，但总是返回<code>undefined</code></li>
@@ -423,7 +423,7 @@ console.log(f.constructor === Array) 👈 true</code></pre>
 </ul>
 <p>由于<code>Object.prototype.__proto__ === null</code>，所以原型链溯源到<code>Object.prototype</code>就结束了</p>
 <p><strong>🔔先有 <code>Object.prototype</code>(原型链顶端)，<code>Function.prototype</code> 继承自 <code>Object.prototype</code> ；最后<code>Function</code> 和<code>Object</code>以及其它构造函数继承<code>Function.prototype</code>而产生</strong></p>
-<p>![截屏2020-08-25 下午3.17.46](学习JavaScript中类，原型和继承/截屏2020-08-25 下午3.17.46.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%883.17.46.png" alt="截屏2020-08-25 下午3.17.46"></p>
 <h1 id="静态属性和方法"><a href="#静态属性和方法" class="headerlink" title="静态属性和方法"></a>静态属性和方法</h1><p>静态方法是指不需要声明类的实例就可以直接使用的方法。在JAVA中通过<code>static</code>定义静态方法</p>
 <pre><code class="java">public class Person{
   static int num = 0;

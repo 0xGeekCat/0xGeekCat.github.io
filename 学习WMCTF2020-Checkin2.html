@@ -374,7 +374,7 @@ for ($ascii1 = 0; $ascii1 &lt; 256; $ascii1++) {
 <h1 id="爆破临时文件"><a href="#爆破临时文件" class="headerlink" title="爆破临时文件"></a>爆破临时文件</h1><p>题目的环境特设置为7.0.33版本，有之前<a href="https://0xgeekcat.github.io/2020/08/12/%E5%AD%A6%E4%B9%A0PHP%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E6%9C%BA%E5%88%B6%E4%B8%8E%E5%88%A9%E7%94%A8/">学习文章</a>可知利用string.strip_tags会发生segment fault，这时候上传一个webshell会以临时文件的形式保存在/tmp中，利用require_once包含即可</p>
 <pre><code>http://127.0.0.1:8080/WMCTF2020/web_checkin2/?content=/tmp/phpvDH7XM</code></pre>
 <p>❗️此时包含webshell之后<strong>进行蚁剑连接</strong>，不要直接用浏览器访问这段url，👇因为访问一次之后内容又会被exit死亡退出覆盖</p>
-<p>![截屏2020-08-13 上午11.04.52](学习WMCTF2020-Checkin2/截屏2020-08-13 上午11.04.52.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0WMCTF2020-Checkin2/%E6%88%AA%E5%B1%8F2020-08-13%20%E4%B8%8A%E5%8D%8811.04.52.png" alt="截屏2020-08-13 上午11.04.52"></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="%5Bhttps://cyc1e183.github.io/2020/08/04/WMctf2020-Checkin%E5%87%BA%E9%A2%98%E6%83%B3%E6%B3%95-%E9%A2%98%E8%A7%A3/%5D(https://cyc1e183.github.io/2020/08/04/WMctf2020-Checkin%E5%87%BA%E9%A2%98%E6%83%B3%E6%B3%95-%E9%A2%98%E8%A7%A3/)">WMctf2020 Checkin出题想法&amp;题解</a></p>
 <p><strong>郑重感谢</strong></p>
 

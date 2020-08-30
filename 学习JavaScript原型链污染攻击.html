@@ -311,7 +311,7 @@ console.log(`Name: ${son.first_name} ${son.last_name}`)</code></pre>
 <li>依次寻找，直到找到<code>null</code>结束。比如，<code>Object.prototype</code>的<code>__proto__</code>就是<code>null</code></li>
 </ol>
 <p>👇观察输出便于理解</p>
-<p>![截屏2020-08-25 下午8.40.45](学习JavaScript原型链污染攻击/截屏2020-08-25 下午8.40.45.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%94%BB%E5%87%BB/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%888.40.45.png" alt="截屏2020-08-25 下午8.40.45"></p>
 <p>JavaScript的这个查找机制运用在面向对象的继承中，被称作<code>prototype</code>继承链</p>
 <p>不再深入研究更细节的内容，只要牢记👇几点</p>
 <ol>
@@ -352,7 +352,7 @@ merge(o1, o2)
 o3 = {}
 console.log(o3.b)</code></pre>
 <p>出现问题，原型链没有被污染</p>
-<p>![截屏2020-08-25 下午9.22.35](学习JavaScript原型链污染攻击/截屏2020-08-25 下午9.22.35.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%94%BB%E5%87%BB/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%889.22.35.png" alt="截屏2020-08-25 下午9.22.35"></p>
 <p>观察上文的等效写法，<code>let o2 = {a: 1, &quot;__proto__&quot;: {b: 2}}</code>中插入<code>__proto__</code>的行为可以如👇理解</p>
 <pre><code class="javascript">o2[&#39;__proto__&#39;] = {b: 2} 👉 o2.__proto__ = {b: 2}</code></pre>
 <p>实际上是将<code>{b: 2}</code>设为<code>o2</code>的原型对象，很明显和修改<code>Object.prototype</code>的目的相违背；导致污染失败是因为<code>o2</code>中<code>__proto__</code>被视为指向<code>Object.prototype</code>的原型链处理</p>
@@ -364,7 +364,7 @@ merge(o1, o2)
 
 o3 = {}
 console.log(o3.b)</code></pre>
-<p>![截屏2020-08-25 下午9.55.30](学习JavaScript原型链污染攻击/截屏2020-08-25 下午9.55.30.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0JavaScript%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%E6%94%BB%E5%87%BB/%E6%88%AA%E5%B1%8F2020-08-25%20%E4%B8%8B%E5%8D%889.55.30.png" alt="截屏2020-08-25 下午9.55.30"></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.leavesongs.com/PENETRATION/javascript-prototype-pollution-attack.html" target="_blank" rel="noopener">深入理解 JavaScript Prototype 污染攻击</a></p>
 <p><strong>郑重感谢</strong></p>
 

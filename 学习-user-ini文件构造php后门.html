@@ -288,17 +288,17 @@
         <div class="entry-content">
           <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>.user.ini</code>不管是nginx/apache/IIS，<strong>只要是以<code>FastCGI</code>运行的php都可以使用</strong>，不像.htaccess有局限性，使用范围更广</p>
 <p>在之前的文章中，本人已经将本地apache的工作模式切换为<code>FastCGI</code>，所以便直接开始进行漏洞复现</p>
-<h1 id="了解-user-ini"><a href="#了解-user-ini" class="headerlink" title="了解.user.ini"></a>了解.user.ini</h1><p>![截屏2020-08-18 下午7.28.25](学习-user-ini文件构造php后门/截屏2020-08-18 下午7.28.25.png)</p>
+<h1 id="了解-user-ini"><a href="#了解-user-ini" class="headerlink" title="了解.user.ini"></a>了解.user.ini</h1><p><img src="%E5%AD%A6%E4%B9%A0-user-ini%E6%96%87%E4%BB%B6%E6%9E%84%E9%80%A0php%E5%90%8E%E9%97%A8/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%887.28.25.png" alt="截屏2020-08-18 下午7.28.25"></p>
 <p>👇查看<code>.user.ini</code>中配置可被设定范围</p>
-<p>![截屏2020-08-18 下午7.32.08](学习-user-ini文件构造php后门/截屏2020-08-18 下午7.32.08.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0-user-ini%E6%96%87%E4%BB%B6%E6%9E%84%E9%80%A0php%E5%90%8E%E9%97%A8/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%887.32.08.png" alt="截屏2020-08-18 下午7.32.08"></p>
 <p>在 <code>.user.ini</code> 风格的INI文件中只有具有<code>PHP_INI_PERDIR</code>(虽然👆表中没提到)和<code>PHP_INI_USER</code>模式的INI设置可被识别</p>
 <p>和<code>php.ini</code>不同，<code>.user.ini</code>是一个能被动态加载的ini文件。也就是说修改了<code>.user.ini</code>后，不需要重启服务器中间件，只需要等待<code>user_ini.cache_ttl</code>所设置的时间，即可被重新加载</p>
 <h1 id="利用配置选项"><a href="#利用配置选项" class="headerlink" title="利用配置选项"></a>利用配置选项</h1><p>利用之前文章所学的<code>auto_append_file</code>来设置<code>.user.ini</code>，在php文件结尾包含<code>1.gif</code></p>
-<p>![截屏2020-08-18 下午7.37.40](学习-user-ini文件构造php后门/截屏2020-08-18 下午7.37.40.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0-user-ini%E6%96%87%E4%BB%B6%E6%9E%84%E9%80%A0php%E5%90%8E%E9%97%A8/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%887.37.40.png" alt="截屏2020-08-18 下午7.37.40"></p>
 <p>👇编辑<code>1.gif</code></p>
 <pre><code class="php">&lt;?php phpinfo();</code></pre>
 <p>访问空文件<code>test.php</code>，后门构造成功</p>
-<p>![截屏2020-08-18 下午7.43.32](学习-user-ini文件构造php后门/截屏2020-08-18 下午7.43.32.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0-user-ini%E6%96%87%E4%BB%B6%E6%9E%84%E9%80%A0php%E5%90%8E%E9%97%A8/%E6%88%AA%E5%B1%8F2020-08-18%20%E4%B8%8B%E5%8D%887.43.32.png" alt="截屏2020-08-18 下午7.43.32"></p>
 <p>如果某网站限制不允许上传<code>.php</code>文件，你便可以上传一个<code>.user.ini</code>，再上传一个图片马包含起来进行getshell。不过前提是含有<code>.user.ini</code>的文件夹下需要有正常的php文件，否则也不能包含</p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://wooyun.js.org/drops/user.ini%E6%96%87%E4%BB%B6%E6%9E%84%E6%88%90%E7%9A%84PHP%E5%90%8E%E9%97%A8.html" target="_blank" rel="noopener">.user.ini文件构造php后门</a></p>
 
