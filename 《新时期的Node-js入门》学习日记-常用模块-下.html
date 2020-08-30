@@ -300,9 +300,9 @@
 <p>这两种做法的缺点都很明显。第一种可能客户端发送了很多请求才能得到一个新内容，第二种则是在服务器获得新内容前都无法关闭socket，会占用很多系统资源</p>
 <p><strong>WebSocket可以实现浏览器与服务器的全双工通信</strong>，它和传统的jsonp、comet等解决方案不同，不必浏览器发送请求后再由服务器返回消息，而是可以<strong>由服务器主动发起向浏览器的数据传输</strong></p>
 <p>WebSocket的请求头和HTTP很相似，👇是一个WebSocket请求头</p>
-<p>![截屏2020-08-28 下午2.06.53](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午2.06.53.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%882.06.53.png" alt="截屏2020-08-28 下午2.06.53"></p>
 <p>服务器返回👇消息</p>
-<p>![截屏2020-08-28 下午2.07.27](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午2.07.27.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%882.07.27.png" alt="截屏2020-08-28 下午2.07.27"></p>
 <p>在请求头中，Connection字段必须设置成<code>Upgrade</code>，表示客户端希望连接升级，Upgrade字段必须设置<code>websocket</code>，表示希望升级到WebSocket协议</p>
 <p><code>Sec-WebSocket-Key</code>是随机的字符串，服务器端会用这些数据来构造出一个SHA-1的信息摘要。服务器会给这个随机的字符串再加上一个特殊字符串<code>258EAFA5-E 914-47DA-95CA-C5AB0DC85B11</code>，然后计算SHA-1摘要，之后进行BASE-64编码，将结果作为<code>Sec-WebSocket-Accept</code>头的值返回给客户端</p>
 <p><code>258EAFA5-E914-47DA-95CA-C5AB0DC85B11</code>这一字符串是一个GUID，其本身并没有特别的含义，选择这个字符串的原因只是这个字符串不大可能被<code>WebSocket</code>之外的协议用到</p>
@@ -329,7 +329,7 @@ wss.on(&#39;connection&#39;, function (ws) {
     ws.send(&quot;I&#39;m a message send from a ws server&quot;)
 })</code></pre>
 <p>👇服务器和控制器回显</p>
-<p>![截屏2020-08-28 下午3.24.21](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午3.24.21.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%883.24.21.png" alt="截屏2020-08-28 下午3.24.21"></p>
 <p>![截屏2020-08-28 下午3.24.45](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午3.24.45.png)</p>
 <p>在Node里，比较出名的WebSocket模块还有<code>Socket.IO</code>，常被拿来做在线的聊天或者推送服务</p>
 <h1 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h1><p><code>Stream模块</code>为Node操作流式数据提供了支持。Stream的思想最早见于早期的UNIX，在UNIX中使用<code>|</code>符号会创建一个匿名管道，其本质上也是一个Stream，用于两个程序或者是设备之间的数据传输</p>
@@ -429,7 +429,7 @@ read.on(&#39;end&#39;, function () {
 <p><strong>❗️对于自定义Stream的例子并不是很理解，以后再仔细研究</strong></p>
 <h1 id="Events"><a href="#Events" class="headerlink" title="Events"></a>Events</h1><p>Node的Events模块只定义了一个类，就是<code>EventEmitter</code>(以下简称Event)，这个类在很多Node本身以及第三方模块中大量使用，通常是用作基类被继承</p>
 <h2 id="事件和监听器"><a href="#事件和监听器" class="headerlink" title="事件和监听器"></a>事件和监听器</h2><p>Node程序中的对象会产生一系列的事件，这些对象被称为<strong>事件触发器</strong>；所有能触发事件的对象都是<code>EventEmitter</code>类的实例。<code>EventEmitter</code>定义了<code>on</code>方法</p>
-<p>![截屏2020-08-28 下午6.00.45](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午6.00.45.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%886.00.45.png" alt="截屏2020-08-28 下午6.00.45"></p>
 <p><strong>注册一个事件并触发</strong></p>
 <pre><code class="javascript">var eventEmitter = require(&#39;events&#39;)
 
@@ -443,7 +443,7 @@ myEmitter.emit(&#39;begin&#39;)</code></pre>
 <p>用户可以注册多个同名的事件，如果注册两个名为<code>begin</code>的事件，那么它们都会被触发</p>
 <p>如果想获取当前的<code>emitter</code>一共注册了哪些事件，可以使用<code>eventNames</code>方法，该方法会输出包括全部事件名称的数组</p>
 <pre><code class="javascript">console.log(myEmitter.eventNames())</code></pre>
-<p>![截屏2020-08-28 下午8.19.04](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午8.19.04.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%888.19.04.png" alt="截屏2020-08-28 下午8.19.04"></p>
 <p>如果注册了两个同名的<code>event</code>，输出结果也只有一个，该方法的结果集并不包含重复结果</p>
 <p>❗️在Node v6.x及之前的版本中，event模块可以通过👇方法引入</p>
 <pre><code class="javascript">var myEmitter = process.eventEmitter</code></pre>
@@ -451,7 +451,7 @@ myEmitter.emit(&#39;begin&#39;)</code></pre>
 <h2 id="处理error事件"><a href="#处理error事件" class="headerlink" title="处理error事件"></a>处理error事件</h2><p>由于Node代码运行在单线程环境中，那么运行时出现的任何错误都有可能导致整个进程退出。利用事件机制可以实现简单的错误处理功能</p>
 <p>当Node程序出现错误的时候，通常会触发一个错误事件，如果代码中没有注册相应的处理方法，会导致Node进程崩溃退出</p>
 <pre><code class="javascript">myEmitter.emit(&#39;error&#39;, new Error(&#39;crash&#39;))</code></pre>
-<p>![截屏2020-08-28 下午8.31.06](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午8.31.06.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%888.31.06.png" alt="截屏2020-08-28 下午8.31.06"></p>
 <p>👆Node程序主动抛出了一个error并打印出整个错误栈，相当于</p>
 <pre><code class="javascript">throw new Error(&#39;crash&#39;)</code></pre>
 <p>如果不想因为抛出一个error而使进程退出，那么可以让<code>uncaughtException</code>事件作为最后一道防线来捕获异常</p>
@@ -502,9 +502,9 @@ ls.stderr.on(&#39;data&#39;, function (data) {
 ls.on(&#39;close&#39;, function (code) {
     console.log(&#39;child process exited with code&#39;, code)
 })</code></pre>
-<p>![截屏2020-08-28 下午9.24.16](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午9.24.16.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%889.24.16.png" alt="截屏2020-08-28 下午9.24.16"></p>
 <p>其中<code>spawn</code>的第一个参数虽然是<code>command</code>，但实际接收的却是一个file</p>
-<p>![截屏2020-08-28 下午9.24.52](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午9.24.52.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%889.24.52.png" alt="截屏2020-08-28 下午9.24.52"></p>
 <p>在Windows环境中用于<code>ls</code>同含义的命令<code>dir</code>替代后执行代码会出现形如<code>Error: spawn dir ENOENT</code>的错误；原因很简单，这与操作系统本身有关，在Linux中万物皆文件，命令行的命令也不例外，例如<code>ls</code>命令是一个名为<code>ls</code>的可执行文件；而在Windows中并没有名为<code>dir</code>的可执行文件</p>
 <h2 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h2><p>在Linux环境下，创建一个新进程的本质是复制一个当前的进程，当用户调用fork后，操作系统会先为这个新进程分配空间，然后将父进程的数据原样复制一份过去，父进程和子进程只有少数值不同，例如进程标识符<code>PID</code></p>
 <p>❗️对于Node来说，父进程和子进程都有独立的内存空间和独立的V8实例，它们和父进程唯一的联系是用来进程间通信的<code>IPC Channel</code>；此外Node中<code>fork</code>和<code>POSIX</code>系统调用的不同之处在于Node中的<code>fork</code>并不会复制父进程</p>
@@ -530,10 +530,10 @@ process.on(&#39;message&#39;, function (msg) {
 })
 process.send({hello: &#39;parent&#39;})</code></pre>
 <p>fork内部会通过<code>spawn</code>调用<code>process.executePath</code>，即Node的可执行文件地址<code>/usr/local/bin/node</code>来生成一个Node实例，然后再用这个实例来执行fork方法</p>
-<p>![截屏2020-08-28 下午9.56.52](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午9.56.52.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%889.56.52.png" alt="截屏2020-08-28 下午9.56.52"></p>
 <h2 id="exec和execFile"><a href="#exec和execFile" class="headerlink" title="exec和execFile"></a>exec和execFile</h2><p>如果开发一种系统，那么对于不同的模块可能会用到不同的技术来实现，例如Web服务器使用Node，然后再使用Java的消息队列提供发布订阅服务，这种情况下通常使用<strong>进程间通信</strong>的方式来实现</p>
 <p>但有时开发者不希望使用这么复杂的方式，或者要调用的干脆是一个黑盒系统，即无法通过修改源码来实现进程间通信，这时候往往采用折中的方式，例如通过<code>shell</code>来调用目标服务，然后再拿到对应的输出</p>
-<h3 id="execFile方法"><a href="#execFile方法" class="headerlink" title="execFile方法"></a>execFile方法</h3><p>![截屏2020-08-28 下午10.06.26](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午10.06.26.png)</p>
+<h3 id="execFile方法"><a href="#execFile方法" class="headerlink" title="execFile方法"></a>execFile方法</h3><p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%8810.06.26.png" alt="截屏2020-08-28 下午10.06.26"></p>
 <p>可以看出，<code>execfile</code>和<code>spawn</code>在形式上的主要区别在于execfile提供了一个回调函数，通过这个回调函数可以获得子进程的标准输出/错误流</p>
 <p>使用shell进行跨进程调用长久以来被认为是不稳定的，这大概源于人们对控制台不友好的交互体验的恐惧，输入命令后，很可能长时间看不到一个输出，尽管后台可能在一直运算，但在用户看来和死机无异</p>
 <p>在Linux下执行<code>exec</code>命令后，原有进程会被替换成新的进程，进而失去对新进程的控制，这代表着新进程的状态也没办法获取了，此外还有shell本身运行出现错误，或者因为各种原因出现长时间卡顿甚至失去响应等情况</p>
@@ -547,7 +547,7 @@ int main()
     return 5;
 }</code></pre>
 <p><strong>使用gcc编译该文件</strong></p>
-<p>![截屏2020-08-28 下午10.37.54](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午10.37.54.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%8810.37.54.png" alt="截屏2020-08-28 下午10.37.54"></p>
 <p><strong>使用spwan来调用</strong></p>
 <pre><code class="javascript">var spawn = require(&#39;child_process&#39;).spawn
 var ls = spawn(&#39;/Users/max/Webstorm/test/example&#39;) 👈 
@@ -564,7 +564,7 @@ ls.on(&#39;close&#39;, function (code) {
     console.log(&#39;child process exited with code&#39;, code)
 })</code></pre>
 <p><strong>❗️spawn的执行目录和node所处目录相同，如果是<code>spawn(&#39;example&#39;)</code>程序会报错，除非<code>example</code>程序也位于<code>/usr/local/bin</code>目录</strong></p>
-<p>![截屏2020-08-28 下午11.09.01](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午11.09.01.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%8811.09.01.png" alt="截屏2020-08-28 下午11.09.01"></p>
 <p>程序正确打印出了<code>hello,world</code>，此外还可以看到<code>example</code>最后的<code>return 5</code>会被作为子进程结束的<code>code</code>被返回</p>
 <p><strong>使用execFile来调用</strong></p>
 <pre><code class="javascript">const exec = require(&#39;child_process&#39;).exec
@@ -573,7 +573,7 @@ const child = exec(&#39;/Users/max/Webstorm/test/example&#39;, ((error, stdout, 
         throw stderr
     console.log(stdout)
 }))</code></pre>
-<p>![截屏2020-08-28 下午11.17.45](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-28 下午11.17.45.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8B%E5%8D%8811.17.45.png" alt="截屏2020-08-28 下午11.17.45"></p>
 <p>同样打印出<code>hello,world</code>，可见除了调用形式不同，二者相差不大</p>
 <p>在子进程的信息交互方面，spawn使用流式处理的方式，当子进程产生数据时，主进程可以通过监听事件来获取消息；而exec是将所有返回的信息放在stdout里面一次性返回的，也就是该方法的<code>maxBuffer</code>参数，当子进程的输出超过这个大小时，会产生一个错误</p>
 <p>此外注意到spawn有一个名为shell的参数，其类型为一个布尔值或者字符串，如果这个值被设置为<code>true</code>，就会启动一个shell来执行命令，这个shell在<code>UNIX</code>上是<code>bin/sh</code>，在<code>Windows</code>上则是<code>cmd.exe</code></p>
@@ -581,9 +581,9 @@ const child = exec(&#39;/Users/max/Webstorm/test/example&#39;, ((error, stdout, 
 <p>通常<code>execFile</code>的效率要高于<code>exec</code>，这是因为<code>execFile</code>没有启动<code>shell</code>，而是直接调用<code>spawn</code>来实现的</p>
 <h2 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h2><p>👆几个用于创建进程的方法，都属于<code>child_process</code>的类方法，此外<code>childProcess</code>类继承了<code>EventEmitter</code>，在<code>childProcess</code>中引入事件给进程间通信带来很大的便利</p>
 <p><strong><code>childProcess</code>中的事件</strong></p>
-<p>![截屏2020-08-29 上午8.53.59](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午8.53.59.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%888.53.59.png" alt="截屏2020-08-29 上午8.53.59"></p>
 <p><code>childProcess</code>模块定义的<code>send</code>方法，用于进程间通信</p>
-<p>![截屏2020-08-29 上午9.01.46](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午9.01.46.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%889.01.46.png" alt="截屏2020-08-29 上午9.01.46"></p>
 <p>通过<code>send</code>方法发送的消息，可以通过监听<code>message</code>事件来获取</p>
 <p><strong>父进程发送一个Socket对象</strong></p>
 <pre><code class="javascript">const child = require(&#39;child_process&#39;).fork(&#39;worker.js&#39;)
@@ -632,9 +632,9 @@ if (cluster.isMaster) {
     console.log(&#39;Worker started, process id&#39;, process.pid)
 }</code></pre>
 <p>为了充分利用多核CPU，先调用OS模块的<code>cpus()</code>方法来<strong>获得CPU的核心数</strong></p>
-<p>![截屏2020-08-29 上午9.33.07](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午9.33.07.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%889.33.07.png" alt="截屏2020-08-29 上午9.33.07"></p>
 <p>本人电脑为1个6核CPU，但由于电脑操作系统使用了超线程技术，所以实际拥有12个核，从👆代码的运行结果不难看出有12条进程</p>
-<p>![截屏2020-08-29 上午9.53.50](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午9.53.50.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%889.53.50.png" alt="截屏2020-08-29 上午9.53.50"></p>
 <p>Cluster模块采用的是经典的<strong>主从模型</strong>，由master进程来管理所有的子进程，可以使用<code>cluster.isMaster</code>属性判断当前进程是master还是worker，其中<strong>主进程不负责具体的任务处理，其主要工作是负责调度和管理</strong>，上面的代码中，所有的子进程都监听<code>3000</code>端口</p>
 <p>通常情况下如果多个Node进程监听同一个端口时会出现<code>Error: listen EADDRINUS</code>的错误，而Cluster模块能够让多个子进程监听同一个端口的原因是<strong>master进程内部启动了一个TCP服务器，而真正监听端口的只有这个服务器</strong>，当来自前端的请求触发服务器的connection事件后，master会将对应socket句柄发送给子进程</p>
 <h1 id="Process对象"><a href="#Process对象" class="headerlink" title="Process对象"></a>Process对象</h1><p><strong>Process是一个全局对象无须声明即可访问</strong>，每个Node进程都有独立的process对象。该对象中存储当前进程的环境变量</p>
@@ -643,9 +643,9 @@ console.log(process.argv) // argv[0]表示Node本身 argv[1]表示当前文件�
 console.log(process.pid) // 进程ID
 console.log(process.cwd()) // 当前目录
 console.log(process.version) // Node版本</code></pre>
-<p>![截屏2020-08-29 上午10.02.20](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午10.02.20.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8810.02.20.png" alt="截屏2020-08-29 上午10.02.20"></p>
 <h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><pre><code class="javascript">console.log(process.env)</code></pre>
-<p>![截屏2020-08-29 上午10.04.40](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午10.04.40.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8810.04.40.png" alt="截屏2020-08-29 上午10.04.40"></p>
 <p>开发者可以在代码中判断当前正在运行的Node所属版本，并根据结果来决定是否运行含有一些最新特性的代码</p>
 <pre><code class="javascript">var version = process.version
 
@@ -653,14 +653,14 @@ if (version &gt; &quot;v07.6.0&quot;) { 👈 当前版本为V12.18.3 题目的�
     console.log(&#39;Higher version than v6.0.0&#39;)
 }</code></pre>
 <h2 id="方法和事件"><a href="#方法和事件" class="headerlink" title="方法和事件"></a>方法和事件</h2><p>process模块定义👇事件</p>
-<p>![截屏2020-08-29 上午10.17.22](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午10.17.22.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8810.17.22.png" alt="截屏2020-08-29 上午10.17.22"></p>
 <p><code>unhandledRejection</code>和<code>uncaughtException</code>通常用做错误处理的最后一层保险，但不代表开发者可以省略具体错误处理的代码，<code>beforeExit</code>比较有意思，它仅会在进程准备退出时触发，<strong>准备退出是指目前的事件循环没有要执行的任务</strong>，如果我们手动捕获这一事件并在回调中增加一些额外动作，<strong>进程就不会退出</strong></p>
 <pre><code class="javascript">process.on(&#39;beforeExit&#39;, function () {
     setInterval(function () {
         console.log(&#39;Process will not exit&#39;)
     }, 1000)
 })</code></pre>
-<p>![截屏2020-08-29 上午10.24.57](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午10.24.57.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8810.24.57.png" alt="截屏2020-08-29 上午10.24.57"></p>
 <pre><code class="javascript">process.on(&quot;exit&quot;, function (code) {
     setInterval(function () {
         console.log(&#39;Process will exit what ever you do&#39;)
@@ -673,11 +673,11 @@ process.exit()</code></pre>
 <p>假设开发者要向某台服务器提交数据，但没有和该服务器处在同一个时区内，这就导致开发者的时间和服务器的时间可能会相差几个小时，有的服务器会拒绝这样的请求</p>
 <p>在旧的版本中，打印<code>date</code>对象返回的是当前时区的时间，但在新版本中直接返回的就是世界时，即<code>greenwich</code>时间，相比东八区要早8个小时，格式也不再是GMT格式，这代表就算要获取当前时间都要做一下额外转换</p>
 <p><strong>👇此时实际上为上午10点58分</strong></p>
-<p>![截屏2020-08-29 上午11.00.06](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午11.00.06.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8811.00.06.png" alt="截屏2020-08-29 上午11.00.06"></p>
 <p><strong>使用Date对象提供的全局方法进行转换</strong></p>
-<p>![截屏2020-08-29 上午11.03.49](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午11.03.49.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8811.03.49.png" alt="截屏2020-08-29 上午11.03.49"></p>
 <p><strong><code>getTimezoneOffset</code>的方法可以得到当前的时区</strong></p>
-<p>![截屏2020-08-29 上午11.07.32](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午11.07.32.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8811.07.32.png" alt="截屏2020-08-29 上午11.07.32"></p>
 <p>在上面的代码中，虽然直接打印date对象显示的是<code>greenwich</code>时间，但执行<code>getTimezoneOffset()</code>方法返回的却是<code>-480</code>，表示偏移的分钟数，可以看出偏差8个小时；这代表Node其实知道当前位于哪个时区，但返回的还是<code>greenwich</code>时间</p>
 <h3 id="修改timezone"><a href="#修改timezone" class="headerlink" title="修改timezone"></a>修改timezone</h3><p>首先在Date对象的prototype上声明一个map结构作为属性，用于存储时区名称和偏移量的关系，然后对Date类的Date方法进行修改，如果没有声明<code>process.env.TZ</code>变量，就默认返回原来的date对象；如果声明了该属性，就先到对应的数组中进行搜索，然后返回修改后的date对象</p>
 <pre><code class="javascript">process.env.TZ = &quot;Asia/Shanghai&quot;;
@@ -733,9 +733,9 @@ var interval = setInterval(function () {
     console.log(args)
 }, 1000, &#39;timeout&#39;) 👈 一秒后打印timeout</code></pre>
 <h2 id="定时器中的this"><a href="#定时器中的this" class="headerlink" title="定时器中的this"></a>定时器中的this</h2><p>在JavaScript中，<code>setTimeout</code>和<code>setInterval</code>中的<code>this</code>均指向Windows。原因也很简单，定时器方法的第一个参数是一个匿名函数，<strong>而JavaScript中所有匿名函数的<code>this</code>都指向Windows</strong></p>
-<p>![截屏2020-08-29 上午11.56.50](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午11.56.50.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8811.56.50.png" alt="截屏2020-08-29 上午11.56.50"></p>
 <p>在Node中，<code>setTimeout</code>和<code>setInterval</code>的this会指向<code>timeout</code>类，该类在<code>setTimeout</code>和<code>setInterval</code>内部创建并返回，开发者通常不会直接用到两个类，但是可以打印出来</p>
-<p>![截屏2020-08-29 上午11.58.20](《新时期的Node-js入门》学习日记-常用模块-下/截屏2020-08-29 上午11.58.20.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8A%E5%8D%8811.58.20.png" alt="截屏2020-08-29 上午11.58.20"></p>
 <p>如果在<code>setTimeout</code>方法内部涉及<code>this</code>的指向问题，通常会使用<code>bind</code>或者<code>call</code>方法来重新绑定<code>this</code></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》 李锴</p>
 

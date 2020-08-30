@@ -322,7 +322,7 @@ module.exports = person</code></pre>
 </ul>
 <h3 id="require的缓存策略"><a href="#require的缓存策略" class="headerlink" title="require的缓存策略"></a>require的缓存策略</h3><p>Node会自动缓存经过<code>require</code>引入的文件，使得下次再引入不需要经过文件系统而是直接从缓存中读取。<strong>这种缓存是基于文件路径定位的</strong>，这表示即使有两个完全相同的文件，但它们位于不同的路径下，也会在缓存中维持两份</p>
 <pre><code class="javascript">console.log(require.cache)</code></pre>
-<p>![截屏2020-08-26 下午8.02.30](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-26 下午8.02.30.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-26%20%E4%B8%8B%E5%8D%888.02.30.png" alt="截屏2020-08-26 下午8.02.30"></p>
 <p>上面输出的是<code>test.js</code>在缓存中的信息，其中<code>path</code>表示的是模块引入时Node的查找路径，即从当前目录下的<code>node_modules</code>开始，一直到磁盘根目录为止</p>
 <h3 id="require的隐患"><a href="#require的隐患" class="headerlink" title="require的隐患"></a>require的隐患</h3><p>当调用<code>require</code>加载一个模块时，模块内部的代码都会被调用，有时候这可能会带来隐藏的bug</p>
 <pre><code class="javascript">// module.js
@@ -344,7 +344,7 @@ let test = require(&#39;./module&#39;)</code></pre>
 <h3 id="模块化与作用域"><a href="#模块化与作用域" class="headerlink" title="模块化与作用域"></a>模块化与作用域</h3><p><strong>Node和JavaScript中的<code>this</code>指向有一些区别，其中Node控制台和脚本文件的策略也不一样</strong>。对于浏览器中的JavaScript来说，无论是在脚本或者是Chrome控制台中，其this的指向和行为都是一致的；而Node则不是</p>
 <ul>
 <li><p>控制台中的this</p>
-<p>![截屏2020-08-26 下午11.11.23](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-26 下午11.11.23.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-26%20%E4%B8%8B%E5%8D%8811.11.23.png" alt="截屏2020-08-26 下午11.11.23"></p>
 <p>在Chrome控制台中this指向global对象，全局变量会被挂载到global下</p>
 <p>❗️注意是<code>var a</code>不能用<code>let a</code>，<code>let</code>在之后的章节进行讨论</p>
 </li>
@@ -390,7 +390,7 @@ console.log(module.exports.a) 👈 10</code></pre>
 <pre><code class="javascript">var buffer = Buffer.from([0x49, 0x27, 0x6d, 0x20, 0x61, 0x20, 0x68, 0x61, 0x63, 0x6b, 0x65, 0x72]);
 var buffer = Buffer.from(&quot;I&#39;m a hacker&quot;)</code></pre>
 <p>👆代码写法与书中例子不相符，因为在现如今的Node API中，<code>Buffer()</code>方法被标记为<code>Deprecated</code>，表示已不推荐使用，因为其存在<a href="https://github.com/nodejs/node/issues/4660" target="_blank" rel="noopener">漏洞</a>；目前推荐的是使用<code>Buffer.from</code>方法来初始化一个Buffer对象，如果想把一个Buffer对象转成字符串形式，还需要使用<code>toString</code>方法</p>
-<p>![截屏2020-08-27 上午12.05.56](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午12.05.56.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%8812.05.56.png" alt="截屏2020-08-27 上午12.05.56"></p>
 <p>Buffer支持的编码类型种类有限，仅支持ASCII，Base64，Binary，Hex，UTF-8，UTF-16LE/UCS-2</p>
 <p>Buffer还提供了<code>isEncoding</code>方法来判断是否支持转换为目标编码格式</p>
 <pre><code class="javascript">console.log(Buffer.isEncoding(&quot;UTF-8&quot;))
@@ -418,10 +418,10 @@ rs.on(&#39;end&#39;, function () {
 <h3 id="highWaterMark"><a href="#highWaterMark" class="headerlink" title="highWaterMark"></a>highWaterMark</h3><p><strong>最高水位线</strong>表示内部缓冲区最多能容纳的字节数，如果超过这个大小，就停止读取资源文件，默认值是64KB</p>
 <p>假设文件大小为100KB，那么在默认情况下，系统就会每次从文件里读取64KB大小的数据，随后触发data事件；<code>chunk</code>的大小即为<code>highWaterMark</code>的大小；然后接着读取36KB大小的文件，再次触发data事件；随后文件读取结束，触发end事件；如果<code>highWaterMark</code>设置得很小，那么就会发生多次系统调用，这会对性能造成影响</p>
 <p>运行例子，可以看到输出中产生了乱码</p>
-<p>![截屏2020-08-27 上午8.48.04](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午8.48.04.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%888.48.04.png" alt="截屏2020-08-27 上午8.48.04"></p>
 <p>在utf-8中一个汉字占三个字节，那么将<code>highwatermark</code>设置为10后，每三个字之后都会有一个字被截断，因此在调用<code>toString</code>方法的时候出现了乱码</p>
 <p>打印例子观察<code>chunk</code>，可以发现刚好在<code>世</code>这里字符被截断</p>
-<p>![截屏2020-08-27 上午8.52.26](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午8.52.26.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%888.52.26.png" alt="截屏2020-08-27 上午8.52.26"></p>
 <p>目前👆代码已被舍弃，官方的推荐做法是使用<code>push</code>方法来拼接Buffer</p>
 <pre><code class="javascript">var rs = require(&#39;fs&#39;).createReadStream(&#39;foo.txt&#39;, {highWaterMark: 10})
 
@@ -438,7 +438,7 @@ rs.on(&#39;end&#39;, function () {
 <h1 id="File-System"><a href="#File-System" class="headerlink" title="File System"></a>File System</h1><p>File System是Node中使用最为频繁的模块之一，该模块提供了读写文件的能力，是借助于底层的<code>linuv</code>的<code>C++ API</code>实现的</p>
 <p>浏览器中的JavaScript没有读写本地文件系统的能力(忽略IE中的ActiveX)，<strong>而Node作为服务器编程语言，文件系统API是必需的</strong></p>
 <p>👇学习几种常见API</p>
-<h3 id="readFile"><a href="#readFile" class="headerlink" title="readFile"></a>readFile</h3><p>![截屏2020-08-27 上午10.07.22](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.07.22.png)</p>
+<h3 id="readFile"><a href="#readFile" class="headerlink" title="readFile"></a>readFile</h3><p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%8810.07.22.png" alt="截屏2020-08-27 上午10.07.22"></p>
 <p>异步读取文本文件中的内容</p>
 <pre><code class="javascript">require(&#39;fs&#39;).readFile(&#39;foo.txt&#39;, function (err, data) {
     if (err)
@@ -449,8 +449,8 @@ rs.on(&#39;end&#39;, function () {
 <pre><code class="javascript">var data = require(&#39;fs&#39;).readFileSync(&#39;foo.txt&#39;, {encoding: &quot;UTF-8&quot;})
 console.log(data)</code></pre>
 <p>如果不指定readFile的<code>encoding</code>配置，readFile会直接返回Buffer格式</p>
-<p>![截屏2020-08-27 上午9.46.53](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午9.46.53.png)</p>
-<h3 id="writeFile"><a href="#writeFile" class="headerlink" title="writeFile"></a>writeFile</h3><p>![截屏2020-08-27 上午10.08.25](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.08.25.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%889.46.53.png" alt="截屏2020-08-27 上午9.46.53"></p>
+<h3 id="writeFile"><a href="#writeFile" class="headerlink" title="writeFile"></a>writeFile</h3><p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%8810.08.25.png" alt="截屏2020-08-27 上午10.08.25"></p>
 <p>WriteFile的第一个参数为文件名，如果不存在，则会创建它(默认的flag为<code>w</code>)</p>
 <pre><code class="javascript">require(&#39;fs&#39;).writeFile(&#39;foo.txt&#39;, &quot;I&#39;m a hacker&quot;, {flag: &#39;a&#39;, encoding: &#39;utf-8&#39;},
     function (err) {
@@ -460,7 +460,7 @@ console.log(data)</code></pre>
         console.log(&#39;success&#39;)
     }
 })</code></pre>
-<p>![截屏2020-08-27 上午10.12.54](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午10.12.54.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%8810.12.54.png" alt="截屏2020-08-27 上午10.12.54"></p>
 <h3 id="fs-stat-path-callback"><a href="#fs-stat-path-callback" class="headerlink" title="fs.stat(path, callback)"></a>fs.stat(path, callback)</h3><p>stat方法通常用来获取文件的状态，通常开发者可以在调用open、read或者write方法之前调用<code>fs.stat</code>方法，用来判断该文件是否存在</p>
 <pre><code class="javascript">require(&#39;fs&#39;).stat(&#39;foo.txt&#39;, function (err, result) {
     if (err) {
@@ -470,10 +470,10 @@ console.log(data)</code></pre>
     }
 })</code></pre>
 <p>如果文件存在，<code>result</code>就会返回文件的状态信息</p>
-<p>![截屏2020-08-27 上午11.36.16](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午11.36.16.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%8811.36.16.png" alt="截屏2020-08-27 上午11.36.16"></p>
 <p>如果文件不存在，则会出现<code>Error: ENOENT: no such file or directory</code>的错误</p>
 <h4 id="fs-stat和fs-fstat的区别"><a href="#fs-stat和fs-fstat的区别" class="headerlink" title="fs.stat和fs.fstat的区别"></a><code>fs.stat</code>和<code>fs.fstat</code>的区别</h4><p>File System模块还有一个<code>fstat</code>方法</p>
-<p>![截屏2020-08-27 上午11.40.36](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 上午11.40.36.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8A%E5%8D%8811.40.36.png" alt="截屏2020-08-27 上午11.40.36"></p>
 <p>两个方法唯一的区别是<code>fstat</code>方法第一个参数是文件描述符，因此其通常搭配<code>open</code>方法使用，因为<code>open</code>方法返回的结果就是一个文件描述符</p>
 <p>👇代码运行结果与<code>fs.stat</code>相同</p>
 <pre><code class="javascript">var fs = require(&#39;fs&#39;)
@@ -493,7 +493,7 @@ fs.open(&#39;foo.txt&#39;, &#39;a&#39;, function (err, fd) {
         }
     })
 })</code></pre>
-<h3 id="readdir"><a href="#readdir" class="headerlink" title="readdir"></a>readdir</h3><p>![截屏2020-08-27 下午5.44.26](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.44.26.png)</p>
+<h3 id="readdir"><a href="#readdir" class="headerlink" title="readdir"></a>readdir</h3><p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%885.44.26.png" alt="截屏2020-08-27 下午5.44.26"></p>
 <p>获取目录下的所有文件名是一个常见的需求，实现这个功能只需要<code>fs.readdir</code>以及<code>fs.stat</code>两个API，<code>readdir</code>用于获取目录下的所有文件或者子目录，<code>stat</code>用来判断具体每条记录是文件还是子目录</p>
 <pre><code class="javascript">var fs = require(&#39;fs&#39;)
 
@@ -512,7 +512,7 @@ function getAllFileFromPath(path) {
 }
 
 getAllFileFromPath(__dirname)</code></pre>
-<p>![截屏2020-08-27 下午5.08.56](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.08.56.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%885.08.56.png" alt="截屏2020-08-27 下午5.08.56"></p>
 <h1 id="HTTP服务"><a href="#HTTP服务" class="headerlink" title="HTTP服务"></a>HTTP服务</h1><p>HTTP模块是Node的核心模块，主要提供一系列用于网络传输的API，这些API大都位于比较底层的位置，可以让开发者自由地控制整个HTTP传输过程</p>
 <h2 id="创建HTTP服务器"><a href="#创建HTTP服务器" class="headerlink" title="创建HTTP服务器"></a>创建HTTP服务器</h2><pre><code class="javascript">var http = require(&#39;http&#39;)
 var server = http.createServer(function (req, res) {
@@ -523,11 +523,11 @@ var server = http.createServer(function (req, res) {
 server.listen(3000)</code></pre>
 <p>👆使用createServer方法创建一个简单的HTTP服务器，该方法返回一个<code>http.server</code>类的实例，createServer方法包含一个匿名的回调函数，该函数有两个参数<code>req</code>和<code>res</code>，它们是InComingMessage和ServerResponse的实例。分别表示HTTP的request和response对象，服务器创建完成后Node进程开始循环监听端口</p>
 <p>访问<code>127.0.0.1:3000</code>的结果</p>
-<p>![截屏2020-08-27 下午5.19.47](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.19.47.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%885.19.47.png" alt="截屏2020-08-27 下午5.19.47"></p>
 <p>HTTP请求还会触发connection和request事件，👇监听来自客户端的事件</p>
-<p>![截屏2020-08-27 下午5.38.35](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.38.35.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%885.38.35.png" alt="截屏2020-08-27 下午5.38.35"></p>
 <p>❗️观察结果发现发生了两次连接请求适应浏览器还访问了<code>favicon.ico</code></p>
-<p>![截屏2020-08-27 下午5.40.17](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午5.40.17.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%885.40.17.png" alt="截屏2020-08-27 下午5.40.17"></p>
 <h3 id="简单的静态文件服务器"><a href="#简单的静态文件服务器" class="headerlink" title="简单的静态文件服务器"></a>简单的静态文件服务器</h3><pre><code class="javascript">var http = require(&#39;http&#39;)
 var fs = require(&#39;fs&#39;)
 
@@ -560,7 +560,7 @@ process.on(&quot;uncaughtException&quot;, function () {
 <h3 id="method"><a href="#method" class="headerlink" title="method"></a>method</h3><pre><code class="javascript">var method = req.method</code></pre>
 <p>HTTP请求method的值通常是get、post、put、delete、update这5个关键字之一，以get和post最为常见</p>
 <h3 id="header"><a href="#header" class="headerlink" title="header"></a>header</h3><pre><code class="javascript">var headers = req.headers</code></pre>
-<p>![截屏2020-08-27 下午7.53.17](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午7.53.17.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%887.53.17.png" alt="截屏2020-08-27 下午7.53.17"></p>
 <h3 id="request-body"><a href="#request-body" class="headerlink" title="request body"></a>request body</h3><p>Node使用stream处理HTTP的请求体，stream注册了data和end两个事件</p>
 <pre><code class="javascript">var body = []
 req.on(&#39;data&#39;, function (chunk) {
@@ -586,9 +586,9 @@ res.end()</code></pre>
 <pre><code class="javascript">res.end(&#39;&lt;html&gt;&lt;body&gt;&lt;h1&gt;0xGeekCat&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&#39;)</code></pre>
 <h4 id="response-end"><a href="#response-end" class="headerlink" title="response.end"></a>response.end</h4><p>end方法在每个HTTP请求的最后都会被调用，当客户端的请求完成之后，开发者应该调用该方法来结束HTTP请求。通常情况下，如果不调用end方法，用户最直观的感受通常是浏览器位于地址栏左边的叉号会一直存在，表示该请求尚未完成</p>
 <p>👇已完成</p>
-<p>![截屏2020-08-27 下午10.13.32](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.13.32.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%8810.13.32.png" alt="截屏2020-08-27 下午10.13.32"></p>
 <p>👇未完成</p>
-<p>![截屏2020-08-27 下午10.13.54](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.13.54.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%8810.13.54.png" alt="截屏2020-08-27 下午10.13.54"></p>
 <p>end方法支持字符串或者buffer作为参数，可以指定HTTP请求最后返回的数据，该数据会在浏览器页面上显示；如果定义了回调方法，那么会在end返回后调用</p>
 <pre><code class="javascript">res.end(&quot;0xGeekCat&quot;, function () {
     console.log(&#39;end&#39;)
@@ -638,11 +638,11 @@ var server = http.createServer(function (req, res) {
 })
 
 server.listen(3000)</code></pre>
-<p>![截屏2020-08-28 上午10.45.27](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.45.27.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%8810.45.27.png" alt="截屏2020-08-28 上午10.45.27"></p>
 <p>如果不使用<code>Express</code>之类的Web框架，Node实现的服务器代码通常都是上面这种结构，获取请求的URL之后，再针对不同的<code>HTTP method</code>进行处理，<strong>缺点就是要写很多条件控制语句</strong></p>
 <p>当用户在浏览器输入用户名、密码并提交后，浏览器向<code>127.0.0.1:3000/login</code>发起post请求</p>
 <p><strong>打印头部信息</strong></p>
-<p>![截屏2020-08-27 下午10.43.21](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.43.21.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%8810.43.21.png" alt="截屏2020-08-27 下午10.43.21"></p>
 <p>以表单形式提交数据时，请求头中的content-type为<code>application/x-www-form-urlencoded</code></p>
 <p>报文主体中的内容是通过数据流的形式来传输的，通过监听流事件的方式来获取数据</p>
 <p><strong>打印请求体</strong></p>
@@ -655,13 +655,13 @@ server.listen(3000)</code></pre>
         console.log(body)
     })
     break</code></pre>
-<p>![截屏2020-08-27 下午10.51.03](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午10.51.03.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%8810.51.03.png" alt="截屏2020-08-27 下午10.51.03"></p>
 <h3 id="使用post上传文件"><a href="#使用post上传文件" class="headerlink" title="使用post上传文件"></a>使用post上传文件</h3><pre><code class="javascript">&lt;form action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
     &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;&quot;&gt;&lt;br&gt;
     &lt;input type=&quot;submit&quot; value=&quot;submit&quot; name=&quot;submit&quot;&gt;
 &lt;/form&gt;</code></pre>
 <p>和只有字段值的表单不同的是，上传文件的表单要设置<code>enctype=&quot;multipart/form-data&quot;</code>属性，自然文件上传时的header信息也有所不同</p>
-<p>![截屏2020-08-27 下午11.11.29](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-27 下午11.11.29.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-27%20%E4%B8%8B%E5%8D%8811.11.29.png" alt="截屏2020-08-27 下午11.11.29"></p>
 <p><strong>服务器处理上传文件</strong></p>
 <pre><code class="javascript">function dealUpload(req, res) {
     var form = new formidable.IncomingForm() 👈 创建formidable.IncomingFrom对象
@@ -676,13 +676,13 @@ server.listen(3000)</code></pre>
         res.end(&quot;upload finished&quot;)
     })
 }</code></pre>
-<p>![截屏2020-08-28 上午8.39.46](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.39.46.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%888.39.46.png" alt="截屏2020-08-28 上午8.39.46"></p>
 <p>此时浏览器界面回显</p>
-<p>![截屏2020-08-28 上午8.40.51](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.40.51.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%888.40.51.png" alt="截屏2020-08-28 上午8.40.51"></p>
 <p>如果想获取特定属性比如<code>name</code></p>
 <pre><code class="javascript">console.log(files.file.name)</code></pre>
 <h3 id="HTTP客户端服务"><a href="#HTTP客户端服务" class="headerlink" title="HTTP客户端服务"></a>HTTP客户端服务</h3><p>HTTP模块除了能在服务端处理客户端请求之外，还可以作为客户端向服务器发起请求。这也是Node也能做出像electron那样的桌面软件的基础</p>
-<p>![截屏2020-08-28 上午8.57.01](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午8.57.01.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%888.57.01.png" alt="截屏2020-08-28 上午8.57.01"></p>
 <pre><code class="javascript">var http = require(&#39;http&#39;)
 http.get(&quot;http://127.0.0.1:3000/&quot;, function (res) {
     var statueCode = res.statusCode
@@ -699,7 +699,7 @@ http.get(&quot;http://127.0.0.1:3000/&quot;, function (res) {
         })
     }
 })</code></pre>
-<p>![截屏2020-08-28 上午9.09.05](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午9.09.05.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%889.09.05.png" alt="截屏2020-08-28 上午9.09.05"></p>
 <h3 id="创建代理服务器"><a href="#创建代理服务器" class="headerlink" title="创建代理服务器"></a>创建代理服务器</h3><p>代理服务器相当于在客户端和目标服务器之间建立了一个中转，所有的访问和流量都经过这个服务器进行中转</p>
 <pre><code class="javascript">var http = require(&quot;http&quot;);
 var url = require(&quot;url&quot;);
@@ -756,12 +756,12 @@ server.listen(8124, function () {
     console.log(&#39;server bound&#39;)
 })</code></pre>
 <p>如果服务器收到了一个连接请求，就会返回一个Hello字符串；如果在浏览器里打开<code>localhost:8124</code>的方式来访问，会出现<code>GET http://localhost:8124/ net::ERR_INVALID_HTTP_RESPONSE</code>的错误。原因也很简单，一CP服务器不会返回符合HTTP协议标准的响应</p>
-<p>![截屏2020-08-28 上午10.55.28](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.55.28.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%8810.55.28.png" alt="截屏2020-08-28 上午10.55.28"></p>
 <p>使用<code>nc</code>连接服务器后，服务器端出现👇回显表示服务器正常运行</p>
-<p>![截屏2020-08-28 上午10.56.32](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午10.56.32.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%8810.56.32.png" alt="截屏2020-08-28 上午10.56.32"></p>
 <p><code>c.pipe(c) </code>如果不添加的话会导致对服务器的输入无法输出，原因在之前对<code>pipe</code>的解释中可以理解</p>
 <p>👇前者是不添加后者为添加</p>
-<p>![截屏2020-08-28 上午11.27.47](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.27.47.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%8811.27.47.png" alt="截屏2020-08-28 上午11.27.47"></p>
 <h3 id="TCP客户端"><a href="#TCP客户端" class="headerlink" title="TCP客户端"></a>TCP客户端</h3><pre><code class="javascript">const net =require(&#39;net&#39;)
 const client = net.connect({port: 8124}, function () {
     console.log(&#39;connected to server&#39;)
@@ -776,10 +776,10 @@ client.on(&#39;data&#39;, function (data) {
 client.on(&quot;end&quot;, function () {
     console.log(&#39;disconnected from server&#39;)
 })</code></pre>
-<p>![截屏2020-08-28 上午11.31.12](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.31.12.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%8811.31.12.png" alt="截屏2020-08-28 上午11.31.12"></p>
 <h1 id="SSL更安全的传输方式"><a href="#SSL更安全的传输方式" class="headerlink" title="SSL更安全的传输方式"></a>SSL更安全的传输方式</h1><p>对于企业网站，使用更加安全的数据传输是必要的，使用单纯的HTTP连接，所有的内容都以明文传输，这种方式是极不安全，就连通常被认为安全的<code>post</code>操作，其安全性也无法保证，因此需要更安全的<code>HTTPS(HTTP+SSL)</code></p>
 <p>👇描述<code>SSL</code>在网络通信中的位置</p>
-<p>![截屏2020-08-28 上午11.35.36](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.35.36.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%8811.35.36.png" alt="截屏2020-08-28 上午11.35.36"></p>
 <h2 id="SSL-Secure-Sockets-Layer-amp-TLS-Transport-Layer-Security"><a href="#SSL-Secure-Sockets-Layer-amp-TLS-Transport-Layer-Security" class="headerlink" title="SSL - Secure Sockets Layer &amp; TLS - Transport Layer Security"></a>SSL - Secure Sockets Layer &amp; TLS - Transport Layer Security</h2><p><code>安全套接层</code>协议及其继任者<code>传输层安全</code>协议是为网络通信提供安全及数据完整性的一种安全协议。TLS与SSL在传输层对网络连接进行加密。 SSL的一大优势在于它独立于上层协议，和HTTP结合即为HTTPS，和WebSocket结合即为WSS</p>
 <p>通常认为SSL和TLS指代同一个标准，两者之间的差异极小</p>
 <h2 id="SSL原理"><a href="#SSL原理" class="headerlink" title="SSL原理"></a>SSL原理</h2><p>不同的SSL<strong>握手过程</strong>存在差异，有👇三种</p>
@@ -796,7 +796,7 @@ client.on(&quot;end&quot;, function () {
 <li>报文认证信息码(MAC)算法：常用的例如MD5、SHA等。伪随机数(PRF)算法</li>
 </ul>
 <p>👇字符串就是一个cipher suite</p>
-<p>![截屏2020-08-28 上午11.53.10](《新时期的Node-js入门》学习日记-常用模块/截屏2020-08-28 上午11.53.10.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97/%E6%88%AA%E5%B1%8F2020-08-28%20%E4%B8%8A%E5%8D%8811.53.10.png" alt="截屏2020-08-28 上午11.53.10"></p>
 <ul>
 <li>ECDHE_RSA：密钥交换算法</li>
 <li>AES_128_GCM：数据加密算法</li>

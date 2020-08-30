@@ -316,7 +316,7 @@
 })</code></pre>
 <p>关于回调函数在何时执行并没有具体的要求，回调函数的调用既可以是同步(map方法)，也可以是异步(setTimeout方法中的匿名函数)</p>
 <p>👇回调的过程</p>
-<p>![截屏2020-08-26 上午11.18.53](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 上午11.18.53.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E6%88%AA%E5%B1%8F2020-08-26%20%E4%B8%8A%E5%8D%8811.18.53.png" alt="截屏2020-08-26 上午11.18.53"></p>
 <p>回调方法和主线程处于同一层级，假设主线程发起了一个底层的系统调用，那么操作系统转而去执行这个系统调用；当调用结束后，又回到主线程上调用其后方法</p>
 <h3 id="异步过程中的回调"><a href="#异步过程中的回调" class="headerlink" title="异步过程中的回调"></a>异步过程中的回调</h3><p><strong>单线程运行的语言</strong>在设计时要考虑👇的问题</p>
 <p>❓如果遇到一个耗时的操作，例如磁盘IO，要不要等待操作完成了再执行下一步操作</p>
@@ -376,7 +376,7 @@ fs.readFile(&quot;foo.txt&quot;, callback)</code></pre>
 <h2 id="Libuv中的多线程"><a href="#Libuv中的多线程" class="headerlink" title="Libuv中的多线程"></a>Libuv中的多线程</h2><p>开发者编写的代码确实运行在单线程环境中，但如果说整个Node都是依靠单线程运行的，那就不正确了，因为<code>libuv</code>中是有线程池的概念存在的</p>
 <p>Libuv是一个跨平台的异步IO库，它结合了UNIX下的<code>libev</code>和Windows下的<code>IOCP</code>特性，最早由Node的作者开发，专门为Node提供多平台下的异步IO支持。libuv本身是由<code>C/C++</code>语言实现，Node中的非阻塞IO以及事件循环的底层机制，都是由<code>libuv</code>来实现的</p>
 <p>👇libuv的架构</p>
-<p>![截屏2020-08-26 下午2.22.25](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 下午2.22.25.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E6%88%AA%E5%B1%8F2020-08-26%20%E4%B8%8B%E5%8D%882.22.25.png" alt="截屏2020-08-26 下午2.22.25"></p>
 <p>在Windows环境下，libuv直接使用Windows的IOCP(I/O Completion Port)实现异步IO。在非Windows环境下，libuv使用多线程来模拟异步IO</p>
 <p><strong>🔔Node的异步调用是由libuv来支持的</strong></p>
 <h1 id="并行和并发"><a href="#并行和并发" class="headerlink" title="并行和并发"></a>并行和并发</h1><p>并行(Parallel)与并发(Concurrent)是两个很常见的概念；对应了两种需求，一个是希望计算机做更多的事(处理多个队列)，另一个是希望计算机能更快地完成任务(让队列以更快的速度向前移动)</p>
@@ -390,7 +390,7 @@ fs.readFile(&quot;foo.txt&quot;, callback)</code></pre>
 <p>此时浏览器背后的循环正在不断遍历事件队列，在Ajax操作完成之前，事件队列里还是空的(并不是发出请求这一动作被加入事件队列，而是请求完成这一事件才会加入队列)；如果<code>Ajax</code>操作完成，这个队列中就会增加一个事件，随后被循环遍历到，如果这个事件绑定了一个回调方法，那么循环就会去调用这个方法</p>
 <h2 id="Node中的事件循环"><a href="#Node中的事件循环" class="headerlink" title="Node中的事件循环"></a>Node中的事件循环</h2><p>Node中的事件循环比起浏览器中的JavaScript还是有一些区别的，事件循环同样运行在单线程环境下，JavaScript的事件循环是依靠浏览器实现的，而Node作为另一种运行时(runtime)，事件循环由底层的<code>libuv</code>实现</p>
 <p>👇Node事件循环的具体流程</p>
-<p>![截屏2020-08-26 下午3.04.23](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 下午3.04.23.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E6%88%AA%E5%B1%8F2020-08-26%20%E4%B8%8B%E5%8D%883.04.23.png" alt="截屏2020-08-26 下午3.04.23"></p>
 <p>Node事件循环分成了6个不同的阶段，其中每个阶段都维护着一个回调函数的队列；在不同的阶段，事件循环会处理不同类型的事</p>
 <ol>
 <li>Timers：用来处理<code>setTimeOut()</code>和<code>setInterval()</code>的回调</li>
@@ -474,7 +474,7 @@ console.log(&#39;first&#39;)
 }
 
 recurse(0)</code></pre>
-<p>![截屏2020-08-26 下午5.18.25](《新时期的Node-js入门》学习日记-基础知识/截屏2020-08-26 下午5.18.25.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E6%88%AA%E5%B1%8F2020-08-26%20%E4%B8%8B%E5%8D%885.18.25.png" alt="截屏2020-08-26 下午5.18.25"></p>
 <p><code>nextTickQueue</code>显然是一个队列，先被加入队列的回调会先执行</p>
 <pre><code class="javascript">process.nextTick(function () {
     console.log(&#39;second&#39;)
