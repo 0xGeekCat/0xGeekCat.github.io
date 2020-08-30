@@ -317,7 +317,7 @@
 <p>代码中的name变量属于全局作用域，这表示在同一文件中的任何位置都可以访问到该变量，如果想创建一个新的作用域，只能通过声明一个新的函数来实现</p>
 <p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%E4%B8%8B%E5%8D%882.40.16.png" alt="截屏2020-08-29 下午2.40.16"></p>
 <h3 id="块级作用域-1"><a href="#块级作用域-1" class="headerlink" title="块级作用域"></a>块级作用域</h3><p>大多数常用的编程语言中都有块级作用域的概念，以C语言为例，C语言可以用一对花括号来定义一个块级作用域，<strong>而在<code>ES5</code>中没有这样的设计</strong></p>
-<p>![截屏2020-08-29 下午2.44.50](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午2.44.50.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%882.44.50.png" alt="截屏2020-08-29 下午2.44.50"></p>
 <p>在if代码块中定义的变量在外部依然可以访问到。<strong>要想避免这种情况，通常使用一个闭包来隔离作用域</strong></p>
 <pre><code class="javascript">function foo() {
     var x = 1
@@ -333,7 +333,7 @@
 foo()</code></pre>
 <p>但实现一个闭包要写不少冗余的代码</p>
 <h3 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h3><p><strong>🔔变量提升是指JavaScript解释器会将变量的声明提到当前作用域最前的现象，Node也继承了这一点</strong></p>
-<p>![截屏2020-08-29 下午3.01.28](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午3.01.28.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.01.28.png" alt="截屏2020-08-29 下午3.01.28"></p>
 <p>最后打印出的是<code>undefined</code>，这可能有点让人费解，因为执行打印一行的代码时，变量<code>msg</code>还未被定义，应该出现<code>ReferenceError: msg is not defined</code>的错误才对；实际上，在👆代码中存在一个隐式的变量提升，变量<code>msg</code>的声明被提到代码最前面</p>
 <p>👇实际上的执行</p>
 <pre><code class="javascript">var msg
@@ -348,7 +348,7 @@ for (let i = 0; i &lt; 3; i++) {
 console.log(i) // 0</code></pre>
 <p>for循环内部使用let声明的变量，和外部使用var声明的处于不同的作用域中，值互不影响</p>
 <h3 id="重复声明"><a href="#重复声明" class="headerlink" title="重复声明"></a>重复声明</h3><p>在同一个块级作用域中，不能使用let关键字重复声明同一个变量</p>
-<p>![截屏2020-08-29 下午3.16.34](《新时期的Node-js入门》学习日记-用ES6书写Node-上/截屏2020-08-29 下午3.16.34.png)</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.16.34.png" alt="截屏2020-08-29 下午3.16.34"></p>
 <p>在不同块级作用域中则无此限制</p>
 <pre><code class="javascript">let a = 15
 
