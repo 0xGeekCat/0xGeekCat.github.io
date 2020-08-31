@@ -924,7 +924,7 @@ function Student(name, age, gender) {
 var student = new Student(&#39;0xGeekCat&#39;, 19, &#39;male&#39;)
 student.getInfo()
 student.getInfo2() 👈 第二个细节 这里报错</code></pre>
-<p><img src="/Users/max/0xGeekCat/blog/source/_posts/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%201.png" alt="screenshot 1"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%201.png" alt="screenshot 1"></p>
 <p>这种方式避免了原型链继承不能传参的缺点，在这种情况下，<code>student</code>对象只是子类的实例不是父类的实例，而且只能调用父类中定义的方法，不能调用父类<code>prototype</code>原型上定义的方法</p>
 <h3 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h3><pre><code class="javascript">function Person() {
     this.getInfo = () =&gt; {
