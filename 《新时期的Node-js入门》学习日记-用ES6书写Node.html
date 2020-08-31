@@ -306,7 +306,7 @@
 <li><code>nvm use ﹤version﹥</code>：切换到某个版本的Node</li>
 <li><code>nvm ls</code>：列出当前安装的所有Node版本，并且显示当前使用的Node版本</li>
 </ul>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%E4%B8%8B%E5%8D%882.24.35.png" alt="截屏2020-08-29 下午2.24.35"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%E4%B8%8B%E5%8D%882.24.35.png" alt="截屏2020-08-29 下午2.24.35"></p>
 <h1 id="块级作用域"><a href="#块级作用域" class="headerlink" title="块级作用域"></a>块级作用域</h1><h2 id="ES5中的作用域"><a href="#ES5中的作用域" class="headerlink" title="ES5中的作用域"></a>ES5中的作用域</h2><p><code>ES5</code>中只有两种作用域</p>
 <ul>
 <li>全局作用域</li>
@@ -315,9 +315,9 @@
 <p>在JavaScript文件中声明一个变量</p>
 <pre><code class="javascript">var name = &#39;0xGeekCat&#39;</code></pre>
 <p>代码中的name变量属于全局作用域，这表示在同一文件中的任何位置都可以访问到该变量，如果想创建一个新的作用域，只能通过声明一个新的函数来实现</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%E4%B8%8B%E5%8D%882.40.16.png" alt="截屏2020-08-29 下午2.40.16"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%E4%B8%8B%E5%8D%882.40.16.png" alt="截屏2020-08-29 下午2.40.16"></p>
 <h3 id="块级作用域-1"><a href="#块级作用域-1" class="headerlink" title="块级作用域"></a>块级作用域</h3><p>大多数常用的编程语言中都有块级作用域的概念，以C语言为例，C语言可以用一对花括号来定义一个块级作用域，<strong>而在<code>ES5</code>中没有这样的设计</strong></p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%882.44.50.png" alt="截屏2020-08-29 下午2.44.50"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%882.44.50.png" alt="截屏2020-08-29 下午2.44.50"></p>
 <p>在if代码块中定义的变量在外部依然可以访问到。<strong>要想避免这种情况，通常使用一个闭包来隔离作用域</strong></p>
 <pre><code class="javascript">function foo() {
     var x = 1
@@ -333,7 +333,7 @@
 foo()</code></pre>
 <p>但实现一个闭包要写不少冗余的代码</p>
 <h3 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h3><p><strong>🔔变量提升是指JavaScript解释器会将变量的声明提到当前作用域最前的现象，Node也继承了这一点</strong></p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.01.28.png" alt="截屏2020-08-29 下午3.01.28"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.01.28.png" alt="截屏2020-08-29 下午3.01.28"></p>
 <p>最后打印出的是<code>undefined</code>，这可能有点让人费解，因为执行打印一行的代码时，变量<code>msg</code>还未被定义，应该出现<code>ReferenceError: msg is not defined</code>的错误才对；实际上，在👆代码中存在一个隐式的变量提升，变量<code>msg</code>的声明被提到代码最前面</p>
 <p>👇实际上的执行</p>
 <pre><code class="javascript">var msg
@@ -348,7 +348,7 @@ for (let i = 0; i &lt; 3; i++) {
 console.log(i) // 0</code></pre>
 <p>for循环内部使用let声明的变量，和外部使用var声明的处于不同的作用域中，值互不影响</p>
 <h3 id="重复声明"><a href="#重复声明" class="headerlink" title="重复声明"></a>重复声明</h3><p>在同一个块级作用域中，不能使用let关键字重复声明同一个变量</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.16.34.png" alt="截屏2020-08-29 下午3.16.34"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.16.34.png" alt="截屏2020-08-29 下午3.16.34"></p>
 <p>在不同块级作用域中则无此限制</p>
 <pre><code class="javascript">let a = 15
 
@@ -363,10 +363,10 @@ function scope() {
 scope()
 console.log(a) // 15</code></pre>
 <h3 id="变量提升-1"><a href="#变量提升-1" class="headerlink" title="变量提升"></a>变量提升</h3><p>let关键字可以解决<code>ES5</code>中变量提升带来的问题，下面的代码会抛出一个错误而不是打印出<code>undefined</code></p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.19.49.png" alt="截屏2020-08-29 下午3.19.49"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.19.49.png" alt="截屏2020-08-29 下午3.19.49"></p>
 <p>👆看似<code>let</code>没有变量提升，但实际上其内部也存在变量提升，从开头命名的真正赋值这个范围被称为<code>Temporal Dead Zone</code>(临时死区)，在临时死区内无法对变量进行取值或者赋值，表现出的行为就和没有变量提升一样，<strong>❌此处体会上暂时有点不清晰</strong></p>
 <h2 id="const关键字"><a href="#const关键字" class="headerlink" title="const关键字"></a>const关键字</h2><p>声明为<code>const</code>的变量不可以再被修改，也不能被重复声明，这表示<code>const</code>变量必须在声明的同时进行初始化，const的另一个适用场景是用于模块引入</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.28.32.png" alt="截屏2020-08-29 下午3.28.32"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%883.28.32.png" alt="截屏2020-08-29 下午3.28.32"></p>
 <p><strong><code>const</code>声明的变量不能修改，但使用<code>const</code>修饰的对象却可以修改</strong>，这表明<code>const</code>内部是依靠指针来判断对象是否被修改的</p>
 <pre><code class="javascript">const b = {name: &#39;0xGeekCat&#39;}
 b.name = &#39;hacker&#39;
@@ -395,7 +395,7 @@ console.log(arr.findIndex(function (x) {
 }))</code></pre>
 <h2 id="from-方法"><a href="#from-方法" class="headerlink" title="from()方法"></a>from()方法</h2><p>from方法用于将一个<code>array-like object</code>转换成数组</p>
 <p>JavaScript中的参数对象<code>arguments</code>就是一个<code>array-like object</code>，可以通过<code>[]</code>来访问其中的元素，也可以通过<code>length</code>属性来得到对象的长度。但是无法通过<code>array</code>对象的方法，例如<code>pop</code>或者<code>push</code>来操作它</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%884.06.00.png" alt="截屏2020-08-29 下午4.06.00"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%884.06.00.png" alt="截屏2020-08-29 下午4.06.00"></p>
 <p>🔔<strong>通常一个对象有length属性而且其值大于0，那么就可以看作是<code>array-like object</code></strong></p>
 <p><strong>新建一个<code>array-like object</code></strong></p>
 <pre><code class="javascript">var a = {}
@@ -452,7 +452,7 @@ for (let i of a.keys()) {
 for (let i of a.entries()) {
     console.log(i)
 }</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%884.44.07.png" alt="截屏2020-08-29 下午4.44.07"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%884.44.07.png" alt="截屏2020-08-29 下午4.44.07"></p>
 <p>事实上凡是内部实现<code>iterator</code>接口的对象都可以使用这三个方法进行遍历。上面的代码中没有使用values方法，原因是该方法目前还没有得到广泛支持，在某些环境中可能存在<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1299593" target="_blank" rel="noopener">兼容性问题</a></p>
 <h2 id="TypedArray"><a href="#TypedArray" class="headerlink" title="TypedArray"></a>TypedArray</h2><p><code>ES2015</code>新增了<code>TypedArray</code>类型，它和<code>array</code>的区别在于<code>TypedArray</code>的元素必须是同一类型。<code>TypedArray</code>的本意是为JavaScript提供访问二进制数据的能力，由于Node已经内置了<code>Buffer</code>类型，因此<code>TypedArray</code>在Node中的出镜率相对不高，在<code>TypedArray</code>标准推出后，Node中<code>Buffer</code>类型的底层改用<code>TypedArray</code>实现</p>
 <h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="参数的默认值"><a href="#参数的默认值" class="headerlink" title="参数的默认值"></a>参数的默认值</h2><p><code>ES6</code>允许给函数的参数赋一个默认值</p>
@@ -462,7 +462,7 @@ for (let i of a.entries()) {
 
 greed() // hello world</code></pre>
 <p>不能在方法体内用<code>let</code>关键字声明与参数同名的变量，否则会出现<code>SyntaxError</code></p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%885.12.07.png" alt="截屏2020-08-29 下午5.12.07"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%885.12.07.png" alt="截屏2020-08-29 下午5.12.07"></p>
 <p><strong>❌此处与书中描述有出入，书中指的是含有默认值的变量</strong></p>
 <p>除了允许赋默认值外，<code>ES6</code>还允许赋默认参数，即接收一个数组名作为参数，前面使用三个点号<code>...</code>即<strong>spread运算符</strong>来标识，避免了在调用方法时写一堆参数</p>
 <h2 id="Spread运算符"><a href="#Spread运算符" class="headerlink" title="Spread运算符"></a>Spread运算符</h2><p><code>Spread运算符</code>是<code>ES6</code>提出的新运算符，其实它并算不上新概念，在C语言中就已经出现，<code>spread运算符</code>可以和数组结合使用，扩展的参数</p>
@@ -472,7 +472,7 @@ console.log(...arr1, ...arr2)
 
 var name = [...&#39;0xGeekCat&#39;]
 console.log(name)</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%885.21.13.png" alt="截屏2020-08-29 下午5.21.13"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%885.21.13.png" alt="截屏2020-08-29 下午5.21.13"></p>
 <p><code>spread运算符</code>也可以作为函数的参数，表示该函数有多个参数，也可以在函数调用时使用</p>
 <pre><code class="javascript">function func(x, y, z) {
     return x + y + z
@@ -520,7 +520,7 @@ console.log(date.getDate()) // undefined/undefined/undefined</code></pre>
 }
 
 console.log(date.getDate())</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.33.29.png" alt="截屏2020-08-29 下午6.33.29"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.33.29.png" alt="截屏2020-08-29 下午6.33.29"></p>
 <p>在<code>ES6</code>中使用箭头函数则可以完美解决问题</p>
 <pre><code class="javascript">var date = {
     year: 2020,
@@ -539,8 +539,8 @@ console.log(date.getDate()) // 2020/8/29</code></pre>
     func()
 }
 foo()</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.47.49.png" alt="截屏2020-08-29 下午6.47.49"></p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.48.52.png" alt="截屏2020-08-29 下午6.48.52"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.47.49.png" alt="截屏2020-08-29 下午6.47.49"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.48.52.png" alt="截屏2020-08-29 下午6.48.52"></p>
 <p><code>setTimeout</code>中匿名函数的<code>this</code>指向，Node和浏览器不同，在Chrome中输出<code>window</code>对象，在Node控制台中输出一个<code>Timeout</code>对象</p>
 <pre><code class="javascript">function foo() {
     setTimeout(function () {
@@ -557,7 +557,7 @@ foo()</code></pre>
     })
 }
 foo()</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.59.31.png" alt="截屏2020-08-29 下午6.59.31"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%886.59.31.png" alt="截屏2020-08-29 下午6.59.31"></p>
 <p><strong>🔔此时浏览器中<code>this</code>还是指向Windows，证明实际上匿名函数内部并没有定义this，仅仅是引用外面一层的<code>this</code></strong></p>
 <h2 id="箭头函数的陷阱"><a href="#箭头函数的陷阱" class="headerlink" title="箭头函数的陷阱"></a>箭头函数的陷阱</h2><p>箭头函数本身没有定义<code>this</code>，在箭头函数内部使用<code>this</code>关键字时，它开始在代码定义的位置向上找，直到遇见第一个<code>this</code>，这带来了很大的便利但有时也会出现一些问题</p>
 <pre><code class="javascript">function Person() {
@@ -621,10 +621,10 @@ for (let i of set.values()) {
 for (let i of set.entries()) {
     console.log(i)
 }</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%888.40.27.png" alt="截屏2020-08-29 下午8.40.27"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%888.40.27.png" alt="截屏2020-08-29 下午8.40.27"></p>
 <p><strong>WeakSet</strong></p>
 <p><code>WeakSet</code>和<code>Set</code>的主要区别在于**<code>WeakSet</code>的成员只能是对象**</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%888.46.59.png" alt="截屏2020-08-29 下午8.46.59"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%888.46.59.png" alt="截屏2020-08-29 下午8.46.59"></p>
 <p><strong><code>WeakSet</code>中的<code>weak</code>一词指的是弱引用</strong>，它表示<code>WeakSet</code>中存储的是对象的弱引用，这是一个垃圾回收中的概念，在垃圾回收器的扫描过程中，一旦发现了只有弱引用的对象，就会在回收阶段将其内存回收</p>
 <p>这也就表示<code>WeakSet</code>中存储的对象如果没有被其他的对象所引用，其内存空间就会被回收。由于开发者通常无法控制垃圾回收器的运行，因此<code>WeakSet</code>中的值是无法预测的。 WeakSet不支持遍历，也不能用size属性来得到其大小</p>
 <p><strong><code>WeakSet</code>的优点在于对垃圾回收有利</strong>，假设在一个局部作用域中产生了一个中间值的对象，如果作用域之外没有引用这个对象，那么就可以使用<code>WeakSet</code>来存储它，在离开局部作用域之后，该对象就会在下一轮垃圾回收时被销毁</p>
@@ -658,7 +658,7 @@ for (let m of map.entries()) {
 
 map.clear()
 console.log(map)</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%889.02.40.png" alt="截屏2020-08-29 下午9.02.40"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%889.02.40.png" alt="截屏2020-08-29 下午9.02.40"></p>
 <h3 id="WeakMap"><a href="#WeakMap" class="headerlink" title="WeakMap"></a>WeakMap</h3><p><code>WeakMap</code>用法和<code>WeakSet</code>相似，作为<code>key</code>的变量必须是个对象，关于弱引用的特性和<code>WeakSet</code>相同，不再叙述</p>
 <h1 id="Iterator"><a href="#Iterator" class="headerlink" title="Iterator"></a>Iterator</h1><h2 id="ES6中的Iterator"><a href="#ES6中的Iterator" class="headerlink" title="ES6中的Iterator"></a>ES6中的Iterator</h2><p><code>ES6</code>中的<code>Iterator</code>接口通过<code>Symbol.iterator</code>属性来实现，如果对象设置了<code>Symbol.iterator</code>属性，就表示该对象是可以被遍历的，就可以用<code>next</code>方法遍历</p>
 <p>👇给对象加上<code>Iterator</code>接口</p>
@@ -695,7 +695,7 @@ console.log(str[Symbol.iterator])
 
 var obj = {}
 console.log(obj[Symbol.iterator]) // undefined</code></pre>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%889.30.47.png" alt="截屏2020-08-29 下午9.30.47"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/%E6%88%AA%E5%B1%8F2020-08-29%20%E4%B8%8B%E5%8D%889.30.47.png" alt="截屏2020-08-29 下午9.30.47"></p>
 <p><strong>❗️普通对象没有<code>iterator</code>接口</strong></p>
 <h2 id="Iterator的遍历"><a href="#Iterator的遍历" class="headerlink" title="Iterator的遍历"></a>Iterator的遍历</h2><p>在<code>ES6</code>中所有<strong>内部实现了<code>Symbol.iterator</code>接口的对象</strong>都可以使用<code>for / of</code>循环进行遍历</p>
 <p>👆自定义的<code>Iter</code>对象不可以进行循环，需要进行修改</p>
@@ -868,7 +868,7 @@ console.log(student.constructor.getInfo === Student.prototype.getInfo) // true</
 console.log(Student.prototype.constructor === Student) // true</code></pre>
 <h2 id="静态方法"><a href="#静态方法" class="headerlink" title="静态方法"></a>静态方法</h2><p>在定义类时如果定义了方法，那么该类的每个实例在初始化时都会有一份该方法的备份。有时我们不希望一些方法被继承，而是希望作为父类的属性来使用</p>
 <p><code>ES6</code>中使用<code>static</code>关键字来声明静态方法，该方法只能通过类名来直接调用，而不能通过类的实例调用</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot.png" alt="screenshot"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot.png" alt="screenshot"></p>
 <p>如果一个类继承一个包含静态方法的类，那么它可以通过<code>super</code>关键字来调用父类的静态方法，但包含<code>super</code>关键字的子类方法也必须是静态方法</p>
 <pre><code class="javascript">class Person {
     static getName() {
@@ -924,7 +924,7 @@ function Student(name, age, gender) {
 var student = new Student(&#39;0xGeekCat&#39;, 19, &#39;male&#39;)
 student.getInfo()
 student.getInfo2() 👈 第二个细节 这里报错</code></pre>
-<p><img src="/Users/max/0xGeekCat/blog/source/_posts/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%201.png" alt="screenshot 1"></p>
+<p><img src="/Users/max/0xGeekCat/blog/source/_posts/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%201.png" alt="screenshot 1"></p>
 <p>这种方式避免了原型链继承不能传参的缺点，在这种情况下，<code>student</code>对象只是子类的实例不是父类的实例，而且只能调用父类中定义的方法，不能调用父类<code>prototype</code>原型上定义的方法</p>
 <h3 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h3><pre><code class="javascript">function Person() {
     this.getInfo = () =&gt; {
@@ -1088,7 +1088,7 @@ import {Name, Age} from module</code></pre>
 <pre><code class="shell">npm install --save-dev babel-cli
 npm install --save-dev babel-preset-es2015</code></pre>
 <p>安装成功后，可以在终端使用<code>babel</code>命令</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%204.png" alt="screenshot 4"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%204.png" alt="screenshot 4"></p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>要在项目中使用<code>babel</code>，需要增加名为<code>.babelrc</code>的配置文件，配置文件的主要目的是指定<code>babel</code>以何种标准进行转换</p>
 <p>👇对使用<code>ES2015</code>语法的代码进行转换</p>
 <pre><code class="javascript">{
@@ -1098,14 +1098,14 @@ npm install --save-dev babel-preset-es2015</code></pre>
 }</code></pre>
 <p>书中关于<code>stage</code>的相关配置在实际中似乎并不需要</p>
 <p>👇试着用<code>babel</code>转换代码，先编写一个简单的使用ES6特性的代码</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%205.png" alt="screenshot 5"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%205.png" alt="screenshot 5"></p>
 <p>也可以使用<code>-o</code>参数将转换结果重定向到文件</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%206.png" alt="screenshot 6"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%206.png" alt="screenshot 6"></p>
 <p>如果不想在命令行中使用<code>babel</code>进行转换，也可以使用代码来完成，需要安装额外的组件</p>
 <pre><code class="shell">npm install --save-dev babel-core </code></pre>
 <p><strong>❌不过书中这种方法在本人测试时出现错误</strong></p>
 <p>除了在本地进行转换之外，<code>babel</code>的官方网站提供了一个在线的<a href="http://babeljs.io/repl/" target="_blank" rel="noopener">试验场</a>，可以将<code>ES6</code>或以上版本的代码放进去进行试验。其结果应该和本地结果还是略有偏差，个人更喜欢命令行操作</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%207.png" alt="screenshot 7"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%207.png" alt="screenshot 7"></p>
 <p>可以看到<code>babel</code>转换后的代码有个显著的特征：那就是让人看不懂</p>
 <p>即使是简单如继承一个类，转换成<code>ES5</code>的写法之后也变得让人费解，这也是有些开发者不喜欢<code>babel</code>的原因。即使<code>babel</code>是开源的，面对这么复杂的代码，也很难让人放心是否有潜在的问题</p>
 <h2 id="babel-polyfill"><a href="#babel-polyfill" class="headerlink" title="babel-polyfill"></a>babel-polyfill</h2><p>在默认情况下，<code>babel</code>只转换最新的JavaScript语法，但不会转换一些新的API，例如Promise、Iterator等，还有一些新增的对象方法也不会被转换，例如<code>array.from()</code>等</p>
@@ -1124,7 +1124,7 @@ timeout(1000).then((value =&gt; {
     console.log(value)
 }))</code></pre>
 <p><code>babel</code>之后的结果</p>
-<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%203.png" alt="screenshot 3"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node/screenshot%203.png" alt="screenshot 3"></p>
 <p><code>babel</code>的使用完全是基于配置的，如果想要使用<code>ES2016</code>或者<code>ES2017</code>的特性，只需要在配置文件中增加对应的配置就可以</p>
 <p><code>babel</code>存在的意义是能够让开发者使用最新的特性进行开发而不用受限于运行时的支持</p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》 李锴</p>
