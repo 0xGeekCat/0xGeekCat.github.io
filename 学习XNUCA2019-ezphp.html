@@ -389,7 +389,7 @@ file_put_contents($_GET[&#39;filename&#39;], $_GET[&#39;content&#39;]);</code></
 <p>👇一个简单的测试，此时<code>tmp.php</code>文件为空</p>
 <p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.05.34.png" alt="截屏2020-08-24 上午10.05.34"></p>
 <p>删除<code>==</code>，写入成功</p>
-<p>![截屏2020-08-24 上午10.07.39](学习XNUCA2019-ezphp/截屏2020-08-24 上午10.07.39.png)</p>
+<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.07.39.png" alt="截屏2020-08-24 上午10.07.39"></p>
 <p>网上很多人对此题的处理都是通过加字符填充处理，但并没对其操作的原理进行了解；学习还是应该刨根问底</p>
 <p>不过在<code>base64_decode</code>中的字符串中间有<code>=</code>并不影响结果</p>
 <p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8A%E5%8D%8810.11.49.png" alt="截屏2020-08-24 上午10.11.49"></p>
@@ -421,6 +421,7 @@ php_value zend.script_encoding &quot;UTF-7&quot;
 # \</code></pre>
 <pre><code>php_value+include_path+%22%2ftmp%22%0aphp_value+zend.multibyte+1%0aphp_value+zend.script_encoding+%22UTF-7%22%0a%23+%5c</code></pre>
 <p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-24%20%E4%B8%8B%E5%8D%8812.01.54.png" alt="截屏2020-08-24 下午12.01.54"></p>
+<h1 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h1><p>如果直接传参<code>?filename=index.php&amp;content=&lt;?php phpinfo();?&gt;</code>很显然是不可以的，会报错<code> failed to open stream: Permission denied</code>，权限不够</p>
 <h1 id="吐槽一下"><a href="#吐槽一下" class="headerlink" title="吐槽一下"></a>吐槽一下</h1><p>真的吐了；这阵子一直在打比赛和调试环境中度过，搞的这个博客从18号一直拖到24号；自己也是菜的真实，打题打的人都傻了</p>
 <p>这道题细节是真的多，就算明白方法，操作上也有可能一不小心产生失误</p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://nikoeurus.github.io/2019/12/01/xnuca-Web/#ezphp" target="_blank" rel="noopener">从xnuca2019-ezphp深入学习.htaccess</a></p>
