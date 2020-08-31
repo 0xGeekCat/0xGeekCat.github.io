@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">《新时期的Node.js入门》学习日记-用ES6书写Node(上) | 0xGeekCat</title>
+  <title itemprop="name">《新时期的Node.js入门》学习日记-用ES6书写Node | 0xGeekCat</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -279,7 +279,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
           <header class="entry-header">
-            <h1 class="entry-title">《新时期的Node.js入门》学习日记-用ES6书写Node(上)</h1>
+            <h1 class="entry-title">《新时期的Node.js入门》学习日记-用ES6书写Node</h1>
             <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-8-29&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
 
             <hr>
@@ -958,9 +958,10 @@ student.getInfo2()</code></pre>
 <pre><code class="javascript">function Person(name, age) {
     this.name = name
     this.age = age
-    this.getInfo = () =&gt; {
-        return this.name + &#39;, &#39; + this.age
-    }
+}
+
+Person.prototype.getInfo = function () {
+    return this.name + &#39;, &#39; + this.age
 }
 
 class Student extends Person{
@@ -980,9 +981,154 @@ class Student extends Person{
 }
 
 var student = new Student(&#39;0xGeekCat&#39;, 19, &#39;male&#39;)
+student.print() // 0xGeekCat, 19, male</code></pre>
+<p><code>super</code>方法可以带参数，表示哪些父类的属性会被继承</p>
+<p>🔔<strong>在子类中<code>super</code>方法是必须要调用的，原因在于子类本身没有自身的<code>this</code>对象，必须通过<code>super</code>方法拿到父类的<code>this</code>对象</strong></p>
+<p>如果子类没有定义<code>constructor</code>方法，那么在默认的构造方法内部自动调用<code>super</code>方法，<strong>并继承父类的全部属性</strong></p>
+<p>在子类的构造方法中必须先调用<code>super</code>方法，然后才能调用<code>this</code>关键字声明其他的属性，因为在super没有调用之前子类还没有<code>this</code>这一缘故</p>
+<pre><code class="javascript">class Student extends Person{
+    constructor(name, age, gender) {
+        console.log(this) 👈 报错 ReferenceError
+        super(name, age);
+        this.gender = gender
+        console.log(this) 👈 Student { name: &#39;0xGeekCat&#39;, age: 19, gender: &#39;male&#39; }
+    }
 
-student.print()</code></pre>
-<h1 id="未完待续、、、"><a href="#未完待续、、、" class="headerlink" title="未完待续、、、"></a>未完待续、、、</h1><h2 id="Node中的类继承"><a href="#Node中的类继承" class="headerlink" title="Node中的类继承"></a>Node中的类继承</h2><h1 id="ES6的模块化标准"><a href="#ES6的模块化标准" class="headerlink" title="ES6的模块化标准"></a>ES6的模块化标准</h1><h1 id="使用babel来转换代码"><a href="#使用babel来转换代码" class="headerlink" title="使用babel来转换代码"></a>使用babel来转换代码</h1><h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1>
+    ...
+}
+
+var student = new Student(&#39;0xGeekCat&#39;, 19, &#39;male&#39;)</code></pre>
+<p>除了用在子类的构造函数中，<code>super</code>还可以用在类方法中来引用父类的方法</p>
+<p>❗️**<code>super</code>只能调用父类方法，而不能调用父类的属性，因为方法是定义在原型链上的，属性则是定义在类的内部**</p>
+<pre><code class="javascript">getInfo() {
+    return super.name // undefined
+}</code></pre>
+<p>🔔<strong>当子类函数被调用时使用的均为修改父类<code>this</code>得来的子类的<code>this</code>，即使使用<code>super</code>来调用父类的方法，使用的仍然是子类的<code>this</code></strong></p>
+<pre><code class="javascript">class Person {
+    constructor() {
+        this.name = &#39;0xGeekCat&#39;
+        this.gender = &#39;male&#39;
+    }
+
+    getInfo() {
+        return this.name + &#39;, &#39; + this.gender
+    }
+}
+
+class Student extends Person{
+    constructor() {
+        super();
+        this.name = &#39;hacker&#39;
+        this.gender = &#39;male&#39;
+    }
+
+    getInfo() {
+        return &#39;hello, world&#39;
+    }
+
+    print() {
+        return super.getInfo()
+    }
+}
+
+let student = new Student()
+console.log(student.print()) // hacker, male</code></pre>
+<p>👆<code>super</code>调用了父类的方法，输出的内容却是子类的属性，说明<code>super</code>绑定了子类的<code>this</code></p>
+<p>还可以对<code>super</code>的属性赋值<code>super.name =&#39;hacker&#39;</code>，这个赋值修改的是子类属性，如果打印<code>super.name</code>，会输出<code>undefined</code></p>
+<pre><code class="javascript">class Person {
+    constructor() {
+        this.name = &#39;0xGeekCat&#39;
+    }
+}
+
+class Student extends Person{
+    constructor() {
+        super();
+        super.name = &#39;hacker&#39; 👈
+    }
+
+    getInfo() {
+        console.log(super.name) // undefined
+        console.log(this.name) // hacker
+    }
+}
+
+let student = new Student()
+student.getInfo()</code></pre>
+<h1 id="ES6的模块化标准"><a href="#ES6的模块化标准" class="headerlink" title="ES6的模块化标准"></a>ES6的模块化标准</h1><p>区别于上一章提到的<code>AMD</code>和<code>CommonJS</code>，<code>ES2015</code>也提出了一套模块化标准；但Node目前还不支持<code>ES2015</code>的模块标准，了解即可</p>
+<p><strong>❌此块内容本人暂时没有搞清楚，留在之后实践中继续研究</strong></p>
+<p><code>ES6</code>同样使用<code>export</code>关键字来导出变量，但和<code>commonJS</code>略有不同</p>
+<pre><code class="javascript">export const Name = &#39;0xGeekCat&#39;
+export const Age = 10</code></pre>
+<p>也可以将多个要导出的对象打包</p>
+<pre><code class="javascript">const Name = &#39;0xGeekCat&#39;
+const Age = 10
+
+export {Name, Age}</code></pre>
+<p>使用<code>export</code>导出变量时，通常要使用花括号<code>{}</code>将其包裹起来，否则会出现错误</p>
+<h2 id="导出方法"><a href="#导出方法" class="headerlink" title="导出方法"></a>导出方法</h2><pre><code class="javascript">// 方法一
+export function add(x, y) {
+    return x + y
+}
+
+// 方法二
+function add(x, y) {
+    return x + y
+}
+export {add}</code></pre>
+<h2 id="导入"><a href="#导入" class="headerlink" title="导入"></a>导入</h2><pre><code class="javascript">var module = require(&#39;./module&#39;)
+
+import Name from module
+import {Name, Age} from module</code></pre>
+<h1 id="使用babel来转换代码"><a href="#使用babel来转换代码" class="headerlink" title="使用babel来转换代码"></a>使用babel来转换代码</h1><p>ES6乃至ES7的新特性让人激动不已，开发者可能迫不及待地想在自己的工作中使用这些新语法，以便改善自己的工作效率</p>
+<p>然而Node支持新特性也是有时间差的；此外生产环境中Node的版本往往较低，但开发者用的可能是最新版本。这代表即使在开发过程中使用了最新的特性，这些代码也无法在生产环境中运行，为了解决这些困境，<code>babel</code>应运而生</p>
+<p><strong><code>babel</code>的初衷是为了解决新特性的代码无法在低版本的<code>Node</code>环境中运行的问题，它提供了一系列<code>API</code>，用来把使用新特性编写的代码编译为可以在低版本环境中运行的版本</strong></p>
+<h2 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h2><p>对于初次使用<code>babel</code>的开发者来说，最为头疼的就是各种组件的配置，<code>babel</code>本身是由一系列的组件构成，想要使用<code>babel</code>的功能需要自行配置组件</p>
+<p><strong>👇在项目目录执行</strong></p>
+<pre><code class="shell">npm install --save-dev babel-cli
+npm install --save-dev babel-preset-es2015</code></pre>
+<p>安装成功后，可以在终端使用<code>babel</code>命令</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%204.png" alt="screenshot 4"></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>要在项目中使用<code>babel</code>，需要增加名为<code>.babelrc</code>的配置文件，配置文件的主要目的是指定<code>babel</code>以何种标准进行转换</p>
+<p>👇对使用<code>ES2015</code>语法的代码进行转换</p>
+<pre><code class="javascript">{
+  &quot;presets&quot;: [
+    &quot;es2015&quot;
+  ]
+}</code></pre>
+<p>书中关于<code>stage</code>的相关配置在实际中似乎并不需要</p>
+<p>👇试着用<code>babel</code>转换代码，先编写一个简单的使用ES6特性的代码</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%205.png" alt="screenshot 5"></p>
+<p>也可以使用<code>-o</code>参数将转换结果重定向到文件</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%206.png" alt="screenshot 6"></p>
+<p>如果不想在命令行中使用<code>babel</code>进行转换，也可以使用代码来完成，需要安装额外的组件</p>
+<pre><code class="shell">npm install --save-dev babel-core </code></pre>
+<p><strong>❌不过书中这种方法在本人测试时出现错误</strong></p>
+<p>除了在本地进行转换之外，<code>babel</code>的官方网站提供了一个在线的<a href="http://babeljs.io/repl/" target="_blank" rel="noopener">试验场</a>，可以将<code>ES6</code>或以上版本的代码放进去进行试验。其结果应该和本地结果还是略有偏差，个人更喜欢命令行操作</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%207.png" alt="screenshot 7"></p>
+<p>可以看到<code>babel</code>转换后的代码有个显著的特征：那就是让人看不懂</p>
+<p>即使是简单如继承一个类，转换成<code>ES5</code>的写法之后也变得让人费解，这也是有些开发者不喜欢<code>babel</code>的原因。即使<code>babel</code>是开源的，面对这么复杂的代码，也很难让人放心是否有潜在的问题</p>
+<h2 id="babel-polyfill"><a href="#babel-polyfill" class="headerlink" title="babel-polyfill"></a>babel-polyfill</h2><p>在默认情况下，<code>babel</code>只转换最新的JavaScript语法，但不会转换一些新的API，例如Promise、Iterator等，还有一些新增的对象方法也不会被转换，例如<code>array.from()</code>等</p>
+<p>转换这些特性还需要使用其他的第三方插件</p>
+<pre><code class="shell">npm install --save-dev babel-polyfill </code></pre>
+<p>👇转换一个包含Promise的代码文件</p>
+<pre><code class="javascript">import &#39;babel-polyfill&#39;
+
+function timeout(ms) {
+    return new Promise(((resolve, reject) =&gt; {
+        setTimeout(resolve, ms, &#39;done&#39;)
+    }))
+}
+
+timeout(1000).then((value =&gt; {
+    console.log(value)
+}))</code></pre>
+<p><code>babel</code>之后的结果</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node-%E4%B8%8A/screenshot%203.png" alt="screenshot 3"></p>
+<p><code>babel</code>的使用完全是基于配置的，如果想要使用<code>ES2016</code>或者<code>ES2017</code>的特性，只需要在配置文件中增加对应的配置就可以</p>
+<p><code>babel</code>存在的意义是能够让开发者使用最新的特性进行开发而不用受限于运行时的支持</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》 李锴</p>
+
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
