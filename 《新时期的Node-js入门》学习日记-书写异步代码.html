@@ -339,7 +339,7 @@ console.log(data) // undefined</code></pre>
     // todo
 }) </code></pre>
 <p>如果对于多个功能相同的异步操作，它们的回调函数都是相同的，这样的写法会产生很多功能重复的代码</p>
-<p>另一种做法是将回调函数作为参数传递，这通常被称为<strong>延续传递方式</strong><code>Continuation Passing Style</code>，<code>CPS</code>的本质仍然是一个高阶函数</p>
+<p>另一种做法是<strong>将回调函数作为参数传递</strong>，这通常被称为<strong>延续传递方式</strong><code>Continuation Passing Style</code>，<code>CPS</code>的本质仍然是一个高阶函数</p>
 <p><strong>CPS风格的回调</strong></p>
 <pre><code class="javascript">var fs = require(&#39;fs&#39;)
 
@@ -486,14 +486,14 @@ async.map(arr, myReadFile, function (err, results) {
     })</code></pre>
 <p>👆两段代码结构上最大的区别是使用<code>deferred</code>改写的<code>Ajax</code>方法，将<code>success</code>和<code>error</code>两个回调函数从<code>$.ajax()</code>方法中剥离，而且链式调用也表明<code>$.ajax(&quot;test.html&quot;)</code>异步方法产生了返回值，这是一个很大的进步，离最开始的理想更近一步</p>
 <p>后面<code>Promise</code>概念得到推广并出了一些规范，以<code>Promise/A+</code>最为出名，社区也出现了一些支持<code>Promise</code>的第三方库，后来<code>Promise/A+</code>标准被社区接受，<code>ES2015</code>中的<code>Promise</code>就是按照它来实现的</p>
-<h2 id="Promise是什么"><a href="#Promise是什么" class="headerlink" title="Promise是什么"></a>Promise是什么</h2><p><code>Promise</code>表示一个异步操作的最终结果。这不太容易理解，可以将<code>Promise</code>理解为一个状态机，它存在下面三种不同的状态，并在某一时刻只能有一种状态</p>
+<h2 id="Promise是什么"><a href="#Promise是什么" class="headerlink" title="Promise是什么"></a>Promise是什么</h2><p><strong><code>Promise</code>表示一个异步操作的最终结果</strong>。这不太容易理解，可以将<code>Promise</code>理解为一个状态机，它存在下面三种不同的状态，并在某一时刻只能有一种状态</p>
 <ul>
 <li>Pending：表示还在执行</li>
 <li>Fulfilled或者Resolved：执行成功</li>
 <li>Rejected：执行失败</li>
 </ul>
 <p>一个Promise是对一个操作，通常是一个异步操作的封装，异步操作有等待完成、成功、失败三种可能结果，对应了Promise的三种状态</p>
-<p>Promise的状态只能由<code>Pending转换为Resolved</code>或者由<code>Pending转换为Rejected</code>，一旦状态转换完成就无法再改变</p>
+<p><strong>Promise的状态只能由<code>Pending转换为Resolved</code>或者由<code>Pending转换为Rejected</code>，一旦状态转换完成就无法再改变</strong></p>
 <p>假设用Promise封装一个异步操作，那么当它被创建的时候就处于Pending状态，当异步操作成功完成时，将状态转换为Fulfilled；如果执行中出现错误，将状态转换为Rejected</p>
 <h2 id="ES2015中的Promise"><a href="#ES2015中的Promise" class="headerlink" title="ES2015中的Promise"></a>ES2015中的Promise</h2><p><strong><code>Promise</code>和<code>Class</code>堪称ES2015的两个最重要的特性</strong>，在如何组织异步代码这个问题上，ES2015中的Generator或者ES2017的async方法，都是以Promise作为基础的</p>
 <h3 id="将异步方法封装成Promise"><a href="#将异步方法封装成Promise" class="headerlink" title="将异步方法封装成Promise"></a>将异步方法封装成Promise</h3><p>可以用Promise的构造函数来封装一个现有的异步操作</p>
@@ -621,7 +621,659 @@ Promise.all(promises).then(function (results) {
 <p>使用<code>promise.all</code>方法封装的Promise，如果将结果集打印出来，会发现它们是按照顺序排列的</p>
 <p><strong>❓既然<code>promise.all</code>会按照顺序返回封装Promise的结果，那么是不是代表内部的Promise是顺序执行的</strong></p>
 <p>答案是否定的，前面已经提到一个Promise的执行是从被创建的那一刻开始的，也就是说当调用<code>promise.all</code>时，所有的Promise都已经开始执行了，**<code>all</code>方法只是等到全部的Promise完成后，对所有的执行结果做包装再返回**</p>
-<h3 id="promise-race"><a href="#promise-race" class="headerlink" title="promise.race"></a>promise.race</h3><h3 id="promise-catch"><a href="#promise-catch" class="headerlink" title="promise.catch"></a>promise.catch</h3><h2 id="使用Promise组织异步代码"><a href="#使用Promise组织异步代码" class="headerlink" title="使用Promise组织异步代码"></a>使用Promise组织异步代码</h2><h2 id="第三方模块的Promise"><a href="#第三方模块的Promise" class="headerlink" title="第三方模块的Promise"></a>第三方模块的Promise</h2><h1 id="Generator，一种过渡方案"><a href="#Generator，一种过渡方案" class="headerlink" title="Generator，一种过渡方案"></a>Generator，一种过渡方案</h1><h1 id="回调的终点——async-await"><a href="#回调的终点——async-await" class="headerlink" title="回调的终点——async/await"></a>回调的终点——async/await</h1>
+<h3 id="promise-race"><a href="#promise-race" class="headerlink" title="promise.race"></a>promise.race</h3><p><code>race</code>方法接收Promise数组作为参数并返回一个新的Promise，数组中的Promise会同时开始执行，<code>race</code>返回的Promise的状态由数组中率先执行完毕的Promise的状态决定</p>
+<pre><code class="javascript">function timeout(ms) {
+    return new Promise((resolve, reject) =&gt; {
+        setTimeout(resolve, ms, &#39;timeout first&#39;)
+    })
+}
+
+let promise = Promise.race([timeout(1), readFile_promise(&#39;foo.txt&#39;)])
+
+promise.then(function (value) {
+    console.log(value)
+})</code></pre>
+<p>👆两个Promise，如果<code>readFile_promise</code>先完成，then方法打印出的就是文件内容。由于<code>timeout</code>只设置了1ms，通常小于读取文件需要的时间，因此调用<code>then</code>方法总是会打印出<code>timeout first</code></p>
+<p>看起来<code>race</code>方法似乎没特别的用处，但在处理Web服务器中的超时逻辑时十分方便，例如为一个Promise，可能是一个数据库操作定义了100ms的执行时限，如果耗时超过这个时间就返回一个超时错误，在这种情况下就可以考虑使用race方法</p>
+<h3 id="promise-catch"><a href="#promise-catch" class="headerlink" title="promise.catch"></a>promise.catch</h3><p>Promise在执行中如果出了错误，可以使用<code>throw</code>关键字抛出错误，并且可以使用<code>catch</code>方法进行捕获；如果不设置任何回调函数捕捉错误，Promise内部抛出的错误就无法传递到外部</p>
+<pre><code class="javascript">var promise = new Promise(function (resolve, reject) {
+    throw new Error(&#39;get error&#39;)
+})
+
+promise.catch(function (err) {
+    console.log(err)
+})</code></pre>
+<p>除了使用<code>throw</code>主动抛出错误之外，也可以直接使用<code>reject</code>方法</p>
+<pre><code class="javascript">var promise = new Promise(function (resolve, reject) {
+    reject(Error(&#39;get error&#39;))
+})
+
+promise.catch(function (err) {
+    console.log(err)
+})</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%205.png" alt="screenshot 5"></p>
+<p>如果Promise的状态已经变成resolved，那么此时再抛出错误是无效的，因为这相当于改变一个状态确定的Promise的状态，👆提到过Promise一旦状态转换完成就无法再改变</p>
+<pre><code class="javascript">var promise = new Promise(function (resolve, reject) {
+    reject(&#39;0xGeekCat&#39;)
+    throw new Error(&#39;get error&#39;)
+})
+
+promise.catch(function (err) {
+    console.log(err) // 0xGeekCat
+})</code></pre>
+<h2 id="使用Promise组织异步代码"><a href="#使用Promise组织异步代码" class="headerlink" title="使用Promise组织异步代码"></a>使用Promise组织异步代码</h2><p><strong>🔔使用promise的初衷是为了解决多个异步操作顺序执行的问题</strong>，因此可以使用<code>then</code>的链式调用来实现这一目标</p>
+<p><strong>使用Promise的链式调用改写三个文本文件顺序读取</strong></p>
+<pre><code class="javascript">readFile_promise(&#39;foo.txt&#39;).then(function (value) {
+    console.log(value)
+    return readFile_promise(&#39;bar.txt&#39;)
+}).then(function (value) {
+    console.log(value)
+    return readFile_promise(&#39;baz.txt&#39;)
+}).then(function (value) {
+    console.log(value)
+})</code></pre>
+<p>👆一堆<strong>链式调用</strong>让人头晕，这也是Promise的不足之处；为了再次简化，可以考虑利用CPS将then方法中的回调函数抽出来</p>
+<pre><code class="javascript">var list = [&#39;foo.txt&#39;, &#39;bar.txt&#39;, &#39;baz.txt&#39;]
+var count = 0
+readFile_promise(&#39;foo.txt&#39;).then(readCB).then(readCB).then(readCB)
+
+function readCB(data) {
+    console.log(data)
+
+    if (++ count &gt; 2)
+        return
+    return readFile_promise(list[count]);
+}</code></pre>
+<h2 id="第三方模块的Promise"><a href="#第三方模块的Promise" class="headerlink" title="第三方模块的Promise"></a>第三方模块的Promise</h2><p>在Node完全支持Promise之前，开发者们通常是使用一些第三方库提供的功能来使用Promise</p>
+<p><strong><code>bluebird</code>是一个功能完善的Promise第三方库</strong>，项目开始于2013年，它提供了完整的Promise逻辑以及对非Promise方法转换为Promise的支持，而且在执行效率上高于原生的Promise</p>
+<h3 id="新建Promise"><a href="#新建Promise" class="headerlink" title="新建Promise"></a>新建Promise</h3><p><strong>使用bluebird封装Ajax方法</strong></p>
+<pre><code class="javascript">var Promise = require(&#39;bluebird&#39;)
+
+function ajaxGetAsync(url) {
+    return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest
+        xhr.addEventListener(&#39;error&#39;, reject)
+        xhr.addEventListener(&#39;load&#39;, resolve)
+        xhr.open(&#39;GET&#39;, url)
+        xhr.send(null)
+    })
+}</code></pre>
+<p>和原生的Promise构造函数没有太大区别</p>
+<h3 id="使用Promisify来转换异步方法"><a href="#使用Promisify来转换异步方法" class="headerlink" title="使用Promisify来转换异步方法"></a>使用Promisify来转换异步方法</h3><p><strong>要使用Promise，要么新建一个Promise，要么把现有的方法转换为Promise</strong></p>
+<p>bluebird提供<code>promisify</code>方法，用来直接将一个异步方法转换为Promise，这估计是bluebird最常用的API，时至今日，该方法的意义已经没那么大了，但姑且在这里标记一下</p>
+<p><strong>使用Promisify将一个方法转换为Promise</strong></p>
+<pre><code class="javascript">var {promisify} = require(&#39;bluebird&#39;)
+var readFile_promise = promisify(require(&#39;fs&#39;).readFile)
+
+readFile_promise(&#39;foo.txt&#39;, &#39;utf8&#39;).then(function (result) {
+    console.log(result)
+}).catch(function (err) {
+    console.log(&#39;error:&#39;, err)
+})</code></pre>
+<p><code>bluebird</code>还提供<code>promisifyAll</code>方法来转换一个对象的全部方法，这个方法的便利性超乎想象。比如可以将<code>fs</code>模块的全部方法批量转换成Promise形式，省去一个个地进行转换</p>
+<pre><code class="javascript">var {promisifyAll} = require(&#39;bluebird&#39;)
+var fs = promisifyAll(require(&#39;fs&#39;))
+
+fs.readFileAsync(&#39;read.js&#39;, &#39;utf8&#39;).then(function (result) {
+    console.log(result)
+}).catch(function (err) {
+    console.log(err.stack)
+})</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%206.png" alt="screenshot 6"></p>
+<p><code>promisifyAll</code>通常用于转换一个对象的全部方法，比如👆会转换整个<code>fs</code>模块内部的异步方法，<code>bluebird</code>会在原方法名之后加上<code>Async</code>后缀，例如<code>readFile</code>的Promise化后的方法名为<code>readFileAsync</code></p>
+<h1 id="Generator，一种过渡方案"><a href="#Generator，一种过渡方案" class="headerlink" title="Generator，一种过渡方案"></a>Generator，一种过渡方案</h1><p>无论是概念还是形式上，ES2015中的Generator几乎就是Python中Generator的翻版</p>
+<p><strong>🔔Generator本质上是一个函数，它最大的特点就是可以被中断，然后恢复执行</strong></p>
+<p>通常来说，当开发者调用一个函数之后，这个函数的执行就脱离了开发者的控制，只有函数执行完毕之后，控制权才能重新回到调用者手中，因此程序员在编写方法代码时，唯一能够影响方法执行的只有预先定义的<code>return</code>关键字</p>
+<p>Promise也是如此，新建一个Promise后，其状态自动转换为pending同时开始执行，直到状态改变后才能进行下一步操作</p>
+<p>而Generator函数不同，Generator函数可以由用户执行中断或者恢复执行的操作，Generator中断后可以转去执行别的操作，然后再回过头从中断的地方恢复执行，<strong>这其实是一种协程的概念</strong></p>
+<h2 id="Generator的使用"><a href="#Generator的使用" class="headerlink" title="Generator的使用"></a>Generator的使用</h2><p>Generator函数和普通函数在外表上两个最大的区别</p>
+<ul>
+<li>在function关键字和方法名中间有个星号</li>
+<li>方法体中使用<code>yield</code>关键字</li>
+</ul>
+<pre><code class="javascript">function* Generator() {
+    yield &#39;0xGeekCat&#39;
+    return &#39;end&#39;
+}</code></pre>
+<p>和普通方法一样，Generator可以定义成多种形式</p>
+<pre><code class="javascript">// 普通方法
+function* generator() {}
+
+// 函数表达式
+var gen = function* generator() {}
+
+// 对象属性方法
+var obj = {
+    * generator() {}
+}</code></pre>
+<p><strong>Generator函数的状态</strong></p>
+<p><code>yield</code>关键字用来定义函数执行的状态，如果Generator中定义了<code>x</code>个<code>yield</code>关键字，那么就有<code>x + 1</code>种状态，因为最后的return语句</p>
+<h2 id="Generator函数的执行"><a href="#Generator函数的执行" class="headerlink" title="Generator函数的执行"></a>Generator函数的执行</h2><p>跟普通函数相比，Generator函数更像是一个类或者一种数据类型</p>
+<p>直接执行Generator会得到Generator对象，而不是执行方法体中的内容</p>
+<pre><code class="javascript">function* Generator() {
+    yield &#39;0xGeekCat&#39;
+    return &#39;end&#39;
+}
+
+var gen = Generator()
+console.log(gen) // Object [Generator] {}</code></pre>
+<p>按照通常的思路，<code>gen</code>应该是<code>Generator()</code>函数的返回值，👆也提到Generator函数可能有多种状态，Promise也可能有三种状态。不同的是Promise只能有一个确定的状态，而Generator对象会逐个经历所有的状态，直到Generator函数执行完毕</p>
+<p><strong>当调用Generator函数之后，该函数并没有立刻执行，函数的返回结果也不是字符串，而是一个对象，可以将该对象理解为一个指针，指向Generator函数当前的状态</strong></p>
+<p>当Generator被调用后，指针指向方法体的开始行，当next方法调用后，该指针向下移动，方法也跟着向下执行，最后会停在第一个遇到的yield关键字前面，当再次调用next方法时，指针会继续移动到下一个yield关键字，直到运行到方法的最后一行</p>
+<pre><code class="javascript">var gen = Generator()
+console.log(gen.next())
+console.log(gen.next())
+console.log(gen.next())</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%207.png" alt="screenshot 7"></p>
+<p>上面的代码一共调用了三次<code>next</code>方法，每次都返回一个包含执行信息的对象</p>
+<ul>
+<li>一个表达式的值</li>
+<li>一个标记执行状态的flag</li>
+</ul>
+<p><strong>分析3次next触发的程序运行</strong></p>
+<ol>
+<li>遇到一个yield语句后停止，返回对象的value的值就是yield语句的值，done属性用来标志Generator方法是否执行完毕</li>
+<li>程序执行到return语句的位置，返回对象的value值即为return语句的值，如果没有return语句，则会一直执行到函数结束，value值为undefined，done属性值为true</li>
+<li>Generator已经执行完毕，因此value的值为undefined</li>
+</ol>
+<h3 id="yield关键字"><a href="#yield关键字" class="headerlink" title="yield关键字"></a>yield关键字</h3><p><code>yield</code>本意为<strong>生产</strong>，在Python、Java以及C#中都有yield关键字，但只有Python中yield的语义和Node相似</p>
+<p>当next方法被调用时，Generator函数开始向下执行，遇到yield关键字时，会暂停当前操作，并且对yield后的表达式进行求值，无论yield后面表达式返回的是何种类型的值，<strong>yield操作最后返回的都是一个对象，该对象有value和done两个属性</strong></p>
+<p>value很好理解，如果后面是一个基本类型，那么value的值就是对应的值，<strong>更为常见的是yield后面跟的是Promise对象</strong></p>
+<p>done属性表示当前Generator对象的状态，刚开始执行时done属性的值为false，当Generator执行到return语句时，done的值会变成true，表示Generator执行结束</p>
+<p><strong>❗️yield关键字本身不产生返回值</strong></p>
+<pre><code class="javascript">function* foo(x) {
+    var y = yield (x + 1)
+    return y
+}
+
+var gen = foo(5)
+console.log(gen.next())
+console.log(gen.next())</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%208.png" alt="screenshot 8"></p>
+<p><strong>❓为什么第二个<code>next</code>方法执行后，<code>y</code>的值却是<code>undefined</code></strong></p>
+<p><code>next</code>方法的返回值是<code>yield</code>关键字后面表达式的值，而<code>yield</code>关键字本身可以视为一个不产生返回值的函数，因此<code>y</code>并没有被赋值</p>
+<pre><code class="javascript">function* foo(x) {
+    yield y =  (x + 1)
+    return &#39;end&#39;
+}
+
+var gen = foo(5)
+console.log(gen.next())
+console.log(gen.next())</code></pre>
+<p>👆这样就解决了计算<code>y</code>值的问题</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%209.png" alt="screenshot 9"></p>
+<p><code>next</code>方法还可以接受一个数值作为参数，代表上一个yield求值的结果</p>
+<pre><code class="javascript">function* foo(x) {
+    var y = yield (x + 1)
+    return y
+}
+
+var gen = foo(5)
+console.log(gen.next())
+console.log(gen.next(10))</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2010.png" alt="screenshot 10"></p>
+<p>👆代码等价于</p>
+<pre><code class="javascript">function* foo(x) {
+    var y = yield (x + 1)
+    y = 10 👈
+    return y
+}
+
+var gen = foo(5)
+console.log(gen.next())
+console.log(gen.next())</code></pre>
+<p><code>next</code>可以接收参数代表可以从外部传一个值到Generator函数内部，<strong>实际上正是这个特性使得Generator可以用来组织异步方法</strong></p>
+<h3 id="next方法与Iterator接口"><a href="#next方法与Iterator接口" class="headerlink" title="next方法与Iterator接口"></a>next方法与Iterator接口</h3><p><code>Iterator</code>同样使用next方法来遍历元素。由于Generator函数会返回的对象实现了一个Iterator接口，因此所有能够遍历Iterator接口的方法都可以用来执行Generator，可以使用<code>for / of</code>循环的方式来执行Generator函数内的步骤</p>
+<p><strong>❗️循环会在<code>done</code>属性为<code>true</code>时停止，之前例子中的<code>end</code>并不会被打印，如果希望被打印，需要将最后的<code>return</code>改为<code>yield</code></strong></p>
+<pre><code class="javascript">function * Generator() {
+    yield &#39;hello, world&#39;
+    yield &#39;0xGeekCat&#39;
+    return &#39;end&#39;
+}
+
+var gen = Generator()
+
+for (let i of gen) {
+    console.log(i)
+}
+
+console.log(Array.from(Generator())) 👈 将Generator()转换成数组，不过似乎其不是array-like Object</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2011.png" alt="screenshot 11"></p>
+<p>直接打印Generator函数的示例没有结果，但既然Generator函数返回了一个遍历器，那就自然具有<code>Symbol.iterator</code>属性</p>
+<pre><code class="javascript">console.log(gen[Symbol.iterator]) // [Function: [Symbol.iterator]]</code></pre>
+<h2 id="Generator中的错误处理"><a href="#Generator中的错误处理" class="headerlink" title="Generator中的错误处理"></a>Generator中的错误处理</h2><p>Generator函数的原型中定义了<code>throw</code>方法，用于抛出异常</p>
+<pre><code class="javascript">function * generator() {
+    try {
+        yield console.log(&#39;0xGeekCat&#39;)
+    } catch (e) {
+        console.log(e)
+    }
+
+    yield console.log(&#39;Node&#39;)
+    return &#39;end&#39;
+}
+
+var gen = generator()
+gen.next()
+gen.throw(&#39;error&#39;)
+console.log(gen.next())</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2012.png" alt="screenshot 12"></p>
+<p>执行完第一个<code>yield</code>操作后，Generator对象抛出了异常，然后被函数体中<code>try / catch</code>捕获</p>
+<p><strong>❗️当异常被捕获后，Generator函数会继续向下执行，直到遇到下一个<code>yield</code>操作并输出<code>yield</code>表达式的值</strong></p>
+<pre><code class="javascript">function* generator() {
+    try {
+        yield console.log(&#39;hello, world&#39;)
+    } catch (e) {
+        console.log(e)
+    }
+
+    console.log(&#39;test&#39;)
+    yield console.log(&#39;0xGeekCat&#39;)
+    return &#39;end&#39;
+}
+
+var gen = generator()
+gen.next()
+gen.throw(&#39;throw error&#39;)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2013.png" alt="screenshot 13"></p>
+<p>如果Generator函数在执行的过程中出错，也可以在外部进行捕获</p>
+<pre><code class="javascript">function* generator() {
+    yield console.log(undefined.undefined)
+}
+
+var gen = generator()
+
+try {
+    gen.next()
+} catch (e) {
+    console.log(e)
+}</code></pre>
+<p>Generator的原型对象还定义了<code>return()</code>方法，用来结束Generator函数的执行，这和函数内部的<code>return</code>关键字不是一个概念</p>
+<pre><code class="javascript">function* generator() {
+    yield console.log(&#39;hello, world&#39;)
+    yield console.log(&#39;0xGeekCat&#39;)
+    return &#39;end&#39;
+}
+
+var gen = generator()
+gen.next()
+gen.return() 👈 之后的next不会被执行
+gen.next()</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2014.png" alt="screenshot 14"></p>
+<h2 id="用Generator组织异步方法"><a href="#用Generator组织异步方法" class="headerlink" title="用Generator组织异步方法"></a>用Generator组织异步方法</h2><p><strong>使用Generator函数处理异步任务的原因</strong></p>
+<ul>
+<li>Generator函数可以中断和恢复执行，这个特性由<code>yield</code>关键字来实现</li>
+<li>Generator函数内外可以交换数据，这个特性由<code>next</code>函数来实现</li>
+</ul>
+<p><strong>Generator函数处理异步操作的核心思想</strong></p>
+<p>先将函数暂停在某处，然后拿到异步操作的结果，然后再把这个结果传到方法体内</p>
+<p>yield关键字后面除了通常的函数表达式外，比较常见的是后面跟的是一个Promise，由于yield关键字会对其后的表达式进行求值并返回，那么调用next方法时就会返回一个Promise对象，可以接着调用then方法，并在回调中使用next方法将结果传回Generator</p>
+<p><strong>使用Generator处理异步</strong></p>
+<pre><code class="javascript">var fs = require(&#39;fs&#39;)
+
+function readFile_promise(path) {
+    return new Promise(function (resolve, reject) {
+        fs.readFile(path, &#39;utf-8&#39;, function (error, data) {
+            if (data) {
+                resolve(data)
+            } else {
+                reject(error)
+            }
+        })
+    })
+}
+
+function* generator() {
+    var result = yield readFile_promise(&#39;foo.txt&#39;)
+    console.log(result)
+}
+
+var gen = generator()
+var result = gen.next() 👈 result对象中含有Promise对象
+console.log(result)
+result.value.then(function (data) { 
+    gen.next(data)
+})</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2015.png" alt="screenshot 15"></p>
+<p>👆Generator函数封装<code>readFile_promise</code>方法，该方法返回一个Promise，Generator函数对<code>readFile_promise</code>的调用方式和同步操作基本相同，除了yield关键字之外</p>
+<p><strong>使用Generator进行多个异步流程控制</strong></p>
+<pre><code class="javascript">var fs = require(&#39;fs&#39;)
+
+function readFile_promise(path) {
+    return new Promise(function (resolve, reject) {
+        fs.readFile(path, &#39;utf-8&#39;, function (error, data) {
+            if (data) {
+                resolve(data)
+            } else {
+                reject(error)
+            }
+        })
+    })
+}
+
+function* generator() {
+    var result = yield readFile_promise(&#39;foo.txt&#39;)
+    console.log(result)
+
+    var result2 = yield readFile_promise(&#39;bar.txt&#39;)
+    console.log(result2)
+}
+
+var gen = generator()
+var result = gen.next()
+console.log(result)
+result.value.then(function (data) {
+    gen.next(data).value.then(function (data) {
+        gen.next(data)
+    })
+})</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2016.png" alt="screenshot 16"></p>
+<p><strong>Generator的缺点</strong></p>
+<p>虽然在调用时保持了同步形式，但需要手动执行Generator函数，于是在执行时又回到了嵌套调用</p>
+<h2 id="Generator的自动执行"><a href="#Generator的自动执行" class="headerlink" title="Generator的自动执行"></a>Generator的自动执行</h2><p>开发者肯定不希望调用函数还要一步步地写代码。对Generator函数来说，如果要顺序地读取多个文件，也要写很多用来执行的代码</p>
+<p>无论是Promise还是Generator，就算在编写异步代码时能获得便利，但执行阶段却要写更多的代码</p>
+<ul>
+<li>Promise需要手动调用<code>then</code>方法</li>
+<li>Generator需要手动调用<code>next</code>方法</li>
+</ul>
+<p>当需要顺序执行异步操作的个数比较少的情况下，开发者还可以接受手动执行，但如果面对多个异步操作就有些难办，避免了<strong>回调地狱</strong>，却又陷到了<strong>执行地狱</strong></p>
+<h3 id="自动执行器的实现"><a href="#自动执行器的实现" class="headerlink" title="自动执行器的实现"></a>自动执行器的实现</h3><p>既然Generator函数是依靠next方法来执行的，那么只要实现函数自动执行next方法就可以</p>
+<pre><code class="javascript">function auto(Generator) {
+    var gen = Generator()
+
+    while (gen.next().value !== undefined) {
+        gen.next()
+    }
+}</code></pre>
+<p>👆思路虽然没错，但这种写法并不正确，首先这种方法只能用在像👇这种最简单的Generator函数上</p>
+<pre><code class="javascript">function* Generator() {
+    yield &#39;0xGeekCat&#39;
+    return &#39;end&#39;
+}</code></pre>
+<p>另一方面，由于Generator没有<code>hasNext</code>方法，<code>gen.next().value !== undefined</code>在while循环中作为条件，在第一次条件判断时就开始执行了，这表示无法拿到第一次执行的结果。因此这种写法行不通，于是换个思路</p>
+<pre><code class="javascript">function* Generator() {
+    yield &#39;0xGeekCat&#39;
+    yield &#39;hello, world&#39;
+    return &#39;end&#39;
+}
+
+
+var gen = Generator()
+for (let i of gen) {
+    console.log(i)
+}</code></pre>
+<p><code>for / of</code>循环看起来没什么问题，但同样也只能拿来执行最简单的Generator函数</p>
+<h3 id="基于Promise的执行器"><a href="#基于Promise的执行器" class="headerlink" title="基于Promise的执行器"></a>基于Promise的执行器</h3><p>在实际应用中，yield后面跟的大都是Promise，这时候<code>for / of</code>实现的执行器就不起作用</p>
+<p>观察发现Generator的嵌套执行是一种递归调用，每一次的嵌套的返回结果都是一个Promise对象</p>
+<p><strong>升级后的执行函数</strong></p>
+<pre><code class="javascript">function auto_exec(gen) {
+    function next(data) {
+        var result = gen.next(data)
+
+        if (result.done)
+            return result.value
+
+        result.value.then(function (data) {
+            next(data)
+        })
+    }
+
+    next()
+}</code></pre>
+<p>这个执行器因为调用<code>then</code>方法，因此只适用于<code>yield</code>后面跟一个Promise的方法</p>
+<h3 id="使用co模块来自动执行"><a href="#使用co模块来自动执行" class="headerlink" title="使用co模块来自动执行"></a>使用co模块来自动执行</h3><p>为了解决generator执行的问题，2013年6月发布了著名co模块，这是一个用来自动执行Generator函数的小工具，和Generator配合可以实现接近同步的调用方式，co方法仍然会返回一个Promise</p>
+<p><strong>使用co模块执行Generator</strong></p>
+<pre><code class="javascript">var fs = require(&#39;fs&#39;)
+var co = require(&#39;co&#39;)
+
+function readFile_promise(path) {
+    return new Promise(function (resolve, reject) {
+        fs.readFile(path, &#39;utf-8&#39;, function (error, data) {
+            if (data) {
+                resolve(data)
+            } else {
+                reject(error)
+            }
+        })
+    })
+}
+
+function* gen() {
+    var result = yield readFile_promise(&#39;foo.txt&#39;)
+    console.log(result)
+
+    var result2 = yield readFile_promise(&#39;bar.txt&#39;)
+    console.log(result2)
+}
+
+co(gen)</code></pre>
+<p>只要将Generator函数作为参数传给co方法就能将内部的异步任务顺序执行</p>
+<p><strong>❗️要使用co模块，yield后面的语句只能是promsie对象</strong></p>
+<p>到此为止，对异步的处理有了一个比较妥当的方式，利用<code>generator + co</code>，基本可以用同步的方式来书写异步操作</p>
+<p>但co模块仍有不足之处，由于它仍然返回Promise，这代表如果想要获得异步方法的返回值，还要👇这种形式</p>
+<pre><code class="javascript">co(gen).then(function (value) {
+    console.log(value)
+})</code></pre>
+<p>另外当面对多个异步操作时，除非将所有的异步操作都放在一个Generator函数中，否则如果需要对co的返回值进行进一步操作，仍然要将代码写到Promise的回调中去</p>
+<h1 id="回调的终点-async-await"><a href="#回调的终点-async-await" class="headerlink" title="回调的终点 async / await"></a>回调的终点 async / await</h1><h2 id="async函数的概念"><a href="#async函数的概念" class="headerlink" title="async函数的概念"></a>async函数的概念</h2><p>ES2017标准引入async函数，终结了回调处理的问题，<strong>async函数可以看作是自带执行器的Generator函数</strong></p>
+<p><strong>用async函数改写Generator方法</strong></p>
+<pre><code class="javascript">function* gen() {
+    var result = yield readFile_promise(&#39;foo.txt&#39;)
+    console.log(result)
+
+    var result2 = yield readFile_promise(&#39;bar.txt&#39;)
+    console.log(result2)
+}
+👇 等效
+var asyncReadFile = async function() {
+    var result = readFile_promise(&#39;foo.txt&#39;)
+    console.log(result)
+
+    var result2 = readFile_promise(&#39;bar.txt&#39;)
+    console.log(result2)
+}</code></pre>
+<p>形式看起来没有什么大的变化，yield关键字换成了await，方法名前的*号变成了async关键字</p>
+<p><strong>Generator和async的区别</strong></p>
+<ul>
+<li>await后面往往是Promise，如果不是就隐式调用<code>promise.resolve</code>转换成Promise，<strong>await会等待后面的Promise执行完成后再进行下一步操作</strong></li>
+<li>调用async方法是直接通过方法名调用</li>
+</ul>
+<p>在这个过程中，完全没有了回调的影子也没有引入任何第三方模块，async拥有Node的原生支持，困扰Node社区多年的回调问题在这里终结</p>
+<h3 id="声明async方法"><a href="#声明async方法" class="headerlink" title="声明async方法"></a>声明async方法</h3><pre><code class="javascript">// 普通函数声明
+async function foo() {}
+
+// 函数表达式
+const foo = async function() {}
+
+// 箭头函数
+const foo = async () =&gt; {}</code></pre>
+<h3 id="async的返回值"><a href="#async的返回值" class="headerlink" title="async的返回值"></a>async的返回值</h3><p>async函数总是会返回一个Promise对象，如果return关键字后面不是一个Promise，那么默认调用<code>promise.resolve</code>方法进行转换</p>
+<pre><code class="javascript">async function asyncFunc() {
+    return &#39;0xGeekCat&#39;
+}
+
+asyncFunc().then(function (data) {
+    console.log(data) // 0xGeekCat
+})
+
+console.log(asyncFunc()) // Promise { &#39;0xGeekCat&#39; }</code></pre>
+<p><code>asyncFunc()</code>方法虽然看似返回了一个字符串，却使用then方法来获得值，这是内部将字符串转换成了Promise的缘故</p>
+<h3 id="async函数的执行过程"><a href="#async函数的执行过程" class="headerlink" title="async函数的执行过程"></a>async函数的执行过程</h3><ul>
+<li>在async函数开始执行的时候，会自动生成一个Promise对象</li>
+<li>当方法体开始执行后，如果遇到return关键字或者throw关键字，执行会立刻退出，如果遇到await关键字则会暂停执行，await后面的异步操作结束后会恢复执行</li>
+<li>执行完毕，返回一个Promise</li>
+</ul>
+<p><strong>通过👇例子了解async函数工作流程</strong></p>
+<pre><code class="javascript">async function asyncFunc() {
+    console.log(&#39;begin&#39;)
+    return &#39;0xGeekCat&#39;
+}
+
+asyncFunc().then(x =&gt; console.log(x))
+
+setTimeout(function () {
+    console.log(&#39;end&#39;)
+}, 2000)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2018.png" alt="screenshot 18"></p>
+<pre><code class="javascript">async function asyncFunc() {
+    console.log(&#39;begin&#39;)
+    return &#39;0xGeekCat&#39;
+}
+
+asyncFunc().then(x =&gt; console.log(x))
+
+console.log(&#39;end&#39;)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2019.png" alt="screenshot 19"></p>
+<p>async函数返回的Promise，既可以是resolved状态，也可以是reject状态，不过通常使用<code>throw Error</code>的方式来代替reject</p>
+<pre><code class="javascript">async function asyncFunc() {
+    return Promise.reject(new Error(&#39;0xGeekCat&#39;))
+}
+
+asyncFunc().catch(err =&gt; console.log(err))</code></pre>
+<h2 id="await关键字"><a href="#await关键字" class="headerlink" title="await关键字"></a>await关键字</h2><p>对于async来说，await关键字不是必需的，<strong>由于async本质上是对Promise的封装，可以使用执行Promise的方法来执行async方法</strong></p>
+<p><strong>🔔await关键字是这一情况的语法糖，它可以<code>自动执行</code>一个Promise</strong></p>
+<p>其实是等待后面的Promise完成后再进行下一步动作，当async函数内有多个Promise需要串行执行的时候，这种特性带来的好处是十分明显的</p>
+<p>await操作符的结果是由其后面Promise对象的操作结果来决定的</p>
+<ul>
+<li>如果后面Promise对象变为resolved，await操作符返回的值就是resolve的值</li>
+<li>如果Promise对象的状态变成rejected，那么await也会抛出reject的值</li>
+</ul>
+<p><strong>异步读取一个文件</strong></p>
+<pre><code class="javascript">async function readFile() {
+    var result = await readFile_promise(&#39;foo.txt&#39;)
+    console.log(result)
+}
+readFile()
+👇 等效
+readFile_promise(&#39;foo.txt&#39;).then(function (data) {
+    console.log(data)
+})</code></pre>
+<p><strong>由于await可以看作是Promise的执行器</strong>，所以也可以写成👇形式</p>
+<pre><code class="javascript">async function readFile() {
+    var result = await readFile_promise(&#39;foo.txt&#39;).then(function (result) {
+        return result
+    })
+    console.log(result)
+}
+
+readFile()</code></pre>
+<p>在使用了await关键字之后，无论是代码还是执行，都变得和同步操作没什么两样</p>
+<h3 id="await与并行"><a href="#await与并行" class="headerlink" title="await与并行"></a>await与并行</h3><p>await会等待后面的Promise完成后再采取下一步动作，这意味着当有多个await操作时，程序会变成完全的串行操作</p>
+<p><strong>为了发挥Node的异步优势，当异步操作之间不存在结果的依赖关系时，可以使用<code>promise.all</code>来实现并行</strong></p>
+<pre><code class="javascript">async function readFile() {
+    const [result1, result2] = await Promise.all([
+        readFile_promise(&#39;foo.txt&#39;),
+        readFile_promise(&#39;bar.txt&#39;)
+    ])
+
+    console.log(result1, result2)
+}
+👇 等效
+function readFile() {
+    return Promise.all([
+        readFile_promise(&#39;foo.txt&#39;),
+        readFile_promise(&#39;bar.txt&#39;)
+    ]).then((result) =&gt; {
+        console.log(result)
+    })
+}</code></pre>
+<h3 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h3><p>当async函数中有多个await关键字时，如果有一个await的状态变成了<code>rejected</code>，那么后面的操作就不会继续执行</p>
+<pre><code class="javascript">var asyncReadFile = async function() {
+    var result1 = await readFile_promise(&#39;not exist&#39;)
+    var result2 = await readFile_promise(&#39;foo.txt&#39;)
+
+    console.log(result1.toString())
+    console.log(result2.toString())
+}
+
+asyncReadFile()</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81/screenshot%2017.png" alt="screenshot 17"></p>
+<p>👆表明代码中有没有被处理的处于rejected状态的Promise。因此使用await时为了避免潜在的错误，最好用<code>try / catch</code>将所有的await包裹起来</p>
+<h2 id="在循环中使用async方法"><a href="#在循环中使用async方法" class="headerlink" title="在循环中使用async方法"></a>在循环中使用async方法</h2><p><strong><code>for / while</code>循环</strong></p>
+<pre><code class="javascript">var array = [&#39;foo.txt&#39;, &#39;bar.txt&#39;, &#39;baz.txt&#39;]
+async function readFile() {
+    for (let i = 0; i &lt; 3; i ++) {
+        var result = await readFile_promise(array[i])
+        console.log(result)
+    }
+}
+
+readFile()</code></pre>
+<p><strong><code>forEach</code>循环</strong></p>
+<pre><code class="javascript">async function readFile(list) {
+    list.forEach(async function (item) {
+        var result = await readFile_promise(item)
+        console.log(result)
+    })
+}
+
+readFile([&#39;foo.txt&#39;, &#39;bar.txt&#39;, &#39;baz.txt&#39;])</code></pre>
+<p>❗️即使是在匿名函数中使用await关键字，也要在匿名函数前加上async关键字</p>
+<p><strong><code>for \ of</code>循环</strong></p>
+<pre><code class="javascript">async function readFile(list) {
+    for (const item of list) {
+        var result = await readFile_promise(item)
+        console.log(result)
+    }
+}
+
+readFile([&#39;foo.txt&#39;, &#39;bar.txt&#39;, &#39;baz.txt&#39;])</code></pre>
+<p>如果异步方法的执行全都变成串行的话，就不能发挥出Node非阻塞IO的优势了，如果想要使用并行来提高执行效率，那么需要使用<code>promise.all</code></p>
+<pre><code class="javascript">async function readFile(list) {
+    await Promise.all(list.map(async function (item) {
+        var result = await readFile_promise(item)
+        console.log(result)
+    }))
+}
+
+readFile([&#39;foo.txt&#39;, &#39;bar.txt&#39;, &#39;baz.txt&#39;])</code></pre>
+<h2 id="async和await小结"><a href="#async和await小结" class="headerlink" title="async和await小结"></a>async和await小结</h2><p>async函数是用<code>async / await</code>关键字来标识的，async函数返回一个Promise对象，当在方法体中遇到异步操作时，会立刻返回，随后不断轮询直到异步操作完成，随后再继续执行方法体内剩下的代码</p>
+<pre><code class="javascript">async function timeout(ms) {
+    await new Promise(resolve =&gt; {
+        setTimeout(resolve, ms)
+    })
+}
+
+async function asyncPrint(ms) {
+    for (let i = 0; i &lt; 5; i ++) {
+        await timeout(ms)
+        console.log(i)
+    }
+}
+
+asyncPrint(1000)</code></pre>
+<p>❗️即使将<code>timeout</code>写成了<code>async / await</code>形式，但在<code>asyncPrint</code>方法中依然需要使用<code>await</code>关键字来调用，同时也药让<code>asyncPrint</code>函数带上<code>async</code>关键字</p>
+<p>通常在只要函数体中调用async操作，该函数就不得不带上async关键字。这有可能导致所有的函数都变成async函数，就像采用同步事件处理的语言一样</p>
+<p><strong>对于await关键字使用的一些关键点</strong></p>
+<ul>
+<li>await关键字必须位于async函数内部</li>
+<li>await关键字后面需要是一个Promise对象，不是的话就调用resolve转换</li>
+<li>await关键字的返回结果就是其后面Promise执行的结果，可能是resolved或者rejected的值</li>
+<li>不能在普通箭头函数中使用await关键字，需要在箭头函数前面增加async关键字</li>
+<li>await用来串行地执行异步操作，想实现并行可以考虑<code>promise.all</code></li>
+</ul>
+<h2 id="async函数的缺点"><a href="#async函数的缺点" class="headerlink" title="async函数的缺点"></a>async函数的缺点</h2><p>async函数和Generator函数比起来，有着不少的优点，例如可以实现自动执行，无须借助第三方模块等，也免去了Generator函数中一些复杂的概念，async函数的声明和执行与普通同步函数几乎一模一样，除了async和await关键字，但仍然有一些不足，如果有很多层的方法调用，最底层的异步操作被封装成了async方法，那么该函数的所有上层方法可能都要变成async方法</p>
+<p>假设有一个get方法，用来从数据库中找出一条id最大值的记录，然后调用set方法将这个值增加1后存入数据库，然后再返回修改后的值</p>
+<pre><code class="javascript">async function update() {
+    var value = await get()
+    ++ value
+
+    await set()
+    // 应该等待set结束再返回
+    return value
+}</code></pre>
+<p>假设update是由一个对象触发update事件时执行的回调函数，通常情况下上一级的调用会是👇形式</p>
+<pre><code class="javascript">obj.on(&#39;update&#39;, function () {
+    var value = update()
+})</code></pre>
+<p>对于async函数update来说，这种调用得不到正确的value值，<strong>🔔因为async方法返回的永远是Promise</strong>，即使开发者返回的是常量，也会被自动调用的<code>promise.resolve</code>方法转换为Promise，因此上层的调用方法也要是async函数</p>
+<pre><code class="javascript">async function xxx() {
+    var value = await update()
+    return value
+}</code></pre>
+<p>如果还存在更高层次的方法调用，那么从最底层的异步操作开始，到最顶层一个不需要返回值的函数为止，全部的方法都变成async方法</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》 李锴</p>
+
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -648,9 +1300,26 @@ Promise.all(promises).then(function (results) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                《新时期的Node.js入门》学习日记-使用Koa2构建Web站点</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
         
           
-            <div class="post-nepre full next">
+            <div class="post-nepre half next">
           
             <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node.html" rel="next">
               <div class="background">
