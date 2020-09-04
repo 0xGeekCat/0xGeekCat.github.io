@@ -271,30 +271,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
 
-  <div class="pattern-center single-center">
-    <!-- 有配图默认渲染第一张 -->
-    <div class="pattern-attachment-img lazyload" style="background-image: url(https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png);" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
-    </div>
-    <header class="pattern-header single-header">
-      <h1 class="entry-title">
-      《新时期的Node.js入门》学习日记-使用Koa2构建Web站点</h1>
-      <p class="entry-census">
-        <span>
-          <a href="https://0xgeekcat.github.io/">
-            <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg">
-          </a>
-        </span>
-        <span>
-          <a href="https://0xgeekcat.github.io/">0xGeekCat</a>
-        </span>
-        <span class="bull">
-        ·</span>
-        2020-9-1<span class="bull">
-        ·</span>
-      <span id="busuanzi_value_page_pv"></span>次阅读</p>
-    </header>
-  </div>
-
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
@@ -302,8 +278,614 @@
         <div class="toc"></div>
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
+          <header class="entry-header">
+            <h1 class="entry-title">《新时期的Node.js入门》学习日记-使用Koa2构建Web站点</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-9-1&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
         <div class="entry-content">
-          
+          <h1 id="Node-Web框架的发展历程"><a href="#Node-Web框架的发展历程" class="headerlink" title="Node Web框架的发展历程"></a>Node Web框架的发展历程</h1><p>首先梳理一下Node Web框架的发展历程，从2009年到现在，最为出名的Web框架有三个</p>
+<h2 id="Connect"><a href="#Connect" class="headerlink" title="Connect"></a>Connect</h2><p>Connect诞生于2010年，这个时间相当早，因为Node项目始于2009年，<strong>可以将Connect理解成一个Node中间件的脚手架，只提供了基本的调用逻辑，没有具体的处理逻辑</strong>，Connect的源码结构十分简单，只有一个文件，去掉注释后的代码不超过两百行</p>
+<p>之所以首先提到Connect是因为它首先在Node服务器编程中引入了中间件<code>middleware</code>概念</p>
+<p>中间件的概念并不新鲜，但对于当时还是一片荒芜的Node来说，中间件概念的引入有很重要的意义，因为之后产生的大多数框架都开始采用这一思路，为后面Express的诞生与繁荣打下了基础</p>
+<p><strong>中间件的引入将Web开发变成不同模块间的层级调用，有助于开发者将业务逻辑拆分</strong>；此外Connect的实现已经成了某种事实的规范</p>
+<h2 id="Express"><a href="#Express" class="headerlink" title="Express"></a>Express</h2><p>Express框架开发的时间也很早，它继承了Connect的大部分思想，也继承了源码，其发展分为两个阶段，Express3.x与Express4.x</p>
+<ul>
+<li><p>在3.x及之前版本中，Express直接依赖Connect的源码，并内置不少中间件，这种做法的缺点是如果内置的中间件更新，那么开发者就不得不更新整个Express</p>
+</li>
+<li><p>在4.x中，Express摆脱了对Connect的依赖，并且摒弃除了静态文件模块之外的所有中间件，只保留了核心路由处理逻辑以及一些其他的代码</p>
+</li>
+</ul>
+<p>在过去的几年中，Express取得了巨大的成功，无论是开发者的数量还是社区的活跃程度都是现象级的</p>
+<p><strong>🔔MEAN架构<code>MongoDB + Express + Angular + Node</code>成为了不少初创网站的开发首选，至今依旧非常流行</strong></p>
+<h2 id="Koa"><a href="#Koa" class="headerlink" title="Koa"></a>Koa</h2><p>在某些需要同步调用的场景下处理异步让人窝火，开发者往往会在这上面耗费大量的时间，而不是把主要精力放在业务逻辑上</p>
+<p>因此在2013年底，Express的原班开发人马使用ES2015中的新特性，主要是Generator重新打造新的Web框架<code>Koa</code></p>
+<p>Koa的初衷就是彻底解决在Node Web开发中的异步问题，在ES2015还没有被Node完全支持的时候，运行Koa项目需要在启动Node时加上<code>--harmony</code>参数</p>
+<p><strong>🔔Koa的理念与Connect更加相似，内部没有提供任何中间件，Express中保留的静态文件和路由也被剔除，仅作为中间件调用的脚手架</strong></p>
+<p>Koa的发展同样存在Koa1.x和Koa2两个阶段，两者之间有一定的区别</p>
+<ul>
+<li>Koa2使用ES2017中async方法来处理中间件的调用</li>
+<li>Koa1.x使用的是generator</li>
+</ul>
+<p>Connect、 Express、 Koa这三个框架可谓一脉相承，Connect目前已经少有人问津，Express和Koa占据了绝大部分的市场</p>
+<h1 id="内容规划"><a href="#内容规划" class="headerlink" title="内容规划"></a>内容规划</h1><h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><h3 id="上传文章"><a href="#上传文章" class="headerlink" title="上传文章"></a>上传文章</h3><p>实现Web的富文本编译器是一项吃力不讨好的工作，如果独立开发的话，逻辑的复杂性往往会让开发者陷入绝境。因此通常情况下要实现在线文章的编辑往往借用第三方模块</p>
+<p>文章实现的博客系统里，采用本地编写文章，然后上传到网站上的方式实现，这能让我们更关注路由和数据库存储方面的内容</p>
+<h3 id="路由设计"><a href="#路由设计" class="headerlink" title="路由设计"></a>路由设计</h3><p><strong>👇初步设计的路由</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot.png" alt="screenshot"></p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p><strong>为了实现目标网站，需要解决👇问题</strong></p>
+<ul>
+<li>静态文件服务</li>
+<li>路由设计</li>
+<li>数据存储</li>
+<li>页面渲染</li>
+</ul>
+<p><strong>本次使用的技术栈为<code>Node + Koa + MongoDB + Redis + Ejs</code></strong></p>
+<ul>
+<li>Node：开发语言</li>
+<li>Koa：Web开发框架</li>
+<li>MongoDB：基础的数据存储服务</li>
+<li>Redis：主要用来存储Session</li>
+<li>Ejs：页面模板引擎</li>
+</ul>
+<h1 id="Koa入门"><a href="#Koa入门" class="headerlink" title="Koa入门"></a>Koa入门</h1><h2 id="Koa1-x与Koa2"><a href="#Koa1-x与Koa2" class="headerlink" title="Koa1.x与Koa2"></a>Koa1.x与Koa2</h2><p><strong>Koa1.x和Koa2的主要区别在于前者使用Generator，后者使用async方法来进行中间件的管理</strong></p>
+<p>Web开发中尽管Node本身是异步的，但还是希望能够顺序执行某些操作，而且代码实现要尽可能简洁</p>
+<p>在实际开发中这些操作会抽象为一个个中间件，通常都是异步进行调用的，那么问题就回到如何控制中间件的调用顺序</p>
+<p>在Koa1.x的版本中，使用了ES2015提案中的Generator函数来作为异步处理的主要方式。为了实现Generator的自动执行，还使用了co模块作为底层的执行器</p>
+<p><strong>安装Koa 1.x&amp; Koa 2.x</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%201.png" alt="screenshot 1"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%204.png" alt="screenshot 4"></p>
+<p><strong>Koa 1.x示例</strong></p>
+<pre><code class="javascript">var Koa = require(&#39;koa&#39;)
+var app = Koa()
+
+app.use(function *(next) {
+    var start = new Date
+    // 调用下一个中间件，即向前端响应 &#39;hello, world&#39;
+    yield next
+    var ms = new Date - start
+    // 打印从请求到响应的耗时
+    console.log(&#39;%s %s - %s&#39;, this.method, this.url, ms)
+})
+
+app.use(function *() {
+    this.body = &#39;hello, world&#39;
+})
+
+app.listen(3000)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%202.png" alt="screenshot 2"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%203.png" alt="screenshot 3"></p>
+<p>Koa1.x对中间件的处理基于co模块，这仍然是一种比较hack的方法。ES2017的草案里增加async函数，Koa为此发布2.0版本，这个版本舍弃Genrator函数和co模块，完全使用async函数来实现</p>
+<p>Koa和Express最大的不同之处在于Koa剥离了各种中间件，这种做法的优点是可以让框架变得更加轻量，缺点就是Koa发展时间还较短，各种中间件质量参差不齐，1.x和2.x的中间件也存在一些兼容性问题，但对于多数常用的中间件来说，都已经实现了对Koa2.0的支持</p>
+<p><strong>❗️文章👇提到的Koa均代表Koa2.0</strong></p>
+<h2 id="context对象"><a href="#context对象" class="headerlink" title="context对象"></a>context对象</h2><p><strong>使用Koa2.0创建http服务器</strong></p>
+<pre><code class="javascript">const Koa = require(&#39;koa&#39;)
+const app = new Koa()
+
+app.use(ctx =&gt; {
+    ctx.body = &#39;0xGeekCat&#39;
+})
+
+app.listen(3000)</code></pre>
+<p><strong>Node提供<code>request</code>和<code>response</code>两个对象，Koa把两者封装到<code>context</code>对象中，缩写为<code>ctx</code></strong></p>
+<p>context中封装许多方法和属性，大部分是从request和response对象中使用委托方式得来的</p>
+<p>ctx也提供直接访问原生对象的手段，<code>ctx.req</code>和<code>ctx.res</code>即代表原生request和response对象</p>
+<p>ctx对象还自行封装了一些对象，例如<code>ctx.request</code>和<code>ctx.response</code>，它们和原生对象之间的区别在于里面只有一部分常用的属性</p>
+<pre><code class="javascript">const Koa = require(&#39;koa&#39;)
+const app = new Koa()
+
+app.use((ctx, next) =&gt; {
+    console.log(ctx.request)
+    console.log(ctx.response)
+})
+
+app.listen(3000)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%205.png" alt="screenshot 5"></p>
+<p><code>ctx.response</code>只有最基本的几个属性，没有注册任何事件或方法，这表示👇的使用方法是错误的</p>
+<pre><code class="javascript">fs.createReadStream(&#39;foo.txt&#39;).pipe(ctx.response)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%206.png" alt="screenshot 6"></p>
+<p><code>ctx.response</code>只是一个简单的对象，没有定义任何事件，要使用pipe方法，代码要改成👇</p>
+<pre><code class="javascript">fs.createReadStream(&#39;foo.txt&#39;).pipe(ctx.res)</code></pre>
+<h3 id="ctx-state"><a href="#ctx-state" class="headerlink" title="ctx.state"></a>ctx.state</h3><p>state属性是官方推荐的命名空间，如开发者想把后端的消息传递到前端，可以将属性挂在<code>ctx.state</code>下面</p>
+<p>例如从数据库中查找一个用户id</p>
+<pre><code class="javascript">ctx.state.user = await User.find(id)</code></pre>
+<h3 id="其他的一些属性和方法"><a href="#其他的一些属性和方法" class="headerlink" title="其他的一些属性和方法"></a>其他的一些属性和方法</h3><pre><code class="javascript">ctx.app // ctx 对 app 对象的引用
+ctx.cookie.get(name, [option]) // 获得 cookie
+ctx.cookie.set(name, value, [option]) // 设置 cookie
+ctx.throw([msg], [status], [properties]) // 用来抛出异常</code></pre>
+<h3 id="处理http请求"><a href="#处理http请求" class="headerlink" title="处理http请求"></a>处理http请求</h3><p>Koa在<code>ctx</code>对象中封装了request以及response对象，那么在处理http请求的时候，使用ctx就可以完成所有的处理</p>
+<pre><code class="javascript">ctx.body = &#39;0xGeekCat&#39;
+👇 等效
+res.statusCode = 200
+res.end(&#39;0xGeekCat&#39;)</code></pre>
+<p>ctx相当于<code>ctx.request</code>或者<code>ctx.response</code>的别名，http请求类型通过<code>ctx.method</code>判断，get请求的参数可以通过<code>ctx.query</code>获取</p>
+<p><strong>设置路由获取get请求参数</strong></p>
+<pre><code class="javascript">const Router = require(&#39;koa-router&#39;)
+const Koa = require(&#39;koa&#39;)
+
+const app = new Koa()
+const router = new Router()
+
+router.get(&#39;/&#39;, async (ctx, next) =&gt; {
+    console.log(ctx.method)
+    console.log(ctx.query)
+})
+
+app.use(router.routes())
+app.listen(3000)</code></pre>
+<p>访问<code>http://127.0.0.1:3000/?name=0xGeekCat</code>时console回显</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%207.png" alt="screenshot 7"></p>
+<p>Koa处理get请求比较简单，直接通过<code>ctx.req.﹤param﹥</code>就能拿到get参数的值，post请求的处理稍微麻烦一些，通常使用<code>bodyParser</code>中间件进行处理，但也仅限于普通表单，获取格式为<code>ctx.request.body.﹤param﹥</code></p>
+<pre><code class="javascript">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Login&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;http://localhost:3000/login&quot; method=&quot;post&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;name&quot;&gt;
+    &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;submit&quot;&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p><strong>服务端相应路由的代码</strong></p>
+<pre><code class="javascript">var Koa=require(&#39;koa&#39;)
+var router = require(&#39;koa-router&#39;)()
+var bodyParser = require(&#39;koa-bodyparser&#39;)
+
+var app=new Koa();
+
+router.post(&#39;/login&#39;, (ctx, next) =&gt; {
+    console.log(ctx.request.body.name)
+    console.log(ctx.request.body.password)
+})
+
+
+app.use(bodyParser());
+app.use(router.routes());
+app.listen(3000);</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%208.png" alt="screenshot 8"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%209.png" alt="screenshot 9"></p>
+<h1 id="middleware"><a href="#middleware" class="headerlink" title="middleware"></a>middleware</h1><h2 id="中间件的概念"><a href="#中间件的概念" class="headerlink" title="中间件的概念"></a>中间件的概念</h2><p>在介绍Koa中间件之前，暂时先把目光投向Express，因为Koa中间件的设计思想大部分来自Connect，而Express又是基于Connect扩展而来</p>
+<p><strong>🔔Express本身是由路由和中间件构成，从本质上来说Express的运行就是在不断调用各种中间件</strong></p>
+<p><strong>中间件本质上是接收请求并且做出相应动作的函数</strong>，该函数通常接收<code>req</code>和<code>res</code>作为参数，以便对request和response对象进行操作，在Web应用中，客户端发起的每一个请求，首先要经过中间件的处理才能继续向下</p>
+<p>中间件的第三个参数一般写作<code>next</code>，代表下一个中间件。如果在中间件的方法体中调用<code>next</code>方法，即表示请求会由下一个中间件处理</p>
+<p><strong>👇这个函数就可以做为中间件</strong></p>
+<pre><code class="javascript">function md(req, res, next) {
+    console.log(&#39;I am a Middleware&#39;)
+    next()
+}</code></pre>
+<h3 id="中间件的功能"><a href="#中间件的功能" class="headerlink" title="中间件的功能"></a>中间件的功能</h3><p>中间件本质仍然是函数，那么它就可以做到Node代码能做到的任何事情，除此之外还包括了修改request和response对象、终结请求-响应循环，以及调用下一个中间件等功能，这通常是通过内部调用<code>next</code>方法实现。如果在某个中间件中没有调用<code>next</code>方法，则表示对请求的处理到此为止，下一个中间件不会被执行</p>
+<h3 id="中间件的加载"><a href="#中间件的加载" class="headerlink" title="中间件的加载"></a>中间件的加载</h3><p>中间件的加载使用<code>use</code>方法实现，该方法定义在Express或者Koa对象的实例上</p>
+<p><strong>例如加载👆定义的中间件<code>md</code></strong></p>
+<pre><code class="javascript">var app = new Koa()
+app.use(md)</code></pre>
+<h3 id="Express中的中间件"><a href="#Express中的中间件" class="headerlink" title="Express中的中间件"></a>Express中的中间件</h3><p>Express应用可使用👇几种中间件</p>
+<ul>
+<li>应用级中间件</li>
+<li>路由级中间件</li>
+<li>错误处理中间件</li>
+<li>第三方中间件</li>
+</ul>
+<p>这是官网的分类，实际上这几个概念有一些重合之处</p>
+<h4 id="应用级中间件"><a href="#应用级中间件" class="headerlink" title="应用级中间件"></a>应用级中间件</h4><p>使用<code>app.use</code>方法或者<code>app.METHOD()</code>，调用绑定在app对象上的中间件，这里Method表示http方法，即get / post等</p>
+<pre><code class="javascript">const express = require(&#39;express&#39;)
+var app = express()
+
+// 没有挂在路径的中间件，前端每个请求都会经过该中间件
+app.use(function (req, rees, next) {
+    console.log(&#39;Time:&#39;, Date.now())
+    next()
+})
+
+app.use(&#39;/user/:id&#39;, function (req, res, next) {
+    console.log(&#39;Request Type:&#39;, req.method)
+})
+
+app.listen(3000)</code></pre>
+<p>访问<code>http://127.0.0.1:3000/user/1</code></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2010.png" alt="screenshot 10"></p>
+<p>第一个中间件中调用了<code>next</code>方法，因此会转到第二个中间件，第二个由于没有调用<code>next</code>方法，其后的中间件都不会执行</p>
+<h4 id="路由级中间件"><a href="#路由级中间件" class="headerlink" title="路由级中间件"></a>路由级中间件</h4><p>和Koa不同，路由处理是Express的一部分，通常通过<code>router.use</code>方法绑定到router对象上</p>
+<pre><code class="javascript">const express = require(&#39;express&#39;)
+var app = express()
+var router = express.Router()
+
+// 将中间件挂载道 /login 路径下，所有访问 /login 的请求都会经过该中间件
+router.use(&#39;/login&#39;, function (req, res, next) {
+    console.log(&#39;Time:&#39;, Date.now()) 
+    next()
+})
+
+app.use(router) 👈
+app.listen(3000)</code></pre>
+<p>访问<code>http://127.0.0.1:3000/login</code></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2011.png" alt="screenshot 11"></p>
+<h4 id="错误处理中间件"><a href="#错误处理中间件" class="headerlink" title="错误处理中间件"></a>错误处理中间件</h4><p><strong>❗️错误处理中间件有4个参数，即使不需要通过<code>next</code>方法来调用下一个中间件，也必须在参数列表中声明它，否则中间件会被识别为一个常规中间件，不能处理错误</strong></p>
+<pre><code class="javascript">const express = require(&#39;express&#39;)
+var app = express()
+
+app.get(&#39;/err&#39;,(req,res)=&gt;{
+    throw new Error(&quot;0xGeekCat&quot;);
+})
+
+app.use((err,req,res,next)=&gt;{
+    console.log(err)
+    res.status(500).send(&#39;Something broke&#39;);
+})
+
+app.listen(3000)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2012.png" alt="screenshot 12"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2014.png" alt="screenshot 14"></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2013.png" alt="screenshot 13"></p>
+<h4 id="内置中间件"><a href="#内置中间件" class="headerlink" title="内置中间件"></a>内置中间件</h4><p>从4.x版本开始，Express不再依赖Connect。除负责管理静态资源的static模块的中间件外，Express以前内置的中间件已经全部作为单独模块安装使用</p>
+<h4 id="第三方中间件"><a href="#第三方中间件" class="headerlink" title="第三方中间件"></a>第三方中间件</h4><p>第三方中间件可以为Express应用增加更多功能，通常通过<code>npm</code>来安装</p>
+<p>Koa没有任何内置中间件，连路由处理都没有包括在内，所有中间件都要通过第三方模块来实现，比起Express来，Koa更像是Connect</p>
+<h2 id="next方法"><a href="#next方法" class="headerlink" title="next方法"></a>next方法</h2><p>无论是Express还是Koa，中间件的调用都是通过<code>next</code>方法来执行的，该方法最早在Connect中提出，并被Express和Koa沿用</p>
+<ol>
+<li>调用<code>app.use</code>方法时，在内部形成了一个中间件数组，在框架内部会将执行下一个中间件的操作放在next方法内部</li>
+<li>当执行next方法时，就会执行下一个中间件</li>
+<li>如果在一个中间件中没有调用next方法，那么中间件的调用会中断，后续的中间件都不会被执行</li>
+</ol>
+<p>对于整个应用来说，next方法实现的无非就是嵌套调用，可以理解成一个递归操作，执行完<code>next</code>对应的中间件后，还会返回原来的方法内部，继续向下执行后面的方法</p>
+<p>👇<code>洋葱图</code>很形象地解释了Koa中间件的工作原理，对于request对象，首先从最外围的中间件开始一层层向下，到达最底层的中间件后，再由内到外一层层返回给客户端。每个中间件都可能对request或者response对象进行修改</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2015.png" alt="screenshot 15"></p>
+<h2 id="中间件的串行调用"><a href="#中间件的串行调用" class="headerlink" title="中间件的串行调用"></a>中间件的串行调用</h2><p>👇是Koa设计的核心部分，在Web开发中，通常希望一些操作能够串行执行，例如等待写入日志完成后再进行数据库操作，最后再进行路由处理，在技术层面，上面的业务场景表现为串行调用某些异步中间件</p>
+<p><strong>Express的异步中间件</strong></p>
+<pre><code class="javascript">var app = require(&#39;express&#39;)()
+
+app.use(function (req, res, next) {
+    next()
+    console.log(&#39;I am middleware1&#39;)
+})
+
+app.use(function (req, res, next) {
+    process.nextTick(function () { 👈
+        console.log(&#39;I am middleware2&#39;)
+        next()
+    })
+})
+
+app.listen(3000)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2016.png" alt="screenshot 16"></p>
+<p>根据👆提到next方法可以理解为递归操作，那么应该先执行输出middleware2，然后再输出middleware1；但由于第二个中间件内的<code>process.nextTick</code>是异步调用，因此马上返回到第一个中间件，然后第二个中间件的回调函数才执行</p>
+<p>在有些情况下，可能需要等待middleware2执行结束之后再输出结果。<strong>在Koa中借助<code>async / await</code>方法即可轻松实现</strong></p>
+<p><strong>Koa中使用async组织的异步中间件</strong></p>
+<pre><code class="javascript">var Koa = require(&#39;koa&#39;)
+var app = new Koa()
+
+app.use(async (ctx, next) =&gt; {
+    await next()
+    console.log(&#39;I am middleware1&#39;)
+})
+
+app.use(async (ctx, next) =&gt; {
+    process.nextTick(function () {
+        console.log(&#39;I am middleware2&#39;)
+        next()
+    })
+})
+
+app.listen(3000)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2017.png" alt="screenshot 17"></p>
+<p>使用await关键字后，直到next内部的异步方法完成之前，midddlware1都不会向下执行</p>
+<h2 id="如何实现超时响应"><a href="#如何实现超时响应" class="headerlink" title="如何实现超时响应"></a>如何实现超时响应</h2><h3 id="Express中的超时响应"><a href="#Express中的超时响应" class="headerlink" title="Express中的超时响应"></a>Express中的超时响应</h3><p>在Web开发中，开发者希望能给长时间得不到响应的请求返回特定的错误信息</p>
+<p>在Express中，可以使用<code>connect-timeout</code>第三方中间件来处理响应超时</p>
+<pre><code class="javascript">var express = require(&#39;express&#39;)
+var timeout = require(&#39;connect-timeout&#39;)
+
+var app = express()
+
+app.use(timeout(&#39;5s&#39;))
+app.use(some middleware)
+app.use(haltOnTimedout)
+app.use(some middleware)
+app.use(haltOnTimedout)
+
+function haltOnTimedout(req, res, next) {
+    if (!req.timedout)
+        next()
+}
+
+app.listen(3000)</code></pre>
+<p>该中间件的实现很简单，timeout内部定义了定时器方法，如果超过定时器规定的时间限制，就会触发错误事件并返回503状态码，并且<code>haltOnTimedout</code>后面的中间件不再执行；如果在定时器触发前完成响应，就会取消定时器</p>
+<p>这种做法虽然看起来能解决超时问题，但缺点也很明显，timeout方法中只定义了简单的定时器，如果中间件中包含异步操作那么容易在调用回调方法时出现问题</p>
+<p>假设timeout加载后又引入了一个名为<code>queryDB</code>的中间件，该中间件封装了一个异步的数据库操作，并且将查询的结果作为响应消息返回。<code>queryDB</code>在大多数状态下执行很快，1秒内就能完成，但有时会因为某些原因，例如被其他操作阻塞导致执行时间变成10秒，这时timeout中间件已经将超时信息返回给客户端，如果<code>queryDB</code>内部包含<code>res.send</code>方法，就会出现<code>Can&#39;t set headers after they are sent</code>的错误</p>
+<p>要解决这个问题，比较妥当的方式是通过事件监听的方式，如果超时之后触发该事件，那么取消之后的全部操作，或者直接修改<code>res.end</code>方法，在其中设置<code>flag</code>用来判断是否已经调用过</p>
+<p>问题的根本原因是<code>connect-time</code>或者是Express没办法对异步中间件的执行进行很好的控制</p>
+<h3 id="Koa中的超时响应"><a href="#Koa中的超时响应" class="headerlink" title="Koa中的超时响应"></a>Koa中的超时响应</h3><p>借助async方法中间件会按照顺序来执行，这时进行timeout管理就比较方便，社区也有<code>koa-timeout</code>等中间件</p>
+<pre><code class="javascript">var Koa = require(&#39;koa&#39;)
+var app = new Koa()
+
+app.use(async (ctx, next) =&gt; {
+    var tmr = null
+    const timeout = 5000
+
+    await Promise.race([new Promise(function (resolve, reject) {
+        tmr = setTimeout(function () {
+            var e = new Error(&#39;Request timeout&#39;)
+            e.status = 408
+            reject(e)
+        }, timeout)
+    }),
+        new Promise(function (resolve, reject) {
+            // 执行后面加载的中间件
+            (async function () {
+                await next()
+                clearTimeout(tmr)
+                resolve()
+            })()
+        })
+    ])
+})</code></pre>
+<p><strong>❌此知识点没有太理解</strong></p>
+<h1 id="常用服务的实现"><a href="#常用服务的实现" class="headerlink" title="常用服务的实现"></a>常用服务的实现</h1><h2 id="静态文件服务"><a href="#静态文件服务" class="headerlink" title="静态文件服务"></a>静态文件服务</h2><p>之前学习使用原生http和fs模块结合的方法实现静态文件服务，在Web开发中通常不会使用自己封装的方法，这里选择<code>koa-static</code>作为处理静态文件的中间件</p>
+<pre><code class="javascript">const Koa = require(&#39;koa&#39;);
+const app = new Koa();
+const server = require(&#39;koa-static&#39;)
+
+app.use(server(__dirname + &#39;/static/html&#39;, {extensions: [&#39;html&#39;]}))
+app.listen(3000)</code></pre>
+<p>static模块规划好静态文件存放的路径，使用<code>app.use</code>挂载在应用上即可</p>
+<p>👆<code>__dirname + &quot;/static/html&quot;</code>表示静态文件存放的路径，当接收到请求后，会在该路径下进行查找</p>
+<p><code>serve</code>方法可以接收一个对象作为参数，表示将查找文件的范围限定在指定后缀名范围内。例如👆代码设置<code>{extensions: [&#39;html&#39;]}</code>，那么在访问文件时就可以省略文件后缀名</p>
+<p><strong>👇通过<code>http://127.0.0.1:3000/login</code>访问<code>login.html</code></strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2018.png" alt="screenshot 18"></p>
+<p><strong><code>login.html</code>所在文件位置</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2019.png" alt="screenshot 19"></p>
+<h2 id="路由服务"><a href="#路由服务" class="headerlink" title="路由服务"></a>路由服务</h2><p>Express的路由中间件集成在框架内部</p>
+<pre><code class="javascript">const express = require(&#39;express&#39;)
+const app = new express
+
+app.get(&#39;/&#39;, function (req, res) {
+    // todo
+})</code></pre>
+<p><strong>Koa中的路由处理要借助第三方模块来实现，👇使用<code>koa-router</code></strong></p>
+<pre><code class="javascript">const Koa = require(&#39;koa&#39;);
+const bodyParser = require(&#39;koa-bodyparser&#39;)
+const router = require(&#39;koa-router&#39;)()
+const app = new Koa()
+
+app.use(bodyParser())
+app.use(router.routes())
+
+router.get(&#39;/&#39;, async (ctx, next) =&gt; {
+    ctx.response.body =
+        &#39;&lt;h1&gt;Index&lt;/h1&gt; &lt;form action=&quot;/login&quot; method=&quot;post&quot;&gt;&#39; +
+        &#39;&lt;p&gt;Name: &lt;input name=&quot;name&quot;&gt;&lt;/p&gt;&#39; +
+        &#39;&lt;p&gt;Password: &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;&lt;/p&gt;&#39; +
+        &#39;&lt;p&gt;&lt;input type=&quot;submit&quot; value=&quot;submit&quot;&gt;&lt;/p&gt;&#39; +
+        &#39;&lt;/form&gt;&#39;
+})
+
+router.post(&#39;/login&#39;, async (ctx, next) =&gt; {
+    let name = ctx.request.body.name || &#39;&#39;,
+        password = ctx.request.body.password || &#39;&#39;
+
+    console.log(ctx.request)
+
+    if (name === &#39;0xGeekCat&#39; &amp;&amp; password === &#39;12345&#39;) {
+        ctx.body = &#39;Success&#39;
+    } else {
+        ctx.body = &#39;Error&#39;
+    }
+})
+
+app.listen(3000)</code></pre>
+<p>👆定义两个路由，接收到get请求后向前端渲染一个form表单用于登录，当用户单击submit提交后，router接收到post请求后使用<code>ctx.request.body</code>对象解析表单中的字段，该对象是router中间件提供的访问接口</p>
+<p><strong>因为router也是中间件，因此要使用<code>app.use</code>挂在app对象中，‼️<code>bodyPaser</code>要在router之前加载才能生效</strong></p>
+<p><code>koa-router</code>同样支持定义多种形式的路由</p>
+<pre><code class="javascript">router.get(&#39;/:category/:title&#39;, function (ctx, next) {
+    console.log(ctx.param)
+})</code></pre>
+<p><code>:category</code>和<code>:title</code>实际上起到get参数的作用，要获取这种形式的参数，可以使用<code>ctx.params</code>对象</p>
+<pre><code class="javascript">router.get(&#39;/delete/blog/:blogId&#39;, async (ctx, next) =&gt; {
+    await dbAPI.deleteBlogId(ctx.params.blogId)
+    await next()
+})</code></pre>
+<h2 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h2><p>在网站的规划中，使用id这一唯一属性来定位一篇博客，而博客是以HTML文件形式存储在static文件夹下的，文件名是博客的标题</p>
+<p>为了管理id和文件名以及文件分类之间的映射关系，引入MongoDB来作为数据存储的介质</p>
+<h3 id="使用Mongoose访问MongoDB"><a href="#使用Mongoose访问MongoDB" class="headerlink" title="使用Mongoose访问MongoDB"></a>使用Mongoose访问MongoDB</h3><p>在SSH<code>struts2 + spring + hibernate</code>框架开发的J2EE应用中，<code>Hibernate</code>是一种ORM对象关系映射<code>Object Relational Mapper</code>，它提供了Java对象与关系型数据库表的映射关系，使得开发者能编写更高效率的代码而不是直接使用JDBC来连接数据库</p>
+<p>在这一点上，Mongoose和Hibernate相似，它同样为Node提供访问MongoDB的接口，它将MongoDB中的collection映射到Node的代码中</p>
+<p>Mongoose和Hibernate的不同之处在于Mongoose是一种ODM对象文件映射<code>Object Document Mapper</code>，提供的是对象和文档数据库<code>Document Database</code>之间的映射关系</p>
+<h3 id="Mongoose的使用"><a href="#Mongoose的使用" class="headerlink" title="Mongoose的使用"></a>Mongoose的使用</h3><p><strong>安装mongoose</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2020.png" alt="screenshot 20"></p>
+<p><strong>MongoDB的本地实例运行</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2021.png" alt="screenshot 21"></p>
+<p><strong>连接MongoDB</strong></p>
+<pre><code class="javascript">var mongoose = require(&#39;mongoose&#39;);
+mongoose.connect(&#39;mongodb://localhost/test&#39;, { useUnifiedTopology: true, useNewUrlParser: true }); 👈 没有这个options会报错</code></pre>
+<p><strong>检测连接状态</strong></p>
+<pre><code class="javascript">var db = mongoose.connection
+
+db.on(&#39;error&#39;, console.error.bind(console, &#39;connection error&#39;))
+db.once(&#39;open&#39;, function (callback) {
+    // connected
+})</code></pre>
+<p>Mongoose自身定义了一些数据结构来实现Node代码与MongoDB的映射</p>
+<p>要使用Monggose，首先要明确schema、model的概念</p>
+<ul>
+<li>schema：一种以文件形式存储的数据库模型骨架，不具备数据库的操作能力</li>
+<li>model：由schema发布生成的模型，具有抽象属性和行为的数据库操作对</li>
+</ul>
+<p>如果使用关系型数据库来类比的话，schema大致相当于关系型数据库中的一张表，每个schema中定义若干字段；而model则可以看作是SQL语句的抽象，只能定义在一个schema上，MongoDB的增删改查操作都是通过model来进行的</p>
+<p><strong>在数据库中定义一个名为login的collection，它包含两个字段：username、password</strong></p>
+<pre><code class="javascript">var mongoose = require(&#39;mongoose&#39;);
+mongoose.connect(&#39;mongodb://localhost/test&#39;, { useUnifiedTopology: true, useNewUrlParser: true });
+
+var db = mongoose.connection
+
+var loginSchema = new mongoose.Schema({
+    username: String,
+    password: String
+})
+
+var login = db.model(&#39;login&#39;, loginSchema, &#39;login&#39;) 👈
+var user1 = new login({username: &#39;0xGeekCat&#39;, password: &#39;12345&#39;})
+user1.save(function (err) {
+    if (err)
+        return handleError(err)
+})</code></pre>
+<p>👆首先声明一个schema，schema内有username和password两个字段，schema相当于collection的骨架</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2022.png" alt="screenshot 22"></p>
+<p>该方法的第三个参数才是MongoDB中对应collection的名字</p>
+<pre><code class="javascript">var login = db.model(&#39;login&#39;, loginSchema)</code></pre>
+<p><strong>👆如果漏掉第三个参数，❗️Mongoose会自动创建一个名为<code>logins</code>的collection，相当于model名称的复数形式，那么之后在使用collection的时候就会发现一个预期之外的collection</strong></p>
+<p>定义好model之后，调用model的save方法将数据存储在对应的collection中</p>
+<p><strong>使用Mongoose查询</strong></p>
+<pre><code class="javascript">var login = db.model(&#39;login&#39;, loginSchema, &#39;login&#39;)
+var query = login.find({username: &#39;0xGeekCat&#39;})
+query.then(function (doc) {
+    console.log(doc)
+})</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2023.png" alt="screenshot 23"></p>
+<p>doc对象是一个包含所有结果集的数组</p>
+<p>此外Mongoose是默认支持Promise规范的，这就代表我们可以用ES201X的一些新语法来编写数据库代码</p>
+<h3 id="博客系统的数据库准备"><a href="#博客系统的数据库准备" class="headerlink" title="博客系统的数据库准备"></a>博客系统的数据库准备</h3><p>在编写代码之前，首先要明确有哪些数据需要存储。除了存储登录信息外，还需要维护关于博客信息的collection</p>
+<ul>
+<li>title：文章标题</li>
+<li>kind：文章分类</li>
+<li>id：文章id</li>
+</ul>
+<p>本节定义的collection中，只维护一张信息表，至于博客文章的内容本身，暂且将它们视为静态文件放在<code>static/blogs</code>文件夹下</p>
+<h3 id="Schema的定义"><a href="#Schema的定义" class="headerlink" title="Schema的定义"></a>Schema的定义</h3><p>在目前的实现中一共定义了两个collection，分别是login和blogList</p>
+<ul>
+<li>login负责登录</li>
+<li>blogList用作博客相关的操作</li>
+</ul>
+<pre><code class="javascript">var mongoose = require(&#39;mongoose&#39;);
+mongoose.connect(&#39;mongodb://localhost/test&#39;, { useUnifiedTopology: true, useNewUrlParser: true });
+
+var db = mongoose.connection
+var blogListSchema = new mongoose.Schema({
+    title: String,
+    kind: String,
+    id: String
+})
+
+var blogList = db.model(&#39;blogList&#39;, blogListSchema, &#39;blogList&#39;)</code></pre>
+<h3 id="数据查询的实现"><a href="#数据查询的实现" class="headerlink" title="数据查询的实现"></a>数据查询的实现</h3><p><strong>数据查询分为两个阶段</strong></p>
+<ol>
+<li>数据库查询并返回结果</li>
+<li>前端页面根据返回的json字符串渲染对应的页面元素</li>
+</ol>
+<p>当访问博客网站时，首先会被默认导航至首页，即博客列表。这里以文章的分类作为条件进行查询，如果用户没有选择任何分类，则返回全部文章</p>
+<p><strong>查询某个分类下的全部文章</strong></p>
+<pre><code class="javascript">var blogList = db.model(&#39;blogList&#39;, blogListSchema, &#39;blogList&#39;)
+
+async function getBlogList(kind) {
+    let query = {} // 空对象作为查询条件，表示查询所有结果
+    let results = []
+
+    if (kind !== &#39;/&#39;) {
+        query = {kind: kind}
+    }
+
+    results = await blogList.find(query)
+    return results
+}</code></pre>
+<p>该方法返回一个包含着若干对象的数组，可以直接用来被前端解析</p>
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p><strong>处理文件的上传，大致分为两步</strong></p>
+<ul>
+<li>路由收到前端的post请求，将文件存储在static目录下</li>
+<li>将form中的文件名、类别信息写入数据库，并赋给这篇博客一个用于访问的id</li>
+</ul>
+<p>文件的上传使用<code>formidable</code>实现，<code>formidable</code>是一个著名的处理文件上传的第三方模块，被广泛地用在Node Web应用中</p>
+<pre><code class="javascript">// uplaod.js
+const formidable = require(&#39;formidable&#39;)
+const fs = require(&#39;fs&#39;)
+
+function dealUpload(ctx) {
+    var form = new formidable.IncomingForm() 
+    form.keepExtensions = true // 保持原来的扩展名
+    form.uploadDir = __dirname + &#39;/static/html&#39;
+    form.parse(ctx.req, function (err, fields, files) {
+        if (err)
+            throw err
+        fs.renameSync(files.file.path, form.uploadDir + files.file.name)
+
+        // todo save to db
+    })
+}
+
+module.exports = dealUpload</code></pre>
+<p>下一步是将博客信息写入数据库，我们计划给每一篇博客增加id，这一属性是从1开始自增的，因此在插入新的数据前，要获取数据库中最大的id</p>
+<p><strong>查找ID的最大值</strong></p>
+<pre><code class="javascript">var blogList = db.model(&#39;blogList&#39;, blogListSchema, &#39;blogList&#39;)
+
+async function queryMaxID() {
+    let temp = 0
+    await blogList.find({}).sort({&#39;id&#39;: -1}).limit(1).then(function (doc) {
+        if (doc.length &gt; 0) {
+            temp = doc[0].id
+        } else {
+            console.log(&#39;collection is empty&#39;)
+        }
+    })
+    return temp
+}
+
+async function insertBlogList(title, kind) {
+    let value = await queryMaxID()
+    var record = new blogList({title: title, kind: kind, id: ++value})
+    record.save(function (err) {
+        if (err) {
+            console.log(err)
+            return 
+        }
+        console.log(&#39;Insert done&#39;)
+    })
+}</code></pre>
+<p>👆使用了两个async方法，<code>queryMaxID</code>方法使用了一条链式查询</p>
+<pre><code class="javascript">blogList.find({}).sort({&#39;id&#39;: -1}).limit(1)</code></pre>
+<p><strong>❗️mongodb中没有其他数据库里的max或者min方法来取最大值和最小值，惯用的做法是先按照id进行排序，然后取第一条</strong></p>
+<p><code>sort()</code>方法可以通过参数指定排序的字段，并使用 1 和 -1 来指定排序的方式</p>
+<ul>
+<li>1 为升序排列</li>
+<li>-1是为降序排列</li>
+</ul>
+<h3 id="对文章的修改"><a href="#对文章的修改" class="headerlink" title="对文章的修改"></a>对文章的修改</h3><p>由于没有实现一个线上的文本编辑器，因此操作只能局限在删除一篇文章或者修改文章的分类</p>
+<p><strong>配置路由</strong></p>
+<pre><code class="javascript">router.post(&#39;/delete/blog/:blogId&#39;, async (ctx, next) =&gt; {
+    // todo delete someone blog
+    await next()
+})
+
+router.post(&#39;/modify/blog/:blogId/:kindName&#39;, async (ctx, next) =&gt; {
+    // todo modify blog kind
+    await next()
+})</code></pre>
+<p><strong>删除和修改blog的分类</strong></p>
+<pre><code class="javascript">// delete未定义async方法
+function deleteBlogId(id) {
+    let query = {id: id}
+    console.log(query)
+    blogList.remove(query).then(function (doc) {
+        console.log(&#39;done&#39;)
+    })
+}
+
+function modifyBlogKind(id, kind) {
+    let query = {id: id}
+    blogList.findOneAndUpdate(query, {kind: kind}).then(function (doc) {
+        console.log(&#39;done&#39;)
+    })
+}</code></pre>
+<h3 id="使用MongoDB存储文件内容"><a href="#使用MongoDB存储文件内容" class="headerlink" title="使用MongoDB存储文件内容"></a>使用MongoDB存储文件内容</h3><p>在目前的系统中，将文章以静态文件的形式存放在目录下，在实践中通常是不安全的，通常需要将其存在数据库中，博客文章存储在数据库中通常还要经过加密，这里省略这一步</p>
+<p>本章的网站采取用户本地上传的做法，那么在用户上传成功后，就要将文件内容写入数据库中</p>
+<pre><code class="javascript">async function saveBlog(path, id) {
+    let content = require(&#39;fs&#39;).readFileSync(path, {encoding: &quot;UTF-8&quot;})
+    let query = new blog({content: content, id: id})
+    query.save(function (err) {
+        if (err)
+            return
+        console.log(&#39;save done&#39;)
+    })
+}</code></pre>
+<h2 id="页面渲染"><a href="#页面渲染" class="headerlink" title="页面渲染"></a>页面渲染</h2><h1 id="构建健壮的Web应用"><a href="#构建健壮的Web应用" class="headerlink" title="构建健壮的Web应用"></a>构建健壮的Web应用</h1><h2 id="上传文件验证"><a href="#上传文件验证" class="headerlink" title="上传文件验证"></a>上传文件验证</h2><h2 id="使用Cookie进行身份验证"><a href="#使用Cookie进行身份验证" class="headerlink" title="使用Cookie进行身份验证"></a>使用Cookie进行身份验证</h2><h2 id="使用Session记录会话状态"><a href="#使用Session记录会话状态" class="headerlink" title="使用Session记录会话状态"></a>使用Session记录会话状态</h2><h1 id="使用Redis进行持久化"><a href="#使用Redis进行持久化" class="headerlink" title="使用Redis进行持久化"></a>使用Redis进行持久化</h1><h2 id="Node和Redis的交互"><a href="#Node和Redis的交互" class="headerlink" title="Node和Redis的交互"></a>Node和Redis的交互</h2><h2 id="CURD操作"><a href="#CURD操作" class="headerlink" title="CURD操作"></a>CURD操作</h2><h2 id="使用Redis持久化session"><a href="#使用Redis持久化session" class="headerlink" title="使用Redis持久化session"></a>使用Redis持久化session</h2><h2 id="Redis在Node中的应用"><a href="#Redis在Node中的应用" class="headerlink" title="Redis在Node中的应用"></a>Redis在Node中的应用</h2><h1 id="Koa源码剖析"><a href="#Koa源码剖析" class="headerlink" title="Koa源码剖析"></a>Koa源码剖析</h1><h2 id="Koa的启动过程"><a href="#Koa的启动过程" class="headerlink" title="Koa的启动过程"></a>Koa的启动过程</h2><h2 id="中间件的加载-1"><a href="#中间件的加载-1" class="headerlink" title="中间件的加载"></a>中间件的加载</h2><h2 id="listen-方法"><a href="#listen-方法" class="headerlink" title="listen()方法"></a>listen()方法</h2><h2 id="next-与return-next"><a href="#next-与return-next" class="headerlink" title="next()与return next()"></a>next()与return next()</h2><h2 id="关于Can’t-set-headers-after-they-are-sent"><a href="#关于Can’t-set-headers-after-they-are-sent" class="headerlink" title="关于Can’t set headers after they are sent."></a>关于Can’t set headers after they are sent.</h2><h2 id="Context对象的实现"><a href="#Context对象的实现" class="headerlink" title="Context对象的实现"></a>Context对象的实现</h2><h2 id="Koa的优缺点"><a href="#Koa的优缺点" class="headerlink" title="Koa的优缺点"></a>Koa的优缺点</h2><h1 id="网站部署"><a href="#网站部署" class="headerlink" title="网站部署"></a>网站部署</h1><h2 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h2><h2 id="部署在云服务主机上"><a href="#部署在云服务主机上" class="headerlink" title="部署在云服务主机上"></a>部署在云服务主机上</h2><h2 id="通过GitHub-pages来部署"><a href="#通过GitHub-pages来部署" class="headerlink" title="通过GitHub pages来部署"></a>通过GitHub pages来部署</h2>
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
@@ -330,9 +912,26 @@
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                《新时期的Node.js入门》学习日记-知识补充</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
         
           
-            <div class="post-nepre full next">
+            <div class="post-nepre half next">
           
             <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%B9%A6%E5%86%99%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81.html" rel="next">
               <div class="background">
