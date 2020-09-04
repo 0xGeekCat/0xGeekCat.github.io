@@ -885,7 +885,186 @@ function modifyBlogKind(id, kind) {
         console.log(&#39;save done&#39;)
     })
 }</code></pre>
-<h2 id="页面渲染"><a href="#页面渲染" class="headerlink" title="页面渲染"></a>页面渲染</h2><h1 id="构建健壮的Web应用"><a href="#构建健壮的Web应用" class="headerlink" title="构建健壮的Web应用"></a>构建健壮的Web应用</h1><h2 id="上传文件验证"><a href="#上传文件验证" class="headerlink" title="上传文件验证"></a>上传文件验证</h2><h2 id="使用Cookie进行身份验证"><a href="#使用Cookie进行身份验证" class="headerlink" title="使用Cookie进行身份验证"></a>使用Cookie进行身份验证</h2><h2 id="使用Session记录会话状态"><a href="#使用Session记录会话状态" class="headerlink" title="使用Session记录会话状态"></a>使用Session记录会话状态</h2><h1 id="使用Redis进行持久化"><a href="#使用Redis进行持久化" class="headerlink" title="使用Redis进行持久化"></a>使用Redis进行持久化</h1><h2 id="Node和Redis的交互"><a href="#Node和Redis的交互" class="headerlink" title="Node和Redis的交互"></a>Node和Redis的交互</h2><h2 id="CURD操作"><a href="#CURD操作" class="headerlink" title="CURD操作"></a>CURD操作</h2><h2 id="使用Redis持久化session"><a href="#使用Redis持久化session" class="headerlink" title="使用Redis持久化session"></a>使用Redis持久化session</h2><h2 id="Redis在Node中的应用"><a href="#Redis在Node中的应用" class="headerlink" title="Redis在Node中的应用"></a>Redis在Node中的应用</h2><h1 id="Koa源码剖析"><a href="#Koa源码剖析" class="headerlink" title="Koa源码剖析"></a>Koa源码剖析</h1><h2 id="Koa的启动过程"><a href="#Koa的启动过程" class="headerlink" title="Koa的启动过程"></a>Koa的启动过程</h2><h2 id="中间件的加载-1"><a href="#中间件的加载-1" class="headerlink" title="中间件的加载"></a>中间件的加载</h2><h2 id="listen-方法"><a href="#listen-方法" class="headerlink" title="listen()方法"></a>listen()方法</h2><h2 id="next-与return-next"><a href="#next-与return-next" class="headerlink" title="next()与return next()"></a>next()与return next()</h2><h2 id="关于Can’t-set-headers-after-they-are-sent"><a href="#关于Can’t-set-headers-after-they-are-sent" class="headerlink" title="关于Can’t set headers after they are sent."></a>关于Can’t set headers after they are sent.</h2><h2 id="Context对象的实现"><a href="#Context对象的实现" class="headerlink" title="Context对象的实现"></a>Context对象的实现</h2><h2 id="Koa的优缺点"><a href="#Koa的优缺点" class="headerlink" title="Koa的优缺点"></a>Koa的优缺点</h2><h1 id="网站部署"><a href="#网站部署" class="headerlink" title="网站部署"></a>网站部署</h1><h2 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h2><h2 id="部署在云服务主机上"><a href="#部署在云服务主机上" class="headerlink" title="部署在云服务主机上"></a>部署在云服务主机上</h2><h2 id="通过GitHub-pages来部署"><a href="#通过GitHub-pages来部署" class="headerlink" title="通过GitHub pages来部署"></a>通过GitHub pages来部署</h2>
+<p><strong>修改upload.js</strong></p>
+<pre><code class="javascript">form.parse(ctx.req, async function (err, fields, files) {
+    if (err)
+        throw err
+    fs.renameSync(files.file.path, form.uploadDir + files.file.name)
+    let value = await dbAPI.insertBlogList(files.file.name, fields.kind)
+    console.log(&#39;Id is&#39;, value)
+
+    await dbAPI.saveBlog(form.uploadDir, fields.kind)
+})</code></pre>
+<h3 id="文章内容的读取"><a href="#文章内容的读取" class="headerlink" title="文章内容的读取"></a>文章内容的读取</h3><p>当用户单击页面元素试图打开文章时，我们需要用id作为参数在数据库中进行查询</p>
+<pre><code class="javascript">async function readBlog(id) {
+    let content
+    await blog.find({id: id}).then(function (doc) {
+        content = doc[0]
+    })
+
+    return content
+}</code></pre>
+<p>在MongoDB中，整片文章都是使用字符串的形式来存储的，对于Koa而言，直接使用👇方法就能在前端返回文章内容</p>
+<pre><code class="javascript">ctx.body = content</code></pre>
+<p><strong>打开博客内容的路由设计</strong></p>
+<pre><code class="javascript">router.get(&#39;/blog/:blogId&#39;, async (ctx, next) =&gt; {
+    let blogId = ctx.params.blogId
+    ctx.body = await dbAPI.readBlog(blogId)
+    await next()
+})</code></pre>
+<h2 id="页面渲染"><a href="#页面渲染" class="headerlink" title="页面渲染"></a>页面渲染</h2><p>目前市面上流行的前端解决方案大致有👇几种：</p>
+<ul>
+<li>不使用任何框架，直接使用Ajax请求后端，再根据返回的结果对DOM进行操作，这种做法很少见</li>
+<li>使用页面模板方式来渲染页面，比较流行的是ejs、jade等几种模板引擎，其原理大都是通过使用正则替换来生成HTML</li>
+<li>使用完整的前端框架，近几年前端流行MVVM框架，比较出名的有React、 Angular、Vue等</li>
+</ul>
+<p>使用前端渲染，通常需要一个页面引擎，它的本质是一个正则表达式，将引擎定义的标签和后端返回的数据转换成HTML标签本节选择ejs来作为模板引擎，它通过将JavaScript代码嵌入到HTML文件中来实现，其文件扩展名为.ejs</p>
+<h3 id="在Koa中使用ejs"><a href="#在Koa中使用ejs" class="headerlink" title="在Koa中使用ejs"></a>在Koa中使用ejs</h3><p>首先安装<code>koa-views</code>模块，这是一个比较完整的包含多种页面模板的第三方模块</p>
+<p><strong>在root.js中增加👇代码</strong></p>
+<pre><code class="javascript">const views = require(&#39;koa-views&#39;)
+
+app.use(views(__dirname + &#39;/static/html&#39;), {extensions: [&#39;html&#39;]})</code></pre>
+<p><strong>在route.js中调用render方法进行渲染</strong></p>
+<pre><code class="javascript">router.get(&#39;/blogList&#39;, async (ctx, next) =&gt; {
+    const result = await dbAPI.getBlogList(&#39;/&#39;)
+    return ctx.render(&#39;blogList&#39;, {results: results})
+})</code></pre>
+<p>在<code>ctx.render</code>方法之前需要加上return关键字，render方法接收两个参数</p>
+<ul>
+<li>第一个参数是ejs文件的名字，其路径已经定义在root.js中</li>
+<li>第二个参数是一个对象，属性名表示ejs文件中变量的名字，属性名必须和ejs中的定义的变量名相同，否则会出现解析错误</li>
+</ul>
+<p><strong>blogList.ejs代码</strong></p>
+<pre><code class="ejs">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;blogList&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;ul&gt;
+    &lt;% for(var i=0;i&lt;results.length;i++){%>
+        <li id="<%= results[i].id %>" class="<%= results[i].kind %>"><%= results[i].title %></li>
+    <%}%&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>👆将文章的id作为dom元素的id，文章的类别作为元素的class属性，当用户单击了某一篇文章后，可以直接使用对应的id来作为http请求的参数进行查询</p>
+<h3 id="根据id打开文件"><a href="#根据id打开文件" class="headerlink" title="根据id打开文件"></a>根据id打开文件</h3><p>现在页面上显示了博客列表，接下来要做的就是打开某一篇具体的文章，现在在页面上有每一篇文章的id，只需要在单击时将id信息打包发出即可，可以使用<code>﹤a/﹥</code>标签或者<code>jQuery</code>来实现，这里选择<code>jQuery</code></p>
+<pre><code class="javascript">&lt;script src=&quot;https://code.jquery.com/jquery-1.12.4.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    $(&quot;li&quot;).click(function(){
+        $.get(&quot;/blog/&quot;+$(this).attr(&#39;id&#39;), function(result){
+            console.log(&quot;done&quot;);
+        });
+    });
+&lt;/script&gt;</code></pre>
+<h3 id="前端渲染和后端渲染"><a href="#前端渲染和后端渲染" class="headerlink" title="前端渲染和后端渲染"></a>前端渲染和后端渲染</h3><ul>
+<li><strong>前端渲染是指后端提供<code>restful API</code> ，前端只负责调用API并拿到json数据，然后根据拿到的数据更新页面视图或者其他的一些操作</strong>，如果开发者在项目中使用了ejs或者jade这样的页面模板，那么通常属于前端渲染<ul>
+<li>优点是可以实现前后端分离和前端的模块化，事实上近些年涌现的React或者Vue都是以前端渲染为前提的</li>
+<li>缺点是SEO不友好</li>
+</ul>
+</li>
+<li>服务器一次性返回全部的HTML字符串，这种方式被称为后端渲染；使用字符串拼接的HTML往往会耗费开发者全部的耐心<ul>
+<li>这种方式的优点是首屏加载快对SEO有利</li>
+<li>缺点是前后端耦合，代码难以维护而且不美观</li>
+</ul>
+</li>
+</ul>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2024.png" alt="screenshot 24"></p>
+<h1 id="构建健壮的Web应用"><a href="#构建健壮的Web应用" class="headerlink" title="构建健壮的Web应用"></a>构建健壮的Web应用</h1><h2 id="上传文件验证"><a href="#上传文件验证" class="headerlink" title="上传文件验证"></a>上传文件验证</h2><p>允许用户上传文件其实是很危险的操作，因为你无法期望所有用户都能上传有效合法的文件，因此有必要对上传文件进行验证</p>
+<h3 id="限制文件类型"><a href="#限制文件类型" class="headerlink" title="限制文件类型"></a>限制文件类型</h3><p>对于博客网站文件类型通常只有js/html/css三种类型的后缀名，再加上一些图片后缀或者pdf，系统应当对上传文件的后缀名进行检查，如果不是上述类型的文件名后缀，应该拒绝服务并返回错误码。对文件类型的验证通常在客户端完成</p>
+<h3 id="限制文件大小"><a href="#限制文件大小" class="headerlink" title="限制文件大小"></a>限制文件大小</h3><p>对于网站来说，通常在任何情况下都应该避免大文件的上传，如果服务器对上传的文件没有进行正确的处理，很容易就会出现内存不足的情况，过大的文件也会浪费服务器磁盘空间</p>
+<p><strong>验证文件的大小可以通过两个方面来进行</strong></p>
+<ul>
+<li>在客户端上传之前就对文件大小进行判断</li>
+<li>在服务器端进行处理时进行验证</li>
+</ul>
+<p><strong>前端验证文件类型和大小</strong></p>
+<pre><code class="html">&lt;form id=&quot;form1&quot; action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+    &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;uploadFile&quot;/&gt;&lt;br/&gt;
+    &lt;input type=&quot;text&quot; name=&quot;kind&quot;&gt;
+    &lt;input type=&quot;button&quot; value=&quot;submit&quot; id=&quot;sbtn&quot; onclick = &quot;submitForm();&quot;/&gt;
+&lt;/form&gt;
+&lt;script src=&quot;https://code.jquery.com/jquery-1.12.4.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    function submitForm(){
+        var uploadFile = document.getElementById(&quot;uploadFile&quot;);
+        var file = uploadFile.files[0];
+        var type = file.type;//例如 text/html
+        var fileSize = file.size;
+        //文件大小超过100k
+           if(fileSize &gt; 100 * 1024 || type!== &quot;text/html&quot;){
+              alert(&quot;file type/size error,please check.&quot;)
+               return;
+           }
+        $(&quot;#form1&quot;).submit();
+    }
+&lt;/script&gt;</code></pre>
+<p><strong>服务器端验证上传文件大小</strong></p>
+<pre><code class="javascript">function dealUpload(ctx) {
+    if (ctx.method === &#39;POST&#39; &amp;&amp; ctx.path === &#39;/upload&#39;) {
+        let form = new formidable.IncomingForm()
+        form.maxFileSize = 100 * 1024
+        form.keepExtensions = true
+        form.uploadDir = __dirname + &#39;/static/blogs&#39;
+
+        ...
+
+        form.on(&#39;error&#39;, function (e) {
+            console.log(e)
+            res.writeHead(400, {
+                &#39;Connection&#39;: &#39;close&#39;
+            })
+
+            res.end(&#39;file is too big&#39;)
+        })
+    }
+}</code></pre>
+<p>如果上传的字节超过一定大小就拒绝接收并返回错误码，由于恶意访问者有可能篡改前端代码，因此后端的验证也是必需的</p>
+<p><code>formidable</code>模块可以做到这一点，该模块使用流来处理上传的文件。在处理文件流的过程中可以获得已上传的文件大小，如果超过预定义的<code>maxFileSize</code>值就会触发error事件并停止接收文件，此时返回给客户端错误消息</p>
+<p><strong>‼️<code>formidable</code>在npm上的<code>1.1.1</code>版本，在这个版本中设置maxFileSize不会生效，即使检测到了文件大小超出限制也不能取消上传</strong></p>
+<p><strong>👇个人使用的<code>formidable</code>版本</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2025.png" alt="screenshot 25"></p>
+<h2 id="使用Cookie进行身份验证"><a href="#使用Cookie进行身份验证" class="headerlink" title="使用Cookie进行身份验证"></a>使用Cookie进行身份验证</h2><p>现在开发出来的站点是无状态的。在大型项目中的权限系统总是问题最多并且最难管理</p>
+<h3 id="关于Cookie"><a href="#关于Cookie" class="headerlink" title="关于Cookie"></a>关于Cookie</h3><p><strong>Cookie是为了辨别用户信息而存储在客户端的数据</strong></p>
+<p>对于Cookie的使用，最重要的就是要控制Cookie的大小，不要放入无用的信息或者过多信息；无论使用何种服务端技术，只要发送的HTTP响应中包含👇形式的字段，则视为服务器要求客户端设置Cookie</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2026.png" alt="screenshot 26"></p>
+<p>支持Cookie的浏览器都会对此做出反应，即创建Cookie文件并保存，也可能是放在内存中，用户以后在每次发出请求时，浏览器都要判断当前所有的Cookie中有没有处于有效期，根据expires属性判断；并且匹配path属性的Cookie信息，如果有的话，会以下面的形式加入到请求头中发回服务端</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2027.png" alt="screenshot 27"></p>
+<h3 id="Node中的Cookie"><a href="#Node中的Cookie" class="headerlink" title="Node中的Cookie"></a>Node中的Cookie</h3><p>Node设置Cookie很简单，response对象提供了原生的Cookie方法</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2028.png" alt="screenshot 28"></p>
+<h3 id="Koa中的Cookie"><a href="#Koa中的Cookie" class="headerlink" title="Koa中的Cookie"></a>Koa中的Cookie</h3><p>Koa中对Cookie的操作本质上还是对Node原生方法的封装</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2029.png" alt="screenshot 29"></p>
+<p><strong>在博客系统中，主要针对用户登录进行Cookie设置</strong></p>
+<pre><code class="javascript">router.post(&#39;/login&#39;, async (ctx, next) =&gt; {
+    console.log(&#39;get&#39;)
+    let name = ctx.request.body.name || &#39;&#39;,
+        password = ctx.request.body.password || &#39;&#39;
+    const result = await dbAPI.validate(name, password)
+
+    if (result) {
+        ctx.cookie.set(&#39;loginStatus&#39;, true)
+        ctx.redirect(&#39;/blogList&#39;)
+    } else {
+        ctx.body = &#39;body error&#39;
+    }
+})</code></pre>
+<p>👆设置名为<code>LoginStatus</code>的Cookie，之后要做的就通过Cookie来验证登录状态</p>
+<pre><code class="javascript">function validateStatus(ctx) {
+    if (!ctx.cookies.get(&#39;loginStatus&#39;)) {
+        console.log(&#39;not login&#39;)
+        ctx.redirect(&#39;/status/html/login.html&#39;)
+    }
+}</code></pre>
+<p>按照通常的思路，<code>validateStatus</code>方法应该放在<code>route.js</code>中，在收到路由请求后调用</p>
+<pre><code class="javascript">router.get(&#39;/&#39;, async (ctx, next) =&gt; {
+    validateStatus()
+    ctx.redirect(&#39;/blogList&#39;)
+})</code></pre>
+<p>但这样做的缺点很明显，那就是在每一个路由方法中都要调用该函数，这样会带来很多重复代码。更好的做法是将其用中间件的方式来加载，这样每个路由请求都会经过该中间件</p>
+<p><strong>将登录验证作为中间件来实现</strong></p>
+<h2 id="使用Session记录会话状态"><a href="#使用Session记录会话状态" class="headerlink" title="使用Session记录会话状态"></a>使用Session记录会话状态</h2><h1 id="使用Redis进行持久化"><a href="#使用Redis进行持久化" class="headerlink" title="使用Redis进行持久化"></a>使用Redis进行持久化</h1><h2 id="Node和Redis的交互"><a href="#Node和Redis的交互" class="headerlink" title="Node和Redis的交互"></a>Node和Redis的交互</h2><h2 id="CURD操作"><a href="#CURD操作" class="headerlink" title="CURD操作"></a>CURD操作</h2><h2 id="使用Redis持久化session"><a href="#使用Redis持久化session" class="headerlink" title="使用Redis持久化session"></a>使用Redis持久化session</h2><h2 id="Redis在Node中的应用"><a href="#Redis在Node中的应用" class="headerlink" title="Redis在Node中的应用"></a>Redis在Node中的应用</h2><h1 id="Koa源码剖析"><a href="#Koa源码剖析" class="headerlink" title="Koa源码剖析"></a>Koa源码剖析</h1><h2 id="Koa的启动过程"><a href="#Koa的启动过程" class="headerlink" title="Koa的启动过程"></a>Koa的启动过程</h2><h2 id="中间件的加载-1"><a href="#中间件的加载-1" class="headerlink" title="中间件的加载"></a>中间件的加载</h2><h2 id="listen-方法"><a href="#listen-方法" class="headerlink" title="listen()方法"></a>listen()方法</h2><h2 id="next-与return-next"><a href="#next-与return-next" class="headerlink" title="next()与return next()"></a>next()与return next()</h2><h2 id="关于Can’t-set-headers-after-they-are-sent"><a href="#关于Can’t-set-headers-after-they-are-sent" class="headerlink" title="关于Can’t set headers after they are sent."></a>关于Can’t set headers after they are sent.</h2><h2 id="Context对象的实现"><a href="#Context对象的实现" class="headerlink" title="Context对象的实现"></a>Context对象的实现</h2><h2 id="Koa的优缺点"><a href="#Koa的优缺点" class="headerlink" title="Koa的优缺点"></a>Koa的优缺点</h2><h1 id="网站部署"><a href="#网站部署" class="headerlink" title="网站部署"></a>网站部署</h1><h2 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h2><h2 id="部署在云服务主机上"><a href="#部署在云服务主机上" class="headerlink" title="部署在云服务主机上"></a>部署在云服务主机上</h2><h2 id="通过GitHub-pages来部署"><a href="#通过GitHub-pages来部署" class="headerlink" title="通过GitHub pages来部署"></a>通过GitHub pages来部署</h2>
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
