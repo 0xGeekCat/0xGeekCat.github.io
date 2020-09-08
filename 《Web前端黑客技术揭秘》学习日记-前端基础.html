@@ -289,8 +289,110 @@
           <p>首先，看看这个松散的HTML世界，脚本、样式、图片、多媒体等这些资源如何运作</p>
 <p>然后看看号称跨站之魂的JavaScript脚本如何打破这个世界的逻辑，CSS样式如何让这个世界充满伪装</p>
 <p>最后看看另一只躲藏在Flash里的“幽灵”，它又是如何辅佐JavaScript的</p>
-<h1 id="W3C的世界法则"><a href="#W3C的世界法则" class="headerlink" title="W3C的世界法则"></a>W3C的世界法则</h1><p>W3C即<a href="http://www.w3.org/" target="_blank" rel="noopener">万维网联盟</a>，它制定了很多推荐标准，比如：HTML、XML、JavaScript、CSS等，是这些标准让这个Web世界变得标准和兼容。浏览器遵循这些标准去实现自己的各种解析引擎，Web厂商同样遵循这些标准去展示自己的Web服务。如果没有W3C，那么这个Web世界将一片混乱</p>
-<p>由于W3C制定的是推荐标准，很多时候网站并没严格按照这些标准执行，但是却能比较好地呈现出来。而浏览器的实现也不一定完全遵循标准，甚至可能冒出一个自己的方案，这个现象可以在微软的IE浏览器与Mozilla的Firefox浏览器中随处发现，这也是前端设计师们经常苦恼的“不兼容”问题，导致出现了各种“Hack”技术，这些Hacks就是为了解决这些不兼容问题而出现的</p>
+<h1 id="W3C的世界法则"><a href="#W3C的世界法则" class="headerlink" title="W3C的世界法则"></a>W3C的世界法则</h1><p>W3C即<a href="http://www.w3.org/" target="_blank" rel="noopener">万维网联盟</a>，它制定了很多推荐标准，比如：HTML、XML、JavaScript、CSS等，是这些标准让Web世界变得标准和兼容。浏览器遵循这些标准去实现自己的各种解析引擎，Web厂商同样遵循这些标准去展示自己的Web服务。如果没有W3C，那么这个Web世界将一片混乱</p>
+<p>由于W3C制定的是推荐标准，很多时候网站并没严格按照这些标准执行，但是却能比较好地呈现出来。而浏览器的实现也不一定完全遵循标准，甚至可能冒出一个自己的方案，这个现象可以在微软的IE浏览器与Mozilla的Firefox浏览器中随处发现，这也是前端设计师们经常苦恼的“不兼容”问题，导致出现了各种<code>Hack</code>技术，这些Hacks就是为了解决这些不兼容问题而出现的</p>
+<p>为了解决CSS兼容性而发展的CSS Reset技术，该技术会重置一些样式，这些样式在不同的浏览器中有不同的呈现，后续的CSS将在这个基础上重新开始定义自己的样式</p>
+<p>再如为了解决JavaScript兼容性，诞生了许多优秀的JavaScript框架，如jQuery、YUI等，使用这些框架提供的API，就可以很好地在各个主流浏览器上得到一致的效果 </p>
+<p>Web世界在进步，标准化也越来越被重视。W3C的标准设计就安全了吗？浏览器遵循W3C标准的实现就完美了吗？浏览器之间的这些差异可能导致多少安全风险的出现？</p>
+<p><strong>👇Web安全事件的角色</strong></p>
+<ul>
+<li>W3C</li>
+<li>浏览器厂商</li>
+<li>Web厂商</li>
+<li>攻击者</li>
+<li>被攻击者</li>
+</ul>
+<p>解决方案的参与者除了攻击者以外，其他都需要参与，这是一个因果循环，如果W3C的标准制定具有安全缺陷，那么遵循标准去实现的浏览器厂商与Web厂商都将带进这些安全缺陷，或者W3C标准没安全缺陷，而浏览器厂商或者Web厂商实现上存在缺陷，那么安全事件照样发生，而如果被攻击者能有比较好的安全意识或防御方案，那么安全事件也很难发生</p>
+<h1 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h1><p>URL是互联网最伟大的创意之一，它也被称为链接，通过URL请求可以查找到唯一的资源</p>
+<p><strong>👇格式 &amp; 对应关系</strong></p>
+<pre><code>&lt;scheme&gt;://&lt;netloc&gt;/&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;
+
+http://www.foo.com/path/f.php?id=1&amp;type=cool#new
+&lt;scheme&gt; - http
+&lt;netloc&gt; - www.foo.com
+&lt;path&gt; - /path/f.php
+&lt;query&gt; - id=1&amp;type=cool，包括&lt;参数名=参数值&gt;对
+&lt;fragment&gt; - new</code></pre>
+<p>对于需要<code>HTTP Basic</code>认证的URL请求，甚至可以将用户名与密码直接放入URL中，位于<code>&lt;netloc&gt;</code>之前</p>
+<pre><code>http://username:password@www.foo.com/</code></pre>
+<p>我们接触最多的是HTTP/HTTPS协议的URL，这是Web安全的入口点，各种安全威胁都是伴随着URL的请求而进行的，如果客户端到服务端各层的解析没做好，就可能出现安全问题</p>
+<p><strong>URL有个重点就是编码方式</strong></p>
+<ul>
+<li>escape</li>
+<li>encodeURI</li>
+<li>encodeURIComponent</li>
+</ul>
+<p><strong>对应的解码函数</strong></p>
+<ul>
+<li>unescape</li>
+<li>decodeURI</li>
+<li>decodeURIComponent</li>
+</ul>
+<p>这三个编码函数是有差异的，甚至浏览器在自动URL编码中也存在差异</p>
+<h1 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h1><p>URL的请求协议几乎都是HTTP，它是一种无状态的请求响应，即每次请求响应之后，连接会立即断开或延时断开(保持一定的连接有效期)，断开后下一次请求再重新建立</p>
+<p><strong>👇对<code>http://www.foo.com/</code>发起一个GET请求</strong></p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot.png" alt="screenshot"></p>
+<p><strong>服务器的响应</strong></p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%201.png" alt="screenshot 1"></p>
+<p>请求与响应一般都分为头部与体部，它们之间以空行分隔。请求体一般出现在POST方法中，比如表单的键值对。响应体就是在浏览器中看到的内容，比如，HTML/JSON/JavaScript/XML等。这里的重点在这个头部，头部的每一行都有自己的含义，key与value之间以冒号分隔</p>
+<p><strong>👇请求头中的几个关键点</strong></p>
+<pre><code>GET http://www.foo.com/HTTP/1.1</code></pre>
+<p>常见的请求方法有GET/POST，最后的<code>HTTP/1.1</code>表示1.1版本的HTTP协议，更早的版本有1.0、0.9</p>
+<pre><code>Host: www.foo.com</code></pre>
+<p>表明请求的主机是什么</p>
+<pre><code>User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.3 Safari/535.19</code></pre>
+<p><code>User-Agent</code>用于表明身份。从这里可以看到操作系统、浏览器、浏览器内核及对应的版本号等信息</p>
+<pre><code>Referer: http://www.baidu.com/</code></pre>
+<p><code>Referer</code>表明从哪里来，比如从<code>http://www.baidu.com/</code>页面点击过来</p>
+<pre><code>Cookie: SESSIONID=58AB420B1D8B800526ACCCAA83A827A3:FG=1</code></pre>
+<p>HTTP是无状态的，那么每次在连接时，服务端如何知道你是上一次的那个？这里通过Cookies进行会话跟踪，第一次响应时设置的Cookies在随后的每次请求中都会发送出去。Cookies还可以包括登录认证后的身份信息</p>
+<p><strong>👇响应头中的几个关键点</strong></p>
+<pre><code>HTTP/1.1 200 OK</code></pre>
+<p>200是状态码，OK是状态描述</p>
+<pre><code>Server: Apache/2.2.8 (Win32) PHP/5.2.6</code></pre>
+<p>上述语句透露了服务端的一些信息：Web容器、操作系统、服务端语言及对应的版本</p>
+<pre><code>X-Powered-By: PHP/5.2.6</code></pre>
+<p>这里也透露了服务端语言的信息</p>
+<pre><code>Content-Length: 3635</code></pre>
+<p>响应体的长度</p>
+<pre><code>Content-Type: text/html;charset=gbk</code></pre>
+<p>响应资源的类型与字符集。针对不同的资源类型会有不同的解析方式，这个会影响浏览器对响应体里的资源解析方式，可能因此带来安全问题。字符集也会影响浏览器的解码方式，同样可能带来安全问题</p>
+<pre><code>Set-Cookie: PTOKEN=; expires=Mon, 01 Jan 1970 00:00:00 GMT; path=/; domain=.foo.com; HttpOnly; Secure
+Set-Cookie: USERID=c7888882e039b32fd7b4d3; expires=Tue, 01 Jan 2030 00:00:00 GMT; path=/; domain=.foo.com</code></pre>
+<p>每个<code>Set-Cookie</code>都设置一个Cookie</p>
+<ul>
+<li>expires：过期时间，如果过期时间是过去，那就表明这个Cookie要被删</li>
+<li>path：相对路径，只有这个路径下的资源可以访问这个Cookie</li>
+<li>domain：域名，有权限设置为更高一级的域名</li>
+<li>HttpOnly：标志（默认无，如果有的话，<strong>表明Cookie存在于HTTP层面，不能被客户端脚本读取</strong>）</li>
+<li>Secure：标志（默认无，如果有的话，<strong>表明Cookie仅通过HTTPS协议进行安全传输</strong>）</li>
+</ul>
+<h1 id="松散的HTML世界"><a href="#松散的HTML世界" class="headerlink" title="松散的HTML世界"></a>松散的HTML世界</h1><p>HTML里可以有脚本、样式等内容的嵌入，以及图片、多媒体等资源的引用。我们看到的网页就是一个HTML文档</p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%202.png" alt="screenshot 2"></p>
+<p><strong>❓为什么说HTML的世界是松散的</strong></p>
+<p>HTML是由众多标签组成的，标签内还有对应的各种属性</p>
+<ul>
+<li><strong>这些标签可以不区分大小写，有的可以不需要闭合</strong></li>
+<li><strong>属性的值可以用单引号、双引号、反单引号包围住，甚至不需要引号</strong></li>
+<li>多余的空格与Tab毫不影响HTML的解析</li>
+<li>HTML里可以内嵌CSS、JavaScript等内容，而不强调分离…</li>
+</ul>
+<p>松散有松散的好处，但这样却培养出了一种惰性，很多前端安全问题就是因为松散导致的</p>
+<h2 id="DOM树"><a href="#DOM树" class="headerlink" title="DOM树"></a>DOM树</h2><p>DOM树对于Web前端安全来说非常重要，很多数据都存在于DOM树中，通过DOM树的操作可以非常容易地获取到隐私数据。其实HTML文档就是一个DOM树</p>
+<p><strong>👆那段HTML用树形结构描述</strong></p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%203.png" alt="screenshot 3"></p>
+<p><code>&lt;html&gt;</code>是树根，其他都是树的每个节点。这里约定标签节点以<code>&lt;xxx&gt;</code>表示，属性节点以<code>@xxx</code>表示，而文本节点以<code>xxx</code>表示</p>
+<p><strong>隐私数据可能存储在👇位置</strong></p>
+<ul>
+<li>HTML内容中</li>
+<li>浏览器本地存储中，如Cookies等</li>
+<li>URL地址中</li>
+</ul>
+<h2 id="iframe内嵌出一个开放的世界"><a href="#iframe内嵌出一个开放的世界" class="headerlink" title="iframe内嵌出一个开放的世界"></a>iframe内嵌出一个开放的世界</h2><p><code>iframe</code>标签是HTML中一个非常重要的标签，也是Web安全中出镜频率最高的标签之一，很多网站都通过iframe嵌入第三方内容</p>
+<p>👇嵌入广告页面</p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%204.png" alt="screenshot 4"></p>
+<p>还有Web 2.0网站中嵌入的许多第三方Web游戏与应用，都有使用到iframe。iframe标签带来了很多便利，同时也带来了很多风险，比如攻击者入侵一个网站后，可以通过iframe嵌入自己的网马页面，用户访问该网站后，被嵌入的网马页面就会执行，<strong>这就是由信任关系导致的安全问题</strong></p>
+<p>iframe标签还有一些有趣的安全话题，当网站页面使用iframe方式嵌入一个页面时，我们约定网站页面是父页，而被嵌入的这个页面是子页，如图2-1所示。那么父页与子页之间如何跨文档读写数据</p>
 
         </div>
         <!-- .entry-content -->
