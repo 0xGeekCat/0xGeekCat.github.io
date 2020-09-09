@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://0xgeekcat.github.io/%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80.html</loc>
+    <loc>https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB.html</loc>
     
     <lastmod>2020-09-09</lastmod>
     
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB.html</loc>
+    <loc>https://0xgeekcat.github.io/%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80.html</loc>
     
-    <lastmod>2020-09-08</lastmod>
+    <lastmod>2020-09-09</lastmod>
     
   </url>
   
@@ -345,13 +345,6 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/rss/index.html</loc>
-    
-    <lastmod>2020-08-02</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://0xgeekcat.github.io/tags/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
@@ -366,14 +359,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/video/index.html</loc>
+    <loc>https://0xgeekcat.github.io/rss/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/about/index.html</loc>
+    <loc>https://0xgeekcat.github.io/video/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -395,6 +388,13 @@
   
   <url>
     <loc>https://0xgeekcat.github.io/comment/index.html</loc>
+    
+    <lastmod>2020-08-02</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0xgeekcat.github.io/about/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -475,14 +475,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Windows/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Hack-The-Box/</loc>
     <lastmod>2020-09-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Hack-The-Box/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Windows/</loc>
     <lastmod>2020-09-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
