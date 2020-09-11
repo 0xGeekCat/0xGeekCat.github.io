@@ -2,14 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB.html</loc>
+    <loc>https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB.html</loc>
     
     <lastmod>2020-09-11</lastmod>
     
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB.html</loc>
+    <loc>https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB.html</loc>
     
     <lastmod>2020-09-11</lastmod>
     
@@ -345,14 +345,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/rss/index.html</loc>
+    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
+    <loc>https://0xgeekcat.github.io/rss/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -394,14 +394,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/comment/index.html</loc>
+    <loc>https://0xgeekcat.github.io/lab/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/lab/index.html</loc>
+    <loc>https://0xgeekcat.github.io/comment/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -440,13 +440,6 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Node/</loc>
-    <lastmod>2020-09-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://0xgeekcat.github.io/categories/node/</loc>
     <lastmod>2020-09-11</lastmod>
     <changefreq>daily</changefreq>
@@ -454,7 +447,7 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Node/</loc>
     <lastmod>2020-09-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -468,6 +461,13 @@
   </url>
   
   <url>
+    <loc>https://0xgeekcat.github.io/categories/%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/</loc>
+    <lastmod>2020-09-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://0xgeekcat.github.io/categories/JavaScript/</loc>
     <lastmod>2020-09-11</lastmod>
     <changefreq>daily</changefreq>
@@ -475,14 +475,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Windows/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Hack-The-Box/</loc>
     <lastmod>2020-09-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Hack-The-Box/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Windows/</loc>
     <lastmod>2020-09-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

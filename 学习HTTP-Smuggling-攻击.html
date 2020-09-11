@@ -287,11 +287,11 @@
         
         <div class="entry-content">
           <h1 id="TL-NR"><a href="#TL-NR" class="headerlink" title="TL;NR"></a>TL;NR</h1><p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot.png" alt="screenshot"></p>
-<h1 id="TimeLine"><a href="#TimeLine" class="headerlink" title="TimeLine"></a>TimeLine</h1><p>@Amit Klein 在 2004 年提出 <a href="https://dl.packetstormsecurity.net/papers/general/whitepaper_httpresponse.pdf" target="_blank" rel="noopener">HTTP Response Splitting</a> 技术，是 HTTP Smuggling 攻击的雏形</p>
-<p>关于 HTTP Smuggling 这种攻击方式在 2005 年已由 @Watchfire 首次提出 <a href="https://www.cgisecurity.com/lib/HTTP-Request-Smuggling.pdf" target="_blank" rel="noopener">HTTP Request Smuggling</a> </p>
+<h1 id="TimeLine"><a href="#TimeLine" class="headerlink" title="TimeLine"></a>TimeLine</h1><p>@Amit Klein 在 2004 年提出HTTP Response Splitting技术，是 HTTP Smuggling 攻击的雏形</p>
+<p>关于 HTTP Smuggling 这种攻击方式在 2005 年已由 @Watchfire 首次提出HTTP Request Smuggling</p>
 <p>HTTP Parameter Pollution (HPP)，也就是 HTTP 参数污染，这其实也算是一种”特殊”的 HTTP Smuggling 攻击，在 2009 年由 @Stefano di Paola &amp; @Luca Carettoni 在 OWASP Poland conference 上首次提出，一经提出就引起了比较大的轰动，被广泛运用在绕过 WAF 当中</p>
-<p>2016 年 Defcon 24 ，@regilero 提出了 [Hiding Wookiees In Http](<a href="https://xz.aliyun.com/t/[https://media.defcon.org/DEF" target="_blank" rel="noopener">https://xz.aliyun.com/t/[https://media.defcon.org/DEF</a> CON 24/DEF CON 24 presentations/DEF CON 24 - Regilero-Hiding-Wookiees-In-Http.pdf](<a href="https://media.defcon.org/DEF" target="_blank" rel="noopener">https://media.defcon.org/DEF</a> CON 24/DEF CON 24 presentations/DEF CON 24 - Regilero-Hiding-Wookiees-In-Http.pdf))，进一步揭示了 HTTP Smuggling 这种攻击方式</p>
-<p>2019 年 Defcon 27， @James Kettle 提出了 [HTTP Desync Attacks: Smashing into the Cell Next Door](<a href="https://xz.aliyun.com/t/[https://media.defcon.org/DEF" target="_blank" rel="noopener">https://xz.aliyun.com/t/[https://media.defcon.org/DEF</a> CON 27/DEF CON 27 presentations/DEFCON-27-albinowax-HTTP-Desync-Attacks.pdf](<a href="https://media.defcon.org/DEF" target="_blank" rel="noopener">https://media.defcon.org/DEF</a> CON 27/DEF CON 27 presentations/DEFCON-27-albinowax-HTTP-Desync-Attacks.pdf))，讲解了如何用 HTTP Smuggling 技术挖掘到了 Paypal 的漏洞</p>
+<p>2016 年 Defcon 24 ，@regilero 提出了Hiding Wookiees In Http，进一步揭示了 HTTP Smuggling 这种攻击方式</p>
+<p>2019 年 Defcon 27， @James Kettle 提出了HTTP Desync Attacks: Smashing into the Cell Next Door，讲解了如何用 HTTP Smuggling 技术挖掘到了 Paypal 的漏洞</p>
 <h1 id="HTTP-Connection-Mod"><a href="#HTTP-Connection-Mod" class="headerlink" title="HTTP Connection Mod"></a>HTTP Connection Mod</h1><p>在<code>HTTP1.0</code>之前的协议设计中，客户端每进行一次HTTP请求，就需要同服务器建立一个TCP链接。而现代的Web网站页面是由多种资源组成的，我们要获取一个网页的内容，不仅要请求HTML文档，还有JS、CSS、图片等各种各样的资源，这样如果按照之前的协议设计，就会导致HTTP服务器的负载开销增大。于是在<code>HTTP1.1</code>中，增加了<code>Keep-Alive</code>和<code>Pipeline</code>这两个特性</p>
 <h2 id="Keep-Alive"><a href="#Keep-Alive" class="headerlink" title="Keep-Alive"></a>Keep-Alive</h2><p><img src="%E5%AD%A6%E4%B9%A0HTTP-Smuggling-%E6%94%BB%E5%87%BB/screenshot%201.png" alt="screenshot 1"></p>
 <p>在<code>HTTP/1.1</code>中默认使用<code>Keep-Alive</code>，从而允许在单个连接上承载多个请求和响应</p>

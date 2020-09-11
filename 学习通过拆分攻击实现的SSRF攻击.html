@@ -288,13 +288,19 @@
         <div class="entry-content">
           <h1 id="HTTP请求路径中的unicode字符损坏"><a href="#HTTP请求路径中的unicode字符损坏" class="headerlink" title="HTTP请求路径中的unicode字符损坏"></a>HTTP请求路径中的unicode字符损坏</h1><p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot.png" alt="screenshot"></p>
 <p><strong>报告者使用Node.js向特定路径发出HTTP请求</strong>，但是发出的请求实际上被定向到了不一样的路径，后来报告者发现这个问题是由Node.js将HTTP请求写入路径时对unicode字符的有损编码引起的</p>
-<p>虽然用户发出的<code>http</code>请求通常将请求路径指定为字符串，但Node.js最终必须将请求作为原始字节输出。JavaScript支持unicode字符串，因此将它们转换为字节意味着选择并应用适当的unicode编码。对于不包含主体的请求，Node.js默认使用<code>latin1</code>，这是一种单字节编码，不能表示高编号的unicode字符；相反这些字符被截断为其JavaScript表示的最低字节</p>
+<p>虽然用户发出的<code>http</code>请求通常将请求路径指定为字符串，但Node.js最终必须将请求作为原始字节输出。JavaScript支持unicode字符串，因此将它们转换为字节意味着选择并应用适当的unicode编码。对于不包含主体的请求，<strong>Node.js默认使用<code>latin1</code>，这是一种单字节编码，不能表示高编号的unicode字符；相反这些字符被截断为其JavaScript表示的最低字节</strong></p>
 <pre><code class="javascript">v = &#39;/caf\u{E9}\u{01F436}&#39;
 console.log(v)
 
 w = Buffer.from(v, &#39;latin1&#39;).toString(&#39;latin1&#39;)
 console.log(w)</code></pre>
 <p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot%201.png" alt="screenshot 1"></p>
+<p><strong>两字节组成的unicode编码转换成单字节的latin1时会被截去第一个字节</strong></p>
+<pre><code class="javascript">console.log(Buffer.from(&#39;\u{5b}&#39;, &#39;latin1&#39;).toString()) → [
+console.log(Buffer.from(&#39;\u{015b}&#39;, &#39;latin1&#39;).toString()) → [
+
+console.log(Buffer.from(&#39;\u{0128}&#39;, &#39;latin1&#39;).toString()) → (
+console.log(Buffer.from(&#39;\u{28}&#39;, &#39;latin1&#39;).toString()) → (</code></pre>
 <h1 id="通过拆分请求实现的SSRF攻击"><a href="#通过拆分请求实现的SSRF攻击" class="headerlink" title="通过拆分请求实现的SSRF攻击"></a>通过拆分请求实现的SSRF攻击</h1><p>基本文本的协比如<code>HTTP</code>，通常很脆弱。假设一个服务器接受用户输入，并将其包含在通过HTTP公开的内部服务请求中</p>
 <pre><code>GET /private-api?q=&lt;user-input-here&gt; HTTP/1.1
 Authorization: server-secret-key</code></pre>
@@ -306,7 +312,7 @@ DELETE /private-api
 Authorization: server-secret-key</code></pre>
 <p>接收服务将此解释为两个单独的HTTP请求，一个<code>GET</code>后跟一个<code>DELETE</code>，其无法知道调用者的意图</p>
 <p>实际上这种精心构造的用户输入会欺骗服务器，使其发出额外的请求，这种情况被称为服务器端请求伪造。服务器可能拥有攻击者不具有的权限，例如访问内网或者秘密api密钥，这就进一步加剧了问题的严重性</p>
-<p>好的HTTP库通通常包含阻止这一行为的措施，Node.js也不例外</p>
+<p><strong>好的HTTP库通通常包含阻止这一行为的措施，Node.js也不例外</strong></p>
 <p>如果尝试发出一个路径中含有控制字符的HTTP请求，控制字符会被修改</p>
 <p>👇搭建一个http server</p>
 <pre><code class="javascript">// Node v8.0.0
@@ -341,6 +347,9 @@ console.log(b)</code></pre>
 console.log(Buffer.from(&#39;http://localhost:3000/čĊ/test&#39;, &#39;latin1&#39;).toString())</code></pre>
 <p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot%205.png" alt="screenshot 5"></p>
 <p>通过在请求路径中包含精心选择的unicode字符，攻击者可以欺骗Node.js将HTTP协议控制字符写入路径</p>
+<p><strong>补充说明</strong></p>
+<pre><code class="javascript">console.log(&#39;\u{0d}&#39; === &#39;\r&#39;) → true
+console.log(&#39;\u{0a}&#39; === &#39;\n&#39;) → true</code></pre>
 <h1 id="简单模拟环境"><a href="#简单模拟环境" class="headerlink" title="简单模拟环境"></a>简单模拟环境</h1><p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot%2039.png" alt="screenshot 39"></p>
 <p>node v8.0.0向本机8000端口发起拆分请求</p>
 <pre><code class="javascript">var http = require(&#39;http&#39;)
