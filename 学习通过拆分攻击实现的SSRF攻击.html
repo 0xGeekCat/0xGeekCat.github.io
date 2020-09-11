@@ -287,7 +287,7 @@
         
         <div class="entry-content">
           <h1 id="HTTP请求路径中的unicode字符损坏"><a href="#HTTP请求路径中的unicode字符损坏" class="headerlink" title="HTTP请求路径中的unicode字符损坏"></a>HTTP请求路径中的unicode字符损坏</h1><p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot.png" alt="screenshot"></p>
-<p>报告者使用Node.js向特定路径发出HTTP请求，但是发出的请求实际上被定向到了不一样的路径，后来报告者发现这个问题是由Node.js将HTTP请求写入路径时对unicode字符的有损编码引起的</p>
+<p><strong>报告者使用Node.js向特定路径发出HTTP请求</strong>，但是发出的请求实际上被定向到了不一样的路径，后来报告者发现这个问题是由Node.js将HTTP请求写入路径时对unicode字符的有损编码引起的</p>
 <p>虽然用户发出的<code>http</code>请求通常将请求路径指定为字符串，但Node.js最终必须将请求作为原始字节输出。JavaScript支持unicode字符串，因此将它们转换为字节意味着选择并应用适当的unicode编码。对于不包含主体的请求，Node.js默认使用<code>latin1</code>，这是一种单字节编码，不能表示高编号的unicode字符；相反这些字符被截断为其JavaScript表示的最低字节</p>
 <pre><code class="javascript">v = &#39;/caf\u{E9}\u{01F436}&#39;
 console.log(v)
@@ -337,9 +337,17 @@ console.log(a)
 console.log(b)</code></pre>
 <p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot%204.png" alt="screenshot 4"></p>
 <p>但是当结果字符串被编码为<code>latin1</code>后写入路径时，这些字符将分别被截断为<code>\r</code>和<code>\n</code></p>
-<pre><code class="javascript">console.log(Buffer.from(&#39;http://localhost:3000/\u{010D}\u{010A}/test&#39;, &#39;latin1&#39;).toString())</code></pre>
+<pre><code class="javascript">console.log(Buffer.from(&#39;http://localhost:3000/\u{010D}\u{010A}/test&#39;, &#39;latin1&#39;).toString())
+console.log(Buffer.from(&#39;http://localhost:3000/čĊ/test&#39;, &#39;latin1&#39;).toString())</code></pre>
 <p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot%205.png" alt="screenshot 5"></p>
 <p>通过在请求路径中包含精心选择的unicode字符，攻击者可以欺骗Node.js将HTTP协议控制字符写入路径</p>
+<h1 id="简单模拟环境"><a href="#简单模拟环境" class="headerlink" title="简单模拟环境"></a>简单模拟环境</h1><p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot%2039.png" alt="screenshot 39"></p>
+<p>node v8.0.0向本机8000端口发起拆分请求</p>
+<pre><code class="javascript">var http = require(&#39;http&#39;)
+http.get(&quot;http://127.0.0.1:8000/čĊ/test&quot;)</code></pre>
+<p>8000端口开启监听</p>
+<pre><code class="bash">nc -l 8000</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0%E9%80%9A%E8%BF%87%E6%8B%86%E5%88%86%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E7%9A%84SSRF%E6%94%BB%E5%87%BB/screenshot%2038.png" alt="screenshot 38"></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.rfk.id.au/blog/entry/security-bugs-ssrf-via-request-splitting/" target="_blank" rel="noopener">Security Bugs in Practice: SSRF via Request Splitting</a></p>
 
         </div>
