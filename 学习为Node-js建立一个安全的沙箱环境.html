@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">Category: node | 0xGeekCat</title>
+  <title itemprop="name">学习为Node.js建立一个安全的沙箱环境 | 0xGeekCat</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -267,435 +267,146 @@
   </div>
 </header>
 
-      
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
 <div class="pattern-center-blank"></div>
-<div class="pattern-center ">
-  <div class="pattern-attachment-img">
-    <img data-src="node.img" class="lazyload" onerror="imgError(this,3)" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;">
-  </div>
-  <header class="pattern-header ">
-    <h1 class="cat-title">node.zh</h1>
-    <span class="cat-des">
-      <p>node.en</p>
-    </span>
-  </header>
-</div>
+
 <div id="content" class="site-content">
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">学习为Node.js建立一个安全的沙箱环境</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-9-14&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="动态执行脚本的场景"><a href="#动态执行脚本的场景" class="headerlink" title="动态执行脚本的场景"></a>动态执行脚本的场景</h1><p>在一些应用中，会给用户提供插入自定义逻辑的能力</p>
+<ul>
+<li>Microsoft Office中的 <code>VBA</code></li>
+<li>一些游戏中的 <code>lua 脚本</code></li>
+<li>FireFox 的<code>油猴脚本</code></li>
+</ul>
+<p>这些能让用户在可控的范围和权限内发挥想象做一些好玩、有用的事情，扩展能力，满足用户的个性化需求</p>
+<p>大多数都是一些客户端程序，但在一些在线的系统和产品中也常常也有类似的需求，事实上在线的应用中也有不少提供了编写自定义脚本的能力，比如Google Docs中的 <code>Apps Script</code>，它可以让用户使用 <code>JavaScript</code> 做一些有用的事情，比如运行代码来响应文档打开事件或单元格更改事件</p>
+<p>与<strong>运行在用户电脑中的客户端应用</strong>不同，用户的自定义脚本通常只能影响用户自已，而对于<strong>在线的应用或服务</strong>来讲，<strong>安全</strong>就变得更为重要，用户的自定义脚本必须严格受到限制和隔离，即不能影响到宿主程序，也不能影响到其它用户。</p>
+<p>而Safeify就是一个针对Node.js应用，用于安全执行用户自定义的非信任脚本的模块</p>
+<h1 id="安全的执行动态脚本"><a href="#安全的执行动态脚本" class="headerlink" title="安全的执行动态脚本"></a>安全的执行动态脚本</h1><p>👇使用<code>eval()</code>在JavaScript程序中动态执行代码</p>
+<pre><code class="javascript">console.log(eval(&#39;1 + 2&#39;)) → 3</code></pre>
+<p><code>eval</code> 是全局对象的一个函数属性</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot.png" alt="screenshot"></p>
+<p><code>eval()</code>执行的代码拥有和应用中其它正常代码一样的权限，<strong>能访问执行上下文中的局部变量，也能访问所有全局变量</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%201.png" alt="screenshot 1"></p>
+<p>上一篇<a href="https://0xgeekcat.github.io/Node-js%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0-GYCTF2020-Node-Game.html">文章</a>提到的<code>Function</code>构造函数可以动态创建函数</p>
+<p><img src="Node-js%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0-GYCTF2020-Node-Game/screenshot%207.png" alt="screenshot 7"></p>
+<p><img src="Node-js%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0-GYCTF2020-Node-Game/screenshot%208.png" alt="screenshot 8"></p>
+<pre><code class="javascript">let sum = Function(&#39;a&#39;, &#39;b&#39;, &#39;console.log(a + b)&#39;)
+sum(1, 2) → 3</code></pre>
+<p><strong><code>Function</code>构造的函数只能在全局作用域中运行，并不能调用上下文的局部变量</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%202.png" alt="screenshot 2"></p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://segmentfault.com/a/1190000014533283" target="_blank" rel="noopener">为 Node.js 应用建立一个更安全的沙箱环境</a></p>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                学习ES6原生Proxy构造函数</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+        
+          
+            <div class="post-nepre half next">
+          
+            <a href="/Node-js%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0-GYCTF2020-Node-Game.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                Node.js漏洞学习-[GYCTF2020]Node Game</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html">
-    学习ES6原生Proxy构造函数</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-14</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83.html">
-    学习为Node.js建立一个安全的沙箱环境</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-14</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85.html">
-    《新时期的Node.js入门》学习日记-知识补充</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-3</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9.html">
-    《新时期的Node.js入门》学习日记-使用Koa2构建Web站点</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-1</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node.html">
-    《新时期的Node.js入门》学习日记-用ES6书写Node</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-8-29</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B.html">
-    《新时期的Node.js入门》学习日记-常用模块(下)</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-8-28</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-
-      <div class="clearer">
-      </div>
-    </main>
-    <!--  -->
-    
-  </div>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
+        </div>
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
 
-<!-- 
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html">
-    学习ES6原生Proxy构造函数</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-14</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83.html">
-    学习为Node.js建立一个安全的沙箱环境</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-14</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85.html">
-    《新时期的Node.js入门》学习日记-知识补充</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-3</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9.html">
-    《新时期的Node.js入门》学习日记-使用Koa2构建Web站点</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-9-1</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node.html">
-    《新时期的Node.js入门》学习日记-用ES6书写Node</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-8-29</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E7%94%A8ES6%E4%B9%A6%E5%86%99Node.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
-    <article class="post post-list" itemscope="" itemtype="https://schema.org/BlogPosting">
-  <div class="post-entry">
-    <div class="feature">
-      <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B.html">
-        <div class="overlay">
-          <i class="iconfont icon-text">
-          </i>
-        </div>
-        <img width="150" height="150" src="" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" >
-      </a>
-    </div>
-    <h1 class="entry-title">
-    <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B.html">
-    《新时期的Node.js入门》学习日记-常用模块(下)</a>
-    </h1>
-    <div class="p-time">
-      <i class="iconfont icon-time">
-      </i>
-    2020-8-28</div>
-    <p>
-    用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-    <footer class="entry-footer">
-      <div class="post-more">
-        <a href="/%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E5%B8%B8%E7%94%A8%E6%A8%A1%E5%9D%97-%E4%B8%8B.html">
-          <i class="iconfont icon-caidan">
-          </i>
-        </a>
-      </div>
-    </footer>
-  </div>
-  <hr>
-</article>
-  
 
- -->
+
     </div>    
     <div class="ins-search">
     <div class="ins-search-mask"></div>
