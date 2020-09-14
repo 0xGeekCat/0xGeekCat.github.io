@@ -359,6 +359,20 @@
   </url>
   
   <url>
+    <loc>https://0xgeekcat.github.io/music/index.html</loc>
+    
+    <lastmod>2020-08-02</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
+    
+    <lastmod>2020-08-02</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://0xgeekcat.github.io/rss/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
@@ -373,21 +387,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
-    
-    <lastmod>2020-08-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0xgeekcat.github.io/music/index.html</loc>
-    
-    <lastmod>2020-08-02</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://0xgeekcat.github.io/video/index.html</loc>
+    
+    <lastmod>2020-08-02</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0xgeekcat.github.io/client/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -402,13 +409,6 @@
   
   <url>
     <loc>https://0xgeekcat.github.io/about/index.html</loc>
-    
-    <lastmod>2020-08-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0xgeekcat.github.io/client/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -461,14 +461,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Node/</loc>
+    <loc>https://0xgeekcat.github.io/categories/node/</loc>
     <lastmod>2020-09-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/node/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Node/</loc>
     <lastmod>2020-09-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

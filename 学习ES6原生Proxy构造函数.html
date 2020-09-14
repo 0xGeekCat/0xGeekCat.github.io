@@ -323,7 +323,11 @@ console.log(Reflect.get(target, &#39;x&#39;)) → 42</code></pre>
         get: (obj, prop) =&gt; prop in obj ? obj[prop] : zeroValue
     });</code></pre>
 <p><code>withZeroValue</code> 包装目标对象<code>target</code>。 如果<code>target</code>设置属性，则返回属性值。 否则返回一个默认的<strong>零值</strong><code>zeroValue</code></p>
-<p><strong>❗️👆访问对象属性使用<code>obj[prop]</code>，而不是<code>obj.prop</code></strong></p>
+<ul>
+<li><code>obj</code>：对象</li>
+<li><code>prop</code>：获取的属性名</li>
+</ul>
+<p><strong>‼️👆访问对象属性使用<code>obj[prop]</code>，而不是<code>obj.prop</code></strong></p>
 <pre><code class="javascript">let pos = {
     x: 4,
     y: 19
@@ -331,7 +335,68 @@ console.log(Reflect.get(target, &#39;x&#39;)) → 42</code></pre>
 const a = &#39;x&#39;;
 console.log(pos[a]) → 4
 console.log(pos.a) → undefined</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/screenshot%202.png" alt="screenshot 2"></p>
+<pre><code class="javascript">let pos = {
+    x: 4,
+    y: 19
+};
+
+console.log(pos.x, pos.y, pos.z); → 4 19 undefined
+
+pos = withZeroValue(pos, 0)
+console.log(pos.x, pos.y, pos.z); → 4 19 0</code></pre>
+<p>此功能可能有用的一个地方是坐标系</p>
+<h2 id="负索引数组"><a href="#负索引数组" class="headerlink" title="负索引数组"></a>负索引数组</h2><p>在JavaScript中获取数组中的最后一个元素方式通过写的很冗长且重复也容易出错。 这就是为什么有一个TC39提案定义了一个便利属性<code>Array.lastItem</code>来获取和设置最后一个元素</p>
+<p>其他语言如Python和Ruby会使用负索引更容易访问数组最后面的元素。可以简单地使用<code>arr[-1]</code>替代<code>arr[arr.length-1]</code>访问最后一个元素</p>
+<p>使用<code>Proxy</code>也可以在Javascript中使用负索引</p>
+<pre><code class="javascript">const negativeArray = els =&gt;
+    new Proxy(els, {
+        get: (target, propKey) =&gt;
+            Reflect.get(
+                target,
+                +propKey &lt; 0 ? String(target.length + +propKey) : propKey,
+            )
+    });
+
+const unicorn = negativeArray([&quot;🐴&quot;, &quot;🌈&quot;, &quot;🦄&quot;])
+console.log(unicorn[-1]) → 🦄</code></pre>
+<ul>
+<li><code>target</code>：目标对象</li>
+<li><code>propKey</code>：被获取的属性名</li>
+</ul>
+<h3 id="propKey"><a href="#propKey" class="headerlink" title="+propKey"></a>+propKey</h3><p>👆<code>propKey</code>数据类型是<code>String</code>，但如果要进行数学运算需要转换为数值型；<code>+</code>与<code>Number()</code>等效</p>
+<pre><code class="javascript">let propKey = &#39;-1&#39;;
+let target = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;];
+
+let fin = propKey &lt; 0 ? String(target.length + propKey) : propKey
+console.log(target[fin]) → undefined
+
+let bin = Number(propKey) &lt; 0 ? String(target.length + Number(propKey)) : propKey
+console.log(target[bin]) → c</code></pre>
+<h3 id="Reflect-get"><a href="#Reflect-get" class="headerlink" title="Reflect.get()"></a>Reflect.get()</h3><p><img src="%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/screenshot%203.png" alt="screenshot 3"></p>
+<h2 id="隐藏属性"><a href="#隐藏属性" class="headerlink" title="隐藏属性"></a>隐藏属性</h2><p>众所周知JavaScript没有私有属性。 <code>Symbol</code>最初是为了<a href="https://codeburst.io/a-practical-guide-to-es6-symbol-3fc90117c7ac" target="_blank" rel="noopener">启用私有属性而引入</a>，但后来使用像<code>Object.getOwnPropertySymbols</code>这样的反射方法进行了淡化，这使得它们可以被公开发现；长期以来的惯例是将私有属性命名为前下划线<code>_</code>，有效地标记其不要访问。<code>Proxy</code>提供了一种稍微更好的方法来屏蔽这些属性</p>
+<pre><code class="javascript">const hide = (target, prefix = &quot;_&quot;) =&gt;
+    new Proxy(target, {
+        has: (obj, prop) =&gt; !prop.startsWith(prefix) &amp;&amp; prop in obj,
+        ownKeys: obj =&gt;
+            Reflect.ownKeys(obj).filter(
+                prop =&gt; typeof prop !== &quot;string&quot; || !prop.startsWith(prefix)
+            ),
+        get: (obj, prop, rec) =&gt; (prop in rec ? obj[prop] : undefined)
+    });</code></pre>
+<p><code>hide</code>函数包装目标对象，并使得从<code>in</code>运算符和<code>Object.getOwnPropertyNames</code>和<code>Object.getOwnPropertySymbols</code>等方法无法访问带有下划线的属性</p>
+<pre><code class="javascript">let userData = hide({
+    name: &#39;0xGeekCat&#39;,
+    age: 19,
+    _gender: &#39;male&#39;
+})
+
+for (let attribute in userData) {
+    console.log(attribute) → name age
+}</code></pre>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://blog.fundebug.com/2019/07/27/javascript-es6-how-to-use-proxy/" target="_blank" rel="noopener">ES6之Proxy 的巧用</a></p>
+<p><a href="https://www.itranslater.com/qa/details/2106866219927208960" target="_blank" rel="noopener">语法 - JavaScript属性访问：点符号与括号？</a></p>
+<p><a href="https://segmentfault.com/q/1010000011378086" target="_blank" rel="noopener">js变量前的+是什么意思</a></p>
 
         </div>
         <!-- .entry-content -->
