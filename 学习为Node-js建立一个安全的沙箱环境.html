@@ -309,7 +309,39 @@
 sum(1, 2) → 3</code></pre>
 <p><strong><code>Function</code>构造的函数只能在全局作用域中运行，并不能调用上下文的局部变量</strong></p>
 <p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%202.png" alt="screenshot 2"></p>
-<h2 id="结合ES6的新特性Proxy"><a href="#结合ES6的新特性Proxy" class="headerlink" title="结合ES6的新特性Proxy"></a>结合ES6的新特性Proxy</h2><h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://segmentfault.com/a/1190000014533283" target="_blank" rel="noopener">为 Node.js 应用建立一个更安全的沙箱环境</a></p>
+<h2 id="结合ES6的新特性Proxy"><a href="#结合ES6的新特性Proxy" class="headerlink" title="结合ES6的新特性Proxy"></a>结合ES6的新特性Proxy</h2><pre><code class="javascript">function evalute(code,sandbox) {
+    sandbox = sandbox || Object.create(null);
+    const fn = new Function(&#39;sandbox&#39;, `with(sandbox){return (${code})}`);
+    const proxy = new Proxy(sandbox, {
+        has(target, key) {
+            // 欺骗让动态执行的代码使其认为属性存在
+            return true;
+        }
+    });
+    return fn(proxy);
+}
+console.log(evalute(&#39;1+2&#39;))
+evalute(&#39;console.log(1)&#39;)</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%204.png" alt="screenshot 4"></p>
+<p>无论 <code>eval</code> 还是 <code>function</code>，执行时如果找不到所需的属性，就会把作用域一层一层向上查找，一直到 <code>global</code>；若此时在<code>sandbox</code>中通过<code>has()</code>欺骗程序，告诉它这个<strong>不存在的属性</strong>是存在的，那么程序就会直接在<code>sandbox</code>中调用属性，进而发生错误</p>
+<p><strong>👇没设置<code>has()</code>进行欺骗当前程序</strong></p>
+<pre><code class="JavaScript">function evalute(code,sandbox) {
+    sandbox = sandbox || Object.create(null);
+    const fn = new Function(&#39;sandbox&#39;, `with(sandbox){return (${code})}`);
+    const proxy = new Proxy(sandbox, {
+    });
+    return fn(proxy);
+}
+console.log(evalute(&#39;1+2&#39;)) → 3
+evalute(&#39;console.log(1)&#39;) → 1</code></pre>
+<h1 id="VM内建模块"><a href="#VM内建模块" class="headerlink" title="VM内建模块"></a>VM内建模块</h1><p><code>VM</code>是Node.js默认提供的内建模块，<code>VM</code> 模块提供了一系列用于在V8虚拟机环境中编译和运行代码的API。JavaScript代码可以被<strong>编译并立即运行</strong>或<strong>编译、保存然后再运行</strong></p>
+<pre><code class="javascript">const vm = require(&#39;vm&#39;);
+const script = new vm.Script(&#39;m + n&#39;);
+const sandbox = { m: 1, n: 2 };
+const context = new vm.createContext(sandbox);
+console.log(script.runInContext(context)); → 3</code></pre>
+<p>通过 <code>vm.Script</code> 还能指定代码执行了「最大毫秒数」，超过指定的时长将终止执行并抛出一个异常</p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://segmentfault.com/a/1190000014533283" target="_blank" rel="noopener">为 Node.js 应用建立一个更安全的沙箱环境</a></p>
 
         </div>
         <!-- .entry-content -->
