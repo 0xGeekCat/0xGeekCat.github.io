@@ -345,36 +345,6 @@
 <li>删除当前目录除了<code>index.php</code>以外所有文件</li>
 <li>写入内容为<code>content</code>名为<code>filename</code>的文件</li>
 </ol>
-<h1 id="Apache运行-htaccess机制"><a href="#Apache运行-htaccess机制" class="headerlink" title="Apache运行.htaccess机制"></a>Apache运行.htaccess机制</h1><p>在理解这道题之前需要简单了解一下Apache运行<code>.htaccess</code>的机制；网上有人给出了结论，但没给出有说服力的案例，在此借用这题构造个PoC来进行一下测试</p>
-<p>👇编辑.htaccess和1.a</p>
-<pre><code># .htaccess
-php_value auto_append_file .htaccess 👈 使得php文件末尾包含.htaccess文件 php_value只能用在php作为apache模块时
-
-# 1.a
-hacker</code></pre>
-<p>👇编辑index.php</p>
-<pre><code class="php">&lt;?php
-$files = scandir(&#39;./&#39;);
-foreach($files as $file) {
-    if(is_file($file)){
-        if ($file !== &quot;index.php&quot; &amp;&amp; $file !== &quot;1.a&quot;) {
-            unlink($file);
-        }
-    }
-}
-
-file_put_contents($_GET[&#39;filename&#39;], $_GET[&#39;content&#39;]);</code></pre>
-<p>之后访问<code>index.php</code>传入参数</p>
-<pre><code>?filename=.htaccess&amp;content=php_value%20auto_append_file%201.a</code></pre>
-<p>分析<code>index.php</code>可以很好理解其程序执行时删掉了之前写入的<code>.htaccess</code>，此时<code>.htaccess</code>为通过参数写入的文件，其内容为php文件尾部包含<code>1.a</code>；根据这种猜测，执行<code>index.php</code>后界面显示应该为<code>hacker</code></p>
-<p><strong>👇接下来就是进行测试判断与猜想是否吻合</strong></p>
-<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-23%20%E4%B8%8B%E5%8D%888.12.21.png" alt="截屏2020-08-23 下午8.12.21"></p>
-<p>神奇的事情发生了，第一次的<code>.htaccess</code>文件明明删除了，但最后还是还是执行了其中的内容；</p>
-<p><strong>再次访问<code>index.php</code></strong></p>
-<p><img src="%E5%AD%A6%E4%B9%A0XNUCA2019-ezphp/%E6%88%AA%E5%B1%8F2020-08-23%20%E4%B8%8B%E5%8D%888.18.25.png" alt="截屏2020-08-23 下午8.18.25"></p>
-<p>此时是直接访问的<code>index.php</code>，<code>.htaccess</code>已经被删除，但最后还是包含了<code>1.a</code>中的内容</p>
-<p>由此不难得出，程序在运行时是先将<code>.htaccess</code>读入内存，在当前<strong>程序执行时</strong>如果文件被删除并不影响<code>.htaccess</code>对配置的修改；<strong>但注意是在程序执行时才是如此</strong>；如果直接删除<code>.htaccess</code>很显然对配置的修改自然就会失效</p>
-<p><strong>了解了运作机制以及之前几篇关于Apache文章的知识积累接下来就是轻松的解题环节，对于以下题解的疑问都可以在之前得文章中找到解释</strong></p>
 <h1 id="解题一"><a href="#解题一" class="headerlink" title="解题一"></a>解题一</h1><p>根据之前所写<a href="https://0xgeekcat.github.io/2020/08/16/%E5%AD%A6%E4%B9%A0%E5%88%A9%E7%94%A8-htaccess%E7%9A%84bypass%E6%8A%80%E5%B7%A7/">文章</a>，可以通过修改<code>Apache</code>配置使得<code>preg_match</code>失效</p>
 <p>👇构造payload，结尾要用<code>\</code>处理content中的<code>\n</code>，不然违背<code>.htaccess</code>书写格式会导致<code>Apache</code>运行崩溃</p>
 <pre><code>?content=php_value%20pcre.backtrack_limit%200%0aphp_value%20pcre.jit%200%0a%23\&amp;filename=.htaccess</code></pre>
@@ -424,6 +394,7 @@ php_value zend.script_encoding &quot;UTF-7&quot;
 <h1 id="补充说明"><a href="#补充说明" class="headerlink" title="补充说明"></a>补充说明</h1><p>如果直接传参<code>?filename=index.php&amp;content=&lt;?php phpinfo();?&gt;</code>很显然是不可以的，会报错<code> failed to open stream: Permission denied</code>，权限不够</p>
 <h1 id="吐槽一下"><a href="#吐槽一下" class="headerlink" title="吐槽一下"></a>吐槽一下</h1><p>真的吐了；这阵子一直在打比赛和调试环境中度过，搞的这个博客从18号一直拖到24号；自己也是菜的真实，打题打的人都傻了</p>
 <p>这道题细节是真的多，就算明白方法，操作上也有可能一不小心产生失误</p>
+<p>此篇文章之前关于<code>.htaccess</code>运行机制的解释错误，感谢<code>0xcccccc</code>师傅的斧正</p>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://nikoeurus.github.io/2019/12/01/xnuca-Web/#ezphp" target="_blank" rel="noopener">从xnuca2019-ezphp深入学习.htaccess</a></p>
 
         </div>
