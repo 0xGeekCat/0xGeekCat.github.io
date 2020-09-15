@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">学习为Node.js建立一个安全的沙箱环境 | 0xGeekCat</title>
+  <title itemprop="name">简单了解Node.js沙箱环境 | 0xGeekCat</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -279,7 +279,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
           <header class="entry-header">
-            <h1 class="entry-title">学习为Node.js建立一个安全的沙箱环境</h1>
+            <h1 class="entry-title">简单了解Node.js沙箱环境</h1>
             <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-9-14&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
 
             <hr>
@@ -340,7 +340,38 @@ const script = new vm.Script(&#39;m + n&#39;);
 const sandbox = { m: 1, n: 2 };
 const context = new vm.createContext(sandbox);
 console.log(script.runInContext(context)); → 3</code></pre>
-<p>通过 <code>vm.Script</code> 还能指定代码执行了「最大毫秒数」，超过指定的时长将终止执行并抛出一个异常</p>
+<p><strong>❗️在Node.js通过<code>vm.runInContext</code>看似隔离了代码执行环境，但实际上却很容易逃逸</strong></p>
+<pre><code class="javascript">const vm = require(&#39;vm&#39;);
+const script = new vm.Script(&#39;this.constructor.constructor(&quot;return process&quot;)().exit()&#39;);
+script.runInThisContext()
+
+console.log(&#39;0xGeekCat&#39;)</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%203.png" alt="screenshot 3"></p>
+<p>❗️在之前<a href="https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0JavaScript%E4%B8%AD%E7%B1%BB%EF%BC%8C%E5%8E%9F%E5%9E%8B%E5%92%8C%E7%BB%A7%E6%89%BF.html">文章</a>中研究过<code>this.constructor</code>指的是<code>Object</code>，且<code>Object</code>的构造函数是<code>Function</code></p>
+<pre><code class="javascript">console.log(this) → {}
+console.log(this.constructor) → [Function: Object]
+console.log(this.constructor.constructor) → [Function: Function]</code></pre>
+<p><strong>👇对<code>this.constructor.constructor(&quot;return process&quot;)().exit()</code>的理解</strong></p>
+<pre><code class="javascript">this.constructor.constructor(&quot;return process&quot;)().exit()
+↓
+Object.constructor(&quot;return process&quot;)().exit()
+↓
+Function(&quot;return process&quot;)().exit()
+↓
+process.exit()</code></pre>
+<p>👇简单处理就能避免通过 <code>this.constructor</code> 拿到 <code>process</code></p>
+<pre><code class="javascript">//创建无__proto__的空白对象作为sandbox
+const sandbox = Object.create(null);</code></pre>
+<p>但即便如此也依然有风险，由于JavaScript本身的动态特点，各种黑魔法防不胜防。事实上Node.js的官方文档中也提到<strong>不要把 <code>VM</code> 当做一个安全的沙箱，去执行任意非信任的代码</strong></p>
+<h1 id="VM2内建模块"><a href="#VM2内建模块" class="headerlink" title="VM2内建模块"></a>VM2内建模块</h1><p>在社区中有一些开源的模块用于运行不信任代码，例如<code>sandbox</code>、<code>vm2</code>、<code>jailed</code>等</p>
+<p>相较而言<code>vm2</code>对各方面做了更多的安全工作。从<code>vm2</code>的官方<code>README</code>中可以看到，它基于Node.js内建的<code>VM</code>模块，建立基础的沙箱环境，然后同时使用<code>ES6</code>的<code>Proxy</code>技术来防止沙箱脚本逃逸</p>
+<pre><code class="javascript">const vm2 = require(&#39;vm2&#39;);
+new vm2.VM().run(&#39;this.constructor.constructor(&quot;return process&quot;)().exit()&#39;);
+↓ 简写
+const {VM} = require(&#39;vm2&#39;);
+new VM().run(&#39;this.constructor.constructor(&quot;return process&quot;)().exit()&#39;);</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%205.png" alt="screenshot 5"></p>
+<p>👆代码并没有成功结束掉宿主程序，vm2官方描述vm2是一个沙盒，可以在Node.js中按全的执行不受信任的代码；<strong>❗️但是事实并非如此</strong></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://segmentfault.com/a/1190000014533283" target="_blank" rel="noopener">为 Node.js 应用建立一个更安全的沙箱环境</a></p>
 
         </div>
