@@ -373,14 +373,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
+    <loc>https://0xgeekcat.github.io/music/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/music/index.html</loc>
+    <loc>https://0xgeekcat.github.io/video/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -394,7 +394,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/video/index.html</loc>
+    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
+    
+    <lastmod>2020-08-02</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0xgeekcat.github.io/comment/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -416,13 +423,6 @@
   
   <url>
     <loc>https://0xgeekcat.github.io/client/index.html</loc>
-    
-    <lastmod>2020-08-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0xgeekcat.github.io/comment/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -503,14 +503,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Windows/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Hack-The-Box/</loc>
     <lastmod>2020-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/categories/Hack-The-Box/</loc>
+    <loc>https://0xgeekcat.github.io/categories/Windows/</loc>
     <lastmod>2020-09-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
