@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">简单了解Node.js沙箱环境 | 0xGeekCat</title>
+  <title itemprop="name">简单了解Node.js沙箱环境并分析VM2实现原理 | 0xGeekCat</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -279,7 +279,7 @@
         <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
         
           <header class="entry-header">
-            <h1 class="entry-title">简单了解Node.js沙箱环境</h1>
+            <h1 class="entry-title">简单了解Node.js沙箱环境并分析VM2实现原理</h1>
             <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-9-14&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
 
             <hr>
@@ -364,15 +364,89 @@ process.exit()</code></pre>
 const sandbox = Object.create(null);</code></pre>
 <p>但即便如此也依然有风险，由于JavaScript本身的动态特点，各种黑魔法防不胜防。事实上Node.js的官方文档中也提到<strong>不要把 <code>VM</code> 当做一个安全的沙箱，去执行任意非信任的代码</strong></p>
 <h1 id="VM2内建模块"><a href="#VM2内建模块" class="headerlink" title="VM2内建模块"></a>VM2内建模块</h1><p>在社区中有一些开源的模块用于运行不信任代码，例如<code>sandbox</code>、<code>vm2</code>、<code>jailed</code>等</p>
-<p>相较而言<code>vm2</code>对各方面做了更多的安全工作。从<code>vm2</code>的官方<code>README</code>中可以看到，它基于Node.js内建的<code>VM</code>模块，建立基础的沙箱环境，然后同时使用<code>ES6</code>的<code>Proxy</code>技术来防止沙箱脚本逃逸</p>
-<pre><code class="javascript">const vm2 = require(&#39;vm2&#39;);
-new vm2.VM().run(&#39;this.constructor.constructor(&quot;return process&quot;)().exit()&#39;);
-↓ 简写
-const {VM} = require(&#39;vm2&#39;);
-new VM().run(&#39;this.constructor.constructor(&quot;return process&quot;)().exit()&#39;);</code></pre>
+<p>相较而言<code>vm2</code>对各方面做了更多的安全工作。从<code>vm2</code>的官方<code>README</code>中可以看到，它基于Node.js内建的<code>VM</code>模块建立基础的沙箱环境，同时使用<code>ES6</code>的<code>Proxy</code>技术来防止沙箱脚本逃逸</p>
+<h2 id="vm-API"><a href="#vm-API" class="headerlink" title="vm API"></a>vm API</h2><p>vm2是在vm的基础上实现的沙箱，所以内部调用的还是vm的API</p>
+<p><strong>在vm中运行一个沙箱环境</strong></p>
 <p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%205.png" alt="screenshot 5"></p>
-<p>👆代码并没有成功结束掉宿主程序，vm2官方描述vm2是一个沙盒，可以在Node.js中按全的执行不受信任的代码；<strong>❗️但是事实并非如此</strong></p>
-<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://segmentfault.com/a/1190000014533283" target="_blank" rel="noopener">为 Node.js 应用建立一个更安全的沙箱环境</a></p>
+<p><strong>👇沙箱代码</strong></p>
+<pre><code class="javascript">const vm = require(&#39;vm&#39;)
+
+const context = {
+    animal: &#39;cat&#39;,
+    count: 0
+}
+
+// 编译一段代码
+const script = new vm.Script(`count += 1; name = &quot;0xGeekCat&quot;`)
+
+// 创建一个上下文隔离对象(沙箱)
+vm.createContext(context)
+
+// 在沙箱中运行代码
+for (let i = 0; i &lt; 10; i ++) {
+    script.runInContext(context)
+}
+
+// 打印运行结果
+console.log(context) → { animal: &#39;cat&#39;, count: 10, name: &#39;0xGeekCat&#39; }</code></pre>
+<p><strong>当然也可以直接在沙箱中运行代码</strong>；如果不提供上下文变量，vm会自己创建一个隔离的上下文</p>
+<pre><code class="javascript">const vm = require(&#39;vm&#39;)
+console.log(vm.runInNewContext(`let a = 2; a`)) → 2</code></pre>
+<p><strong>🔔vm中最关键的就是上下文<code>context</code> ，vm能逃逸的原理就是因为<code>context</code>并没有拦截针对外部的<code>constructor</code>和<code>__proto__</code>等属性的访问</strong></p>
+<h2 id="vm2-API"><a href="#vm2-API" class="headerlink" title="vm2 API"></a>vm2 API</h2><p>vm的代码包中主要有四个文件</p>
+<ul>
+<li><code>cli.js</code> 实现vm2的命令行调用</li>
+<li><code>contextify.js</code> 封装了对象，<strong>❗️并针对global的<code>Buffer</code>类进行代理</strong></li>
+<li><code>main.js</code> vm2执行的入口，导出<code>NodeVM</code>, <code>VM</code>这两个沙箱环境，还有一个<code>VMScript</code>实际上是封装了<code>vm.Script</code></li>
+<li><code>sandbox.js</code>针对<code>global</code>的一些函数和变量进行hook</li>
+</ul>
+<p>vm2相比vm做了很大的改进，其中之一就是利用了<code>ES6</code>新增的<code>proxy</code>特性，从而拦截对诸如<code>constructor</code>和<code>__proto__</code>等属性的访问</p>
+<p><strong>在vm2中运行👇代码</strong></p>
+<pre><code class="javascript">const {VM, VMScript} = require(&#39;vm2&#39;)
+
+const script = new VMScript(`let a = 2; a`)
+console.log(new VM().run(script)) → 2</code></pre>
+<p><code>VM</code>是vm2在vm的基础上封装的虚拟机，只需要将其实例化之后调用<code>run</code>方法即可运行脚本</p>
+<h2 id="vm2运行原理"><a href="#vm2运行原理" class="headerlink" title="vm2运行原理"></a>vm2运行原理</h2><p><strong>将👆代码拆分开方便分析运行原理</strong></p>
+<pre><code class="javascript">const {VM, VMScript} = require(&quot;vm2&quot;);
+
+const script = new VMScript(&quot;let a = 2;a&quot;);
+
+let vm = new VM();
+
+console.log(vm.run(script));</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%206.png" alt="screenshot 6"></p>
+<p>vm2最核心的操作就在于针对<code>context</code>的封装</p>
+<h2 id="vm2封装上下文"><a href="#vm2封装上下文" class="headerlink" title="vm2封装上下文"></a>vm2封装上下文</h2><p>👇将<code>vm.createContext</code>创建的上下文作为参数传入。其中引入<code>contextify.js</code>的代码比较独特，是调用vm的API将<code>contextify.js</code>封装为一个匿名函数</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%207.png" alt="screenshot 7"></p>
+<p><code>host</code>传入一些需要用的对象</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%208.png" alt="screenshot 8"></p>
+<p><strong>❓vm2中的<code>contextify.js</code>究竟做了什么</strong></p>
+<p>最开始定义了一些常量，并且在global和this上添加了相应属性</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%209.png" alt="screenshot 9"></p>
+<p><code>Contextify</code>和<code>Decontextify</code>都是<code>WeakMap</code></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2010.png" alt="screenshot 10"></p>
+<p><code>WeakMap</code>是<code>ES6</code>新增的语法，只接受对象作为键名，并且为了<strong>防止内存泄漏</strong>，这些对象是不会被计入垃圾回收机制</p>
+<p><strong>❓<code>Contextify.readonly</code> 做了些什么</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2011.png" alt="screenshot 11"></p>
+<p><strong>👇函数调用图</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2012.png" alt="screenshot 12"></p>
+<p>❓为什么需要调用这么多层方法，最后返回的又是一个什么</p>
+<p>从最后一个调用的方法<code>Contextify.object</code>可以很清楚地看到最后返回了一个代理对象，并且其中还有一个<code>Object.assign</code>的操作</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2013.png" alt="screenshot 13"></p>
+<p><code>Object.assign</code>方法用于将所有可枚举属性的值从一个或多个source对象复制到target对象，若属性相同则会对target已有属性进行覆盖；最终返回target对象</p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2014.png" alt="screenshot 14"></p>
+<p>从<strong>Line: 407</strong><code>}, traps, deepTraps));</code>可以得知<code>deepTraps [cover] traps [cover] {get:..., set: ..., ...}</code></p>
+<p><strong>👇查看<code>deepTraps</code>属性</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2015.png" alt="screenshot 15"></p>
+<p> <code>set, setPrototypeOf ..</code>等方法返回值都是false，也就是说调用<code>Buffer.a = 1</code>时，会被<code>Proxy</code>的<code>set trap</code>拦截</p>
+<p><strong>👇查看<code>traps</code>属性</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2016.png" alt="screenshot 16"></p>
+<p>这些方法并不会返回false，但是也会在合并时覆盖掉前一个对象的<code>get和getPrototypeOf</code></p>
+<p><strong>最终得到一个经过Proxy包装的Buffer对象</strong></p>
+<p><img src="%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83/screenshot%2017.png" alt="screenshot 17"></p>
+<h2 id="代码举例"><a href="#代码举例" class="headerlink" title="代码举例"></a>代码举例</h2><h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://segmentfault.com/a/1190000014533283" target="_blank" rel="noopener">为 Node.js 应用建立一个更安全的沙箱环境</a></p>
+<p><a href="https://www.anquanke.com/post/id/207283" target="_blank" rel="noopener">vm2实现原理分析</a>         </p>
 
         </div>
         <!-- .entry-content -->

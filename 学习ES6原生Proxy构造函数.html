@@ -384,6 +384,7 @@ console.log(target[bin]) → c</code></pre>
             ),
         get: (obj, prop, rec) =&gt; (prop in rec ? obj[prop] : undefined)
     });</code></pre>
+<p><strong>🔔<code>has</code>方法用来拦截<code>HasProperty</code>操作，即判断对象是否具有某个属性时，这个方法会生效。典型的操作就是<code>in</code>运算符</strong></p>
 <p><code>hide</code>函数包装目标对象，并使得从<code>in</code>运算符和<code>Object.getOwnPropertyNames</code>和<code>Object.getOwnPropertySymbols</code>等方法无法访问带有下划线的属性</p>
 <pre><code class="javascript">let userData = hide({
     name: &#39;0xGeekCat&#39;,
@@ -424,11 +425,28 @@ for (let attribute in userData) {
       <div class="toc" style="background: none;"></div>
       <section class="post-squares nextprev">
         
+          
+            <div class="post-nepre half previous">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0Node-js-VM2-sandbox-escapse.html" rel="prev">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Previous Post</span>
+              <div class="info">
+                <h3>
+                学习Node.js VM2 sandbox escapse</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
         
           
-            <div class="post-nepre full next">
+            <div class="post-nepre half next">
           
-            <a href="/%E5%AD%A6%E4%B9%A0%E4%B8%BANode-js%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%AE%89%E5%85%A8%E7%9A%84%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83.html" rel="next">
+            <a href="/%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86.html" rel="next">
               <div class="background">
                 <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
               </div>
@@ -436,7 +454,7 @@ for (let attribute in userData) {
               Next Post</span>
               <div class="info">
                 <h3>
-                简单了解Node.js沙箱环境</h3>
+                简单了解Node.js沙箱环境并分析VM2实现原理</h3>
                 <hr>
               </div>
             </a>

