@@ -380,14 +380,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
+    <loc>https://0xgeekcat.github.io/rss/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/rss/index.html</loc>
+    <loc>https://0xgeekcat.github.io/tags/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -408,7 +408,7 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/comment/index.html</loc>
+    <loc>https://0xgeekcat.github.io/bangumi/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -422,7 +422,14 @@
   </url>
   
   <url>
-    <loc>https://0xgeekcat.github.io/bangumi/index.html</loc>
+    <loc>https://0xgeekcat.github.io/about/index.html</loc>
+    
+    <lastmod>2020-08-02</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://0xgeekcat.github.io/comment/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
@@ -430,13 +437,6 @@
   
   <url>
     <loc>https://0xgeekcat.github.io/lab/index.html</loc>
-    
-    <lastmod>2020-08-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://0xgeekcat.github.io/about/index.html</loc>
     
     <lastmod>2020-08-02</lastmod>
     
