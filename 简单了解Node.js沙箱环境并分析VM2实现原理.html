@@ -431,7 +431,7 @@ console.log(vm.run(script));</code></pre>
 <p><img src="%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/screenshot%2011.png" alt="screenshot 11"></p>
 <p><strong>👇函数调用图</strong></p>
 <p><img src="%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/screenshot%2012.png" alt="screenshot 12"></p>
-<p>❓为什么需要调用这么多层方法，最后返回的又是一个什么</p>
+<p>❓为什么需要调用这么多层方法，最后返回的又是什么</p>
 <p>从最后一个调用的方法<code>Contextify.object</code>可以很清楚地看到最后返回了一个代理对象，并且其中还有一个<code>Object.assign</code>的操作</p>
 <p><img src="%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/screenshot%2013.png" alt="screenshot 13"></p>
 <p><code>Object.assign</code>方法用于将所有可枚举属性的值从一个或多个source对象复制到target对象，若属性相同则会对target已有属性进行覆盖；最终返回target对象</p>
@@ -463,7 +463,7 @@ console.log(a.i); // 访问对象的属性</code></pre>
 <p><img src="%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/screenshot%2018.png" alt="screenshot 18"></p>
 <p><strong>👇VM2内部函数调用流程</strong></p>
 <p><img src="%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/screenshot%2019.png" alt="screenshot 19"></p>
-<p>在访问<code>Proxy</code>对象<code>Buffer</code>的<code>from</code>属性时会被<code>get trap</code>(用于处理对对象属性读取的操作)拦截，经过层层的调用后最终返回一个<code>Proxy</code>对象</p>
+<p>访问<code>Proxy</code>对象<code>Buffer</code>的<code>from</code>属性时会被<code>get trap</code>(用于处理对对象属性读取的操作)拦截，经过层层的调用后最终返回一个<code>Proxy</code>对象</p>
 <p>在沙箱中调用<code>Buffer.from</code>会被<code>apply</code>捕获</p>
 <p><img src="%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3Node.js%E6%B2%99%E7%AE%B1%E7%8E%AF%E5%A2%83%E5%B9%B6%E5%88%86%E6%9E%90VM2%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/screenshot%2020.png" alt="screenshot 20"></p>
 <p><strong>👇<code>from</code>函数调用流程</strong></p>
@@ -471,8 +471,7 @@ console.log(a.i); // 访问对象的属性</code></pre>
 <p>根据<code>Proxy</code>规范，<code>target</code>是未代理之前的函数，<code>context</code>是函数当前运行的上下文，当前为<code>Buffer</code>的代理，args是函数的参数，当前是<code>&quot;&quot;</code></p>
 <p>实际上 <code>Decontextify</code> 的实现和 <code>Contextify</code> 是对称的，只是略微有一点细节上的区别。<code>Decontextify.value</code> 首先会检查 <code>Contextified</code> 中是否有这个对象，如果有直接返回，否则也会针对其进行一层代理</p>
 <p>从函数调用过程中看到虽然vm2针对很多对象做了代理，但是当实际要发生一次函数调用的时候，必须要将代理的<strong>外壳</strong>给剥除掉，并且必须依靠nodejs提供的API来完成，而如果能够捕获到这个被剔除代理的对象，那么就能完成vm2的逃逸，<strong>这是vm2沙箱逃逸的核心原理</strong></p>
-<p><strong>👇执行给a的属性i赋值</strong></p>
-<pre><code class="javascript">a.i = () =&gt; {};</code></pre>
+<p><strong>❌之后部分并未完全理解原文作者意图</strong></p>
 <h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://segmentfault.com/a/1190000014533283" target="_blank" rel="noopener">为 Node.js 应用建立一个更安全的沙箱环境</a></p>
 <p><a href="https://www.anquanke.com/post/id/207283" target="_blank" rel="noopener">vm2实现原理分析</a>         </p>
 
