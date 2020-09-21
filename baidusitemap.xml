@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://0xgeekcat.github.io/Node-js%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0-HFCTF2020-JustEscape.html</loc>
+    <lastmod>2020-09-21</lastmod>
+  </url>
+  <url>
     <loc>https://0xgeekcat.github.io/%E5%AD%A6%E4%B9%A0Node-js-VM2-sandbox-escapse.html</loc>
     <lastmod>2020-09-21</lastmod>
   </url>
