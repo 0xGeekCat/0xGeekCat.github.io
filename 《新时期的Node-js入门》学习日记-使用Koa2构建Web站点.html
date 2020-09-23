@@ -416,7 +416,7 @@ app.use(router.routes())
 app.listen(3000)</code></pre>
 <p>访问<code>http://127.0.0.1:3000/?name=0xGeekCat</code>时console回显</p>
 <p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%207.png" alt="screenshot 7"></p>
-<p>Koa处理get请求比较简单，直接通过<code>ctx.req.﹤param﹥</code>就能拿到get参数的值，post请求的处理稍微麻烦一些，通常使用<code>bodyParser</code>中间件进行处理，但也仅限于普通表单，获取格式为<code>ctx.request.body.﹤param﹥</code></p>
+<p>Koa处理get请求比较简单，直接通过<code>ctx.query.﹤param﹥</code>就能拿到get参数的值，post请求的处理稍微麻烦一些，通常使用<code>bodyParser</code>中间件进行处理，但也仅限于普通表单，获取格式为<code>ctx.request.body.﹤param﹥</code></p>
 <pre><code class="javascript">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -965,7 +965,7 @@ app.use(views(__dirname + &#39;/static/html&#39;), {extensions: [&#39;html&#39;]
 <li>缺点是SEO不友好</li>
 </ul>
 </li>
-<li>服务器一次性返回全部的HTML字符串，这种方式被称为后端渲染；使用字符串拼接的HTML往往会耗费开发者全部的耐心<ul>
+<li><strong>服务器一次性返回全部的HTML字符串，这种方式被称为后端渲染</strong>；使用字符串拼接的HTML往往会耗费开发者全部的耐心<ul>
 <li>这种方式的优点是首屏加载快对SEO有利</li>
 <li>缺点是前后端耦合，代码难以维护而且不美观</li>
 </ul>
@@ -1064,7 +1064,427 @@ app.use(views(__dirname + &#39;/static/html&#39;), {extensions: [&#39;html&#39;]
 })</code></pre>
 <p>但这样做的缺点很明显，那就是在每一个路由方法中都要调用该函数，这样会带来很多重复代码。更好的做法是将其用中间件的方式来加载，这样每个路由请求都会经过该中间件</p>
 <p><strong>将登录验证作为中间件来实现</strong></p>
-<h2 id="使用Session记录会话状态"><a href="#使用Session记录会话状态" class="headerlink" title="使用Session记录会话状态"></a>使用Session记录会话状态</h2><h1 id="使用Redis进行持久化"><a href="#使用Redis进行持久化" class="headerlink" title="使用Redis进行持久化"></a>使用Redis进行持久化</h1><h2 id="Node和Redis的交互"><a href="#Node和Redis的交互" class="headerlink" title="Node和Redis的交互"></a>Node和Redis的交互</h2><h2 id="CURD操作"><a href="#CURD操作" class="headerlink" title="CURD操作"></a>CURD操作</h2><h2 id="使用Redis持久化session"><a href="#使用Redis持久化session" class="headerlink" title="使用Redis持久化session"></a>使用Redis持久化session</h2><h2 id="Redis在Node中的应用"><a href="#Redis在Node中的应用" class="headerlink" title="Redis在Node中的应用"></a>Redis在Node中的应用</h2><h1 id="Koa源码剖析"><a href="#Koa源码剖析" class="headerlink" title="Koa源码剖析"></a>Koa源码剖析</h1><h2 id="Koa的启动过程"><a href="#Koa的启动过程" class="headerlink" title="Koa的启动过程"></a>Koa的启动过程</h2><h2 id="中间件的加载-1"><a href="#中间件的加载-1" class="headerlink" title="中间件的加载"></a>中间件的加载</h2><h2 id="listen-方法"><a href="#listen-方法" class="headerlink" title="listen()方法"></a>listen()方法</h2><h2 id="next-与return-next"><a href="#next-与return-next" class="headerlink" title="next()与return next()"></a>next()与return next()</h2><h2 id="关于Can’t-set-headers-after-they-are-sent"><a href="#关于Can’t-set-headers-after-they-are-sent" class="headerlink" title="关于Can’t set headers after they are sent."></a>关于Can’t set headers after they are sent.</h2><h2 id="Context对象的实现"><a href="#Context对象的实现" class="headerlink" title="Context对象的实现"></a>Context对象的实现</h2><h2 id="Koa的优缺点"><a href="#Koa的优缺点" class="headerlink" title="Koa的优缺点"></a>Koa的优缺点</h2><h1 id="网站部署"><a href="#网站部署" class="headerlink" title="网站部署"></a>网站部署</h1><h2 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h2><h2 id="部署在云服务主机上"><a href="#部署在云服务主机上" class="headerlink" title="部署在云服务主机上"></a>部署在云服务主机上</h2><h2 id="通过GitHub-pages来部署"><a href="#通过GitHub-pages来部署" class="headerlink" title="通过GitHub pages来部署"></a>通过GitHub pages来部署</h2>
+<pre><code class="javascript">function validateCookie(ctx, next) {
+    if (!ctx.cookies.get(&#39;loginStatus&#39;) &amp;&amp; ctx.url !== &#39;/login&#39;) {
+        console.log(&#39;not login&#39;)
+        ctx.redirect(&#39;/login&#39;)
+    } else
+        return next()
+}
+
+module.exports = validateCookie</code></pre>
+<p>👆中间件首先尝试获取名为<code>loginStatus</code>的Cookie，如果没有设置，就将请求重定向到<code>/login</code>路径</p>
+<p>❗️在判断时需要加上<code>ctx.url !== &quot;/login&quot;</code>的判断，否则当用户第一次访问<code>/login</code>时，由于没有还设置cookie，就会造成循环重定向，最后在浏览器中显示一个重定向次数过多的错误</p>
+<p>然后在<code>root.js</code>中挂载该中间件，❗️<strong>应该在路由中间件之前加载，每个路由请求在处理前都要进行登录验证</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2030.png" alt="screenshot 30"></p>
+<p>当访问<code>localhost:3000</code>时，由于没有cookie浏览器页面会跳转到<code>localhost:3000/login</code></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2031.png" alt="screenshot 31"></p>
+<h2 id="使用Session记录会话状态"><a href="#使用Session记录会话状态" class="headerlink" title="使用Session记录会话状态"></a>使用Session记录会话状态</h2><p>关于Session，不应混淆的是<strong>Session规范</strong>和<strong>Session实现</strong></p>
+<p><strong>🔔Session与其说是一种规范，不如说是一种概念，表示用户从进入到离开网络应用这段时间内产生的动作以及上下文</strong></p>
+<p>Session并不是HTTP的独创，而是广泛地体现在各种网络应用和数据库操作中</p>
+<ul>
+<li>例如使用FTP协议传输文件，那么从登录到下载文件完成然后离开的这段时间就可以称为一个Session</li>
+<li>从拿起电话到拨号然后打完电话离开也是一个Session，而且更接近其语义上的概念(会话)。</li>
+</ul>
+<p>Session主要用来管理用户状态，例如用户对某个网站页面的设置，或者在上个页面中做的一些操作，这些数据也可以放在Cookie中，但是一来会增加传输的数据量，二是有些数据存在Cookie中并不安全，例如电商网站的交易信息等</p>
+<h3 id="HTTP中的Session"><a href="#HTTP中的Session" class="headerlink" title="HTTP中的Session"></a>HTTP中的Session</h3><p>以打电话为例，HTTP服务器就像和多数的用户同时打电话，然而每次说完一句话，服务器就会忘记电话那端是谁，这样的话和多个用户的通话就会带来混乱</p>
+<p>早期的HTTP应用是不可交互的，用户只能浏览静态页面，此时用户状态的问题还没有暴露出来；随着互联网的发展，出现了更复杂的交互式应用，但这时HTTP协议已经获得广泛的应用，想推翻重来是不现实的</p>
+<p><strong>因此对于HTTP协议来说，折中的方法就是利用Cookie来实现Session</strong></p>
+<p>既然Cookie每次都要随着HTTP请求发给服务器，那么只要给每个Cookie一个唯一id，就能知道请求来自哪一用户了，就像👆打电话的例子，只要每个用户在最后说一下自己的名字，服务器就能知道电话那端是谁</p>
+<h3 id="创建Session"><a href="#创建Session" class="headerlink" title="创建Session"></a>创建Session</h3><p><strong>一般来说，创建一个Session可以分为👇几步</strong></p>
+<ol>
+<li>生成一个<code>Session id</code>，这个标识符是唯一的</li>
+<li>将<code>Session id</code>存储在内存里；实际上调用代码生成<code>Session id</code>后，其自然是位于内存中的，<strong>❗️不过如果服务器一旦断电或重启，<code>Session</code>信息就会丢失，因此通常使用一些其他技术来进行持久化，例如Redis</strong></li>
+<li>将带有<code>Session id</code>的Cookie发送给客户端</li>
+</ol>
+<h3 id="在Koa中使用Session"><a href="#在Koa中使用Session" class="headerlink" title="在Koa中使用Session"></a>在Koa中使用Session</h3><p>在Koa中使用Session可以考虑使用<code>koa-session</code>中间件</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2032.png" alt="screenshot 32"></p>
+<p>其中<code>app.keys</code>代表加密用的密钥</p>
+<p><strong>👇测试<code>koa-seesion</code></strong></p>
+<pre><code class="javascript">const session = require(&#39;koa-session&#39;)
+const Koa = require(&#39;koa&#39;)
+const app = new Koa()
+const router = require(&#39;koa-router&#39;)()
+// app.keys = [&#39;Key&#39;] 👈 如果CONFIG的signed字段为false就不需要设置keys
+
+const CONFIG = {
+    key: &#39;login&#39;,
+    maxAge: 86400000,
+    overwrite: true,
+    httpOnly: true,
+    signed: false
+}
+app.use(session(CONFIG, app))
+
+router.get(&#39;/&#39;, (ctx, next) =&gt; {
+    ctx.session.login = true 👈 没有这行代码无法正常生成Cookie
+    ctx.body = &#39;0xGeekCat&#39;
+})
+
+app.use(router.routes())
+
+app.listen(3000, function () {
+    console.log(&#39;listening on 3000&#39;)
+})</code></pre>
+<p><strong>❗️由于Cookie的设置是跟在HTTP响应之后，也就是说要设置一个用作Session的Cookie</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2033.png" alt="screenshot 33"></p>
+<p>👆这行代码生成Cookie，Cookie之后会随着<code>HTTP response</code>发送到客户端</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2034.png" alt="screenshot 34"></p>
+<p>可以看到value字段的值是一个看似随机的字符串，这就是之后要使用的<code>Session id</code></p>
+<p>👇可以设置一个其他路由，检测一下服务器端的Session是否在正常工作</p>
+<pre><code class="javascript">router.get(&#39;/verify&#39;, (ctx, next) =&gt; {
+    ctx.body = ctx.session.login
+})</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2035.png" alt="screenshot 35"></p>
+<p>👆证明设置的Session已经正常工作</p>
+<h1 id="使用Redis进行持久化"><a href="#使用Redis进行持久化" class="headerlink" title="使用Redis进行持久化"></a>使用Redis进行持久化</h1><p>Redis是一个知名的<code>key-value</code>数据库，它由C语言实现，和MongoDB以及其他数据库不同的是Redis是一个<strong>内存数据库</strong></p>
+<h2 id="Node和Redis的交互"><a href="#Node和Redis的交互" class="headerlink" title="Node和Redis的交互"></a>Node和Redis的交互</h2><p>npm上有很多用于连接到Redis的第三方模块，👇使用最为流行的<code>node-redis</code>模块</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2036.png" alt="screenshot 36"></p>
+<p>安装完成之后连接Redis</p>
+<pre><code class="javascript">const redis = require(&#39;redis&#39;)
+const client = redis.createClient(&#39;6379&#39;, &#39;127.0.0.1&#39;)
+
+client.on(&#39;error&#39;, function (err) {
+    console.log(err)
+})
+
+client.on(&#39;ready&#39;, function () {
+    console.log(&#39;ready&#39;)
+})
+
+client.set(&#39;name&#39;, &#39;0xGeekCat&#39;, redis.print) 👈 ❗️是print不是print()</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2037.png" alt="screenshot 37"></p>
+<p>👆连接Redis成功之后，设置了一个key为<code>name</code>，value为<code>0xGeekCat</code>的键值对，可在命令行中查询</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2038.png" alt="screenshot 38"></p>
+<h2 id="CURD操作"><a href="#CURD操作" class="headerlink" title="CURD操作"></a>CURD操作</h2><h3 id="get"><a href="#get" class="headerlink" title="get"></a>get</h3><p><code>node-redis</code>模块提供的API都是对应Redis命令的映射，除了最后的回调函数；模块方法的参数就是对应命令的参数</p>
+<p>此外所有的API操作都是异步的，<code>redis.print</code>就是一个回调函数，用于打印命令的执行结果</p>
+<p>使用get方法获取设置的值</p>
+<pre><code class="javascript">client.get(&#39;name&#39;, function (err, reply) {
+    // reply is null when the key is missing
+    console.log(reply) → 0xGeekCat
+})</code></pre>
+<p>如果想要更新数据值，只需再做一次set操作，原有的值就会被覆盖</p>
+<h3 id="SET"><a href="#SET" class="headerlink" title="SET"></a>SET</h3><p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2039.png" alt="screenshot 39"></p>
+<p>👇只会对一个已经存在的key进行设置，并且设置了10s的过期时间，如果Redis中还没有对应的key，回调函数会返回null。如果该key存在，那么会首先修改value的值，在10s后，该key就会被删除</p>
+<pre><code class="javascript">client.set(&#39;name&#39;, &#39;0xGeekCat&#39;, &#39;EX&#39;, 10, &#39;XX&#39;, redis.print)</code></pre>
+<p><strong>验证set方法的过期时间</strong></p>
+<pre><code class="javascript">client.set(&#39;name&#39;, &#39;0xGeekDog&#39;)
+
+client.set(&#39;name&#39;, &#39;0xGeekCat&#39;, &#39;EX&#39;, 10, &#39;XX&#39;, function (err, reply) {
+    client.get(&#39;name&#39;, redis.print)
+    setTimeout(function () {
+        client.get(&#39;name&#39;, redis.print)
+    }, 10000)
+})</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2040.png" alt="screenshot 40"></p>
+<p><strong>❗<code>redis.print</code>的结尾没有<code>()</code>，如果错误的使用<code>()</code>会回显<code>Reply: undefined</code></strong></p>
+<p>从输出可以判断设置的key已经过期，被Redis从列表中删除</p>
+<h3 id="DEL"><a href="#DEL" class="headerlink" title="DEL"></a>DEL</h3><pre><code class="javascript">client.del(&#39;pass&#39;, redis.print)</code></pre>
+<p>如果试图删除一条不存在的数据，会返回一个0值</p>
+<h3 id="使用Promise实现同步调用"><a href="#使用Promise实现同步调用" class="headerlink" title="使用Promise实现同步调用"></a>使用Promise实现同步调用</h3><p>和MongoDB相同，Node对Redis的操作也都是异步进行的，这在某些情境下会变得不方便</p>
+<p><strong>对于<code>node-redis</code>模块来说，官方推荐的是使用bluebird来进行方法的Promise化</strong></p>
+<p>安装bluebird后使用<code>bluebird.promisifyAll</code>来将全部的方法转换为Promise，这个过程十分方便</p>
+<pre><code class="javascript">const redis = require(&#39;redis&#39;)
+const {Promise} = require(&#39;bluebird&#39;)
+
+Promise.promisifyAll(redis.RedisClient.prototype)
+Promise.promisifyAll(redis.Multi.prototype)</code></pre>
+<p><strong>set方法的Promise版本</strong></p>
+<pre><code class="javascript">const client = redis.createClient() 👈 查看源码得知参数默认值 host &#39;127.0.0.1&#39;, port 6379
+client.setAsync(&#39;name&#39;, &#39;0xGeekCat&#39;).then(function (res) {
+    console.log(res) → OK
+})</code></pre>
+<p>将所有方法转换成Promise之后，使用async方法就成了自然而然的选择</p>
+<pre><code class="javascript">async function redisTest() {
+    await client.setAsync(&#39;name&#39;, &#39;0xGeekCat&#39;)
+    let result = await client.getAsync(&#39;name&#39;)
+    console.log(result)
+}
+redisTest() → 0xGeekCat</code></pre>
+<h2 id="使用Redis持久化session"><a href="#使用Redis持久化session" class="headerlink" title="使用Redis持久化session"></a>使用Redis持久化session</h2><p>现在开始尝试将Redis用在👆项目中，这个过程中由于相关的文档的缺乏，有时不得不通过阅读源码的方式来得到正确的用法</p>
+<p>要使用Redis来存储Session，仍然可以使用<code>koa-session</code>模块来完成</p>
+<p>但需要做一些额外的配置，给config增加一个store属性，这是一种类似于Java中接口的设计，只要CONFIG对象声明了该属性，就必须实现set、get和destory方法</p>
+<p><strong>👇修改后的config对象</strong></p>
+<pre><code class="javascript">const CONFIG = {
+    key: &#39;Koa:sess&#39;,
+    maxAge: 86400000,
+    overwrite: true,
+    httpOnly: true,
+    signed: false,
+    store: {}
+}
+
+CONFIG.store.get = async (key) =&gt; {}
+CONFIG.store.set = async (key, sess, maxAge) =&gt; {}
+CONFIG.store.destroy = async (key) =&gt; {}
+
+router.use(session(CONFIG, app))</code></pre>
+<h3 id="get-1"><a href="#get-1" class="headerlink" title="get"></a>get</h3><p>每次当服务器收到请求时都会触发该方法。作为参数的key值就是客户端的<code>Session id</code>，get方法的作用和👇这句作用相同</p>
+<pre><code class="javascript">let key = ctx.cookies.get(&quot;Koa:sess&quot;)</code></pre>
+<h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><p>set方法则会在设置session时触发。该方法有三个参数</p>
+<ul>
+<li>key</li>
+<li>sess</li>
+<li>maxAge</li>
+</ul>
+<p>当执行<code>ctx.session.views = ++n</code>时会触发set方法，<code>koa-session</code>模块会自动生成一个key值</p>
+<ul>
+<li>sess是一个完整的session对象</li>
+<li>maxAge是config设置的过期时间</li>
+</ul>
+<h3 id="destroy"><a href="#destroy" class="headerlink" title="destroy"></a>destroy</h3><p>destroy方法则是在主动调用时才会触发，用于删除一条Session记录。</p>
+<p><strong>👇观察<code>koa-session</code>在Redis配置下如何工作</strong></p>
+<pre><code class="javascript">const session = require(&#39;koa-session&#39;)
+const Koa = require(&#39;koa&#39;)
+const app = new Koa()
+const redis = require(&#39;redis&#39;)
+const {Promise} = require(&#39;bluebird&#39;)
+
+Promise.promisifyAll(redis.RedisClient.prototype)
+Promise.promisifyAll(redis.Multi.prototype)
+
+const client = redis.createClient()
+client.on(&#39;error&#39;, function (err) {
+    console.log(err)
+})
+
+const CONFIG = {
+    key: &#39;Koa:sess&#39;,
+    maxAge: 86400000,
+    overwrite: true,
+    httpOnly: true,
+    signed: false,
+    store: {}
+}
+
+CONFIG.store.get = async (key) =&gt; {
+    console.log(&#39;get key:&#39;, key)
+    let result = await client.getAsync(key)
+    console.log(&#39;set key:&#39;, key)
+}
+CONFIG.store.set = async (key, sess, maxAge) =&gt; {
+    await client.setAsync(key, JSON.stringify(sess))
+    console.log(&#39;set key:&#39;, key)
+}
+CONFIG.store.destroy = async (key) =&gt; {
+    console.log(&#39;destroy key:&#39;, key)
+}
+
+app.use(session(CONFIG, app))
+
+app.use(async ctx =&gt; {
+    if (ctx.path === &#39;/favicon.ico&#39;)
+        return
+    ctx.session.agent = ctx.header[&#39;user-agent&#39;]
+})
+
+app.listen(3000, function () {
+    console.log(&#39;listening on port 3000&#39;)
+})</code></pre>
+<p>使用浏览器访问<code>localhost:3000</code>，可以观察到程序首先调用set方法设置一个Cookie，id的值的来源是<code>http header</code>的<code>user agent</code>属性(JSON格式)，这个<code>key-value</code>键值对随后被写入到Redis</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2041.png" alt="screenshot 41"></p>
+<p><strong>继续刷新页面控制器回显👇</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2042.png" alt="screenshot 42"></p>
+<p>get方法被调用，打印出key值和value的值</p>
+<p>此时注意到服务器又设置了一个新的<code>Session id</code>值，经过试验发现每一次的请求都会分配一个新的<code>Session id</code></p>
+<p>那么会产生一个问题，set方法不断将新的<code>Session id</code>写入Redis，那么每次请求都会产生新的<code>Session id</code>，显然会浪费Redis的空间</p>
+<p><strong>此时Redis中存储的key值情况</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2043.png" alt="screenshot 43"></p>
+<p>这里的key会越来越多，但永远只有一个是有效的，所以针对一个客户连接只需要存储一个有用的<code>Session id</code>就行</p>
+<p>此时destroy方法的作用就显示出来了，在get方法后面调用destroy方法删除没用的<code>Session id</code>即可</p>
+<pre><code class="javascript">CONFIG.store.get = async (key) =&gt; {
+    console.log(&#39;get key:&#39;, key)
+    let result = await client.getAsync(key)
+    console.log(&#39;get result:&#39;, result)
+    await CONFIG.store.destroy(key) 👈
+}
+CONFIG.store.destroy = async (key) =&gt; {
+    await client.delAsync(key)
+    console.log(&#39;destroy key:&#39;, key)
+}</code></pre>
+<p>此时Redis中便只有一个有效<code>Session id</code>存在</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2044.png" alt="screenshot 44"></p>
+<p>在Redis中对于一个连接始终保持一个<code>Session id</code>，为了验证这一点可以使用别的浏览器来访问服务器地址，例如<code>firefox</code>，再次查看Redis中存储的<code>Session id</code>会发现多了一个</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2045.png" alt="screenshot 45"></p>
+<h2 id="Redis在Node中的应用"><a href="#Redis在Node中的应用" class="headerlink" title="Redis在Node中的应用"></a>Redis在Node中的应用</h2><h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><p>一般来说消息队列有两种场景，利用Redis这两种场景都能够实现</p>
+<ul>
+<li>生产/消费者模式：生产者生产消息放到队列里，消费者同时监听队列，如果队列里有了新的消息就将其取走，对于单条消息，只能由一个消费者消费</li>
+<li>发布者/订阅者模式：发布者向某个频道发布一条消息后，多个订阅者都会收到同一份消息，这和发微博或者朋友圈的效果类似，每个订阅者收到的消息应该都是一样的</li>
+</ul>
+<p><strong>发布者/订阅者模式</strong></p>
+<pre><code class="javascript">// publisher
+const redis = require(&#39;redis&#39;)
+const client = redis.createClient()
+
+client.on(&#39;ready&#39;, function () {
+    console.log(&#39;ready&#39;)
+
+    // 向test频道发布一条信息
+    client.publish(&#39;test&#39;, &#39;0xGeekCat&#39;)
+})</code></pre>
+<pre><code class="javascript">// subscriber
+const redis = require(&#39;redis&#39;)
+const client = redis.createClient()
+
+client.subscribe(&#39;test&#39;)
+client.on(&#39;message&#39;, function (channel, message) {
+    console.log(&#39;channel:&#39; + channel, &#39;message:&#39; + message)
+})</code></pre>
+<h1 id="Koa源码剖析"><a href="#Koa源码剖析" class="headerlink" title="Koa源码剖析"></a>Koa源码剖析</h1><p>本节主要从源码的角度来讲述Koa，尤其是其中间件系统是如何实现的</p>
+<p>跟Express相比，Koa的源码异常简洁，Express因为把路由相关的代码嵌入到了主要逻辑中，因此读Express的源码可能长时间不得要领，而直接读Koa的源码几乎没有什么障碍</p>
+<p><strong>Koa的主要代码位于koa根目录下的lib文件夹，只有4个文件去掉注释后的源码不到1000行</strong></p>
+<ul>
+<li>Request.js：对http request对象的封装</li>
+<li>Response.js：对http response对象的封装</li>
+<li>Context.js：将上面两个文件的封装整合到context对象中</li>
+<li>Application.js：项目的启动及中间件的加载</li>
+</ul>
+<h2 id="Koa的启动过程"><a href="#Koa的启动过程" class="headerlink" title="Koa的启动过程"></a>Koa的启动过程</h2><p><strong>👇Koa应用的大致结构</strong></p>
+<pre><code class="javascript">const Koa = require(&#39;koa&#39;)
+const app = new Koa()
+
+// load middleware
+app.use(...)
+app.use(...)
+app.use(...)
+
+app.listen(3000)</code></pre>
+<p><strong>Koa的启动过程大致分为三个步骤</strong></p>
+<ol>
+<li>引入Koa模块，调用构造方法新建一个app对象</li>
+<li>加载中间件</li>
+<li>调用listen方法监听端口</li>
+</ol>
+<p>逐步来看这三个步骤在源码中的实现</p>
+<p>首先是类和构造函数的定义，这部分代码位于Application.js中</p>
+<p><strong>Application.js类定义</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2046.png" alt="screenshot 46"></p>
+<p><code>Application</code>类继承于Events模块，当调用Koa的构造函数时，会初始化一些属性和方法，例如以context/response/request为原型创建的新的对象，还有管理中间件的middleware数组等</p>
+<h2 id="中间件的加载-1"><a href="#中间件的加载-1" class="headerlink" title="中间件的加载"></a>中间件的加载</h2><p>中间件的本质是一个函数，在Koa中该函数通常具有ctx和next两个参数，分别表示封装好的res/req对象以及下一个要执行的中间件，当有多个中间件的时候，本质上是一种嵌套调用，形如之前的洋葱图</p>
+<p>Koa和Express在调用上都是通过调用<code>app.use()</code>的方式来加载一个中间件，但内部的实现却大不相同</p>
+<h3 id="Application-js中use方法的定义"><a href="#Application-js中use方法的定义" class="headerlink" title="Application.js中use方法的定义"></a>Application.js中use方法的定义</h3><p><strong>👇use方法的定义</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2047.png" alt="screenshot 47"></p>
+<p>Koa在application.js中维持了一个middleware的数组，如果有新的中间件被加载，就push到这个数组中，除此之外没有任何多余的操作，相比之下，Express的use方法就麻烦得多</p>
+<p>此外该方法中还增加了<code>isGeneratorFunction</code>判断，这是为了兼容Koa1.x的中间件而加上去的</p>
+<p>在Koa1.x中中间件都是Generator函数，Koa2使用的async函数是无法兼容之前的代码的，因此Koa2提供了convert函数来进行转换</p>
+<h3 id="Application-js对中间件的调用"><a href="#Application-js对中间件的调用" class="headerlink" title="Application.js对中间件的调用"></a>Application.js对中间件的调用</h3><p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2048.png" alt="screenshot 48"></p>
+<p>可以看出关于中间件的核心逻辑应该位于compose方法中，该方法是一个名为<code>Koa-compose</code>的第三方模块</p>
+<p>该模块只有一个方法compose，调用方式为<code>compose([a, b, c, ...])</code>，该方法接受一个中间件的数组作为参数，<strong>返回的仍然是一个中间件(函数)，可以将这个函数看作是之前加载的全部中间件的功能集合</strong></p>
+<h3 id="compose核心方法"><a href="#compose核心方法" class="headerlink" title="compose核心方法"></a>compose核心方法</h3><p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2049.png" alt="screenshot 49"></p>
+<p>方法的核心是一个递归调用的<code>dispatch</code>函数，compose的本质仍是嵌套的中间件</p>
+<h2 id="listen-方法"><a href="#listen-方法" class="headerlink" title="listen()方法"></a>listen()方法</h2><p>这是app启动过程中的最后一步，事实上👆都是为了app的启动做准备，<strong>整个Koa应用的启动是通过listen方法来完成的</strong></p>
+<p><strong>👇application.js中listen方法的定义</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2050.png" alt="screenshot 50"></p>
+<p>👆调用了<code>http.createServer</code>方法建立了http服务器，参数为callback方法返回的<code>handleRequest</code>方法</p>
+<p><strong><code>handleRequest</code>方法做了两件事</strong></p>
+<ul>
+<li><p>封装request和response对象</p>
+<pre><code class="javascript">const ctx = this.createContext(req, res);</code></pre>
+</li>
+<li><p>调用中间件对ctx对象进行处理</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2051.png" alt="screenshot 51"></p>
+</li>
+</ul>
+<h2 id="next-与return-next"><a href="#next-与return-next" class="headerlink" title="next()与return next()"></a>next()与return next()</h2><p>在之前自定义的中间件<code>validateCookie</code>中，最后调用<code>next</code>方法来调用下一个中间件(router)，如果将return去掉，再访问<code>localhost:3000/login</code>就会显示<code>not found</code></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2052.png" alt="screenshot 52"></p>
+<p>Koa对中间件调用的实现本质上是嵌套的<code>promise.resolve</code>方法</p>
+<p><strong>一个简单的中间件模拟示例</strong></p>
+<pre><code class="javascript">let ctx = 1
+
+let md1 = function (ctx, next) {
+    next()
+}
+
+let md2 = function (ctx, next) {
+    return ++ctx
+}
+
+let p = Promise.resolve(
+    md1(ctx, function next() {
+        return Promise.resolve( 
+            md2(ctx, function next() {
+            // more middleware
+        }))
+    })
+)
+
+p.then(function (ctx) {
+    console.log(ctx)
+})</code></pre>
+<p>👆第一行定义的变量ctx，可以将其看作Koa中的ctx对象，经过中间件的处理后，ctx的值会发生相应的变化</p>
+<p>定义md1和md2两个中间件，md1没有做任何操作，只调用了next方法，md2则是对ctx执行加一的操作，那么在最后的then方法中，我们期望ctx的值为2</p>
+<p>运行代码最后的结果却是<code>undefined</code>，在md1的next方法前加上return关键字后，就能得到正常的结果</p>
+<p>在Koa的源码application.js中，<code>handleRequest</code>方法的最后一行</p>
+<pre><code class="javascript">return fnMiddleware(ctx).then(handleResponse).catch(onerror);</code></pre>
+<p>中的<code>fnMiddleware(ctx)</code>相当👆声明的Promise对象p，被中间件方法修改后的ctx对象被then方法传给<code>handleResponse</code>方法返回给客户端</p>
+<p><strong>每个<font color='red'>中间件方法</font>都会返回一个Promise对象，里面包含的是对ctx的修改，通过调用next方法来调用下一个中间件；再通过return关键字将修改后的ctx对象作为resolve的参数返回</strong></p>
+<p>如果多个中间件同时操作ctx对象，那么就有必要使用return关键字将操作的结果返回到上一级调用的中间件</p>
+<p>这就是为什么需要使用<code>return next()</code>而不是<code>next()</code>。事实上Koa-router或者Koa-static的源码都是使用<code>return next</code>方法</p>
+<h2 id="关于Can’t-set-headers-after-they-are-sent"><a href="#关于Can’t-set-headers-after-they-are-sent" class="headerlink" title="关于Can’t set headers after they are sent."></a>关于Can’t set headers after they are sent.</h2><p>这是使用Express或者Koa常见的错误之一</p>
+<p>其原因如字面意思，对于同一个HTTP请求重复发送了HTTP HEADER。服务器在处理HTTP请求时会先发送一个响应头(使用writeHead或setHeader方法)，然后发送主体内容(通过send或者end方法)，如果对一个HTTP请求调用了两次writeHead方法，就会出现Can’t set headers after they are sent的错误提示</p>
+<pre><code class="javascript">const http = require(&#39;http&#39;)
+
+http.createServer(function (req, res) {
+    res.setHeader(&#39;Content-Type&#39;, &#39;text/html&#39;)
+    res.end(&#39;0xGeekCat&#39;)
+    res.setHeader(&#39;Content-Type&#39;, &#39;text/html&#39;)
+}).listen(3000)</code></pre>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2053.png" alt="screenshot 53"></p>
+<p>访问<code>localhost:3000</code>就会得到错误信息，这个例子太过直白</p>
+<p>👇是一个Express的例子，由于中间件可能包含异步操作，因此有时错误的原因比较隐蔽</p>
+<pre><code class="javascript">const express = require(&#39;express&#39;)
+const app = express()
+
+app.use(function (req, res, next) {
+    setTimeout(function () {
+        res.redirect(&#39;/bar&#39;)
+    }, 1000)
+    next()
+})
+
+app.get(&#39;/foo&#39;, function (req, res) {
+    res.end(&#39;foo&#39;)
+})
+
+app.get(&#39;/bar&#39;, function (req, res) {
+    res.end(&#39;bar&#39;)
+})
+
+app.listen(3000)</code></pre>
+<p>访问<code>http://localhost:3000/foo</code>会产生同样的错误，原因也很简单，在请求返回之后，setTimeout内部的redirect会对一个已经发送出去的response进行修改，就会出现错误</p>
+<p>在实际项目中不会像setTimeout这么明显，可能是一个数据库操作或者其他的异步操作，需要特别注意</p>
+<h2 id="Context对象的实现"><a href="#Context对象的实现" class="headerlink" title="Context对象的实现"></a>Context对象的实现</h2><p><strong>ctx对象通过委托获得原生方法和属性</strong></p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2054.png" alt="screenshot 54"></p>
+<p>delegate是一个Node第三方模块，作用是把一个对象中的属性和方法委托到另一个对象上</p>
+<p>这个模块的代码同样非常简单，源代码只有100多行；👆代码中，使用了三个方法</p>
+<ul>
+<li>method：用于委托方法到目标对象上</li>
+<li>access：综合getter和setter，可以对目标进行读写</li>
+<li>getter：为目标属性生成一个访问器，可以理解成复制了一个只读属性到目标对象上</li>
+</ul>
+<p>getter和setter这两个方法是用来控制对象的读写属性的</p>
+<p><strong>暂不做过多了解</strong></p>
+<h3 id="关于动态加载中间件"><a href="#关于动态加载中间件" class="headerlink" title="关于动态加载中间件"></a>关于动态加载中间件</h3><p>在某些应用场景中，开发者可能希望能够动态加载中间件，例如当路由接收到某个请求后再去加载对应的中间件，<strong>但在Koa中这是无法做到的</strong>。Koa应用唯一一次加载所有中间件是在调用listen方法的时候，即使后面再调用app.use方法，也不会生效</p>
+<h2 id="Koa的优缺点"><a href="#Koa的优缺点" class="headerlink" title="Koa的优缺点"></a>Koa的优缺点</h2><p>和Express相比，Koa的优势在于精简，它剥离了所有的中间件，并且对中间件的执行做了很大的优化</p>
+<p>一个经验丰富的Express开发者想要转到Koa上并不需要很大的成本，唯一需要注意的就是中间件执行的策略会有差异，这可能会带来一段时间的不适应</p>
+<p>现在来说说Koa的缺点，<strong>❗️剥离中间件虽然是个优点，但也让不同中间件的组合变得麻烦起来</strong>，Express经过数年的沉淀，各种用途的中间件已经很成熟；而Koa不同，Koa2.0推出的时间还很短，适配的中间件也不完善，有时单独使用各种中间件还好，但一旦组合起来，可能出现不能正常工作的情况</p>
+<p>举个例子，如果想同时使用router和views两个中间件，就要在render方法前加上return关键字，和return next()一个道理，对于刚接触Koa的开发者可能要花很长时间才能定位问题所在。再例如<code>koa-session</code>和<code>Koa-router</code>。虽然中间件概念的引入让Node开发变得像搭积木一样，但积木之间如果不能很顺利地拼接在一块的话，也会增加开发成本</p>
+<h1 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h1><p>将网站发布到公网上通常要走一些复杂的流程，使用国内的云服务商和域名提供商，还要提供身份信息和备案信息等，对于个人开发者来说，如果嫌这些步骤麻烦，那么建议选择本地部署的方式</p>
+<h3 id="使用Localtunnel实现本地部署"><a href="#使用Localtunnel实现本地部署" class="headerlink" title="使用Localtunnel实现本地部署"></a>使用Localtunnel实现本地部署</h3><p>localtunnel是一个有名的npm第三方模块，它可以很容易地将你的本地服务器映射到公网上，而且不用修改DNS或者防火墙设置</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>localtunnel需要全局安装</p>
+<pre><code class="javascript">npm install -g localtunnel  </code></pre>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>先把博客系统在本地运行起来，假设本地端口为3000，然后执行<code>lt</code>命令</p>
+<p><img src="%E3%80%8A%E6%96%B0%E6%97%B6%E6%9C%9F%E7%9A%84Node-js%E5%85%A5%E9%97%A8%E3%80%8B%E5%AD%A6%E4%B9%A0%E6%97%A5%E8%AE%B0-%E4%BD%BF%E7%94%A8Koa2%E6%9E%84%E5%BB%BAWeb%E7%AB%99%E7%82%B9/screenshot%2055.png" alt="screenshot 55"></p>
+<p>该命令会生成一个随机的域名，开发者可以通过该域名来访问自己的网站</p>
+<p>现在就可以使用该域名来访问网站了，不需要任何额外的操作，唯一的缺点可能就是访问比较慢</p>
+<p>通过这种方式部署的网站基本上无法进行SEO优化，也没办法支撑高并发，这不仅由开发者的本地机器决定，更是由localtunnel这种模式本身的特点决定的</p>
+<h3 id="localtunnel原理"><a href="#localtunnel原理" class="headerlink" title="localtunnel原理"></a>localtunnel原理</h3><p>localhost只用一行命令就能实现外网到内网的访问很不可思议。但实际上所有外网的访问，都要先经过localtunnel.me中转之后，才能到达本地主机上，<strong>也就是说localtunnel.me起到了转发作用，可以将localtunnel.me看作是一个反向代理服务器</strong></p>
+<p>localtunnel.me会在内部维护一张映射表，记录着每个开发者本地主机的信息，当收到某个子域名下的请求时，会先在映射表中进行查找，然后将对应的请求或者响应信息转发出去</p>
+<p>从本质上说，所有的内网到外网的穿透，都是借助已经部署在公网上的服务器进行中转的，例如一些VPN服务提供商，往往也是通过某台服务器的中转再到达目标网站的</p>
+<p>如果localtunnel.me这个网站本身停止了服务，那么开发者本地的localtunnel模块也会变得不可用</p>
+<p>这也是为什么这种部署方式很难优化的原因，因为流量不是直接来自用户，而是经过了localtunnel服务器的中转，最直观的感受就是网页打开速度非常慢，这让所有的本地优化都失去了意义。<strong>但如果是访问量比较小的个人网站，这是比较推荐的方式</strong></p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p>《新时期的Node.js入门》</p>
+
         </div>
         <!-- .entry-content -->
         <div class="single-reward">
