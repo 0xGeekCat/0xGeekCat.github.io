@@ -1260,7 +1260,7 @@ const CONFIG = {
 CONFIG.store.get = async (key) =&gt; {
     console.log(&#39;get key:&#39;, key)
     let result = await client.getAsync(key)
-    console.log(&#39;set key:&#39;, key)
+    console.log(&#39;get result:&#39;, result)
 }
 CONFIG.store.set = async (key, sess, maxAge) =&gt; {
     await client.setAsync(key, JSON.stringify(sess))
